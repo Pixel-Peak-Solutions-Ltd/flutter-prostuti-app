@@ -1,16 +1,41 @@
 # prostuti
 
-A new Flutter project.
+##### To run the app project first install ***fvm*** on your system.
 
-## Getting Started
+***for IOS build it's preferred to archive from xCode and upload the symbol files to as well.***
 
-This project is a starting point for a Flutter application.
+## run:
 
-A few resources to get you started if this is your first Flutter project:
+```
+fvm use 3.24.3
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```
+configure Appwrite credantials and setup the Appwrite project on this device
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+fvm flutter pub get
+fvm flutter run
+```
+
+## To give build for Android
+
+```
+fvm flutter build appbundle --release --obfuscate --split-debug-info=./debug_info
+fvm flutter build apk --release --obfuscate --split-debug-info=./debug_info
+```
+
+## for IOS build
+
+```
+fvm flutter build ios --release --obfuscate --split-debug-info=./debug_info
+fvm flutter build ipa --release --obfuscate --split-debug-info=./debug_info
+```
+
+## for IOS upload-symbols
+
+```
+Pods/FirebaseCrashlytics/upload-symbols -gsp Runner/GoogleService-Info.plist -p ios build/Runner.xcarchive/dSYMs
+```
+ 
