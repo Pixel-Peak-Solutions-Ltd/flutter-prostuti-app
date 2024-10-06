@@ -1,24 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'common/helpers/is_darkmode.dart';
+import 'core/configs/app_themes.dart';
 import 'features/onboarding/view/onboarding_page.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final themeMode = ref.watch(themeNotifierProvider);
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Prostuti',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode, // Use the current theme mode
       home: const OnboardingPage(),
     );
   }
