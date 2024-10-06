@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'common/helpers/is_darkmode.dart';
+import 'common/helpers/theme_provider.dart';
 import 'core/configs/app_themes.dart';
 import 'features/onboarding/view/onboarding_page.dart';
 
