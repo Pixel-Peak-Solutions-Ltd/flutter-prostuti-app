@@ -6,6 +6,7 @@ import 'core/configs/app_themes.dart';
 import 'features/onboarding/view/onboarding_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -21,7 +22,8 @@ class MyApp extends ConsumerWidget {
       title: 'Prostuti',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: themeMode, // Use the current theme mode
+      themeMode: themeMode,
+      // Use the current theme mode
       home: const OnboardingPage(),
     );
   }
