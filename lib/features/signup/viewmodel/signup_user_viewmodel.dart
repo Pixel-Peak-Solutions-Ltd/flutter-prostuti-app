@@ -1,9 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'onboarding_viewmodel.g.dart';
+part 'signup_user_viewmodel.g.dart';
 
 @Riverpod(keepAlive: true)
-class OnboardingText extends _$OnboardingText {
+class SignupUserViewmodel extends _$SignupUserViewmodel {
   @override
   String build() {
     return "";

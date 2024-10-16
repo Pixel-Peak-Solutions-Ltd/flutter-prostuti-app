@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../common/view_model/auth_notifier.dart';
+
 part 'dio_service.g.dart';
 
 /*
@@ -12,6 +14,7 @@ final dioService = ref.watch(dioServiceProvider(accessToken: accessToken));
 
 @riverpod
 Dio dio(DioRef ref, {required String accessToken}) {
+  final accessToken = ref.watch(authNotifierProvider);
   return Dio(BaseOptions(
     baseUrl: 'https://example.com', // Replace with your base URL
     connectTimeout: const Duration(milliseconds: 5000),
@@ -19,9 +22,7 @@ Dio dio(DioRef ref, {required String accessToken}) {
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Referer': 'https://example.com',
-      'Origin': 'https://example.com',
-      'Authorization': 'Bearer $accessToken',
+      if (accessToken != null) 'Authorization': 'Bearer $accessToken',
     },
   ));
 }
