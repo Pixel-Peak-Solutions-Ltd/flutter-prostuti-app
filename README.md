@@ -20,7 +20,7 @@ fvm flutter pub get
 flutter pub run build_runner watch --delete-conflicting-outputs
 fvm flutter run
 mason get
-mason make bricks/feature_template --feature_name login
+mason make pros
 ```
 
 ## To give build for Android
