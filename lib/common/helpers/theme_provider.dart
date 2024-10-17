@@ -12,7 +12,7 @@ class ThemeNotifier extends _$ThemeNotifier {
   ThemeMode build() {
     // Start with system theme and then load the saved theme
     _loadThemeMode();
-    return ThemeMode.system;
+    return ThemeMode.light;
   }
 
   // Load the theme mode from SharedPreferences asynchronously
