@@ -1,0 +1,27 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'signup_user_viewmodel.dart';
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+String _$signupUserViewmodelHash() =>
+    r'd94409521dd313c2aaaebf0d7be56c535273f391';
+
+/// See also [SignupUserViewmodel].
+@ProviderFor(SignupUserViewmodel)
+final signupUserViewmodelProvider =
+    NotifierProvider<SignupUserViewmodel, String>.internal(
+  SignupUserViewmodel.new,
+  name: r'signupUserViewmodelProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$signupUserViewmodelHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$SignupUserViewmodel = Notifier<String>;
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

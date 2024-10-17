@@ -15,11 +15,12 @@ fvm use 3.24.3
 configure Appwrite credantials and setup the Appwrite project on this device
 ```
 
-
 ```
 fvm flutter pub get
 flutter pub run build_runner watch --delete-conflicting-outputs
 fvm flutter run
+mason get
+mason make bricks/feature_template --feature_name login
 ```
 
 ## To give build for Android

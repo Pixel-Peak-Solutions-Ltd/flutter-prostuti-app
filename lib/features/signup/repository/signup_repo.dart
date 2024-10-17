@@ -1,7 +1,6 @@
+import 'package:prostuti/common/view_model/auth_notifier.dart';
 import 'package:prostuti/core/services/dio_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../../common/view_model/auth_notifier.dart';
 
 part 'signup_repo.g.dart';
 
