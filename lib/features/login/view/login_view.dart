@@ -29,13 +29,13 @@ class LoginViewState extends ConsumerState<LoginView> {
     double width = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
-      appBar: AppBar(elevation: 0),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const Gap(80),
               Image.asset(
                 "assets/images/prostuti_logo.png",
                 width: 154,
@@ -141,7 +141,9 @@ class LoginViewState extends ConsumerState<LoginView> {
                     ],
                   ),
                 ),
-              )
+              ),
+
+              const Gap(40),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/features/login/view/login_view.dart';
+import 'package:prostuti/features/onboarding/view/onboarding_view.dart';
 
 import 'common/helpers/theme_provider.dart';
 import 'core/configs/app_themes.dart';
@@ -24,7 +25,7 @@ class MyApp extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       // Use the current theme mode
-      home: const LoginView(),
+      home: const OnboardingView(),
     );
   }
 }
