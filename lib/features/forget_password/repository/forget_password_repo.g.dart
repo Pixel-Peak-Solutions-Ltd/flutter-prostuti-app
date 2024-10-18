@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'theme_provider.dart';
+part of 'forget_password_repo.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$themeNotifierHash() => r'5ab04553109b6c8f3b4d3c9956d9eff5be4d08b0';
+String _$forgetPasswordRepoHash() =>
+    r'12284bee210d6a47a8bf470555e860c3ebb00ab3';
 
-/// See also [ThemeNotifier].
-@ProviderFor(ThemeNotifier)
-final themeNotifierProvider =
-    NotifierProvider<ThemeNotifier, ThemeMode>.internal(
-  ThemeNotifier.new,
-  name: r'themeNotifierProvider',
+/// See also [forgetPasswordRepo].
+@ProviderFor(forgetPasswordRepo)
+final forgetPasswordRepoProvider =
+    AutoDisposeProvider<ForgetPasswordRepo>.internal(
+  forgetPasswordRepo,
+  name: r'forgetPasswordRepoProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$themeNotifierHash,
+      : _$forgetPasswordRepoHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ThemeNotifier = Notifier<ThemeMode>;
+typedef ForgetPasswordRepoRef = AutoDisposeProviderRef<ForgetPasswordRepo>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
