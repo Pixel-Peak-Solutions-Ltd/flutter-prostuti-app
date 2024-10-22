@@ -1,13 +1,18 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
+import 'package:prostuti/features/forget_password/view/forget_password_view.dart';
+import 'package:prostuti/features/login/repository/login_repo.dart';
+import 'package:prostuti/features/login/viewmodel/login_viewmodel.dart';
+import 'package:prostuti/features/signup/widgets/label.dart';
 
 import '../../signup/view/phone_view.dart';
 
 class LoginView extends ConsumerStatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
+  const LoginView({super.key});
 
   @override
   LoginViewState createState() => LoginViewState();
@@ -26,7 +31,7 @@ class LoginViewState extends ConsumerState<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.sizeOf(context).width;
+    bool rememberMe = ref.watch(rememberMeProvider);
 
     return Scaffold(
       body: Padding(
@@ -56,9 +61,8 @@ class LoginViewState extends ConsumerState<LoginView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    'ফোন নম্বর',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  const Label(
+                    text: 'ফোন নম্বর',
                   ),
                   const Gap(6),
                   TextFormField(
@@ -68,9 +72,8 @@ class LoginViewState extends ConsumerState<LoginView> {
                         hintText: "আপনার ফোন নম্বর লিখুন"),
                   ),
                   const Gap(20),
-                  Text(
-                    'পাসওয়ার্ড',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  const Label(
+                    text: 'পাসওয়ার্ড',
                   ),
                   const Gap(6),
                   TextFormField(
@@ -90,8 +93,12 @@ class LoginViewState extends ConsumerState<LoginView> {
                             height: 16,
                             width: 16,
                             child: Checkbox(
-                              value: false,
-                              onChanged: (value) {},
+                              value: rememberMe,
+                              onChanged: (value) {
+                                ref
+                                    .watch(rememberMeProvider.notifier)
+                                    .toggleCheckBox(value);
+                              },
                             ),
                           ),
                           const Gap(8),
@@ -102,7 +109,11 @@ class LoginViewState extends ConsumerState<LoginView> {
                         ],
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const ForgetPasswordView(),
+                          ));
+                        },
                         child: Text(
                           'পাসওয়ার্ড ভুলে গেছেন',
                           style:
@@ -119,7 +130,20 @@ class LoginViewState extends ConsumerState<LoginView> {
               const Gap(24),
               LongButton(
                 text: 'লগ ইন',
-                onPressed: () {},
+                onPressed: () async {
+                  final payload = {
+                    "phone": "+88${_phoneController.text}",
+                    "password": _passwordController.text
+                  };
+
+                  final response = await ref
+                      .read(loginRepoProvider)
+                      .loginUser(payload: payload);
+
+                  if (kDebugMode) {
+                    print(response);
+                  }
+                },
               ),
               const Gap(24),
               InkWell(
@@ -142,7 +166,6 @@ class LoginViewState extends ConsumerState<LoginView> {
                   ),
                 ),
               ),
-
               const Gap(40),
             ],
           ),

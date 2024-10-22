@@ -8,13 +8,8 @@ part '{{name.snakeCase()}}_repo.g.dart';
 
 @riverpod
 {{name.pascalCase()}}Repo {{name.camelCase()}}Repo({{name.pascalCase()}}RepoRef ref) {
-final accessToken = ref.watch(authNotifierProvider);
-
-if (accessToken == null) {
-throw Exception('Access token is null. Cannot create {{name.pascalCase()}}Repo.');
-}
-final dioService = ref.watch(dioServiceProvider(accessToken: accessToken));
-return {{name.pascalCase()}}Repo(dioService);
+final dioService = ref.watch(dioServiceProvider);
+return {{name.pascalCase()}Repo(dioService);
 }
 
 class {{name.pascalCase()}}Repo {

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:prostuti/features/signup/view/otp_view.dart';
+import 'package:prostuti/features/signup/repository/signup_repo.dart';
 import 'package:prostuti/features/signup/viewmodel/phone_number_viewmodel.dart';
+import 'package:prostuti/features/signup/widgets/label.dart';
 
 import '../../../common/widgets/long_button.dart';
+import 'otp_view.dart';
 
 class PhoneView extends ConsumerStatefulWidget {
-  const PhoneView({Key? key}) : super(key: key);
+  const PhoneView({super.key});
 
   @override
   PhoneViewState createState() => PhoneViewState();
@@ -45,14 +47,13 @@ class PhoneViewState extends ConsumerState<PhoneView> {
                 'আপনার ফোন নম্বর লিখুন',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              Gap(32),
+              const Gap(32),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    'ফোন নম্বর',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                  const Label(
+                    text: 'ফোন নম্বর',
                   ),
                   const Gap(6),
                   TextFormField(
@@ -63,16 +64,32 @@ class PhoneViewState extends ConsumerState<PhoneView> {
                   ),
                 ],
               ),
-              Gap(32),
+              const Gap(32),
               LongButton(
                 text: 'এগিয়ে যাই',
-                onPressed: () {
+                onPressed: () async {
+                  final response = await ref
+                      .read(signupRepoProvider)
+                      .sendVerificationCode(
+                          phoneNo: _phoneController.text.toString());
+
                   ref
                       .watch(phoneNumberProvider.notifier)
                       .setPhoneNumber(_phoneController.text);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => OtpView(),
-                  ));
+
+                  if (response && context.mounted) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const OtpView(
+                        fromPage: "Signup",
+                      ),
+                    ));
+                  } else {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Something went wrong'),
+                      ));
+                    }
+                  }
                 },
               ),
             ],

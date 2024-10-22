@@ -5,34 +5,52 @@ import '../../common/view_model/auth_notifier.dart';
 
 part 'dio_service.g.dart';
 
-/*
-****** CALL LIKE THiS @ABIJIT ******
-
-final dioService = ref.watch(dioServiceProvider(accessToken: accessToken));
-
- */
-
 @riverpod
-Dio dio(DioRef ref, {required String accessToken}) {
-  final accessToken = ref.watch(authNotifierProvider);
+Dio dio(DioRef ref) {
+  final authNotifier = ref.watch(authNotifierProvider.notifier);
+
   return Dio(BaseOptions(
-    baseUrl: 'https://example.com', // Replace with your base URL
+    baseUrl: 'https://prostuti-app-backend-production.up.railway.app/api/v1',
     connectTimeout: const Duration(milliseconds: 5000),
     receiveTimeout: const Duration(milliseconds: 3000),
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      if (accessToken != null) 'Authorization': 'Bearer $accessToken',
-    },
-  ));
+  ))
+    ..interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        // Get the accessToken from AuthNotifier instead of shared preferences
+        final accessToken = authNotifier.state;
+        if (accessToken != null && accessToken != "") {
+          options.headers['Authorization'] = 'Bearer $accessToken';
+        }
+        handler.next(options);
+      },
+      onError: (DioException error, handler) async {
+        if (error.response?.statusCode == 401) {
+          final newAccessToken = await authNotifier.refreshToken();
+          if (newAccessToken != null) {
+            error.requestOptions.headers['Authorization'] =
+                'Bearer $newAccessToken';
+            final opts = Options(
+              method: error.requestOptions.method,
+              headers: error.requestOptions.headers,
+            );
+            final cloneReq = await Dio().request(
+              error.requestOptions.path,
+              options: opts,
+              data: error.requestOptions.data,
+              queryParameters: error.requestOptions.queryParameters,
+            );
+            handler.resolve(cloneReq);
+          }
+        } else {
+          handler.next(error);
+        }
+      },
+    ));
 }
 
 @riverpod
-DioService dioService(
-  DioServiceRef ref, {
-  required String accessToken,
-}) {
-  final dio = ref.watch(dioProvider(accessToken: accessToken));
+DioService dioService(DioServiceRef ref) {
+  final dio = ref.watch(dioProvider);
   return DioService(dio);
 }
 
@@ -41,65 +59,50 @@ class DioService {
 
   DioService(this._dio);
 
-  // Generic GET request
   Future<Response> getRequest(String endpoint,
       {Map<String, dynamic>? queryParameters}) async {
     try {
-      Response response =
-          await _dio.get(endpoint, queryParameters: queryParameters);
-      return response;
+      return await _dio.get(endpoint, queryParameters: queryParameters);
     } on DioException catch (e) {
       return _handleError(e);
     }
   }
 
-  // Generic POST request
   Future<Response> postRequest(String endpoint, dynamic data,
       {Map<String, dynamic>? queryParameters}) async {
     try {
-      Response response = await _dio.post(endpoint,
+      return await _dio.post(endpoint,
           data: data, queryParameters: queryParameters);
-      return response;
     } on DioException catch (e) {
       return _handleError(e);
     }
   }
 
-  // Generic PUT request
   Future<Response> putRequest(String endpoint, dynamic data,
       {Map<String, dynamic>? queryParameters}) async {
     try {
-      Response response = await _dio.put(endpoint,
+      return await _dio.put(endpoint,
           data: data, queryParameters: queryParameters);
-      return response;
     } on DioException catch (e) {
       return _handleError(e);
     }
   }
 
-  // Generic DELETE request
   Future<Response> deleteRequest(String endpoint,
       {Map<String, dynamic>? queryParameters}) async {
     try {
-      Response response =
-          await _dio.delete(endpoint, queryParameters: queryParameters);
-      return response;
+      return await _dio.delete(endpoint, queryParameters: queryParameters);
     } on DioException catch (e) {
       return _handleError(e);
     }
   }
 
-  // Error handler
   Response _handleError(DioException error) {
-    if (error.response != null) {
-      return error.response!;
-    } else {
-      return Response(
-        requestOptions: RequestOptions(path: ''),
-        statusMessage: 'Error: ${error.message}',
-        statusCode:
-            error.type == DioExceptionType.connectionTimeout ? 408 : 500,
-      );
-    }
+    return Response(
+      requestOptions: error.requestOptions,
+      statusMessage: 'Error: ${error.message}',
+      statusCode: error.response?.statusCode ??
+          (error.type == DioExceptionType.connectionTimeout ? 408 : 500),
+    );
   }
 }

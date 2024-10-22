@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/features/signup/repository/signup_repo.dart';
+import 'package:prostuti/features/signup/viewmodel/otp_viewmodel.dart';
+import 'package:prostuti/features/signup/widgets/label.dart';
 
 import '../../../common/widgets/long_button.dart';
+import '../../login/view/login_view.dart';
 import '../viewmodel/phone_number_viewmodel.dart';
 
 class RegisterView extends ConsumerStatefulWidget {
-  const RegisterView({Key? key}) : super(key: key);
+  const RegisterView({super.key});
 
   @override
   RegisterViewState createState() => RegisterViewState();
@@ -59,10 +63,7 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    'ফোন নম্বর',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  const Label(text: "ফোন নম্বর"),
                   const Gap(6),
                   TextFormField(
                     enabled: false,
@@ -72,10 +73,7 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                         hintText: "আপনার ফোন নম্বর লিখুন"),
                   ),
                   const Gap(20),
-                  Text(
-                    'নাম',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  const Label(text: 'নাম'),
                   const Gap(6),
                   TextFormField(
                     keyboardType: TextInputType.name,
@@ -84,10 +82,7 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                         const InputDecoration(hintText: "আপনার নাম লিখুন"),
                   ),
                   const Gap(20),
-                  Text(
-                    'ইমেইল',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  const Label(text: 'ইমেইল'),
                   const Gap(6),
                   TextFormField(
                     keyboardType: TextInputType.emailAddress,
@@ -96,10 +91,7 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                         const InputDecoration(hintText: "আপনার ইমেইল লিখুন"),
                   ),
                   const Gap(20),
-                  Text(
-                    'পাসওয়ার্ড',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
+                  const Label(text: 'পাসওয়ার্ড'),
                   const Gap(6),
                   TextFormField(
                     keyboardType: TextInputType.text,
@@ -114,7 +106,30 @@ class RegisterViewState extends ConsumerState<RegisterView> {
               const Gap(24),
               LongButton(
                 text: 'এগিয়ে যাই',
-                onPressed: () {},
+                onPressed: () async {
+                  final response =
+                      await ref.read(signupRepoProvider).registerStudent(
+                    {
+                      "otpCode": ref.read(otpProvider),
+                      "name": _nameController.text,
+                      "email": _emailController.text,
+                      "phone": "+88${ref.read(phoneNumberProvider)}",
+                      "password": _passwordController.text,
+                      "confirmPassword": _passwordController.text
+                    },
+                  );
+
+                  if (response && context.mounted) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const LoginView()));
+                  } else {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Signup Failed'),
+                      ));
+                    }
+                  }
+                },
               ),
             ],
           ),

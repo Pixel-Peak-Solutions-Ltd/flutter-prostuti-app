@@ -14,7 +14,7 @@ class OnboardingView extends ConsumerStatefulWidget {
 }
 
 class _OnboardingViewState extends ConsumerState<OnboardingView> {
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   int _currentIndex = 0;
 
   @override

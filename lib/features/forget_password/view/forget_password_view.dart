@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/features/forget_password/repository/forget_password_repo.dart';
 
 import '../../../common/widgets/long_button.dart';
 import '../../signup/view/otp_view.dart';
@@ -66,13 +67,29 @@ class ForgetPasswordViewState extends ConsumerState<ForgetPasswordView> {
               const Gap(32),
               LongButton(
                 text: 'এগিয়ে যাই',
-                onPressed: () {
+                onPressed: () async {
+                  final response = await ref
+                      .read(forgetPasswordRepoProvider)
+                      .sendVerificationCodeForPasswordReset(
+                          phoneNo: _phoneController.text.toString());
+
                   ref
                       .watch(phoneNumberProvider.notifier)
                       .setPhoneNumber(_phoneController.text);
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const OtpView(),
-                  ));
+
+                  if (response && context.mounted) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const OtpView(
+                        fromPage: "resetPassword",
+                      ),
+                    ));
+                  } else {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Please Register your Account first'),
+                      ));
+                    }
+                  }
                 },
               ),
             ],
