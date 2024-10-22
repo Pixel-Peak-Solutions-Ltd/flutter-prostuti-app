@@ -82,4 +82,19 @@ class AppColors {
 
   static const iconDisableLight = Color(0xFFD1D5DB);
   static const iconDisableDark = Color(0xFFD1D5DB);
+
+  static const homeScreenTopLight = Color(0xFF84B5EF);
+  static const homeScreenTopDark = Color(0xFF84B5EF);
+
+  static const homeScreenBottomLight = Color(0xFFDEEFF9);
+  static const homeScreenBottomDark = Color(0xFFDEEFF9);
+
+  static const leaderboardFirstLight = Color(0xFFFEE8DC);
+  static const leaderboardFirstDark = Color(0xFFFEE8DC);
+
+  static const leaderboardSecondLight = Color(0xFFD2FADF);
+  static const leaderboardSecondDark = Color(0xFFD2FADF);
+
+  static const leaderboardThirdLight = Color(0xFFFEF2CE);
+  static const leaderboardThirdDark = Color(0xFFFEF2CE);
 }

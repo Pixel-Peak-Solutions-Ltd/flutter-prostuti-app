@@ -64,7 +64,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                 const Gap(50),
                  Text(
                   'মকটেষ্ট',
-                  style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Gap(16),
                  Padding(
