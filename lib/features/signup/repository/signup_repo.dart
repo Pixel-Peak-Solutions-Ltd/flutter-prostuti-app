@@ -40,7 +40,7 @@ class SignupRepo {
       {required phoneNo, required code, required String type}) async {
     final payload = {
       "phoneNumber": phoneNo.toString(),
-      "code": code.toString(),
+      "otpCode": code.toString(),
       "phoneVerificationType": type
     };
 
@@ -51,7 +51,7 @@ class SignupRepo {
       return OTP.fromJson(response.data);
     } else {
       if (kDebugMode) {
-        print(response.data);
+        print(response.statusMessage);
       }
     }
 

@@ -28,7 +28,7 @@ Dio dio(DioRef ref) {
       onError: (DioException error, handler) async {
         if (error.response?.statusCode == 401) {
           final authNotifier = ref.read(authNotifierProvider.notifier);
-          final newAccessToken = await authNotifier.refreshToken();
+          final newAccessToken = await authNotifier.createAccessToken();
           if (newAccessToken != null) {
             error.requestOptions.headers['Authorization'] =
                 'Bearer $newAccessToken';

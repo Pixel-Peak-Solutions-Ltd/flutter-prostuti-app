@@ -131,14 +131,18 @@ class LoginViewState extends ConsumerState<LoginView> {
               LongButton(
                 text: 'লগ ইন',
                 onPressed: () async {
-                  final payload = {
+                  final payload = rememberMe?{
                     "phone": "+88${_phoneController.text}",
-                    "password": _passwordController.text
+                    "password": _passwordController.text,
+                    "rememberMe": "30d"
+                  }:{
+                    "phone": "+88${_phoneController.text}",
+                    "password": _passwordController.text,
                   };
 
                   final response = await ref
                       .read(loginRepoProvider)
-                      .loginUser(payload: payload);
+                      .loginUser(payload: payload, ref: ref);
 
                   if (kDebugMode) {
                     print(response);
