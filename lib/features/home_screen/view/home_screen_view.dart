@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:table_calendar/table_calendar.dart';
 
-import '../../../common/widgets/calendar_widget.dart';
-import '../../../common/widgets/category_card.dart';
-import '../../../common/widgets/leaderboard_card.dart';
+import '../widget/calendar_widget.dart';
+import '../widget/category_card.dart';
+import '../widget/leaderboard_card.dart';
 import '../../../core/configs/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -165,12 +164,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     top: 300, // Adjust this to control the overlap
                     left: 16,
                     right: 16,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
