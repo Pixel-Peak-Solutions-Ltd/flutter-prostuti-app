@@ -26,13 +26,13 @@ class AuthNotifier extends _$AuthNotifier {
 
   // Refresh token logic
   Future<String?> refreshToken() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();re
     final refreshToken = prefs.getString('refreshToken');
 
     if (refreshToken != null) {
       try {
         final response = await Dio().post(
-          'https://prostuti-app-backend-production.up.railway.app/api/v1/refresh-token',
+          'https://prostuti-app-backend-production.up.railway.app/api/v1/auth/student/refresh-token',
           data: {'refreshToken': refreshToken},
         );
 

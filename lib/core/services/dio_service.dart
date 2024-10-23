@@ -7,7 +7,7 @@ part 'dio_service.g.dart';
 
 @riverpod
 Dio dio(DioRef ref) {
-  final authNotifier = ref.watch(authNotifierProvider.notifier);
+  final authNotifier = ref.watch(authNotifierProvider);
 
   return Dio(BaseOptions(
     baseUrl: 'https://prostuti-app-backend-production.up.railway.app/api/v1',
@@ -16,15 +16,18 @@ Dio dio(DioRef ref) {
   ))
     ..interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        // Get the accessToken from AuthNotifier instead of shared preferences
-        final accessToken = authNotifier.state;
-        if (accessToken != null && accessToken != "") {
-          options.headers['Authorization'] = 'Bearer $accessToken';
+        // Get the accessToken from the AuthNotifier's state
+        if (authNotifier is AsyncData && authNotifier.value != null) {
+          final accessToken = authNotifier.value;
+          if (accessToken != "") {
+            options.headers['Authorization'] = 'Bearer $accessToken';
+          }
         }
         handler.next(options);
       },
       onError: (DioException error, handler) async {
         if (error.response?.statusCode == 401) {
+          final authNotifier = ref.read(authNotifierProvider.notifier);
           final newAccessToken = await authNotifier.refreshToken();
           if (newAccessToken != null) {
             error.requestOptions.headers['Authorization'] =
