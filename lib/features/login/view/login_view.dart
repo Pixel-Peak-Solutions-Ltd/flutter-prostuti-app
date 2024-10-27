@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
+import 'package:prostuti/features/home_screen/view/home_screen_view.dart';
 
 import '../../signup/view/phone_view.dart';
 
@@ -119,7 +120,11 @@ class LoginViewState extends ConsumerState<LoginView> {
               const Gap(24),
               LongButton(
                 text: 'লগ ইন',
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => HomeScreen(),
+                  ));
+                },
               ),
               const Gap(24),
               InkWell(
