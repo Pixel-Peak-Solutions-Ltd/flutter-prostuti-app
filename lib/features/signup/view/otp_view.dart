@@ -6,9 +6,12 @@ import 'package:prostuti/features/forget_password/view/new_password_view.dart';
 import 'package:prostuti/features/signup/view/register_view.dart';
 import 'package:prostuti/features/signup/viewmodel/otp_viewmodel.dart';
 import 'package:prostuti/features/signup/viewmodel/phone_number_viewmodel.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../common/widgets/long_button.dart';
 import '../../../core/configs/app_colors.dart';
+import '../../../core/services/debouncer.dart';
+import '../../../core/services/error_handler.dart';
 import '../repository/signup_repo.dart';
 
 class OtpView extends ConsumerStatefulWidget {
@@ -22,9 +25,13 @@ class OtpView extends ConsumerStatefulWidget {
 
 class OtpViewState extends ConsumerState<OtpView> {
   final _otpController = TextEditingController();
+  final _debouncer = Debouncer(milliseconds: 120);
+  final _loadingProvider = StateProvider<bool>((ref) => false);
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(_loadingProvider);
+
     return Scaffold(
       appBar: AppBar(elevation: 0, automaticallyImplyLeading: false),
       body: Padding(
@@ -74,35 +81,48 @@ class OtpViewState extends ConsumerState<OtpView> {
                   ),
                 ),
                 const Gap(32),
-                LongButton(
-                  text: 'এগিয়ে যাই',
-                  onPressed: () async {
-                    final response = await ref
-                        .read(signupRepoProvider)
-                        .verifyPhoneNumber(
-                            phoneNo: "+88${ref.read(phoneNumberProvider)}",
-                            code: _otpController.text.toString(),
-                            type: widget.fromPage == "Signup"
-                                ? "ACCOUNT_CREATION"
-                                : "PASSWORD_RESET");
+                Skeletonizer(
+                  enabled: isLoading,
+                  child: LongButton(
+                    text: 'এগিয়ে যাই',
+                    onPressed: () async {
+                      _debouncer.run(
+                          action: () async {
+                            final response = await ref
+                                .read(signupRepoProvider)
+                                .verifyPhoneNumber(
+                                    phoneNo:
+                                        "+88${ref.read(phoneNumberProvider)}",
+                                    code: _otpController.text.toString(),
+                                    type: widget.fromPage == "Signup"
+                                        ? "ACCOUNT_CREATION"
+                                        : "PASSWORD_RESET");
 
-                    if (response.data!.verified != null && context.mounted) {
-                      widget.fromPage == "Signup"
-                          ? Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const RegisterView(),
-                            ))
-                          : Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const NewPasswordView(),
-                            ));
-                    } else {
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Wrong OTP'),
-                        ));
-                      }
-                    }
-                  },
+                            if (response.data!.verified != null &&
+                                context.mounted) {
+                              widget.fromPage == "Signup"
+                                  ? Navigator.of(context)
+                                      .push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RegisterView(),
+                                    ))
+                                  : Navigator.of(context)
+                                      .push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          const NewPasswordView(),
+                                    ));
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text(ErrorHandler().getErrorMessage()),
+                              ));
+                              ErrorHandler().clearErrorMessage();
+                            }
+                          },
+                          loadingController:
+                              ref.read(_loadingProvider.notifier));
+                    },
+                  ),
                 ),
               ],
             ),

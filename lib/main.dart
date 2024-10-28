@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prostuti/features/login/view/login_view.dart';
 import 'package:prostuti/features/onboarding/view/onboarding_view.dart';
 import 'package:prostuti/features/signup/view/phone_view.dart';
 
 import 'common/helpers/theme_provider.dart';
 import 'common/view_model/auth_notifier.dart';
 import 'core/configs/app_themes.dart';
-import 'features/login/view/login_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

@@ -3,6 +3,8 @@ import 'package:prostuti/core/services/dio_service.dart';
 import 'package:prostuti/features/signup/model/otp_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/services/error_handler.dart';
+
 part 'signup_repo.g.dart';
 
 @riverpod
@@ -28,6 +30,7 @@ class SignupRepo {
     if (response.statusCode == 200) {
       return response.data["success"];
     } else {
+      ErrorHandler().setErrorMessage(response.statusMessage);
       if (kDebugMode) {
         print(response.data);
       }
@@ -50,6 +53,7 @@ class SignupRepo {
     if (response.statusCode == 200) {
       return OTP.fromJson(response.data);
     } else {
+      ErrorHandler().setErrorMessage(response.statusMessage);
       if (kDebugMode) {
         print(response.statusMessage);
       }
@@ -65,8 +69,9 @@ class SignupRepo {
     if (response.statusCode == 200) {
       return response.data["success"];
     } else {
+      ErrorHandler().setErrorMessage(response.statusMessage);
       if (kDebugMode) {
-        print(response.data);
+        print(response.statusMessage);
       }
     }
 

@@ -4,8 +4,11 @@ import 'package:gap/gap.dart';
 import 'package:prostuti/features/signup/repository/signup_repo.dart';
 import 'package:prostuti/features/signup/viewmodel/phone_number_viewmodel.dart';
 import 'package:prostuti/features/signup/widgets/label.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../common/widgets/long_button.dart';
+import '../../../core/services/debouncer.dart';
+import '../../../core/services/error_handler.dart';
 import 'otp_view.dart';
 
 class PhoneView extends ConsumerStatefulWidget {
@@ -17,6 +20,9 @@ class PhoneView extends ConsumerStatefulWidget {
 
 class PhoneViewState extends ConsumerState<PhoneView> {
   final _phoneController = TextEditingController();
+  final _debouncer = Debouncer(milliseconds: 120);
+  final _loadingProvider = StateProvider<bool>((ref) => false);
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -26,6 +32,7 @@ class PhoneViewState extends ConsumerState<PhoneView> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(_loadingProvider);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -48,49 +55,76 @@ class PhoneViewState extends ConsumerState<PhoneView> {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const Gap(32),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Label(
-                    text: 'ফোন নম্বর',
-                  ),
-                  const Gap(6),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: _phoneController,
-                    decoration: const InputDecoration(
-                        hintText: "আপনার ফোন নম্বর লিখুন"),
-                  ),
-                ],
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Label(
+                      text: 'ফোন নম্বর',
+                    ),
+                    const Gap(6),
+                    TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'ফোন নম্বর প্রয়োজন';
+                        }
+                        if (value.length != 11) {
+                          return 'ফোন নম্বর অবশ্যই ১১ সংখ্যার হতে হবে';
+                        }
+                        return null; // Returns null if validation is successful
+                      },
+                      keyboardType: TextInputType.number,
+                      controller: _phoneController,
+                      decoration: const InputDecoration(
+                          hintText: "আপনার ফোন নম্বর লিখুন"),
+                    ),
+                  ],
+                ),
               ),
               const Gap(32),
-              LongButton(
-                text: 'এগিয়ে যাই',
-                onPressed: () async {
-                  final response = await ref
-                      .read(signupRepoProvider)
-                      .sendVerificationCode(
-                          phoneNo: _phoneController.text.toString());
+              Skeletonizer(
+                enabled: isLoading,
+                child: LongButton(
+                  text: 'এগিয়ে যাই',
+                  onPressed: isLoading
+                      ? () {}
+                      : () {
+                          if (_formKey.currentState!.validate()) {
+                            _debouncer.run(
+                                action: () async {
+                                  final response = await ref
+                                      .read(signupRepoProvider)
+                                      .sendVerificationCode(
+                                          phoneNo:
+                                              _phoneController.text.toString());
 
-                  ref
-                      .watch(phoneNumberProvider.notifier)
-                      .setPhoneNumber(_phoneController.text);
+                                  ref
+                                      .watch(phoneNumberProvider.notifier)
+                                      .setPhoneNumber(_phoneController.text);
 
-                  if (response && context.mounted) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const OtpView(
-                        fromPage: "Signup",
-                      ),
-                    ));
-                  } else {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Something went wrong'),
-                      ));
-                    }
-                  }
-                },
+                                  if (response && context.mounted) {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) => const OtpView(
+                                        fromPage: "Signup",
+                                      ),
+                                    ));
+                                  } else {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text(
+                                          ErrorHandler().getErrorMessage()),
+                                    ));
+                                    ErrorHandler().clearErrorMessage();
+                                  }
+                                },
+                                loadingController:
+                                    ref.read(_loadingProvider.notifier));
+                          }
+                        },
+                ),
               ),
             ],
           ),

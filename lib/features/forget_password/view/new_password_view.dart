@@ -5,8 +5,11 @@ import 'package:prostuti/features/forget_password/repository/forget_password_rep
 import 'package:prostuti/features/login/view/login_view.dart';
 import 'package:prostuti/features/signup/viewmodel/otp_viewmodel.dart';
 import 'package:prostuti/features/signup/viewmodel/phone_number_viewmodel.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../common/widgets/long_button.dart';
+import '../../../core/services/debouncer.dart';
+import '../../../core/services/error_handler.dart';
 
 class NewPasswordView extends ConsumerStatefulWidget {
   const NewPasswordView({super.key});
@@ -18,9 +21,32 @@ class NewPasswordView extends ConsumerStatefulWidget {
 class NewPasswordViewState extends ConsumerState<NewPasswordView> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _debouncer = Debouncer(milliseconds: 120);
+  final _loadingProvider = StateProvider<bool>((ref) => false);
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'পাসওয়ার্ড প্রয়োজন';
+    }
+    // Password must contain at least one uppercase, one special character, and be at least 8 characters long
+    final passwordRegex = RegExp(r'^(?=.*?[A-Z])(?=.*?[!@#\$&*~]).{8,}$');
+    if (!passwordRegex.hasMatch(value)) {
+      return 'পাসওয়ার্ডে কমপক্ষে একটি বড় হাতের অক্ষর, একটি বিশেষ চিহ্ন এবং ৮ অক্ষর থাকতে হবে';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(_loadingProvider);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -43,78 +69,93 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const Gap(32),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'পাসওয়ার্ড',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  const Gap(6),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                        hintText: "আপনার পাসওয়ার্ড লিখুন"),
-                  ),
-                  Text(
-                    'কনফার্ম পাসওয়ার্ড',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  const Gap(6),
-                  TextFormField(
-                    keyboardType: TextInputType.number,
-                    controller: _confirmPasswordController,
-                    decoration: const InputDecoration(
-                        hintText: "আপনার পাসওয়ার্ড কনফার্ম করুন"),
-                  ),
-                ],
+              Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'পাসওয়ার্ড',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const Gap(6),
+                    TextFormField(
+                      validator: _validatePassword,
+                      keyboardType: TextInputType.number,
+                      controller: _passwordController,
+                      decoration: const InputDecoration(
+                          hintText: "আপনার পাসওয়ার্ড লিখুন"),
+                    ),
+                    Text(
+                      'কনফার্ম পাসওয়ার্ড',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const Gap(6),
+                    TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: _confirmPasswordController,
+                      decoration: const InputDecoration(
+                          hintText: "আপনার পাসওয়ার্ড কনফার্ম করুন"),
+                    ),
+                  ],
+                ),
               ),
               const Gap(32),
-              LongButton(
-                text: 'এগিয়ে যাই',
-                onPressed: () async {
-                  if (_passwordController.text !=
-                      _confirmPasswordController.text) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                          content: Text("Your Password Doesn't match")),
-                    );
-                    return;
-                  }
+              Skeletonizer(
+                enabled: isLoading,
+                child: LongButton(
+                  text: 'এগিয়ে যাই',
+                  onPressed: () {
+                    _debouncer.run(
+                        action: () async {
+                          if (_passwordController.text !=
+                              _confirmPasswordController.text) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Your Password Doesn't match")),
+                            );
+                            return;
+                          }
 
-                  final payload = {
-                    "otpCode": ref.read(otpProvider),
-                    "phone": ref.read(phoneNumberProvider),
-                    "newPassword": _passwordController.text,
-                    "confirmNewPassword": _confirmPasswordController.text,
-                  };
+                          final payload = {
+                            "otpCode": ref.read(otpProvider),
+                            "phone": ref.read(phoneNumberProvider),
+                            "newPassword": _passwordController.text,
+                            "confirmNewPassword":
+                                _confirmPasswordController.text,
+                          };
+                          if (_formKey.currentState!.validate()) {
+                            try {
+                              final response = await ref
+                                  .read(forgetPasswordRepoProvider)
+                                  .resetPassword(payload: payload);
 
-                  try {
-                    final response = await ref
-                        .read(forgetPasswordRepoProvider)
-                        .resetPassword(payload: payload);
-
-                    if (response && context.mounted) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => const LoginView()),
-                      );
-                    } else if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Changing Password failed')),
-                      );
-                    }
-                  } catch (e) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('An error occurred')),
-                      );
-                    }
-                  }
-                },
+                              if (response && context.mounted) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => const LoginView()),
+                                );
+                              } else if (context.mounted) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content:
+                                      Text(ErrorHandler().getErrorMessage()),
+                                ));
+                                ErrorHandler().clearErrorMessage();
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text('An error occurred')),
+                                );
+                              }
+                            }
+                          }
+                        },
+                        loadingController: ref.read(_loadingProvider.notifier));
+                  },
+                ),
               ),
             ],
           ),

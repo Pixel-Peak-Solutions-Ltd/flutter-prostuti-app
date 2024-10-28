@@ -8,7 +8,9 @@ import 'package:prostuti/features/forget_password/view/forget_password_view.dart
 import 'package:prostuti/features/login/repository/login_repo.dart';
 import 'package:prostuti/features/login/viewmodel/login_viewmodel.dart';
 import 'package:prostuti/features/signup/widgets/label.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../core/services/debouncer.dart';
 import '../../signup/view/phone_view.dart';
 
 class LoginView extends ConsumerStatefulWidget {
@@ -21,6 +23,8 @@ class LoginView extends ConsumerStatefulWidget {
 class LoginViewState extends ConsumerState<LoginView> {
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _debouncer = Debouncer(milliseconds: 120);
+  final _loadingProvider = StateProvider<bool>((ref) => false);
 
   @override
   void dispose() {
@@ -32,6 +36,7 @@ class LoginViewState extends ConsumerState<LoginView> {
   @override
   Widget build(BuildContext context) {
     bool rememberMe = ref.watch(rememberMeProvider);
+    final isLoading = ref.watch(_loadingProvider);
 
     return Scaffold(
       body: Padding(
@@ -128,26 +133,35 @@ class LoginViewState extends ConsumerState<LoginView> {
                 ],
               ),
               const Gap(24),
-              LongButton(
-                text: 'লগ ইন',
-                onPressed: () async {
-                  final payload = rememberMe?{
-                    "phone": "+88${_phoneController.text}",
-                    "password": _passwordController.text,
-                    "rememberMe": "30d"
-                  }:{
-                    "phone": "+88${_phoneController.text}",
-                    "password": _passwordController.text,
-                  };
+              Skeletonizer(
+                enabled: isLoading,
+                child: LongButton(
+                    text: 'লগ ইন',
+                    onPressed: () {
+                      _debouncer.run(
+                          action: () async {
+                            final payload = rememberMe
+                                ? {
+                                    "phone": "+88${_phoneController.text}",
+                                    "password": _passwordController.text,
+                                    "rememberMe": "30d"
+                                  }
+                                : {
+                                    "phone": "+88${_phoneController.text}",
+                                    "password": _passwordController.text,
+                                  };
 
-                  final response = await ref
-                      .read(loginRepoProvider)
-                      .loginUser(payload: payload, ref: ref);
+                            final response = await ref
+                                .read(loginRepoProvider)
+                                .loginUser(payload: payload, ref: ref);
 
-                  if (kDebugMode) {
-                    print(response);
-                  }
-                },
+                            if (kDebugMode) {
+                              print(response);
+                            }
+                          },
+                          loadingController:
+                              ref.read(_loadingProvider.notifier));
+                    }),
               ),
               const Gap(24),
               InkWell(

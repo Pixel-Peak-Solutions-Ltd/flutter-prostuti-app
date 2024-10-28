@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:prostuti/core/services/dio_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/services/error_handler.dart';
+
 part 'forget_password_repo.g.dart';
 
 @riverpod
@@ -31,6 +33,7 @@ class ForgetPasswordRepo {
     } else if (response.statusCode == 404) {
       return false;
     } else {
+      ErrorHandler().setErrorMessage(response.statusMessage);
       if (kDebugMode) {
         print(response.data);
       }
@@ -48,6 +51,7 @@ class ForgetPasswordRepo {
     } else if (response.statusCode == 404) {
       return false;
     } else {
+      ErrorHandler().setErrorMessage(response.statusMessage);
       if (kDebugMode) {
         print(response.data);
       }

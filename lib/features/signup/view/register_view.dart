@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:prostuti/features/signup/repository/signup_repo.dart';
-import 'package:prostuti/features/signup/viewmodel/otp_viewmodel.dart';
+import 'package:prostuti/core/services/debouncer.dart';
+import 'package:prostuti/features/category/view/category_view.dart';
+import 'package:prostuti/features/signup/viewmodel/email_viewmodel.dart';
+import 'package:prostuti/features/signup/viewmodel/name_viewmodel.dart';
+import 'package:prostuti/features/signup/viewmodel/password_viewmodel.dart';
 import 'package:prostuti/features/signup/widgets/label.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../common/widgets/long_button.dart';
-import '../../login/view/login_view.dart';
 import '../viewmodel/phone_number_viewmodel.dart';
 
 class RegisterView extends ConsumerStatefulWidget {
@@ -21,6 +24,9 @@ class RegisterViewState extends ConsumerState<RegisterView> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  final _debouncer = Debouncer(milliseconds: 20);
+  final _loadingProvider = StateProvider<bool>((ref) => false);
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -38,100 +44,129 @@ class RegisterViewState extends ConsumerState<RegisterView> {
     super.dispose();
   }
 
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'ইমেইল প্রয়োজন';
+    }
+    // Basic email regex pattern
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (!emailRegex.hasMatch(value)) {
+      return 'সঠিক ইমেইল লিখুন';
+    }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'পাসওয়ার্ড প্রয়োজন';
+    }
+    // Password must contain at least one uppercase, one special character, and be at least 8 characters long
+    final passwordRegex = RegExp(r'^(?=.*?[A-Z])(?=.*?[!@#\$&*~]).{8,}$');
+    if (!passwordRegex.hasMatch(value)) {
+      return 'পাসওয়ার্ডে কমপক্ষে একটি বড় হাতের অক্ষর, একটি বিশেষ চিহ্ন এবং ৮ অক্ষর থাকতে হবে';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(_loadingProvider);
     return Scaffold(
       appBar: AppBar(elevation: 0, automaticallyImplyLeading: false),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                "assets/images/prostuti_logo.png",
-                width: 154,
-                height: 101,
-              ),
-              const Gap(60),
-              Text(
-                'আপনার অ্যাকাউন্ট রেজিস্টার করুন',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const Gap(32),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Label(text: "ফোন নম্বর"),
-                  const Gap(6),
-                  TextFormField(
-                    enabled: false,
-                    keyboardType: TextInputType.number,
-                    controller: _phoneController,
-                    decoration: const InputDecoration(
-                        hintText: "আপনার ফোন নম্বর লিখুন"),
-                  ),
-                  const Gap(20),
-                  const Label(text: 'নাম'),
-                  const Gap(6),
-                  TextFormField(
-                    keyboardType: TextInputType.name,
-                    controller: _nameController,
-                    decoration:
-                        const InputDecoration(hintText: "আপনার নাম লিখুন"),
-                  ),
-                  const Gap(20),
-                  const Label(text: 'ইমেইল'),
-                  const Gap(6),
-                  TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    controller: _emailController,
-                    decoration:
-                        const InputDecoration(hintText: "আপনার ইমেইল লিখুন"),
-                  ),
-                  const Gap(20),
-                  const Label(text: 'পাসওয়ার্ড'),
-                  const Gap(6),
-                  TextFormField(
-                    keyboardType: TextInputType.text,
-                    obscureText: true,
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                        hintText: "আপনার পাসওয়ার্ড লিখুন"),
-                  ),
-                  const Gap(16),
-                ],
-              ),
-              const Gap(24),
-              LongButton(
-                text: 'এগিয়ে যাই',
-                onPressed: () async {
-                  final response =
-                      await ref.read(signupRepoProvider).registerStudent(
-                    {
-                      "otpCode": ref.read(otpProvider),
-                      "name": _nameController.text,
-                      "email": _emailController.text,
-                      "phone": "+88${ref.read(phoneNumberProvider)}",
-                      "password": _passwordController.text,
-                      "confirmPassword": _passwordController.text
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/prostuti_logo.png",
+                  width: 154,
+                  height: 101,
+                ),
+                const Gap(60),
+                Text(
+                  'আপনার অ্যাকাউন্ট রেজিস্টার করুন',
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                const Gap(32),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Label(text: "ফোন নম্বর"),
+                    const Gap(6),
+                    TextFormField(
+                      enabled: false,
+                      keyboardType: TextInputType.number,
+                      controller: _phoneController,
+                      decoration: const InputDecoration(
+                          hintText: "আপনার ফোন নম্বর লিখুন"),
+                    ),
+                    const Gap(20),
+                    const Label(text: 'নাম'),
+                    const Gap(6),
+                    TextFormField(
+                      onChanged: (value) => ref
+                          .watch(nameViewmodelProvider.notifier)
+                          .setName(_nameController.text),
+                      keyboardType: TextInputType.name,
+                      controller: _nameController,
+                      decoration:
+                          const InputDecoration(hintText: "আপনার নাম লিখুন"),
+                    ),
+                    const Gap(20),
+                    const Label(text: 'ইমেইল'),
+                    const Gap(6),
+                    TextFormField(
+                      validator: _validateEmail,
+                      onChanged: (value) => ref
+                          .watch(emailViewmodelProvider.notifier)
+                          .setEmail(_emailController.text),
+                      keyboardType: TextInputType.emailAddress,
+                      controller: _emailController,
+                      decoration:
+                          const InputDecoration(hintText: "আপনার ইমেইল লিখুন"),
+                    ),
+                    const Gap(20),
+                    const Label(text: 'পাসওয়ার্ড'),
+                    const Gap(6),
+                    TextFormField(
+                      validator: _validatePassword,
+                      onChanged: (value) => ref
+                          .watch(passwordViewmodelProvider.notifier)
+                          .setPassword(_passwordController.text),
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
+                      controller: _passwordController,
+                      decoration: const InputDecoration(
+                          hintText: "আপনার পাসওয়ার্ড লিখুন"),
+                    ),
+                    const Gap(16),
+                  ],
+                ),
+                const Gap(24),
+                Skeletonizer(
+                  enabled: isLoading,
+                  child: LongButton(
+                    text: 'এগিয়ে যাই',
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _debouncer.run(
+                            action: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CategoryView())),
+                            loadingController:
+                                ref.read(_loadingProvider.notifier));
+                      }
                     },
-                  );
-
-                  if (response && context.mounted) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const LoginView()));
-                  } else {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Signup Failed'),
-                      ));
-                    }
-                  }
-                },
-              ),
-            ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
