@@ -70,6 +70,7 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
               ),
               const Gap(32),
               Form(
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -141,6 +142,7 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
                                   content:
                                       Text(ErrorHandler().getErrorMessage()),
                                 ));
+                                _debouncer.cancel();
                                 ErrorHandler().clearErrorMessage();
                               }
                             } catch (e) {
