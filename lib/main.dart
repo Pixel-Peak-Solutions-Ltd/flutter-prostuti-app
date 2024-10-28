@@ -31,7 +31,7 @@ class MyApp extends ConsumerWidget {
         data: (accessToken) {
           if (accessToken != null) {
             // If the user is logged in, show the home screen
-            return const PhoneView();
+            return const LoginView();
           } else {
             // If the user is not logged in, show the login or onboarding screen
             return const LoginView();

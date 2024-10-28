@@ -21,14 +21,13 @@ class LoginRepo {
 
   LoginRepo(this._dioService);
 
-  Future<Login> loginUser(
-      {required Map<String, String> payload, required WidgetRef ref}) async {
+  Future loginUser(
+      {required Map<String, String> payload, required WidgetRef ref, required bool rememberMe}) async {
     final response = await _dioService.postRequest("/auth/login", payload);
 
     print(response.statusMessage);
     if (response.statusCode == 200) {
       final loginResponse = Login.fromJson(response.data);
-      print("${response.data["data"]}, ${Login.fromJson(response.data).data}");
       final accessToken = loginResponse.data!.accessToken!;
       final accessTokenExpiresIn = loginResponse.data!.accessTokenExpiresIn!;
       final refreshToken = loginResponse.data!.refreshToken!;
@@ -41,16 +40,16 @@ class LoginRepo {
           .add(Duration(seconds: refreshTokenExpiresIn))
           .millisecondsSinceEpoch;
 
+      // print("$accessToken $accessExpiryTime, $refreshToken, $refreshExpiryTime,$rememberMe}");
       await ref.read(authNotifierProvider.notifier).setAccessToken(
-          accessToken, accessExpiryTime, refreshToken, refreshExpiryTime);
+          accessToken, accessExpiryTime, refreshToken, refreshExpiryTime,rememberMe);
 
       return loginResponse;
     } else {
       ErrorHandler().setErrorMessage(response.statusMessage);
       if (kDebugMode) {
-        print("error login");
+        print("error login : ${response.statusMessage}");
       }
-      return Login.fromJson(response.data);
     }
   }
 }

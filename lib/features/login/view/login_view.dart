@@ -191,16 +191,18 @@ class LoginViewState extends ConsumerState<LoginView> {
 
                               final response = await ref
                                   .read(loginRepoProvider)
-                                  .loginUser(payload: payload, ref: ref);
+                                  .loginUser(payload: payload, rememberMe: rememberMe,ref: ref);
 
                               if (response.success!) {
                                 // navigate
                               } else {
-                                ScaffoldMessenger.of(context)
+                                if(context.mounted) {
+                                  ScaffoldMessenger.of(context)
                                     .showSnackBar(SnackBar(
                                   content:
                                       Text(ErrorHandler().getErrorMessage()),
                                 ));
+                                }
                                 _debouncer.cancel();
                                 ErrorHandler().clearErrorMessage();
                               }

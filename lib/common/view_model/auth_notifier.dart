@@ -63,14 +63,23 @@ class AuthNotifier extends _$AuthNotifier {
   }
 
   // Auto-login logic (called on app start)
- /* Future<void> autoLogin() async {
+  /*Future<void> autoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('accessToken');
-    final rememberMe = prefs.getBool('rememberMe') ?? false;
+    final rememberMe = prefs.getBool('rememberMe');
+    final refreshToken = prefs.getString('refreshToken');
+    final refreshExpiryTime = DateTime.parse(prefs.getInt('refreshExpiryTime').toString());
+    final accessExpiryTime = DateTime.parse(prefs.getInt('accessExpiryTime').toString());
 
-    if (rememberMe && token != null) {
+    if (refreshExpiryTime.isBefore(DateTime.now())) {
+      // logout
       // await setAccessToken(token);
     } else {
+      if(accessExpiryTime.isBefore(DateTime.now())){
+        // newAccessToken
+      }else{
+        // homepage
+      }
       await clearAccessToken();
     }
   }*/
@@ -88,9 +97,9 @@ class AuthNotifier extends _$AuthNotifier {
     await prefs.setString('accessToken', accessToken);
     await prefs.setString('accessExpiryTime', accessExpiryTime.toString());
 
-    if(!rememberMe!){
-      await prefs.setString('refreshToken', refreshToken!);
-      await prefs.setInt('refreshExpiryTime', refreshExpiryTime!);
+    if(refreshToken != null && refreshExpiryTime! >0){
+      await prefs.setString('refreshToken', refreshToken);
+      await prefs.setInt('refreshExpiryTime', refreshExpiryTime);
     }
   }
 
