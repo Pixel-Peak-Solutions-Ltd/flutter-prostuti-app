@@ -112,6 +112,7 @@ class ForgetPasswordViewState extends ConsumerState<ForgetPasswordView> {
                                   .showSnackBar(SnackBar(
                                 content: Text(ErrorHandler().getErrorMessage()),
                               ));
+                              _debouncer.cancel();
                               ErrorHandler().clearErrorMessage();
                             }
                           },

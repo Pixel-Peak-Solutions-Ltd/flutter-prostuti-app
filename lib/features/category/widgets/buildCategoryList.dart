@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../core/configs/app_colors.dart';
 
-Widget buildCategoryList(BuildContext context, List<String> icons,
-    List<String> items, void Function()? onTap,
+Widget buildCategoryList(
+    BuildContext context, List<String> icons, List<String> items,
     {bool isSkeleton = false}) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -23,7 +23,7 @@ Widget buildCategoryList(BuildContext context, List<String> icons,
               width: 40,
             ),
             title: Text(isSkeleton ? '' : items[index]),
-            onTap: onTap,
+            onTap: () {},
             trailing: const Icon(Icons.keyboard_arrow_right),
           ),
         );

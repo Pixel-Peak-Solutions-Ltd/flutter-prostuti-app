@@ -41,7 +41,8 @@ class CategoryView extends ConsumerWidget {
       body: categoryAsyncValue.when(
         loading: () => Skeletonizer(
           enableSwitchAnimation: true,
-          child: buildCategoryList(context, icons, List.filled(3, ''), () {},
+          child: buildCategoryList(
+              context, icons, List.filled(3, 'Item with Text'),
               isSkeleton: true),
         ),
         error: (error, stack) => Center(child: Text('Error: $error')),
@@ -104,6 +105,7 @@ class CategoryView extends ConsumerWidget {
                                           content: Text(
                                               ErrorHandler().getErrorMessage()),
                                         ));
+                                        _debouncer.cancel();
                                         ErrorHandler().clearErrorMessage();
                                       }
                                     }

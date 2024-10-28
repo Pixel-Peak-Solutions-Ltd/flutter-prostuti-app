@@ -117,6 +117,7 @@ class PhoneViewState extends ConsumerState<PhoneView> {
                                       content: Text(
                                           ErrorHandler().getErrorMessage()),
                                     ));
+                                    _debouncer.cancel();
                                     ErrorHandler().clearErrorMessage();
                                   }
                                 },

@@ -116,6 +116,7 @@ class OtpViewState extends ConsumerState<OtpView> {
                                   .showSnackBar(SnackBar(
                                 content: Text(ErrorHandler().getErrorMessage()),
                               ));
+                              _debouncer.cancel();
                               ErrorHandler().clearErrorMessage();
                             }
                           },
