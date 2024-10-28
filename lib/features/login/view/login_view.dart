@@ -153,7 +153,7 @@ class LoginViewState extends ConsumerState<LoginView> {
 
                             final response = await ref
                                 .read(loginRepoProvider)
-                                .loginUser(payload: payload, ref: ref);
+                                .loginUser(payload: payload, rememberMe: rememberMe,ref: ref);
 
                             if (kDebugMode) {
                               print(response);
