@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
-import 'package:prostuti/features/home_screen/view/home_screen_view.dart';
 import 'package:prostuti/features/forget_password/view/forget_password_view.dart';
+import 'package:prostuti/features/home_screen/view/home_screen_view.dart';
 import 'package:prostuti/features/login/repository/login_repo.dart';
 import 'package:prostuti/features/login/viewmodel/login_viewmodel.dart';
 import 'package:prostuti/features/signup/widgets/label.dart';
@@ -197,7 +197,10 @@ class LoginViewState extends ConsumerState<LoginView> {
                                       ref: ref);
 
                               if (response.data != null) {
-                                // navigate
+                                Navigator.of(context)
+                                    .pushReplacement(MaterialPageRoute(
+                                  builder: (context) => HomeScreen(),
+                                ));
                               } else if (response.error != null) {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context)
