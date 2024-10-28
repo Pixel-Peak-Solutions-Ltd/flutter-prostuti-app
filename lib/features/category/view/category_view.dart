@@ -93,12 +93,13 @@ class CategoryView extends ConsumerWidget {
                                       },
                                     );
 
-                                    if (response && context.mounted) {
+                                    if (response.data != null &&
+                                        context.mounted) {
                                       Navigator.of(context)
                                           .pushReplacement(MaterialPageRoute(
                                         builder: (context) => const LoginView(),
                                       ));
-                                    } else {
+                                    } else if (response.error != null) {
                                       if (context.mounted) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(

@@ -1,9 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:prostuti/core/services/dio_service.dart';
 import 'package:prostuti/features/signup/model/otp_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/services/api_response.dart';
 import '../../../core/services/error_handler.dart';
+import '../../../core/services/error_response.dart';
 
 part 'signup_repo.g.dart';
 
@@ -18,7 +19,7 @@ class SignupRepo {
 
   SignupRepo(this._dioService);
 
-  Future<bool> sendVerificationCode({required String phoneNo}) async {
+  Future<ApiResponse> sendVerificationCode({required String phoneNo}) async {
     final payload = {
       "phoneNumber": "+88$phoneNo",
       "phoneVerificationType": "ACCOUNT_CREATION"
@@ -28,18 +29,15 @@ class SignupRepo {
         "/phone-verification/send-verification-code", payload);
 
     if (response.statusCode == 200) {
-      return response.data["success"];
+      return ApiResponse.success(response.data['success']);
     } else {
-      ErrorHandler().setErrorMessage(response.statusMessage);
-      if (kDebugMode) {
-        print(response.data);
-      }
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      ErrorHandler().setErrorMessage(errorResponse.message);
+      return ApiResponse.error(errorResponse);
     }
-
-    return false;
   }
 
-  Future<OTP> verifyPhoneNumber(
+  Future<ApiResponse> verifyPhoneNumber(
       {required phoneNo, required code, required String type}) async {
     final payload = {
       "phoneNumber": phoneNo.toString(),
@@ -51,30 +49,24 @@ class SignupRepo {
         "/phone-verification/verify-phone-number", payload);
 
     if (response.statusCode == 200) {
-      return OTP.fromJson(response.data);
+      return ApiResponse.success(OTP.fromJson(response.data));
     } else {
-      ErrorHandler().setErrorMessage(response.statusMessage);
-      if (kDebugMode) {
-        print(response.statusMessage);
-      }
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      ErrorHandler().setErrorMessage(errorResponse.message);
+      return ApiResponse.error(errorResponse);
     }
-
-    return OTP.fromJson(response.data);
   }
 
-  Future<bool> registerStudent(Map<String, String> payload) async {
+  Future<ApiResponse> registerStudent(Map<String, String> payload) async {
     final response =
         await _dioService.postRequest("/auth/register-student", payload);
 
     if (response.statusCode == 200) {
-      return response.data["success"];
+      return ApiResponse.success(response.data["success"]);
     } else {
-      ErrorHandler().setErrorMessage(response.statusMessage);
-      if (kDebugMode) {
-        print(response.statusMessage);
-      }
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      ErrorHandler().setErrorMessage(errorResponse.message);
+      return ApiResponse.error(errorResponse);
     }
-
-    return false;
   }
 }

@@ -1,11 +1,12 @@
 // __brick__/repository/login_repo.dart
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/common/view_model/auth_notifier.dart';
 import 'package:prostuti/core/services/dio_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/services/api_response.dart';
 import '../../../core/services/error_handler.dart';
+import '../../../core/services/error_response.dart';
 import '../model/login_model.dart';
 
 part 'login_repo.g.dart';
@@ -21,11 +22,12 @@ class LoginRepo {
 
   LoginRepo(this._dioService);
 
-  Future loginUser(
-      {required Map<String, String> payload, required WidgetRef ref, required bool rememberMe}) async {
+  Future<ApiResponse> loginUser(
+      {required Map<String, String> payload,
+      required WidgetRef ref,
+      required bool rememberMe}) async {
     final response = await _dioService.postRequest("/auth/login", payload);
 
-    print(response.statusMessage);
     if (response.statusCode == 200) {
       final loginResponse = Login.fromJson(response.data);
       final accessToken = loginResponse.data!.accessToken!;
@@ -41,15 +43,14 @@ class LoginRepo {
           .millisecondsSinceEpoch;
 
       // print("$accessToken $accessExpiryTime, $refreshToken, $refreshExpiryTime,$rememberMe}");
-      await ref.read(authNotifierProvider.notifier).setAccessToken(
-          accessToken, accessExpiryTime, refreshToken, refreshExpiryTime,rememberMe);
+      await ref.read(authNotifierProvider.notifier).setAccessToken(accessToken,
+          accessExpiryTime, refreshToken, refreshExpiryTime, rememberMe);
 
-      return loginResponse;
+      return ApiResponse.success(loginResponse);
     } else {
-      ErrorHandler().setErrorMessage(response.statusMessage);
-      if (kDebugMode) {
-        print("error login : ${response.statusMessage}");
-      }
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      ErrorHandler().setErrorMessage(errorResponse.message);
+      return ApiResponse.error(errorResponse);
     }
   }
 }

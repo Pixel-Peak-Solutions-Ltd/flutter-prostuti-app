@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -191,17 +190,20 @@ class LoginViewState extends ConsumerState<LoginView> {
 
                               final response = await ref
                                   .read(loginRepoProvider)
-                                  .loginUser(payload: payload, rememberMe: rememberMe,ref: ref);
+                                  .loginUser(
+                                      payload: payload,
+                                      rememberMe: rememberMe,
+                                      ref: ref);
 
-                              if (response.success!) {
+                              if (response.data != null) {
                                 // navigate
-                              } else {
-                                if(context.mounted) {
+                              } else if (response.error != null) {
+                                if (context.mounted) {
                                   ScaffoldMessenger.of(context)
-                                    .showSnackBar(SnackBar(
-                                  content:
-                                      Text(ErrorHandler().getErrorMessage()),
-                                ));
+                                      .showSnackBar(SnackBar(
+                                    content:
+                                        Text(ErrorHandler().getErrorMessage()),
+                                  ));
                                 }
                                 _debouncer.cancel();
                                 ErrorHandler().clearErrorMessage();

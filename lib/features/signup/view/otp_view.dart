@@ -98,8 +98,7 @@ class OtpViewState extends ConsumerState<OtpView> {
                                         ? "ACCOUNT_CREATION"
                                         : "PASSWORD_RESET");
 
-                            if (response.data!.verified != null &&
-                                context.mounted) {
+                            if (response.data! != null && context.mounted) {
                               widget.fromPage == "Signup"
                                   ? Navigator.of(context)
                                       .push(MaterialPageRoute(
@@ -111,7 +110,7 @@ class OtpViewState extends ConsumerState<OtpView> {
                                       builder: (context) =>
                                           const NewPasswordView(),
                                     ));
-                            } else {
+                            } else if (response.error != null) {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(
                                 content: Text(ErrorHandler().getErrorMessage()),

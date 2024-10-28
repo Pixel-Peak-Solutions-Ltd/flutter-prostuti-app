@@ -103,9 +103,11 @@ class DioService {
   Response _handleError(DioException error) {
     return Response(
       requestOptions: error.requestOptions,
-      statusMessage: 'Error: ${error.message}',
+      statusMessage: error.message,
       statusCode: error.response?.statusCode ??
           (error.type == DioExceptionType.connectionTimeout ? 408 : 500),
+      data: error.response
+          ?.data, // This will include the JSON body from the error response
     );
   }
 }

@@ -104,14 +104,15 @@ class PhoneViewState extends ConsumerState<PhoneView> {
                                       .watch(phoneNumberProvider.notifier)
                                       .setPhoneNumber(_phoneController.text);
 
-                                  if (response && context.mounted) {
+                                  if (response.data != null &&
+                                      context.mounted) {
                                     Navigator.of(context)
                                         .push(MaterialPageRoute(
                                       builder: (context) => const OtpView(
                                         fromPage: "Signup",
                                       ),
                                     ));
-                                  } else {
+                                  } else if (response.error != null) {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
                                       content: Text(
