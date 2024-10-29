@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'name_viewmodel.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class NameViewmodel extends _$NameViewmodel {
   @override
   String build() {

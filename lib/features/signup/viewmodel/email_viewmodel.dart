@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'email_viewmodel.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class EmailViewmodel extends _$EmailViewmodel {
   @override
   String build() {

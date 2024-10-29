@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'password_viewmodel.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class PasswordViewmodel extends _$PasswordViewmodel {
   @override
   String build() {

@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'otp_viewmodel.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Otp extends _$Otp {
   @override
   String build() {

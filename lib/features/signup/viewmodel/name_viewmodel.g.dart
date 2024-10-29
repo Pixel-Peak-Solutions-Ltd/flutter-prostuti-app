@@ -6,12 +6,11 @@ part of 'name_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$nameViewmodelHash() => r'8a56ea29d9a7fad9ddfc50b77295d96495321e3c';
+String _$nameViewmodelHash() => r'baeddd1d6696f42906c26c24b1cbd3dc45590259';
 
 /// See also [NameViewmodel].
 @ProviderFor(NameViewmodel)
-final nameViewmodelProvider =
-    AutoDisposeNotifierProvider<NameViewmodel, String>.internal(
+final nameViewmodelProvider = NotifierProvider<NameViewmodel, String>.internal(
   NameViewmodel.new,
   name: r'nameViewmodelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +20,6 @@ final nameViewmodelProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$NameViewmodel = AutoDisposeNotifier<String>;
+typedef _$NameViewmodel = Notifier<String>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

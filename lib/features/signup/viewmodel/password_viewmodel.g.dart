@@ -6,12 +6,12 @@ part of 'password_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$passwordViewmodelHash() => r'57eb90280a7fb5e7dcc1162e4bc5bf9641350cc2';
+String _$passwordViewmodelHash() => r'3809972958e9fa1aba664672dea490caadd0d000';
 
 /// See also [PasswordViewmodel].
 @ProviderFor(PasswordViewmodel)
 final passwordViewmodelProvider =
-    AutoDisposeNotifierProvider<PasswordViewmodel, String>.internal(
+    NotifierProvider<PasswordViewmodel, String>.internal(
   PasswordViewmodel.new,
   name: r'passwordViewmodelProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +21,6 @@ final passwordViewmodelProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$PasswordViewmodel = AutoDisposeNotifier<String>;
+typedef _$PasswordViewmodel = Notifier<String>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
