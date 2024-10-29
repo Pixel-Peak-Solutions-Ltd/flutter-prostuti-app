@@ -98,12 +98,12 @@ class OtpViewState extends ConsumerState<OtpView> {
                                         ? "ACCOUNT_CREATION"
                                         : "PASSWORD_RESET");
 
-                            if (response.data! != null && context.mounted) {
+                            if (response.data != null && context.mounted) {
                               widget.fromPage == "Signup"
                                   ? Navigator.of(context)
                                       .push(MaterialPageRoute(
                                       builder: (context) =>
-                                          const RegisterView(),
+                                          RegisterView(_otpController.text),
                                     ))
                                   : Navigator.of(context)
                                       .push(MaterialPageRoute(

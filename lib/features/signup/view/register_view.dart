@@ -3,9 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/services/debouncer.dart';
 import 'package:prostuti/features/category/view/category_view.dart';
-import 'package:prostuti/features/signup/viewmodel/email_viewmodel.dart';
-import 'package:prostuti/features/signup/viewmodel/name_viewmodel.dart';
-import 'package:prostuti/features/signup/viewmodel/password_viewmodel.dart';
 import 'package:prostuti/features/signup/widgets/label.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -13,7 +10,9 @@ import '../../../common/widgets/long_button.dart';
 import '../viewmodel/phone_number_viewmodel.dart';
 
 class RegisterView extends ConsumerStatefulWidget {
-  const RegisterView({super.key});
+  final String otp;
+
+  const RegisterView(this.otp, {super.key});
 
   @override
   RegisterViewState createState() => RegisterViewState();
@@ -109,9 +108,6 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                     const Label(text: 'নাম'),
                     const Gap(6),
                     TextFormField(
-                      onChanged: (value) => ref
-                          .watch(nameViewmodelProvider.notifier)
-                          .setName(_nameController.text),
                       keyboardType: TextInputType.name,
                       controller: _nameController,
                       decoration:
@@ -122,9 +118,6 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                     const Gap(6),
                     TextFormField(
                       validator: _validateEmail,
-                      onChanged: (value) => ref
-                          .watch(emailViewmodelProvider.notifier)
-                          .setEmail(_emailController.text),
                       keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
                       decoration:
@@ -135,9 +128,6 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                     const Gap(6),
                     TextFormField(
                       validator: _validatePassword,
-                      onChanged: (value) => ref
-                          .watch(passwordViewmodelProvider.notifier)
-                          .setPassword(_passwordController.text),
                       keyboardType: TextInputType.text,
                       obscureText: true,
                       controller: _passwordController,
@@ -155,10 +145,15 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _debouncer.run(
-                            action: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CategoryView())),
+                            action: () async {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => CategoryView(
+                                        _nameController.text,
+                                        _emailController.text,
+                                        _passwordController.text,
+                                        widget.otp,
+                                      )));
+                            },
                             loadingController:
                                 ref.read(_loadingProvider.notifier));
                       }

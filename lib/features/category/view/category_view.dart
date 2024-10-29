@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/features/category/repository/category_repo.dart';
-import 'package:prostuti/features/login/view/login_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/services/debouncer.dart';
 import '../../../core/services/error_handler.dart';
+import '../../login/view/login_view.dart';
 import '../../signup/repository/signup_repo.dart';
-import '../../signup/viewmodel/email_viewmodel.dart';
-import '../../signup/viewmodel/name_viewmodel.dart';
-import '../../signup/viewmodel/otp_viewmodel.dart';
-import '../../signup/viewmodel/password_viewmodel.dart';
 import '../../signup/viewmodel/phone_number_viewmodel.dart';
 import '../widgets/buildCategoryList.dart';
 
 class CategoryView extends ConsumerWidget {
-  const CategoryView({super.key});
+  final String name, email, password, otp;
+
+  const CategoryView(this.name, this.email, this.password, this.otp,
+      {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -78,16 +77,13 @@ class CategoryView extends ConsumerWidget {
                                         .read(signupRepoProvider)
                                         .registerStudent(
                                       {
-                                        "otpCode": ref.read(otpProvider),
-                                        "name": ref.read(nameViewmodelProvider),
-                                        "email":
-                                            ref.read(emailViewmodelProvider),
+                                        "otpCode": otp,
+                                        "name": name.toString(),
+                                        "email": email.toString(),
                                         "phone":
                                             "+88${ref.read(phoneNumberProvider)}",
-                                        "password":
-                                            ref.read(passwordViewmodelProvider),
-                                        "confirmPassword":
-                                            ref.read(passwordViewmodelProvider),
+                                        "password": password.toString(),
+                                        "confirmPassword": password.toString(),
                                         "categoryType":
                                             categories[index].toString()
                                       },

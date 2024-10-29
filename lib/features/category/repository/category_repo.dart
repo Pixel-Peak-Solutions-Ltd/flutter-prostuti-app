@@ -3,7 +3,9 @@ import 'package:prostuti/core/services/dio_service.dart';
 import 'package:prostuti/features/category/model/category_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/services/api_response.dart';
 import '../../../core/services/error_handler.dart';
+import '../../../core/services/error_response.dart';
 
 part 'category_repo.g.dart';
 
@@ -25,8 +27,9 @@ class CategoryRepo {
       print(response.data);
       return Category.fromJson(response.data);
     }
-    ErrorHandler().setErrorMessage(response.statusMessage);
-    return response;
+    final errorResponse = ErrorResponse.fromJson(response.data);
+    ErrorHandler().setErrorMessage(errorResponse.message);
+    return ApiResponse.error(errorResponse);
   }
 }
 
