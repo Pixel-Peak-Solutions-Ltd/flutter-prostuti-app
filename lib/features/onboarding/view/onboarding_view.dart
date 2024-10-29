@@ -62,17 +62,20 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                 ),
                 // Add your images to assets folder
                 const Gap(50),
-                 Text(
+                Text(
                   'মকটেষ্ট',
-                    style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Gap(16),
-                 Padding(
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w500),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(fontWeight: FontWeight.w500),
                   ),
                 ),
               ],
@@ -91,17 +94,20 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                 ),
                 // Add your images to assets folder
                 const Gap(50),
-                 Text(
+                Text(
                   'ক্লিয়ার ইউর ডাউটস',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Gap(16),
-                 Padding(
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w500),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleSmall!
+                        .copyWith(fontWeight: FontWeight.w500),
                   ),
                 ),
               ],
@@ -109,7 +115,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
           ],
         ),
         Positioned(
-          bottom: 230, // Adjust position for indicators
+          bottom: 180, // Adjust position for indicators
           left: 0,
           right: 0,
           child: Center(
@@ -131,11 +137,13 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
           right: 0,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: LongButton(onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const LoginView(),
-              ));
-            }, text: 'শুরু করুন'),
+            child: LongButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const LoginView(),
+                  ));
+                },
+                text: 'শুরু করুন'),
           ),
         ),
       ]),
