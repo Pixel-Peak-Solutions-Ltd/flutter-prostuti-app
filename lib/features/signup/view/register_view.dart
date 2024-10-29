@@ -13,9 +13,7 @@ import '../viewmodel/email_viewmodel.dart';
 import '../viewmodel/phone_number_viewmodel.dart';
 
 class RegisterView extends ConsumerStatefulWidget {
-  final String otp;
-
-  const RegisterView(this.otp, {super.key});
+  const RegisterView({super.key});
 
   @override
   RegisterViewState createState() => RegisterViewState();
@@ -159,12 +157,7 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                         _debouncer.run(
                             action: () async {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => CategoryView(
-                                        _nameController.text,
-                                        _emailController.text,
-                                        _passwordController.text,
-                                        widget.otp,
-                                      )));
+                                  builder: (context) => const CategoryView()));
                             },
                             loadingController:
                                 ref.read(_loadingProvider.notifier));

@@ -16,10 +16,7 @@ import '../../signup/viewmodel/phone_number_viewmodel.dart';
 import '../widgets/buildCategoryList.dart';
 
 class CategoryView extends ConsumerWidget {
-  final String name, email, password, otp;
-
-  const CategoryView(this.name, this.email, this.password, this.otp,
-      {super.key});
+  const CategoryView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

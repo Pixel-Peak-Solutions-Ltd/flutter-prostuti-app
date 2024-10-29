@@ -102,8 +102,7 @@ class OtpViewState extends ConsumerState<OtpView> {
                               widget.fromPage == "Signup"
                                   ? Navigator.of(context)
                                       .push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          RegisterView(_otpController.text),
+                                      builder: (context) => RegisterView(),
                                     ))
                                   : Navigator.of(context)
                                       .push(MaterialPageRoute(
