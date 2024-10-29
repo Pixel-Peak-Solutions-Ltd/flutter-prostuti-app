@@ -34,7 +34,7 @@ class MyApp extends ConsumerWidget {
             return const LoginView();
           } else {
             // If the user is not logged in, show the login or onboarding screen
-            return const LoginView();
+            return const OnboardingView();
           }
         },
         loading: () => const CircularProgressIndicator(),

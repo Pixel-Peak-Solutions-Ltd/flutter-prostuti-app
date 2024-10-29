@@ -2,7 +2,7 @@
 
     <application
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon"
+        android:icon="@mipmap/ic_launcher"
         android:label="prostuti">
         <activity
             android:name="com.linusu.flutter_web_auth_2.CallbackActivity"
