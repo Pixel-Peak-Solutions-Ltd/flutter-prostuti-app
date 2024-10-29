@@ -27,19 +27,7 @@ class MyApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
-      home: authState.when(
-        data: (accessToken) {
-          if (accessToken != null) {
-            // If the user is logged in, show the home screen
-            return const LoginView();
-          } else {
-            // If the user is not logged in, show the login or onboarding screen
-            return const OnboardingView();
-          }
-        },
-        loading: () => const CircularProgressIndicator(),
-        error: (error, stack) => const OnboardingView(), // Handle error state
-      ),
+      home: const OnboardingView(),
     );
   }
 }
