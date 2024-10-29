@@ -64,7 +64,7 @@ class OtpViewState extends ConsumerState<OtpView> {
                   controller: _otpController,
                   showCursor: true,
                   onCompleted: (pin) =>
-                      ref.watch(otpProvider.notifier).setOtp(pin),
+                      ref.read(otpProvider.notifier).setOtp(pin),
                 ),
                 const Gap(32),
                 TextButton(

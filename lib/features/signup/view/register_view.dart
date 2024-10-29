@@ -3,10 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/services/debouncer.dart';
 import 'package:prostuti/features/category/view/category_view.dart';
+import 'package:prostuti/features/signup/viewmodel/name_viewmodel.dart';
+import 'package:prostuti/features/signup/viewmodel/password_viewmodel.dart';
 import 'package:prostuti/features/signup/widgets/label.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../common/widgets/long_button.dart';
+import '../viewmodel/email_viewmodel.dart';
 import '../viewmodel/phone_number_viewmodel.dart';
 
 class RegisterView extends ConsumerStatefulWidget {
@@ -110,6 +113,9 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                     TextFormField(
                       keyboardType: TextInputType.name,
                       controller: _nameController,
+                      onChanged: (value) => ref
+                          .read(nameViewmodelProvider.notifier)
+                          .setName(value),
                       decoration:
                           const InputDecoration(hintText: "আপনার নাম লিখুন"),
                     ),
@@ -120,6 +126,9 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                       validator: _validateEmail,
                       keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
+                      onChanged: (value) => ref
+                          .read(emailViewmodelProvider.notifier)
+                          .setEmail(value),
                       decoration:
                           const InputDecoration(hintText: "আপনার ইমেইল লিখুন"),
                     ),
@@ -129,6 +138,9 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                     TextFormField(
                       validator: _validatePassword,
                       keyboardType: TextInputType.text,
+                      onChanged: (value) => ref
+                          .read(passwordViewmodelProvider.notifier)
+                          .setPassword(value),
                       obscureText: true,
                       controller: _passwordController,
                       decoration: const InputDecoration(
