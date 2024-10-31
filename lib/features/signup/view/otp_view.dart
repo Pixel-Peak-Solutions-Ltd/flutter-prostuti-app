@@ -70,7 +70,10 @@ class OtpViewState extends ConsumerState<OtpView> {
                 TextButton(
                   onPressed: () async {
                     await ref.watch(signupRepoProvider).sendVerificationCode(
-                        phoneNo: ref.read(phoneNumberProvider));
+                        phoneNo: ref.read(phoneNumberProvider),
+                        type: widget.fromPage == "Signup"
+                            ? "ACCOUNT_CREATION"
+                            : "PASSWORD_RESET");
                   },
                   child: Text(
                     'আবার কোড পাঠান',

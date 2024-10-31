@@ -39,7 +39,7 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
     // Password must contain at least one uppercase, one special character, and be at least 8 characters long
     final passwordRegex = RegExp(r'^(?=.*?[A-Z])(?=.*?[!@#\$&*~]).{8,}$');
     if (!passwordRegex.hasMatch(value)) {
-      return 'পাসওয়ার্ডে কমপক্ষে একটি বড় হাতের অক্ষর, একটি বিশেষ চিহ্ন এবং ৮ অক্ষর থাকতে হবে';
+      return 'পাসওয়ার্ডে ৮ অক্ষর, বড় হাতের অক্ষর ও বিশেষ চিহ্ন দরকার।';
     }
     return null;
   }
@@ -82,7 +82,8 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
                     const Gap(6),
                     TextFormField(
                       validator: _validatePassword,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
                       controller: _passwordController,
                       decoration: const InputDecoration(
                           hintText: "আপনার পাসওয়ার্ড লিখুন"),
@@ -93,7 +94,8 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
                     ),
                     const Gap(6),
                     TextFormField(
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
                       controller: _confirmPasswordController,
                       decoration: const InputDecoration(
                           hintText: "আপনার পাসওয়ার্ড কনফার্ম করুন"),
