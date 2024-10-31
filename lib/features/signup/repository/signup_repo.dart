@@ -19,10 +19,11 @@ class SignupRepo {
 
   SignupRepo(this._dioService);
 
-  Future<ApiResponse> sendVerificationCode({required String phoneNo}) async {
+  Future<ApiResponse> sendVerificationCode(
+      {required String phoneNo, String type = "ACCOUNT_CREATION"}) async {
     final payload = {
       "phoneNumber": "+88$phoneNo",
-      "phoneVerificationType": "ACCOUNT_CREATION"
+      "phoneVerificationType": type
     };
 
     final response = await _dioService.postRequest(

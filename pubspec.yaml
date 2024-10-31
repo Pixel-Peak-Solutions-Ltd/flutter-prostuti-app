@@ -22,6 +22,7 @@ dependencies:
   skeletonizer: ^1.4.2
   flutter_animate: ^4.5.0
   cached_network_image: ^3.4.1
+  connectivity_plus:
   file_picker:
   shared_preferences:
   twilio_flutter: ^0.9.0
@@ -31,6 +32,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   table_calendar: ^3.1.2
   flutter_launcher_icons: ^0.14.1
+  fpdart: ^1.1.0
 
 dev_dependencies:
   flutter_test:

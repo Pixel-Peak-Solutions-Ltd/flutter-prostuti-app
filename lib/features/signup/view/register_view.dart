@@ -63,7 +63,7 @@ class RegisterViewState extends ConsumerState<RegisterView> {
     // Password must contain at least one uppercase, one special character, and be at least 8 characters long
     final passwordRegex = RegExp(r'^(?=.*?[A-Z])(?=.*?[!@#\$&*~]).{8,}$');
     if (!passwordRegex.hasMatch(value)) {
-      return 'পাসওয়ার্ডে কমপক্ষে একটি বড় হাতের অক্ষর, একটি বিশেষ চিহ্ন এবং ৮ অক্ষর থাকতে হবে';
+      return 'পাসওয়ার্ডে ৮ অক্ষর, বড় হাতের অক্ষর ও বিশেষ চিহ্ন দরকার।';
     }
     return null;
   }
