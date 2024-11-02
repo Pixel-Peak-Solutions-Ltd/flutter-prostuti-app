@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/features/user_profile/view/user_profile_view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../widget/calendar_widget.dart';
@@ -68,30 +69,38 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          children: [
-                            const CircleAvatar(
-                              backgroundImage: AssetImage(
-                                'assets/images/test_dp.jpg',
+                        GestureDetector(
+                          onTap:(){
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(
+                              builder: (context) => const UserProfileView(),
+                            ));
+                          },
+                          child: Row(
+                            children: [
+                              const CircleAvatar(
+                                backgroundImage: AssetImage(
+                                  'assets/images/test_dp.jpg',
+                                ),
                               ),
-                            ),
-                            const Gap(16),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'নাজমুল ইসলাম সিফাত',
-                                  style:
-                                      Theme.of(context).textTheme.titleSmall!,
-                                ),
-                                Text(
-                                  'প্রফাইল দেখুন',
-                                  style:
-                                      Theme.of(context).textTheme.bodyMedium!,
-                                ),
-                              ],
-                            ),
-                          ],
+                              const Gap(16),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'নাজমুল ইসলাম সিফাত',
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall!,
+                                  ),
+                                  Text(
+                                    'জব প্রিপারেশন',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium!,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                         const Gap(24),
                         Padding(
@@ -175,12 +184,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           CategoryCard(
                             icon: "assets/icons/courses_icon.png",
-                            text: 'কোর্সমেট',
+                            text: 'কোর্সসমূহ',
                             image: 'assets/images/courses_background.png',
                           ),
+                          Gap(16),
                           CategoryCard(
                             icon: "assets/icons/my_courses_icon.png",
-                            text: 'আমার কোর্সমেট',
+                            text: 'আমার কোর্সসমূহ',
                             image: 'assets/images/my_courses_background.png',
                           ),
                         ],

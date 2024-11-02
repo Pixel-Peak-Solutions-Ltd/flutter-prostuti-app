@@ -28,6 +28,7 @@ class LoginRepo {
       required bool rememberMe}) async {
     final response = await _dioService.postRequest("/auth/login", payload);
 
+    print("login response : $response");
     if (response.statusCode == 200) {
       final loginResponse = Login.fromJson(response.data);
       final accessToken = loginResponse.data!.accessToken!;

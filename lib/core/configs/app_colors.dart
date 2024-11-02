@@ -97,4 +97,7 @@ class AppColors {
 
   static const leaderboardThirdLight = Color(0xFFFEF2CE);
   static const leaderboardThirdDark = Color(0xFFFEF2CE);
+
+  static const appBarLight = Color(0xFFE1EAFF);
+  static const appBarDark = Color(0xFFE1EAFF);
 }
