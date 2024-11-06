@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Router {
-  static final Router _instance = Router._internal();
+class Nav {
+  static final Nav _instance = Nav._internal();
 
-  factory Router() {
+  factory Nav() {
     return _instance;
   }
 
-  Router._internal();
+  Nav._internal();
 
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
