@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:prostuti/core/configs/app_colors.dart';
 
-class CommonAppBar extends StatelessWidget {
-  const CommonAppBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
+AppBar commonAppbar(String title, BuildContext context) {
+  return AppBar(
+    title: Text(
+      title,
+      style: Theme.of(context).textTheme.titleMedium,
+    ),
+    automaticallyImplyLeading: true,
+    centerTitle: true,
+    backgroundColor: AppColors.shadeSecondaryLight,
+  );
 }

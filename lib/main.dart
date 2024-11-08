@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prostuti/features/course_list/view/course_list_view.dart';
 import 'package:prostuti/features/login/view/login_view.dart';
 import 'package:prostuti/features/onboarding/view/onboarding_view.dart';
 import 'package:prostuti/features/signup/view/phone_view.dart';
@@ -27,7 +28,7 @@ class MyApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
-      home: const OnboardingView(),
+      home: const CourseListView(),
     );
   }
 }
