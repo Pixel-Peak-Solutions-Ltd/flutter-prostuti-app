@@ -6,7 +6,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.3.4 <4.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -14,7 +14,7 @@ dependencies:
 
 
   cupertino_icons: ^1.0.8
-  appwrite: ^13.0.0
+
   dio: ^5.7.0
   google_fonts: ^6.2.1
   flutter_riverpod: ^2.5.3
@@ -22,11 +22,17 @@ dependencies:
   skeletonizer: ^1.4.2
   flutter_animate: ^4.5.0
   cached_network_image: ^3.4.1
-  file_picker: ^8.1.2
-  shared_preferences: ^2.3.2
+  connectivity_plus:
+  file_picker:
+  shared_preferences:
   twilio_flutter: ^0.9.0
   gap: ^3.0.1
   pinput: ^5.0.0
+  smooth_page_indicator: ^1.2.0+3
+  flutter_svg: ^2.0.10+1
+  table_calendar: ^3.1.2
+  flutter_launcher_icons: ^0.14.1
+  fpdart: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -34,9 +40,10 @@ dev_dependencies:
 
 
   flutter_lints: ^3.0.0
-  riverpod_generator: ^2.4.3
+  riverpod_generator:
   build_runner: any
-  riverpod_lint: ^2.3.13
+  riverpod_lint:
+
 
 
 flutter:
@@ -47,7 +54,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
-  #   - images/a_dot_ham.jpeg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

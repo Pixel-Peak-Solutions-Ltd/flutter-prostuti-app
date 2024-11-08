@@ -31,7 +31,7 @@ class AppTheme {
       titleSmall: const TextStyle(
         color: AppColors.textPrimaryLight,
         fontSize: 18,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
       ),
       bodyLarge: const TextStyle(
         color: AppColors.textPrimaryLight,

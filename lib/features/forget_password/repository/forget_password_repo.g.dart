@@ -7,7 +7,7 @@ part of 'forget_password_repo.dart';
 // **************************************************************************
 
 String _$forgetPasswordRepoHash() =>
-    r'12284bee210d6a47a8bf470555e860c3ebb00ab3';
+    r'1274f32356c86d0c2c93c85828b36a0d76469e04';
 
 /// See also [forgetPasswordRepo].
 @ProviderFor(forgetPasswordRepo)
