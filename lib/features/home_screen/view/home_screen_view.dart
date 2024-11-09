@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/core/services/nav.dart';
+import 'package:prostuti/features/course_list/view/course_list_view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../widget/calendar_widget.dart';
@@ -18,13 +20,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Temporary List of flashcards
   List<Flashcard> flashcards = [
-    Flashcard(question: 'How many Americans died in WWII?', answer: 'Around 418,500'),
+    Flashcard(
+        question: 'How many Americans died in WWII?', answer: 'Around 418,500'),
     Flashcard(question: 'What is the capital of France?', answer: 'Paris'),
-    Flashcard(question: 'What is Flutter?', answer: 'A UI toolkit for building apps.'),
-    Flashcard(question: 'What is Dart?', answer: 'A programming language for Flutter.'),
+    Flashcard(
+        question: 'What is Flutter?',
+        answer: 'A UI toolkit for building apps.'),
+    Flashcard(
+        question: 'What is Dart?',
+        answer: 'A programming language for Flutter.'),
   ];
 
-  List<Color> flashCardColors=[
+  List<Color> flashCardColors = [
     AppColors.leaderboardSecondLight,
     AppColors.leaderboardFirstLight,
     AppColors.leaderboardThirdLight,
@@ -39,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     isShowingQuestionList = List.generate(flashcards.length, (index) => true);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             print("Search box clicked!");
                           },
                           child: Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 12),
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -164,21 +172,26 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
-                  const Positioned(
+                  Positioned(
                     top: 300, // Adjust this to control the overlap
                     left: 16,
                     right: 16,
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          CategoryCard(
-                            icon: "assets/icons/courses_icon.png",
-                            text: 'কোর্সমেট',
-                            image: 'assets/images/courses_background.png',
+                          InkWell(
+                            onTap: () {
+                              Nav().push(const CourseListView());
+                            },
+                            child: const CategoryCard(
+                              icon: "assets/icons/courses_icon.png",
+                              text: 'কোর্সসমূহ',
+                              image: 'assets/images/courses_background.png',
+                            ),
                           ),
-                          CategoryCard(
+                          const CategoryCard(
                             icon: "assets/icons/my_courses_icon.png",
                             text: 'আমার কোর্সমেট',
                             image: 'assets/images/my_courses_background.png',
@@ -292,7 +305,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              isShowingQuestionList[index] = !isShowingQuestionList[index]; // Flip card state
+                              isShowingQuestionList[index] =
+                                  !isShowingQuestionList[
+                                      index]; // Flip card state
                             });
                           },
                           child: Card(
@@ -301,27 +316,37 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Container(
-                              padding: EdgeInsets.all(24),
+                              padding: const EdgeInsets.all(24),
                               width: 300,
                               height: 220,
                               color: flashCardColors[index],
                               child: Column(
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       SvgPicture.asset(
-                                          "assets/icons/sound_icon.svg",color: Colors.black,),
+                                        "assets/icons/sound_icon.svg",
+                                        color: Colors.black,
+                                      ),
                                       SvgPicture.asset(
                                           "assets/icons/favourite.svg"),
-                                  ],),
+                                    ],
+                                  ),
                                   const Gap(32),
                                   Center(
                                     child: Text(
                                       isShowingQuestionList[index]
-                                          ? flashcards[index].question // Show question
-                                          : flashcards[index].answer,  // Show answer
-                                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.w600),
+                                          ? flashcards[index]
+                                              .question // Show question
+                                          : flashcards[index]
+                                              .answer, // Show answer
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(
+                                              fontWeight: FontWeight.w600),
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -329,7 +354,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Align(
                                     alignment: Alignment.bottomRight,
                                     child: SvgPicture.asset(
-                                      "assets/icons/flash_card_share_icon.svg",color: Colors.black,),
+                                      "assets/icons/flash_card_share_icon.svg",
+                                      color: Colors.black,
+                                    ),
                                   )
                                 ],
                               ),
@@ -422,5 +449,3 @@ class Flashcard {
 
   Flashcard({required this.question, required this.answer});
 }
-
-

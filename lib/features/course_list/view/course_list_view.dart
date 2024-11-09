@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/appbar/common_app_bar.dart';
+import 'package:prostuti/core/services/nav.dart';
+import 'package:prostuti/features/course_details/view/course_details_view.dart';
 import 'package:prostuti/features/course_list/widgets/category_tile.dart';
 import 'package:prostuti/features/course_list/widgets/course_card.dart';
 import 'package:prostuti/features/course_list/view/course_list_header.dart';
@@ -26,6 +28,7 @@ class CourseListViewState extends ConsumerState<CourseListView> {
 
   List<Map<String, String>> courses = [
     {
+      "id": "1",
       "title": "ফ্লাটার শেখার কোর্স",
       "price": "৳999",
       "discountPrice": "৳1299",
@@ -33,6 +36,7 @@ class CourseListViewState extends ConsumerState<CourseListView> {
       "imgPath": "assets/images/course_thumbnail.png",
     },
     {
+      "id": "2",
       "title": "Flutter",
       "price": "৳799",
       "discountPrice": "৳999",
@@ -40,6 +44,7 @@ class CourseListViewState extends ConsumerState<CourseListView> {
       "imgPath": "assets/images/course_thumbnail.png",
     },
     {
+      "id": "3",
       "title": "Java",
       "price": "৳1499",
       "discountPrice": "৳1699",
@@ -47,6 +52,7 @@ class CourseListViewState extends ConsumerState<CourseListView> {
       "imgPath": "assets/images/course_thumbnail.png",
     },
     {
+      "id": "4",
       "title": "Java with script",
       "price": "৳1499",
       "discountPrice": "৳1699",
@@ -54,6 +60,7 @@ class CourseListViewState extends ConsumerState<CourseListView> {
       "imgPath": "assets/images/course_thumbnail.png",
     },
     {
+      "id": "5",
       "title": "Flutter 2",
       "price": "৳1499",
       "discountPrice": "৳1699",
@@ -102,9 +109,7 @@ class CourseListViewState extends ConsumerState<CourseListView> {
                 ),
               ),
               const Gap(24),
-              const CourseListHeader(
-                text: 'টেস্ট ক্যাটাগরি',
-              ),
+              const CourseListHeader(text: 'টেস্ট ক্যাটাগরি'),
               const Gap(10),
               // Category List
               SizedBox(
@@ -121,16 +126,16 @@ class CourseListViewState extends ConsumerState<CourseListView> {
                 ),
               ),
               const Gap(24),
-              const CourseListHeader(
-                text: 'টপ টেস্ট লিস্ট',
-              ),
+              const CourseListHeader(text: 'টপ টেস্ট লিস্ট'),
               const Gap(10),
 
               for (int i = 0; i < filteredCourses.length; i++)
                 Column(
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Nav().push(CourseDetailsView());
+                      },
                       child: CourseCard(
                         title: filteredCourses[i]['title']!,
                         price: filteredCourses[i]['price']!,
