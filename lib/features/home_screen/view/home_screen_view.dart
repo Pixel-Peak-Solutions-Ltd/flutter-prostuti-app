@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course_list/view/course_list_view.dart';
+import 'package:prostuti/features/my_course/view/my_course_view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../widget/calendar_widget.dart';
@@ -191,10 +192,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               image: 'assets/images/courses_background.png',
                             ),
                           ),
-                          const CategoryCard(
-                            icon: "assets/icons/my_courses_icon.png",
-                            text: 'আমার কোর্সমেট',
-                            image: 'assets/images/my_courses_background.png',
+                          InkWell(
+                            onTap: () => Nav().push(const MyCourseView()),
+                            child: const CategoryCard(
+                              icon: "assets/icons/my_courses_icon.png",
+                              text: 'আমার কোর্সসমূহ',
+                              image: 'assets/images/my_courses_background.png',
+                            ),
                           ),
                         ],
                       ),
