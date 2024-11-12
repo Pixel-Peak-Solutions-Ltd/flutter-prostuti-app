@@ -5,6 +5,8 @@ import 'package:prostuti/common/widgets/appbar/common_app_bar.dart';
 import 'package:prostuti/common/widgets/course_enroll_row.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/features/course_details/view/course_details_review_card.dart';
+import 'package:prostuti/features/course_details/viewmodel/lesson_see_more_viewmodel.dart';
+import 'package:prostuti/features/course_details/viewmodel/review_see_more_viewModel.dart';
 import 'package:prostuti/features/course_details/widgets/course_details_pills.dart';
 import 'package:prostuti/features/course_details/widgets/expandable_text.dart';
 
@@ -15,6 +17,9 @@ class CourseDetailsView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    final reviewMoreBtn = ref.watch(reviewSeeMoreViewmodelProvider);
+    final lessonMoreBtn = ref.watch(lessonSeeMoreViewmodelProvider);
+
     return Scaffold(
       appBar: commonAppbar("BCS ফাইনাল প্রিলি প্রিপারেশন", context),
       body: Padding(
@@ -122,7 +127,7 @@ class CourseDetailsView extends ConsumerWidget {
               const Gap(32),
               const CourseListHeader(text: 'কোর্স কারিকুলাম'),
               const Gap(16),
-              for (int i = 0; i < 5; i++)
+              for (int i = 0; i < (lessonMoreBtn ? 10 : 3); i++)
                 ListTileTheme(
                   contentPadding: const EdgeInsets.all(0),
                   dense: true,
@@ -137,7 +142,7 @@ class CourseDetailsView extends ConsumerWidget {
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                     children: [
-                      for (int i = 0; i < 5; i++)
+                      for (int i = 0; i < 3; i++)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16)
                               .copyWith(top: 0),
@@ -180,10 +185,53 @@ class CourseDetailsView extends ConsumerWidget {
                     ],
                   ),
                 ),
+              const Gap(8),
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      elevation: 0),
+                  onPressed: () {
+                    ref
+                        .watch(lessonSeeMoreViewmodelProvider.notifier)
+                        .toggleBtn();
+                  },
+                  child: Text(
+                    lessonMoreBtn ? "কম দেখুন" : 'আরও দেখুন',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.black),
+                  ),
+                ),
+              ),
               const Gap(32),
               const CourseListHeader(text: 'টেস্ট রিভিউ'),
               const Gap(16),
-              for (int i = 0; i < 3; i++) const CourseDetailsReviewCard(),
+              for (int i = 0; i < (reviewMoreBtn ? 10 : 3); i++)
+                const CourseDetailsReviewCard(),
+              const Gap(8),
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      elevation: 0),
+                  onPressed: () {
+                    ref
+                        .watch(reviewSeeMoreViewmodelProvider.notifier)
+                        .toggleBtn();
+                  },
+                  child: Text(
+                    reviewMoreBtn ? "কম দেখুন" : 'আরও দেখুন',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: Colors.black),
+                  ),
+                ),
+              )
             ],
           ),
         ),
