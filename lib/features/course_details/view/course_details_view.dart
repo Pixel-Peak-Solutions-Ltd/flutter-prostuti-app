@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/appbar/common_app_bar.dart';
 import 'package:prostuti/common/widgets/course_enroll_row.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
-import 'package:prostuti/features/course_details/view/course_details_review_card.dart';
+import 'package:prostuti/features/course_details/widgets/course_details_review_card.dart';
 import 'package:prostuti/features/course_details/viewmodel/lesson_see_more_viewmodel.dart';
 import 'package:prostuti/features/course_details/viewmodel/review_see_more_viewModel.dart';
 import 'package:prostuti/features/course_details/widgets/course_details_pills.dart';

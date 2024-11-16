@@ -2,6 +2,7 @@
 class Assets {
   Assets._();
 
+  static const String iconsAssignment = 'assets/icons/assignment.png';
   static const String iconsBookEdit = 'assets/icons/book-edit.png';
   static const String iconsBottomNavChatUnselect =
       'assets/icons/bottom_nav_chat_unselect.svg';
@@ -24,11 +25,18 @@ class Assets {
       'assets/icons/leaderboard_second_icon.png';
   static const String iconsLeaderboardThirdIcon =
       'assets/icons/leaderboard_third_icon.png';
+  static const String iconsLearderboard = 'assets/icons/learderboard.png';
   static const String iconsMortarboard02 = 'assets/icons/mortarboard-02.png';
   static const String iconsMyCoursesIcon = 'assets/icons/my_courses_icon.png';
+  static const String iconsNotice = 'assets/icons/notice.png';
+  static const String iconsReport = 'assets/icons/report.png';
+  static const String iconsResource = 'assets/icons/resource.png';
+  static const String iconsRoutine = 'assets/icons/routine.png';
   static const String iconsSearchIcon = 'assets/icons/search_icon.svg';
   static const String iconsSoundIcon = 'assets/icons/sound_icon.svg';
+  static const String iconsTest = 'assets/icons/test.png';
   static const String iconsUserGroup = 'assets/icons/user-group.png';
+  static const String iconsVideo = 'assets/icons/video.png';
   static const String imagesBackpack03 = 'assets/images/backpack_03.png';
   static const String imagesBriefcase01 = 'assets/images/briefcase_01.png';
   static const String imagesCourseThumbnail =
@@ -51,4 +59,5 @@ class Assets {
       'assets/images/onboarding_image2.png';
   static const String imagesProstutiLogo = 'assets/images/prostuti_logo.png';
   static const String imagesTestDp = 'assets/images/test_dp.jpg';
+  static const String imagesWelcome = 'assets/images/welcome.png';
 }

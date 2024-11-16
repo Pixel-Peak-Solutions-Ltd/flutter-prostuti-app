@@ -42,7 +42,7 @@ class MyCourseCard extends StatelessWidget {
                   Row(
                     children: [
                       SizedBox(
-                        width: MediaQuery.sizeOf(context).width * 0.4,
+                        width: MediaQuery.sizeOf(context).width * 0.28,
                         child: LinearProgressIndicator(
                           value: progress,
                           backgroundColor: AppColors.shadePrimaryLight,

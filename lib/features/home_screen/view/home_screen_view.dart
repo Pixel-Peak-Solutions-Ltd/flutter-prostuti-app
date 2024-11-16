@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/services/nav.dart';
+import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course_list/view/course_list_view.dart';
 import 'package:prostuti/features/my_course/view/my_course_view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -104,7 +105,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const Gap(24),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 40),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: SizeConfig.w(40)),
                           child: RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(
@@ -135,8 +137,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             print("Search box clicked!");
                           },
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: SizeConfig.w(16),
+                                vertical: SizeConfig.h(12)),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(8),
@@ -178,7 +181,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     left: 16,
                     right: 16,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: SizeConfig.w(4)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -219,8 +223,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(4),
                       child: Image.asset(
                         'assets/images/home_screen_ad.png',
-                        height: 155,
-                        width: 325,
+                        height: SizeConfig.h(120),
+                        width: MediaQuery.sizeOf(context).width,
                         fit: BoxFit.cover,
                       ),
                     ),

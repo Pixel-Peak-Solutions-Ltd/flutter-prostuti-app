@@ -10,6 +10,7 @@ import 'package:prostuti/features/signup/view/phone_view.dart';
 import 'common/helpers/theme_provider.dart';
 import 'common/view_model/auth_notifier.dart';
 import 'core/configs/app_themes.dart';
+import 'core/services/size_config.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +32,10 @@ class MyApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
-      home: HomeScreen(),
+      home: Builder(builder: (context) {
+        SizeConfig.init(context);
+        return HomeScreen();
+      }),
     );
   }
 }
