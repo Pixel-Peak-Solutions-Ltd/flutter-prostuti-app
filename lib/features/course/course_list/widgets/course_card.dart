@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 
-import 'package:prostuti/common/widgets/course_enroll_row.dart';
-
-class CourseCard extends StatelessWidget {
-  const CourseCard({
+class CourseCard extends StatelessWidget with CommonWidgets {
+  CourseCard({
     super.key,
     required this.title,
     required this.price,
@@ -45,10 +44,11 @@ class CourseCard extends StatelessWidget {
             maxLines: 2,
           ),
           const Gap(4),
-          CourseEnrollRow(
+          courseEnrollRow(
             price: price,
             discountPrice: discountPrice,
             discount: discount,
+            theme: Theme.of(context),
           )
         ],
       ),

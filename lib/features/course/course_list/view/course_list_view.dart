@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:prostuti/common/widgets/appbar/common_app_bar.dart';
+
 import 'package:prostuti/core/services/nav.dart';
 
+import '../../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../course_details/view/course_details_view.dart';
 import '../widgets/category_tile.dart';
 import '../widgets/course_card.dart';
@@ -11,13 +12,14 @@ import '../widgets/search_container.dart';
 import 'course_list_header.dart';
 
 class CourseListView extends ConsumerStatefulWidget {
-  const CourseListView({Key? key}) : super(key: key);
+  CourseListView({super.key});
 
   @override
   CourseListViewState createState() => CourseListViewState();
 }
 
-class CourseListViewState extends ConsumerState<CourseListView> {
+class CourseListViewState extends ConsumerState<CourseListView>
+    with CommonWidgets {
   List<String> imgPath = [
     'assets/images/fi_2106463.png',
     'assets/images/fi_2134322.png',
@@ -91,7 +93,7 @@ class CourseListViewState extends ConsumerState<CourseListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: commonAppbar("কোর্সসমূহ", context),
+      appBar: commonAppbar("কোর্সসমূহ"),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(

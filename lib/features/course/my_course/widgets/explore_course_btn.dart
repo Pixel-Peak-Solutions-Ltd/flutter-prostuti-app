@@ -19,7 +19,7 @@ class ExploreCourseBtn extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
             side: const BorderSide(color: Color(0xff155EEF))),
       ),
-      onPressed: () => Nav().push(const CourseListView()),
+      onPressed: () => Nav().push(CourseListView()),
       child: Text(
         'এক্সপলোর টেস্ট কোর্স',
         style: Theme.of(context).textTheme.titleSmall!.copyWith(

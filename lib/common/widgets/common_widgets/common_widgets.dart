@@ -1,22 +1,31 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 
-class CourseEnrollRow extends StatelessWidget {
-  const CourseEnrollRow({
-    super.key,
-    required this.price,
-    required this.discountPrice,
-    required this.discount,
-  });
+mixin CommonWidgets {
+  final ThemeData appTheme = ThemeData();
 
-  final String price;
-  final String discountPrice;
-  final String discount;
+  AppBar commonAppbar(String title) {
+    return AppBar(
+      title: Text(
+        title,
+        style: appTheme.textTheme.titleMedium,
+      ),
+      automaticallyImplyLeading: true,
+      centerTitle: true,
+      backgroundColor: AppColors.shadeSecondaryLight,
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget courseEnrollRow({
+    required String price,
+    required String discountPrice,
+    required String discount,
+    required ThemeData theme,
+  }) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Row(
@@ -24,19 +33,17 @@ class CourseEnrollRow extends StatelessWidget {
           children: [
             Text(
               price,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge!
+              style: theme.textTheme.titleLarge!
                   .copyWith(color: AppColors.textActionSecondaryLight),
             ),
             const Gap(8),
             Text(
               discountPrice,
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                    decoration: TextDecoration.lineThrough,
-                    color: AppColors.textTertiaryLight,
-                    fontWeight: FontWeight.w600,
-                  ),
+              style: theme.textTheme.bodySmall!.copyWith(
+                decoration: TextDecoration.lineThrough,
+                color: AppColors.textTertiaryLight,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             const Gap(8),
             Container(
@@ -48,10 +55,10 @@ class CourseEnrollRow extends StatelessWidget {
               child: Center(
                 child: Text(
                   discount,
-                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Colors.white,
-                        fontSize: 8,
-                      ),
+                  style: theme.textTheme.bodySmall!.copyWith(
+                    color: Colors.white,
+                    fontSize: 8,
+                  ),
                 ),
               ),
             )
@@ -67,10 +74,7 @@ class CourseEnrollRow extends StatelessWidget {
           child: Center(
             child: Text(
               'এনরোল করুন',
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(color: Colors.white),
+              style: theme.textTheme.titleMedium!.copyWith(color: Colors.white),
             ),
           ),
         )

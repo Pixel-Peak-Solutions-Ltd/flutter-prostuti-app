@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:prostuti/common/widgets/appbar/common_app_bar.dart';
+
+import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/size_config.dart';
 
-class EnrolledCourseLandingView extends ConsumerWidget {
-  const EnrolledCourseLandingView({Key? key}) : super(key: key);
+class EnrolledCourseLandingView extends ConsumerWidget with CommonWidgets {
+  EnrolledCourseLandingView({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
@@ -21,7 +22,7 @@ class EnrolledCourseLandingView extends ConsumerWidget {
     ];
 
     return Scaffold(
-      appBar: commonAppbar("BCS ফাইনাল প্রিলি প্রিপারেশন", context),
+      appBar: commonAppbar("BCS ফাইনাল প্রিলি প্রিপারেশন"),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(

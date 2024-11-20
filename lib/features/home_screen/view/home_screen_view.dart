@@ -189,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           InkWell(
                             onTap: () {
-                              Nav().push(const CourseListView());
+                              Nav().push(CourseListView());
                             },
                             child: const CategoryCard(
                               icon: "assets/icons/courses_icon.png",
@@ -198,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           InkWell(
-                            onTap: () => Nav().push(const MyCourseView()),
+                            onTap: () => Nav().push(MyCourseView()),
                             child: const CategoryCard(
                               icon: "assets/icons/my_courses_icon.png",
                               text: 'আমার কোর্সসমূহ',

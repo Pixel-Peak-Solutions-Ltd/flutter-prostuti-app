@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:prostuti/common/widgets/appbar/common_app_bar.dart';
-import 'package:prostuti/common/widgets/course_enroll_row.dart';
+
+import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+
 import 'package:prostuti/core/configs/app_colors.dart';
+import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course/course_details/viewmodel/review_see_more_viewModel.dart';
 
 import '../../course_list/view/course_list_header.dart';
@@ -12,8 +16,8 @@ import '../widgets/course_details_pills.dart';
 import '../widgets/course_details_review_card.dart';
 import '../widgets/expandable_text.dart';
 
-class CourseDetailsView extends ConsumerWidget {
-  const CourseDetailsView({Key? key}) : super(key: key);
+class CourseDetailsView extends ConsumerWidget with CommonWidgets {
+  CourseDetailsView({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
@@ -21,7 +25,7 @@ class CourseDetailsView extends ConsumerWidget {
     final lessonMoreBtn = ref.watch(lessonSeeMoreViewmodelProvider);
 
     return Scaffold(
-      appBar: commonAppbar("BCS ফাইনাল প্রিলি প্রিপারেশন", context),
+      appBar: commonAppbar("BCS ফাইনাল প্রিলি প্রিপারেশন"),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 48),
         child: SingleChildScrollView(
@@ -81,25 +85,28 @@ class CourseDetailsView extends ConsumerWidget {
                     ],
                   ),
                   const Gap(21),
-                  const Row(
-                    children: [
-                      CourseDetailsPills(
-                        value: '৩৪৫ শিক্ষাথী',
-                        icon: Icons.groups_2_outlined,
-                      ),
-                      CourseDetailsPills(
-                        value: '২০ টি টেস্ট',
-                        icon: Icons.menu_book,
-                      ),
-                      CourseDetailsPills(
-                        value: '২৩+ ঘণ্টা',
-                        icon: Icons.timer_sharp,
-                      ),
-                      CourseDetailsPills(
-                        value: 'সার্টিফিকেট',
-                        icon: Icons.school_outlined,
-                      ),
-                    ],
+                  const SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        CourseDetailsPills(
+                          value: '৩৪৫ শিক্ষাথী',
+                          icon: Icons.groups_2_outlined,
+                        ),
+                        CourseDetailsPills(
+                          value: '২০ টি টেস্ট',
+                          icon: Icons.menu_book,
+                        ),
+                        CourseDetailsPills(
+                          value: '২৩+ ঘণ্টা',
+                          icon: Icons.timer_sharp,
+                        ),
+                        CourseDetailsPills(
+                          value: 'সার্টিফিকেট',
+                          icon: Icons.school_outlined,
+                        ),
+                      ],
+                    ),
                   ),
                   const Gap(32),
                   const CourseListHeader(text: 'টেস্ট সম্পর্কে'),
@@ -236,13 +243,17 @@ class CourseDetailsView extends ConsumerWidget {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
-        height: 86,
-        padding: const EdgeInsets.all(16),
-        child: const CourseEnrollRow(
-          price: "100",
-          discountPrice: "12",
-          discount: "20%",
+      bottomNavigationBar: InkWell(
+        onTap: () {},
+        child: Container(
+          height: SizeConfig.h(60),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: courseEnrollRow(
+            price: "100",
+            discountPrice: "12",
+            discount: "20%",
+            theme: Theme.of(context),
+          ),
         ),
       ),
     );
