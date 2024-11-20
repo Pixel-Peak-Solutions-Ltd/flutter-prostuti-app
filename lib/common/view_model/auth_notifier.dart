@@ -1,8 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:prostuti/features/auth/login/model/login_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../features/login/model/login_model.dart';
 
 part 'auth_notifier.g.dart';
 
@@ -15,10 +14,15 @@ class AuthNotifier extends _$AuthNotifier {
   }
 
   // Method to set the access token
-  Future<void> setAccessToken(String accessToken, int accessTokenExpiresIn,
-      String? refreshToken, int? refreshTokenExpiresIn, bool? rememberMe) async {
+  Future<void> setAccessToken(
+      String accessToken,
+      int accessTokenExpiresIn,
+      String? refreshToken,
+      int? refreshTokenExpiresIn,
+      bool? rememberMe) async {
     state = AsyncValue.data(accessToken);
-    await _saveAccessToken(accessToken,accessTokenExpiresIn,refreshToken,refreshTokenExpiresIn,rememberMe);
+    await _saveAccessToken(accessToken, accessTokenExpiresIn, refreshToken,
+        refreshTokenExpiresIn, rememberMe);
   }
 
   // Method to clear the access token (e.g., on logout)
@@ -42,16 +46,28 @@ class AuthNotifier extends _$AuthNotifier {
         );
 
         if (response.statusCode == 200) {
-          final newAccessTokenResponse = Login.fromJson(response.data['accessToken']);
+          final newAccessTokenResponse =
+              Login.fromJson(response.data['accessToken']);
           final accessToken = newAccessTokenResponse.data!.accessToken!;
-          final accessTokenExpiresIn = newAccessTokenResponse.data!.accessTokenExpiresIn!;
+          final accessTokenExpiresIn =
+              newAccessTokenResponse.data!.accessTokenExpiresIn!;
           final refreshToken = newAccessTokenResponse.data!.refreshToken ?? "";
-          final refreshTokenExpiresIn = newAccessTokenResponse.data!.refreshTokenExpiresIn ?? 0;
-          final refreshExpiryTime = DateTime.now().add(Duration(seconds: refreshTokenExpiresIn)).millisecondsSinceEpoch;
+          final refreshTokenExpiresIn =
+              newAccessTokenResponse.data!.refreshTokenExpiresIn ?? 0;
+          final refreshExpiryTime = DateTime.now()
+              .add(Duration(seconds: refreshTokenExpiresIn))
+              .millisecondsSinceEpoch;
 
-          final accessExpiryTime = DateTime.now().add(Duration(seconds: accessTokenExpiresIn)).millisecondsSinceEpoch;
+          final accessExpiryTime = DateTime.now()
+              .add(Duration(seconds: accessTokenExpiresIn))
+              .millisecondsSinceEpoch;
 
-          await ref.read(authNotifierProvider.notifier).setAccessToken(accessToken,accessExpiryTime,refreshToken,refreshExpiryTime,rememberMe);
+          await ref.read(authNotifierProvider.notifier).setAccessToken(
+              accessToken,
+              accessExpiryTime,
+              refreshToken,
+              refreshExpiryTime,
+              rememberMe);
 
           return accessToken;
         }
@@ -91,13 +107,14 @@ class AuthNotifier extends _$AuthNotifier {
   }
 
   // Save the access token to SharedPreferences
-  Future<void> _saveAccessToken(String accessToken, int accessExpiryTime, String? refreshToken, int? refreshExpiryTime, bool? rememberMe) async {
+  Future<void> _saveAccessToken(String accessToken, int accessExpiryTime,
+      String? refreshToken, int? refreshExpiryTime, bool? rememberMe) async {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setString('accessToken', accessToken);
     await prefs.setString('accessExpiryTime', accessExpiryTime.toString());
 
-    if(refreshToken != null && refreshExpiryTime! >0){
+    if (refreshToken != null && refreshExpiryTime! > 0) {
       await prefs.setString('refreshToken', refreshToken);
       await prefs.setInt('refreshExpiryTime', refreshExpiryTime);
     }

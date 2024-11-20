@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
-import 'package:prostuti/features/course_list/model/CourseCardEntity.dart';
 
 class CourseEnrollRow extends StatelessWidget {
   const CourseEnrollRow({
