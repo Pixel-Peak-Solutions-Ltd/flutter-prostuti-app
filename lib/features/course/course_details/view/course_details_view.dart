@@ -142,7 +142,7 @@ class CourseDetailsView extends ConsumerWidget with CommonWidgets {
                   minLeadingWidth: 0,
                   child: ExpansionTile(
                     title: Text(
-                      'লেসন ০১ - বাংলা ভাষা ও সাহিত্য',
+                      'লেসন ${i + 1} - বাংলা ভাষা ও সাহিত্য',
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
@@ -163,23 +163,15 @@ class CourseDetailsView extends ConsumerWidget with CommonWidgets {
                                     size: 18,
                                   ),
                                   const Gap(8),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'রেকর্ড ক্লাস - ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              fontWeight: FontWeight.w700),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: 'সন্ধি ও সমার্থক শব্দ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium),
-                                      ],
-                                    ),
-                                  )
+                                  Text(
+                                    'রেকর্ড ক্লাস - ${i + 1}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                  ),
                                 ],
                               ),
                               const Icon(

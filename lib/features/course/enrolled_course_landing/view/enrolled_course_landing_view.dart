@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
+import 'package:prostuti/features/course/materials/record_class/view/record_class_view.dart';
 
 enum GridItem {
   recordedClass("assets/icons/video.png", "রেকর্ড ক্লাস"),
@@ -21,11 +23,18 @@ enum GridItem {
   const GridItem(this.image, this.title);
 }
 
-class EnrolledCourseLandingView extends ConsumerWidget with CommonWidgets {
-  EnrolledCourseLandingView({super.key});
+class EnrolledCourseLandingView extends ConsumerStatefulWidget {
+  const EnrolledCourseLandingView({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  EnrolledCourseLandingViewState createState() =>
+      EnrolledCourseLandingViewState();
+}
+
+class EnrolledCourseLandingViewState
+    extends ConsumerState<EnrolledCourseLandingView> with CommonWidgets {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: commonAppbar("BCS ফাইনাল প্রিলি প্রিপারেশন"),
       body: Padding(
@@ -70,7 +79,26 @@ class EnrolledCourseLandingView extends ConsumerWidget with CommonWidgets {
                   itemBuilder: (context, index) {
                     final item = GridItem.values[index];
                     return InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        switch (item) {
+                          case GridItem.recordedClass:
+                            Nav().push(RecordClassView());
+                          case GridItem.resource:
+                          // TODO: Handle this case.
+                          case GridItem.test:
+                          // TODO: Handle this case.
+                          case GridItem.assignment:
+                          // TODO: Handle this case.
+                          case GridItem.routine:
+                          // TODO: Handle this case.
+                          case GridItem.reportCard:
+                          // TODO: Handle this case.
+                          case GridItem.leaderboard:
+                          // TODO: Handle this case.
+                          case GridItem.notice:
+                          // TODO: Handle this case.
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -116,7 +144,7 @@ class EnrolledCourseLandingView extends ConsumerWidget with CommonWidgets {
                   minLeadingWidth: 0,
                   child: ExpansionTile(
                     title: Text(
-                      'লেসন ০১ - বাংলা ভাষা ও সাহিত্য',
+                      'লেসন ${i + 1} - বাংলা ভাষা ও সাহিত্য',
                       style: Theme.of(context)
                           .textTheme
                           .bodyLarge!
@@ -137,23 +165,15 @@ class EnrolledCourseLandingView extends ConsumerWidget with CommonWidgets {
                                     size: 18,
                                   ),
                                   const Gap(8),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'রেকর্ড ক্লাস - ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              fontWeight: FontWeight.w700),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: 'সন্ধি ও সমার্থক শব্দ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium),
-                                      ],
-                                    ),
-                                  )
+                                  Text(
+                                    'রেকর্ড ক্লাস - ${i + 1}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                  ),
                                 ],
                               ),
                               const Icon(
