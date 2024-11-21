@@ -16,13 +16,20 @@ import '../widgets/course_details_pills.dart';
 import '../widgets/course_details_review_card.dart';
 import '../widgets/expandable_text.dart';
 
-class CourseDetailsView extends ConsumerWidget with CommonWidgets {
+class CourseDetailsView extends ConsumerStatefulWidget {
   CourseDetailsView({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  CourseDetailsViewState createState() => CourseDetailsViewState();
+}
+
+class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
+    with CommonWidgets {
+  @override
+  Widget build(BuildContext context) {
     final reviewMoreBtn = ref.watch(reviewSeeMoreViewmodelProvider);
     final lessonMoreBtn = ref.watch(lessonSeeMoreViewmodelProvider);
+    ThemeData theme = Theme.of(context);
 
     return Scaffold(
       appBar: commonAppbar("BCS ফাইনাল প্রিলি প্রিপারেশন"),
@@ -141,13 +148,8 @@ class CourseDetailsView extends ConsumerWidget with CommonWidgets {
                   horizontalTitleGap: 0.0,
                   minLeadingWidth: 0,
                   child: ExpansionTile(
-                    title: Text(
-                      'লেসন ${i + 1} - বাংলা ভাষা ও সাহিত্য',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
+                    title: lessonName(
+                        theme, 'লেসন ${i + 1} - বাংলা ভাষা ও সাহিত্য'),
                     children: [
                       for (int i = 0; i < 3; i++)
                         Padding(
@@ -175,7 +177,7 @@ class CourseDetailsView extends ConsumerWidget with CommonWidgets {
                                 ],
                               ),
                               const Icon(
-                                Icons.lock_clock_outlined,
+                                Icons.lock_outline_rounded,
                                 size: 18,
                               )
                             ],

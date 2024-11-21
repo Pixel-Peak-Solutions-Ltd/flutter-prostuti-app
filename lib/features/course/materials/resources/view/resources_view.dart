@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
-import 'package:prostuti/core/services/nav.dart';
-import 'package:prostuti/features/course/materials/record_class/view/record_class_details_view.dart';
+import 'package:prostuti/features/course/materials/resources/view/resource_details_view.dart';
 
-class RecordClassView extends ConsumerStatefulWidget {
-  const RecordClassView({super.key});
+import '../../../../../core/services/nav.dart';
+import '../../record_class/view/record_class_details_view.dart';
+
+class ResourcesView extends ConsumerStatefulWidget {
+  const ResourcesView({super.key});
 
   @override
-  RecordClassViewState createState() => RecordClassViewState();
+  ResourcesViewState createState() => ResourcesViewState();
 }
 
-class RecordClassViewState extends ConsumerState<RecordClassView>
+class ResourcesViewState extends ConsumerState<ResourcesView>
     with CommonWidgets {
   bool isToday = true;
   bool isComplete = true;
@@ -22,7 +23,7 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      appBar: commonAppbar("রেকর্ড ক্লাস"),
+      appBar: commonAppbar("রিসোর্স"),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView.builder(
@@ -41,14 +42,14 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
                   for (int i = 0; i < 3; i++)
                     InkWell(
                       onTap: () {
-                        Nav().push(RecordClassDetailsView(
-                          title: 'রেকর্ড ক্লাস - ${i + 1}',
+                        Nav().push(ResourceDetailsView(
+                          title: 'রিসোর্স - ${i + 1}',
                         ));
                       },
                       child: lessonItem(theme,
                           isItemComplete: isItemComplete,
                           isToday: isToday,
-                          lessonName: 'রেকর্ড ক্লাস - ${i + 1}'),
+                          lessonName: 'রিসোর্স - ${i + 1}'),
                     )
                 ],
               ),

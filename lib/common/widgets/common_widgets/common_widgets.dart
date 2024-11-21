@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
+import 'package:prostuti/core/services/size_config.dart';
 
 mixin CommonWidgets {
   final ThemeData appTheme = ThemeData();
@@ -79,6 +79,70 @@ mixin CommonWidgets {
           ),
         )
       ],
+    );
+  }
+
+  Widget courseCompletePill(ThemeData theme) {
+    return Container(
+      height: SizeConfig.h(16),
+      width: SizeConfig.w(40),
+      decoration: BoxDecoration(
+          color: const Color(0xffB4EFB9),
+          borderRadius: BorderRadius.circular(4)),
+      child: Center(
+        child: Text(
+          'কমপ্লিট',
+          style: theme.textTheme.bodySmall!
+              .copyWith(color: const Color(0xff159021)),
+        ),
+      ),
+    );
+  }
+
+  Widget lessonItem(ThemeData theme,
+      {required bool isItemComplete,
+      required bool isToday,
+      required String lessonName}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16).copyWith(top: 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.video_collection_outlined,
+                size: 18,
+              ),
+              const Gap(8),
+              Text(
+                lessonName,
+                style: theme.textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          if (isItemComplete)
+            const Icon(
+              Icons.check_circle,
+              size: 20,
+              color: Colors.blue,
+            )
+          else
+            Icon(
+              isToday ? Icons.circle_outlined : Icons.lock_outline_rounded,
+              size: 20,
+            )
+        ],
+      ),
+    );
+  }
+
+  Text lessonName(ThemeData theme, String name) {
+    return Text(
+      name,
+      style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
     );
   }
 }

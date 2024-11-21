@@ -38,22 +38,22 @@ class RecordClassDetailsViewState extends ConsumerState<RecordClassDetailsView>
     return Scaffold(
       appBar: commonAppbar("রেকর্ড ক্লাস"),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             PodVideoPlayer(controller: _controller),
-            Gap(16),
+            const Gap(16),
             Text(
               widget.title,
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            Gap(24),
+            const Gap(24),
             Text(
               "রেকর্ড সম্পর্কে",
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            Gap(8),
+            const Gap(8),
             Text(
               'জীবের মধ্যে সবচেয়ে সম্পূর্ণতা মানুষের। কিন্তু সবচেয়ে অসম্পূর্ণ হয়ে সে জন্মগ্রহণ করে। বাঘ ভালুক তার জীবনযাত্রার পনেরো- আনা মূলধন নিয়ে আসে প্রকৃতির মালখানা থেকে। জীবরঙ্গভূমিতে মানুষ এসে দেখা দেয় দুই শূন্য হাতে মুঠো বেঁধে মহাকায় জন্তু ছিল প্রকাণ্ড ... আরো দেখুন',
               style: Theme.of(context).textTheme.bodyLarge,

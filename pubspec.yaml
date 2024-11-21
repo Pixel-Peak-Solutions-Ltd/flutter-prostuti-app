@@ -34,6 +34,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.1
   fpdart: ^1.1.0
   pod_player: ^0.2.2
+  ionicons: ^0.2.2
 
 dev_dependencies:
   flutter_test:
