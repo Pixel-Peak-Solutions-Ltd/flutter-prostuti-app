@@ -5,22 +5,27 @@ import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/size_config.dart';
 
+enum GridItem {
+  recordedClass("assets/icons/video.png", "রেকর্ড ক্লাস"),
+  resource("assets/icons/resource.png", "রিসোর্স"),
+  test("assets/icons/test.png", "টেস্ট"),
+  assignment("assets/icons/assignment.png", "এসাইনমেন্ট"),
+  routine("assets/icons/routine.png", "রুটিন"),
+  reportCard("assets/icons/report.png", "রিপোর্ট কার্ড"),
+  leaderboard("assets/icons/learderboard.png", "লিডারবোর্ড"),
+  notice("assets/icons/notice.png", "নোটিশ");
+
+  final String image;
+  final String title;
+
+  const GridItem(this.image, this.title);
+}
+
 class EnrolledCourseLandingView extends ConsumerWidget with CommonWidgets {
   EnrolledCourseLandingView({super.key});
 
   @override
   Widget build(BuildContext context, ref) {
-    List<Map<String, String>> gridDetails = [
-      {"image": "assets/icons/video.png", "title": "রেকর্ড ক্লাস"},
-      {"image": "assets/icons/resource.png", "title": "রিসোর্স"},
-      {"image": "assets/icons/test.png", "title": "টেস্ট"},
-      {"image": "assets/icons/assignment.png", "title": "এসাইনমেন্ট"},
-      {"image": "assets/icons/routine.png", "title": "রুটিন"},
-      {"image": "assets/icons/report.png", "title": "রিপোর্ট কার্ড"},
-      {"image": "assets/icons/learderboard.png", "title": "লিডারবোর্ড"},
-      {"image": "assets/icons/notice.png", "title": "নোটিশ"},
-    ];
-
     return Scaffold(
       appBar: commonAppbar("BCS ফাইনাল প্রিলি প্রিপারেশন"),
       body: Padding(
@@ -61,8 +66,9 @@ class EnrolledCourseLandingView extends ConsumerWidget with CommonWidgets {
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
                   ),
-                  itemCount: 8,
+                  itemCount: GridItem.values.length,
                   itemBuilder: (context, index) {
+                    final item = GridItem.values[index];
                     return InkWell(
                       onTap: () {},
                       child: Container(
@@ -74,12 +80,12 @@ class EnrolledCourseLandingView extends ConsumerWidget with CommonWidgets {
                           child: Column(
                             children: [
                               Image.asset(
-                                gridDetails[index]["image"].toString(),
+                                item.image,
                                 scale: 0.9,
                               ),
                               const Gap(6),
                               Text(
-                                gridDetails[index]["title"].toString(),
+                                item.title,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
