@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
+import 'package:prostuti/features/course/materials/assignment/view/assignment_view.dart';
 import 'package:prostuti/features/course/materials/record_class/view/record_class_view.dart';
 import 'package:prostuti/features/course/materials/resources/view/resources_view.dart';
 
@@ -92,9 +93,9 @@ class EnrolledCourseLandingViewState
                             Nav().push(const RecordClassView());
                           case GridItem.resource:
                             Nav().push(const ResourcesView());
-                          case GridItem.test:
-                          // TODO: Handle this case.
                           case GridItem.assignment:
+                            Nav().push(const AssignmentView());
+                          case GridItem.test:
                           // TODO: Handle this case.
                           case GridItem.routine:
                           // TODO: Handle this case.
