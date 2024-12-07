@@ -7,15 +7,11 @@ class CourseCard extends StatelessWidget with CommonWidgets {
     super.key,
     required this.title,
     required this.price,
-    required this.discountPrice,
-    required this.discount,
     required this.imgPath,
   });
 
-  final String title;
-  final String price;
-  final String discountPrice;
-  final String discount;
+  final String? title;
+  final String? price;
 
   final String imgPath;
 
@@ -28,15 +24,15 @@ class CourseCard extends StatelessWidget with CommonWidgets {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
-            child: Image.asset(
-              "assets/images/course_thumbnail.png",
+            child: Image.network(
+              imgPath,
               fit: BoxFit.cover,
               width: MediaQuery.sizeOf(context).width,
             ),
           ),
           const Gap(8),
           Text(
-            title,
+            title ?? "No Name",
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!
@@ -46,8 +42,6 @@ class CourseCard extends StatelessWidget with CommonWidgets {
           const Gap(4),
           courseEnrollRow(
             price: price,
-            discountPrice: discountPrice,
-            discount: discount,
             theme: Theme.of(context),
           )
         ],

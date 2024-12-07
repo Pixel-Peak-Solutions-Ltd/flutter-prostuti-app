@@ -10,7 +10,7 @@ Dio dio(DioRef ref) {
   final authNotifier = ref.watch(authNotifierProvider);
 
   return Dio(BaseOptions(
-    baseUrl: 'https://prostuti-app-backend-production.up.railway.app/api/v1',
+    baseUrl: 'https://resilient-heart-dev.up.railway.app/api/v1',
     connectTimeout: const Duration(milliseconds: 5000),
     receiveTimeout: const Duration(milliseconds: 3000),
   ))

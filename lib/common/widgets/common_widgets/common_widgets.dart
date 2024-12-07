@@ -19,50 +19,17 @@ mixin CommonWidgets {
   }
 
   Widget courseEnrollRow({
-    required String price,
-    required String discountPrice,
-    required String discount,
+    required String? price,
     required ThemeData theme,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              price,
-              style: theme.textTheme.titleLarge!
-                  .copyWith(color: AppColors.textActionSecondaryLight),
-            ),
-            const Gap(8),
-            Text(
-              discountPrice,
-              style: theme.textTheme.bodySmall!.copyWith(
-                decoration: TextDecoration.lineThrough,
-                color: AppColors.textTertiaryLight,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const Gap(8),
-            Container(
-              height: 13,
-              width: 39,
-              decoration: BoxDecoration(
-                  color: const Color(0xffFF6A38),
-                  borderRadius: BorderRadius.circular(4)),
-              child: Center(
-                child: Text(
-                  discount,
-                  style: theme.textTheme.bodySmall!.copyWith(
-                    color: Colors.white,
-                    fontSize: 8,
-                  ),
-                ),
-              ),
-            )
-          ],
+        Text(
+          price == "null" ? "Free" : "৳ $price",
+          style: theme.textTheme.titleLarge!
+              .copyWith(color: AppColors.textActionSecondaryLight),
         ),
         Container(
           height: 48,

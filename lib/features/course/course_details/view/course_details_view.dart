@@ -10,7 +10,7 @@ import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course/course_details/viewmodel/review_see_more_viewModel.dart';
 
-import '../../course_list/view/course_list_header.dart';
+import '../../course_list/widgets/course_list_header.dart';
 import '../viewmodel/lesson_see_more_viewmodel.dart';
 import '../widgets/course_details_pills.dart';
 import '../widgets/course_details_review_card.dart';
@@ -244,8 +244,6 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: courseEnrollRow(
             price: "100",
-            discountPrice: "12",
-            discount: "20%",
             theme: Theme.of(context),
           ),
         ),
