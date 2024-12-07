@@ -87,7 +87,7 @@ mixin CommonWidgets {
               const Gap(8),
               Text(
                 lessonName,
-                style: theme.textTheme.bodyMedium!.copyWith(
+                style: theme.textTheme.bodySmall!.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
               ),
