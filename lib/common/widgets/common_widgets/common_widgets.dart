@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/size_config.dart';
+import 'package:prostuti/features/course/course_details/model/course_details_model.dart';
 
 mixin CommonWidgets {
   final ThemeData appTheme = ThemeData();
@@ -111,7 +112,43 @@ mixin CommonWidgets {
   Text lessonName(ThemeData theme, String name) {
     return Text(
       name,
-      style: theme.textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+      style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+    );
+  }
+
+  Widget lessonMaterial(
+      {required IconData icon,
+      required String courseDetailsName,
+      required int i,
+      required int j,
+      required ThemeData theme,
+      required String type}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16).copyWith(top: 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(
+                icon,
+                size: 18,
+              ),
+              const Gap(8),
+              Text(
+                '$type: $courseDetailsName - ${i + 1}',
+                style: theme.textTheme.bodySmall!.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+          const Icon(
+            Icons.lock_outline_rounded,
+            size: 18,
+          )
+        ],
+      ),
     );
   }
 }

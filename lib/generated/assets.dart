@@ -59,6 +59,7 @@ class Assets {
       'assets/images/onboarding_image1.png';
   static const String imagesOnboardingImage2 =
       'assets/images/onboarding_image2.png';
+  static const String imagesPlaceholder = 'assets/images/placeholder.png';
   static const String imagesProstutiLogo = 'assets/images/prostuti_logo.png';
   static const String imagesTestDp = 'assets/images/test_dp.jpg';
   static const String imagesWelcome = 'assets/images/welcome.png';
