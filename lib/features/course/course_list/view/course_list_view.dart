@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import 'package:prostuti/core/services/nav.dart';
+import 'package:prostuti/features/course/course_list/viewmodel/get_course_by_id.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../common/widgets/common_widgets/common_widgets.dart';
@@ -86,12 +87,16 @@ class CourseListViewState extends ConsumerState<CourseListView>
                     children: [
                       InkWell(
                         onTap: () {
+                          ref
+                              .watch(getCourseByIdProvider.notifier)
+                              .setId(course.sId!);
                           Nav().push(CourseDetailsView());
                         },
                         child: CourseCard(
                           title: course.name,
                           price: course.price.toString(),
-                          imgPath: course.image!.path!,
+                          imgPath: course.image!.path ??
+                              "assets/images/course_thumbnail.png",
                         ),
                       )
                     ],

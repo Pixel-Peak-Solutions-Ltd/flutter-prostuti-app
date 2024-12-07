@@ -9,6 +9,7 @@ import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course/course_details/viewmodel/review_see_more_viewModel.dart';
+import 'package:prostuti/features/course/course_list/viewmodel/get_course_by_id.dart';
 
 import '../../course_list/widgets/course_list_header.dart';
 import '../viewmodel/lesson_see_more_viewmodel.dart';
@@ -26,10 +27,17 @@ class CourseDetailsView extends ConsumerStatefulWidget {
 class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
     with CommonWidgets {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final reviewMoreBtn = ref.watch(reviewSeeMoreViewmodelProvider);
     final lessonMoreBtn = ref.watch(lessonSeeMoreViewmodelProvider);
     ThemeData theme = Theme.of(context);
+
+    print(ref.watch(getCourseByIdProvider));
 
     return Scaffold(
       appBar: commonAppbar("BCS ফাইনাল প্রিলি প্রিপারেশন"),

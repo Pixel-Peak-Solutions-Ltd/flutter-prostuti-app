@@ -27,7 +27,9 @@ mixin CommonWidgets {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          price == "null" ? "Free" : "৳ $price",
+          price == "null" || price == null || price == "0"
+              ? "Free"
+              : "৳ $price",
           style: theme.textTheme.titleLarge!
               .copyWith(color: AppColors.textActionSecondaryLight),
         ),

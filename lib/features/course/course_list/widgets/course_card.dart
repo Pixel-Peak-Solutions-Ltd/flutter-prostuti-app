@@ -27,6 +27,17 @@ class CourseCard extends StatelessWidget with CommonWidgets {
             child: Image.network(
               imgPath,
               fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
               width: MediaQuery.sizeOf(context).width,
             ),
           ),
