@@ -136,7 +136,7 @@ mixin CommonWidgets {
               ),
               const Gap(8),
               Text(
-                '$type: $courseDetailsName - ${i + 1}',
+                '$type: $courseDetailsName',
                 style: theme.textTheme.bodySmall!.copyWith(
                   fontWeight: FontWeight.w700,
                 ),

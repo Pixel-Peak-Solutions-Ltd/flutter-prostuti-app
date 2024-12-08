@@ -77,7 +77,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                             icon: Icons.star_border_outlined,
                           ),
                           Text(
-                            "100",
+                            "৳ ${courseDetails.data!.price ?? "Free"}",
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge!
@@ -266,17 +266,29 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
       ),
       bottomNavigationBar: InkWell(
         onTap: () {},
-        child: Skeletonizer(
-          enabled: courseDetailsAsync.isLoading,
-          child: Container(
+        child: Container(
             height: SizeConfig.h(60),
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: courseEnrollRow(
-              price: "100",
-              theme: Theme.of(context),
-            ),
-          ),
-        ),
+            child: courseDetailsAsync.when(
+              data: (data) {
+                return courseEnrollRow(
+                  price: '${data.data!.price ?? "Free"}',
+                  theme: Theme.of(context),
+                );
+              },
+              error: (error, stackTrace) {
+                return Text("$error");
+              },
+              loading: () {
+                return Skeletonizer(
+                  enabled: true,
+                  child: courseEnrollRow(
+                    price: "Free",
+                    theme: Theme.of(context),
+                  ),
+                );
+              },
+            )),
       ),
     );
   }

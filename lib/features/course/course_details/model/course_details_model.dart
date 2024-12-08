@@ -33,6 +33,8 @@ class Data {
   int? totalResources;
   int? totalAssignments;
   int? totalTests;
+  int? price;
+  String? priceType;
 
   Data(
       {this.sId,
@@ -44,7 +46,9 @@ class Data {
       this.totalRecodedClasses,
       this.totalResources,
       this.totalAssignments,
-      this.totalTests});
+      this.totalTests,
+      this.price,
+      this.priceType});
 
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -62,6 +66,8 @@ class Data {
     totalResources = json['totalResources'];
     totalAssignments = json['totalAssignments'];
     totalTests = json['totalTests'];
+    price = json['price'];
+    priceType = json['priceType'];
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +86,8 @@ class Data {
     data['totalResources'] = totalResources;
     data['totalAssignments'] = totalAssignments;
     data['totalTests'] = totalTests;
+    data['price'] = price;
+    data['priceType'] = priceType;
     return data;
   }
 }
