@@ -15,7 +15,7 @@ class RecordClassViewmodel extends _$RecordClassViewmodel {
     // final String id = ref.watch(getCourseByIdProvider);
     final response = await ref
         .read(recordClassRepoProvider)
-        .getRecordedClassList("67548199740a4834eef7d49c");
+        .getRecordedClassList("675556f0740a4834eef7d563");
 
     return response.fold(
       (l) {

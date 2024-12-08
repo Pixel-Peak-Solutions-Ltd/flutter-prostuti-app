@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/materials/record_class/view/record_class_details_view.dart';
+import 'package:prostuti/features/course/materials/record_class/viewmodel/get_record_class_id.dart';
 import 'package:prostuti/features/course/materials/record_class/viewmodel/record_class_viewmodel.dart';
 import 'package:prostuti/features/course/materials/shared/widgets/material_list_skeleton.dart';
 import 'package:prostuti/features/course/materials/shared/widgets/trailing_icon.dart';
@@ -35,9 +36,11 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
 
               return InkWell(
                 onTap: () {
+                  ref
+                      .watch(getRecordClassIdProvider.notifier)
+                      .setRecordClassId(recordClass[index].sId!);
                   Nav().push(RecordClassDetailsView(
-                    title:
-                        'রেকর্ড ক্লাস: ${recordClass[index].recodeClassName} ',
+                    videoUrl: recordClass[index].classVideoURL![0],
                   ));
                 },
                 child: lessonItem(theme,
