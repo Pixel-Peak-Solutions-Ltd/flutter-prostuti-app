@@ -47,9 +47,14 @@ class ResourcesViewState extends ConsumerState<ResourcesView>
                         ));
                       },
                       child: lessonItem(theme,
-                          isItemComplete: isItemComplete,
-                          isToday: isToday,
-                          lessonName: 'রিসোর্স - ${i + 1}'),
+                          trailingIcon: Icon(
+                            Icons.check_circle,
+                            color: Colors.blue,
+                            size: 20,
+                          ),
+                          icon: Icons.picture_as_pdf,
+                          itemName: "রিসোর্স - ${i + 1}",
+                          lessonName: 'Lesson - ${i + 1}'),
                     )
                 ],
               ),

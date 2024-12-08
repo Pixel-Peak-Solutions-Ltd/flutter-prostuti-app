@@ -31,8 +31,13 @@ class MaterialListSkeleton extends StatelessWidget with CommonWidgets {
                   children: [
                     for (int i = 0; i < 3; i++)
                       lessonItem(theme,
-                          isItemComplete: true,
-                          isToday: true,
+                          icon: Icons.abc,
+                          itemName: "",
+                          trailingIcon: Icon(
+                            Icons.check_circle,
+                            color: Colors.blue,
+                            size: 20,
+                          ),
                           lessonName: 'রেকর্ড ক্লাস - ${i + 1}')
                   ],
                 ),

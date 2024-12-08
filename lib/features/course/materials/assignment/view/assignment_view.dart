@@ -46,9 +46,14 @@ class AssignmentViewState extends ConsumerState<AssignmentView>
                         ));
                       },
                       child: lessonItem(theme,
-                          isItemComplete: isItemComplete,
-                          isToday: isToday,
-                          lessonName: 'এসাইনমেন্ট - ${i + 1}'),
+                          trailingIcon: Icon(
+                            Icons.check_circle,
+                            color: Colors.blue,
+                            size: 20,
+                          ),
+                          icon: Icons.assignment_outlined,
+                          itemName: "Assignment ${i + 1}",
+                          lessonName: 'Lesson - ${i + 1}'),
                     )
                 ],
               ),

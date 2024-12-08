@@ -4,18 +4,18 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'record_class_viewmodel.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: false)
 class RecordClassViewmodel extends _$RecordClassViewmodel {
   @override
   Future<List<RecordedClassData>> build() async {
-    return getCourseDetails();
+    return await getCourseDetails();
   }
 
   Future<List<RecordedClassData>> getCourseDetails() async {
     // final String id = ref.watch(getCourseByIdProvider);
     final response = await ref
         .read(recordClassRepoProvider)
-        .getRecordedClassList("675053f46f5e899e209735d1");
+        .getRecordedClassList("67548199740a4834eef7d49c");
 
     return response.fold(
       (l) {

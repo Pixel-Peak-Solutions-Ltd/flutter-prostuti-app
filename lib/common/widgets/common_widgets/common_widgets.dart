@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
@@ -70,44 +71,63 @@ mixin CommonWidgets {
   }
 
   Widget lessonItem(ThemeData theme,
-      {required bool isItemComplete,
-      required bool isToday,
-      required String lessonName}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16).copyWith(top: 0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const Icon(
-                Icons.video_collection_outlined,
-                size: 18,
-              ),
-              const Gap(8),
-              Text(
-                lessonName,
-                style: theme.textTheme.bodySmall!.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
+      {required Widget trailingIcon,
+      required String lessonName,
+      required String itemName,
+      required IconData icon}) {
+    return ListTile(
+        title: Text(
+          itemName,
+          style: theme.textTheme.bodyLarge!.copyWith(
+            fontWeight: FontWeight.w700,
           ),
-          if (isItemComplete)
-            const Icon(
-              Icons.check_circle,
-              size: 20,
-              color: Colors.blue,
-            )
-          else
-            Icon(
-              isToday ? Icons.circle_outlined : Icons.lock_outline_rounded,
-              size: 20,
-            )
-        ],
-      ),
-    );
+        ),
+        subtitle: Text(
+          lessonName,
+          style: theme.textTheme.bodySmall!.copyWith(
+              fontWeight: FontWeight.w700, color: Colors.grey.shade700),
+        ),
+        leading: Icon(
+          Icons.video_collection_outlined,
+          size: 18,
+          color: Colors.grey.shade700,
+        ),
+        trailing: trailingIcon);
   }
+
+  /*
+  Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            const Icon(
+              Icons.video_collection_outlined,
+              size: 18,
+            ),
+            const Gap(8),
+            Text(
+              lessonName,
+              style: theme.textTheme.bodySmall!.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
+        ),
+        if (isItemComplete)
+          const Icon(
+            Icons.check_circle,
+            size: 20,
+            color: Colors.blue,
+          )
+        else
+          Icon(
+            isToday ? Icons.circle_outlined : Icons.lock_outline_rounded,
+            size: 20,
+          )
+      ],
+    );
+   */
 
   Text lessonName(ThemeData theme, String name) {
     return Text(

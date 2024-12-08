@@ -158,9 +158,14 @@ class EnrolledCourseLandingViewState
                     children: [
                       for (int i = 0; i < 3; i++)
                         lessonItem(theme,
-                            isItemComplete: isItemComplete,
-                            isToday: isToday,
-                            lessonName: 'রেকর্ড ক্লাস - ${i + 1}')
+                            trailingIcon: Icon(
+                              Icons.check_circle,
+                              color: Colors.blue,
+                              size: 20,
+                            ),
+                            itemName: "েকর্ড ক্লাস - ${i + 1}",
+                            icon: Icons.video_collection_outlined,
+                            lessonName: 'Lesson - ${i + 1}')
                     ],
                   ),
                 ),

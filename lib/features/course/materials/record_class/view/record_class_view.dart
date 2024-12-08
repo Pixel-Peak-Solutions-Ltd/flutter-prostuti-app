@@ -6,6 +6,9 @@ import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/materials/record_class/view/record_class_details_view.dart';
 import 'package:prostuti/features/course/materials/record_class/viewmodel/record_class_viewmodel.dart';
 import 'package:prostuti/features/course/materials/shared/widgets/material_list_skeleton.dart';
+import 'package:prostuti/features/course/materials/shared/widgets/trailing_icon.dart';
+
+import '../../shared/helper/functions.dart';
 
 class RecordClassView extends ConsumerStatefulWidget {
   const RecordClassView({super.key});
@@ -16,10 +19,6 @@ class RecordClassView extends ConsumerStatefulWidget {
 
 class RecordClassViewState extends ConsumerState<RecordClassView>
     with CommonWidgets {
-  bool isToday = true;
-  bool isComplete = true;
-  bool isItemComplete = false;
-
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -29,43 +28,29 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
       appBar: commonAppbar("রেকর্ড ক্লাস"),
       body: recordClassAsync.when(
         data: (recordClass) {
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: ListView.builder(
-              itemCount: recordClass.length,
-              itemBuilder: (context, index) {
-                return ListTileTheme(
-                  contentPadding: const EdgeInsets.all(0),
-                  dense: true,
-                  horizontalTitleGap: 0.0,
-                  minLeadingWidth: 0,
-                  child: ExpansionTile(
-                    trailing:
-                        isComplete ? courseCompletePill(theme) : Container(),
-                    title: lessonName(theme,
-                        '${recordClass[index].lessonId!.number}: ${recordClass[index].lessonId!.name}'),
-                    children: [
-                      for (int i = 0;
-                          i < recordClass[index].classVideoURL!.length;
-                          i++)
-                        InkWell(
-                          onTap: () {
-                            Nav().push(RecordClassDetailsView(
-                              title:
-                                  'রেকর্ড ক্লাস: ${recordClass[index].recodeClassName} ${i + 1}',
-                            ));
-                          },
-                          child: lessonItem(theme,
-                              isItemComplete: isItemComplete,
-                              isToday: isToday,
-                              lessonName:
-                                  'রেকর্ড ক্লাস: ${recordClass[index].recodeClassName} ${i + 1}'),
-                        )
-                    ],
-                  ),
-                );
-              },
-            ),
+          return ListView.builder(
+            itemCount: recordClass.length,
+            itemBuilder: (context, index) {
+              bool isItemComplete = true;
+
+              return InkWell(
+                onTap: () {
+                  Nav().push(RecordClassDetailsView(
+                    title:
+                        'রেকর্ড ক্লাস: ${recordClass[index].recodeClassName} ',
+                  ));
+                },
+                child: lessonItem(theme,
+                    trailingIcon: TrailingIcon(
+                      classDate: recordClass[index].classDate!,
+                      isCompleted: isItemComplete,
+                    ),
+                    itemName:
+                        "রেকর্ড ক্লাস: ${recordClass[index].recodeClassName}",
+                    icon: Icons.video_collection_outlined,
+                    lessonName: '${recordClass[index].lessonId!.number} '),
+              );
+            },
           );
         },
         error: (error, stackTrace) {
