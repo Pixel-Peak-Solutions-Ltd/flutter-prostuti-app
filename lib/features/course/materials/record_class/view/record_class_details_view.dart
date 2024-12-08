@@ -23,7 +23,7 @@ class RecordClassDetailsViewState extends ConsumerState<RecordClassDetailsView>
   void initState() {
     _controller = PodPlayerController(
       playVideoFrom: PlayVideoFrom.network(
-        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+        'https://all-users.s3.us-west-004.backblazeb2.com/videos/3+Awesome+Life+Hacks+with+Smartphones(720p).MP4',
       ),
     )..initialise();
     super.initState();
@@ -40,31 +40,34 @@ class RecordClassDetailsViewState extends ConsumerState<RecordClassDetailsView>
     final recordClassAsync = ref.watch(recordClassDetailsViewmodelProvider);
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: commonAppbar("রেকর্ড ক্লাস"),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: recordClassAsync.when(
           data: (data) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PodVideoPlayer(controller: _controller),
-                const Gap(16),
-                Text(
-                  data.data!.recodeClassName ?? "No Name",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const Gap(24),
-                Text(
-                  "রেকর্ড সম্পর্কে",
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const Gap(8),
-                Text(
-                  data.data!.classDetails ?? "No Details",
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ],
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  PodVideoPlayer(controller: _controller),
+                  const Gap(16),
+                  Text(
+                    data.data!.recodeClassName ?? "No Name",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const Gap(24),
+                  Text(
+                    "রেকর্ড সম্পর্কে",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const Gap(8),
+                  Text(
+                    data.data!.classDetails ?? "No Details",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ],
+              ),
             );
           },
           error: (error, stackTrace) {

@@ -75,24 +75,37 @@ mixin CommonWidgets {
       required String lessonName,
       required String itemName,
       required IconData icon}) {
-    return ListTile(
-        title: Text(
-          itemName,
-          style: theme.textTheme.bodyLarge!.copyWith(
-            fontWeight: FontWeight.w700,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade500),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ListTile(
+          enableFeedback: true,
+          title: Text(
+            itemName,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: theme.textTheme.bodyLarge!.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-        subtitle: Text(
-          lessonName,
-          style: theme.textTheme.bodySmall!.copyWith(
-              fontWeight: FontWeight.w700, color: Colors.grey.shade700),
-        ),
-        leading: Icon(
-          Icons.video_collection_outlined,
-          size: 18,
-          color: Colors.grey.shade700,
-        ),
-        trailing: trailingIcon);
+          subtitle: Text(
+            lessonName,
+            style: theme.textTheme.bodySmall!.copyWith(
+                fontWeight: FontWeight.w600, color: Colors.grey.shade700),
+          ),
+          leading: CircleAvatar(
+            backgroundColor: Colors.red,
+            child: Icon(
+              icon,
+              size: 20,
+              color: Colors.white,
+            ),
+          ),
+          trailing: trailingIcon),
+    );
   }
 
   /*

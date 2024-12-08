@@ -50,7 +50,7 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
                     ),
                     itemName:
                         "রেকর্ড ক্লাস: ${recordClass[index].recodeClassName}",
-                    icon: Icons.video_collection_outlined,
+                    icon: Icons.video_collection_rounded,
                     lessonName: '${recordClass[index].lessonId!.number} '),
               );
             },

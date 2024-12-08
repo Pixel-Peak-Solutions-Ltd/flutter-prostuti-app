@@ -172,11 +172,18 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                         color: Colors.grey.shade600,
                                       ),
                                       const Gap(8),
-                                      Text(
-                                        'Recorded Class: ${courseDetails.data!.lessons![i].recodedClasses![j].recodeClassName!}',
-                                        style:
-                                            theme.textTheme.bodySmall!.copyWith(
-                                          fontWeight: FontWeight.w700,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.7,
+                                        child: Text(
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          'Recorded Class: ${courseDetails.data!.lessons![i].recodedClasses![j].recodeClassName!}',
+                                          style: theme.textTheme.bodySmall!
+                                              .copyWith(
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -209,11 +216,18 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                         color: Colors.grey.shade600,
                                       ),
                                       const Gap(8),
-                                      Text(
-                                        'Resource: ${courseDetails.data!.lessons![i].resources![j].name}',
-                                        style:
-                                            theme.textTheme.bodySmall!.copyWith(
-                                          fontWeight: FontWeight.w700,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.7,
+                                        child: Text(
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          'Resource: ${courseDetails.data!.lessons![i].resources![j].name}',
+                                          style: theme.textTheme.bodySmall!
+                                              .copyWith(
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -246,11 +260,18 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                         color: Colors.grey.shade600,
                                       ),
                                       const Gap(8),
-                                      Text(
-                                        'Assignment: ${courseDetails.data!.lessons![i].assignments![j].assignmentNo!}',
-                                        style:
-                                            theme.textTheme.bodySmall!.copyWith(
-                                          fontWeight: FontWeight.w700,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.7,
+                                        child: Text(
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          'Assignment: ${courseDetails.data!.lessons![i].assignments![j].assignmentNo!}',
+                                          style: theme.textTheme.bodySmall!
+                                              .copyWith(
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -281,11 +302,18 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                         color: Colors.grey.shade600,
                                       ),
                                       const Gap(8),
-                                      Text(
-                                        'Test: ${courseDetails.data!.lessons![i].tests![j].name!}',
-                                        style:
-                                            theme.textTheme.bodySmall!.copyWith(
-                                          fontWeight: FontWeight.w700,
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.7,
+                                        child: Text(
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          'Test: ${courseDetails.data!.lessons![i].tests![j].name!}',
+                                          style: theme.textTheme.bodySmall!
+                                              .copyWith(
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                         ),
                                       ),
                                     ],
