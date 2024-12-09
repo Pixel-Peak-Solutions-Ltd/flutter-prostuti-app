@@ -1,19 +1,14 @@
-class ResourceList {
+class AssignmentDetails {
   bool? success;
   String? message;
-  List<ResourceListData>? data;
+  Data? data;
 
-  ResourceList({this.success, this.message, this.data});
+  AssignmentDetails({this.success, this.message, this.data});
 
-  ResourceList.fromJson(Map<String, dynamic> json) {
+  AssignmentDetails.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    if (json['data'] != null) {
-      data = <ResourceListData>[];
-      json['data'].forEach((v) {
-        data!.add(ResourceListData.fromJson(v));
-      });
-    }
+    data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -21,74 +16,69 @@ class ResourceList {
     data['success'] = success;
     data['message'] = message;
     if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
+      data['data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
-class ResourceListData {
+class Data {
   String? sId;
-  LessonId? lessonId;
-  String? name;
-  String? resourceDate;
+  String? courseId;
+  String? lessonId;
+  String? assignmentNo;
+  int? marks;
+  String? unlockDate;
+  String? details;
   List<UploadFileResources>? uploadFileResources;
+  String? createdAt;
+  String? updatedAt;
 
-  ResourceListData(
+  Data(
       {this.sId,
+      this.courseId,
       this.lessonId,
-      this.name,
-      this.resourceDate,
-      this.uploadFileResources});
+      this.assignmentNo,
+      this.marks,
+      this.unlockDate,
+      this.details,
+      this.uploadFileResources,
+      this.createdAt,
+      this.updatedAt});
 
-  ResourceListData.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    lessonId =
-        json['lesson_id'] != null ? LessonId.fromJson(json['lesson_id']) : null;
-    name = json['name'];
-    resourceDate = json['resourceDate'];
+    courseId = json['course_id'];
+    lessonId = json['lesson_id'];
+    assignmentNo = json['assignmentNo'];
+    marks = json['marks'];
+    unlockDate = json['unlockDate'];
+    details = json['details'];
     if (json['uploadFileResources'] != null) {
       uploadFileResources = <UploadFileResources>[];
       json['uploadFileResources'].forEach((v) {
         uploadFileResources!.add(UploadFileResources.fromJson(v));
       });
     }
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['_id'] = sId;
-    if (lessonId != null) {
-      data['lesson_id'] = lessonId!.toJson();
-    }
-    data['name'] = name;
-    data['resourceDate'] = resourceDate;
+    data['course_id'] = courseId;
+    data['lesson_id'] = lessonId;
+    data['assignmentNo'] = assignmentNo;
+    data['marks'] = marks;
+    data['unlockDate'] = unlockDate;
+    data['details'] = details;
     if (uploadFileResources != null) {
       data['uploadFileResources'] =
           uploadFileResources!.map((v) => v.toJson()).toList();
     }
-    return data;
-  }
-}
-
-class LessonId {
-  String? sId;
-  String? number;
-  String? name;
-
-  LessonId({this.sId, this.number, this.name});
-
-  LessonId.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    number = json['number'];
-    name = json['name'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = sId;
-    data['number'] = number;
-    data['name'] = name;
+    data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     return data;
   }
 }

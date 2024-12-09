@@ -40,13 +40,13 @@ mixin AssignmentWidgets {
     );
   }
 
-  Container fileBox(ThemeData theme, VoidCallback onCloseTap) {
+  Container fileBox(ThemeData theme, String name) {
     return Container(
       height: SizeConfig.h(64),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(4)),
       child: Center(
           child: ListTile(
-        trailing: InkWell(onTap: onCloseTap, child: const Icon(Icons.close)),
+        trailing: const Icon(Icons.file_download_outlined),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6),
             side: BorderSide(color: Colors.grey.shade300)),
@@ -74,12 +74,10 @@ mixin AssignmentWidgets {
           ],
         ),
         title: Text(
-          'টেস্ট সল্যুশন.pdf',
-          style: theme.textTheme.bodyLarge,
-        ),
-        subtitle: Text(
-          '1.2 MB',
+          name,
           style: theme.textTheme.bodyMedium,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
       )),
     );

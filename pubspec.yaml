@@ -35,6 +35,9 @@ dependencies:
   dartz:
   pod_player: ^0.2.2
   ionicons: ^0.2.2
+  fluttertoast:
+  open_filex:
+  path_provider:
 
 dev_dependencies:
   flutter_test:
