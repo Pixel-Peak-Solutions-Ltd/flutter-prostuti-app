@@ -3,7 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
+import 'package:prostuti/features/course/materials/assignment/view/assignment_view.dart';
+import 'package:prostuti/features/course/materials/record_class/view/record_class_view.dart';
+import 'package:prostuti/features/course/materials/resources/view/resources_view.dart';
 
 enum GridItem {
   recordedClass("assets/icons/video.png", "রেকর্ড ক্লাস"),
@@ -21,11 +25,24 @@ enum GridItem {
   const GridItem(this.image, this.title);
 }
 
-class EnrolledCourseLandingView extends ConsumerWidget with CommonWidgets {
-  EnrolledCourseLandingView({super.key});
+class EnrolledCourseLandingView extends ConsumerStatefulWidget {
+  const EnrolledCourseLandingView({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  EnrolledCourseLandingViewState createState() =>
+      EnrolledCourseLandingViewState();
+}
+
+class EnrolledCourseLandingViewState
+    extends ConsumerState<EnrolledCourseLandingView> with CommonWidgets {
+  bool isToday = true;
+  bool isComplete = true;
+  bool isItemComplete = true;
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+
     return Scaffold(
       appBar: commonAppbar("BCS ফাইনাল প্রিলি প্রিপারেশন"),
       body: Padding(
@@ -70,7 +87,26 @@ class EnrolledCourseLandingView extends ConsumerWidget with CommonWidgets {
                   itemBuilder: (context, index) {
                     final item = GridItem.values[index];
                     return InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        switch (item) {
+                          case GridItem.recordedClass:
+                            Nav().push(const RecordClassView());
+                          case GridItem.resource:
+                            Nav().push(const ResourcesView());
+                          case GridItem.assignment:
+                            Nav().push(const AssignmentView());
+                          case GridItem.test:
+                          // TODO: Handle this case.
+                          case GridItem.routine:
+                          // TODO: Handle this case.
+                          case GridItem.reportCard:
+                          // TODO: Handle this case.
+                          case GridItem.leaderboard:
+                          // TODO: Handle this case.
+                          case GridItem.notice:
+                          // TODO: Handle this case.
+                        }
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
@@ -115,54 +151,21 @@ class EnrolledCourseLandingView extends ConsumerWidget with CommonWidgets {
                   horizontalTitleGap: 0.0,
                   minLeadingWidth: 0,
                   child: ExpansionTile(
-                    title: Text(
-                      'লেসন ০১ - বাংলা ভাষা ও সাহিত্য',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
+                    trailing:
+                        isComplete ? courseCompletePill(theme) : Container(),
+                    title: lessonName(
+                        theme, 'লেসন ${i + 1} - বাংলা ভাষা ও সাহিত্য'),
                     children: [
                       for (int i = 0; i < 3; i++)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16)
-                              .copyWith(top: 0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.video_collection_outlined,
-                                    size: 18,
-                                  ),
-                                  const Gap(8),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'রেকর্ড ক্লাস - ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              fontWeight: FontWeight.w700),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                            text: 'সন্ধি ও সমার্থক শব্দ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                              const Icon(
-                                Icons.lock_clock_outlined,
-                                size: 18,
-                              )
-                            ],
-                          ),
-                        )
+                        lessonItem(theme,
+                            trailingIcon: Icon(
+                              Icons.check_circle,
+                              color: Colors.blue,
+                              size: 20,
+                            ),
+                            itemName: "েকর্ড ক্লাস - ${i + 1}",
+                            icon: Icons.video_collection_outlined,
+                            lessonName: 'Lesson - ${i + 1}')
                     ],
                   ),
                 ),

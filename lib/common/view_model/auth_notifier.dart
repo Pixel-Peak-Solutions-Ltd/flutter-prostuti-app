@@ -3,6 +3,8 @@ import 'package:prostuti/features/auth/login/model/login_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../secrets/secrets.dart';
+
 part 'auth_notifier.g.dart';
 
 @riverpod
@@ -41,7 +43,7 @@ class AuthNotifier extends _$AuthNotifier {
     if (refreshToken != null) {
       try {
         final response = await Dio().post(
-          'https://prostuti-app-backend-production.up.railway.app/api/v1/auth/student/refresh-token',
+          '$BASE_URL/auth/student/refresh-token',
           data: {'refreshToken': refreshToken},
         );
 

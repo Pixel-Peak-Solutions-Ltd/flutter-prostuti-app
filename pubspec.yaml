@@ -14,7 +14,7 @@ dependencies:
 
 
   cupertino_icons: ^1.0.8
-
+  intl:
   dio: ^5.7.0
   google_fonts: ^6.2.1
   flutter_riverpod: ^2.5.3
@@ -32,8 +32,12 @@ dependencies:
   flutter_svg: ^2.0.10+1
   table_calendar: ^3.1.2
   flutter_launcher_icons: ^0.14.1
-  fpdart: ^1.1.0
+  dartz:
   pod_player: ^0.2.2
+  ionicons: ^0.2.2
+  fluttertoast:
+  open_filex:
+  path_provider:
 
 dev_dependencies:
   flutter_test:

@@ -28,7 +28,7 @@ class CourseDetailsPills extends StatelessWidget {
             value,
             style: Theme.of(context)
                 .textTheme
-                .bodyMedium!
+                .bodySmall!
                 .copyWith(color: AppColors.textTertiaryLight),
           ),
         ],

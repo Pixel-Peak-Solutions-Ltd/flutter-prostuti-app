@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/core/services/nav.dart';
+import 'package:prostuti/features/auth/login/view/login_view.dart';
 import 'package:prostuti/features/home_screen/view/home_screen_view.dart';
 
 import 'common/helpers/theme_provider.dart';
@@ -30,7 +31,7 @@ class MyApp extends ConsumerWidget {
       themeMode: themeMode,
       home: Builder(builder: (context) {
         SizeConfig.init(context);
-        return HomeScreen();
+        return LoginView();
       }),
     );
   }

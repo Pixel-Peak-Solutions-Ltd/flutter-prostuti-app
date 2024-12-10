@@ -17,6 +17,7 @@ class Assets {
   static const String iconsClock01 = 'assets/icons/clock-01.png';
   static const String iconsCoursesIcon = 'assets/icons/courses_icon.png';
   static const String iconsFavourite = 'assets/icons/favourite.svg';
+  static const String iconsFileIcon = 'assets/icons/file_icon.png';
   static const String iconsFlashCardShareIcon =
       'assets/icons/flash_card_share_icon.svg';
   static const String iconsLeaderboardFirstIcon =
@@ -53,10 +54,12 @@ class Assets {
       'assets/images/my_course_thumbnail.png';
   static const String imagesMyCoursesBackground =
       'assets/images/my_courses_background.png';
+  static const String imagesNoRecordClass = 'assets/images/no_record_class.png';
   static const String imagesOnboardingImage1 =
       'assets/images/onboarding_image1.png';
   static const String imagesOnboardingImage2 =
       'assets/images/onboarding_image2.png';
+  static const String imagesPlaceholder = 'assets/images/placeholder.png';
   static const String imagesProstutiLogo = 'assets/images/prostuti_logo.png';
   static const String imagesTestDp = 'assets/images/test_dp.jpg';
   static const String imagesWelcome = 'assets/images/welcome.png';

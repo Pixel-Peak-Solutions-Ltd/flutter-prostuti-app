@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:prostuti/secrets/secrets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../common/view_model/auth_notifier.dart';
@@ -10,7 +11,7 @@ Dio dio(DioRef ref) {
   final authNotifier = ref.watch(authNotifierProvider);
 
   return Dio(BaseOptions(
-    baseUrl: 'https://prostuti-app-backend-production.up.railway.app/api/v1',
+    baseUrl: BASE_URL,
     connectTimeout: const Duration(milliseconds: 5000),
     receiveTimeout: const Duration(milliseconds: 3000),
   ))
