@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:prostuti/core/services/nav.dart';
+import 'package:prostuti/features/auth/login/view/login_view.dart';
 import 'package:prostuti/secrets/secrets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -28,26 +31,29 @@ Dio dio(DioRef ref) {
       },
       onError: (DioException error, handler) async {
         if (error.response?.statusCode == 401) {
+          // Refresh the access token
           final authNotifier = ref.read(authNotifierProvider.notifier);
           final newAccessToken = await authNotifier.createAccessToken();
+          debugPrint("newAccessToken $newAccessToken");
+
           if (newAccessToken != null) {
+            // Update the original request's headers with the new token
             error.requestOptions.headers['Authorization'] =
                 'Bearer $newAccessToken';
-            final opts = Options(
-              method: error.requestOptions.method,
-              headers: error.requestOptions.headers,
-            );
-            final cloneReq = await Dio().request(
-              error.requestOptions.path,
-              options: opts,
-              data: error.requestOptions.data,
-              queryParameters: error.requestOptions.queryParameters,
-            );
-            handler.resolve(cloneReq);
+
+            try {
+              // Retry the original request with the updated headers
+              final response = await Dio().fetch(error.requestOptions);
+              return handler.resolve(response);
+            } catch (e) {
+              return handler.reject(e as DioException);
+            }
+          } else {
+            Nav().pushAndRemoveUntil(const LoginView());
           }
-        } else {
-          handler.next(error);
         }
+        // Forward other errors
+        handler.next(error);
       },
     ));
 }
