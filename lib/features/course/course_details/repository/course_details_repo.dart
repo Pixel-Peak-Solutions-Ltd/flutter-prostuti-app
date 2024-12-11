@@ -29,11 +29,6 @@ class CourseDetailsRepo {
 
     if (response.statusCode == 200) {
       return Right(CourseDetails.fromJson(response.data));
-    } else if (response.statusCode == 401) {
-      Nav().pushAndRemoveUntil(const LoginView());
-      final errorResponse = ErrorResponse.fromJson(response.data);
-      ErrorHandler().setErrorMessage(errorResponse.message);
-      return Left(errorResponse);
     } else {
       final errorResponse = ErrorResponse.fromJson(response.data);
       ErrorHandler().setErrorMessage(errorResponse.message);

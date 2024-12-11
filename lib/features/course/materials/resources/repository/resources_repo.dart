@@ -30,11 +30,6 @@ class ResourcesRepo {
 
     if (response.statusCode == 200) {
       return Right(ResourceList.fromJson(response.data));
-    } else if (response.statusCode == 401) {
-      Nav().pushAndRemoveUntil(const LoginView());
-      final errorResponse = ErrorResponse.fromJson(response.data);
-      ErrorHandler().setErrorMessage(errorResponse.message);
-      return Left(errorResponse);
     } else {
       final errorResponse = ErrorResponse.fromJson(response.data);
       ErrorHandler().setErrorMessage(errorResponse.message);
@@ -48,11 +43,6 @@ class ResourcesRepo {
 
     if (response.statusCode == 200) {
       return Right(ResourceDetails.fromJson(response.data));
-    } else if (response.statusCode == 401) {
-      Nav().pushAndRemoveUntil(const LoginView());
-      final errorResponse = ErrorResponse.fromJson(response.data);
-      ErrorHandler().setErrorMessage(errorResponse.message);
-      return Left(errorResponse);
     } else {
       final errorResponse = ErrorResponse.fromJson(response.data);
       ErrorHandler().setErrorMessage(errorResponse.message);
