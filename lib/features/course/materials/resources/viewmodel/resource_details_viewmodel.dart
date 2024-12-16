@@ -1,5 +1,3 @@
-import 'package:prostuti/core/services/nav.dart';
-import 'package:prostuti/features/auth/login/view/login_view.dart';
 import 'package:prostuti/features/course/materials/resources/model/resource_details_model.dart';
 import 'package:prostuti/features/course/materials/resources/repository/resources_repo.dart';
 import 'package:prostuti/features/course/materials/resources/viewmodel/get_resource_by_id.dart';
@@ -20,7 +18,6 @@ class ResourceDetailsViewmodel extends _$ResourceDetailsViewmodel {
 
     return response.fold(
       (l) {
-        Nav().pushAndRemoveUntil(const LoginView());
         throw Exception(l.message);
       },
       (resource) {

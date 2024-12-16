@@ -248,7 +248,7 @@ class RecodedClasses {
   String? recodeClassName;
   String? classDate;
   String? classDetails;
-  List<String>? classVideoURL;
+  Image? classVideoURL;
 
   RecodedClasses(
       {this.sId,
@@ -262,7 +262,9 @@ class RecodedClasses {
     recodeClassName = json['recodeClassName'];
     classDate = json['classDate'];
     classDetails = json['classDetails'];
-    classVideoURL = json['classVideoURL'].cast<String>();
+    classVideoURL = json['classVideoURL'] != null
+        ? Image.fromJson(json['classVideoURL'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -271,7 +273,9 @@ class RecodedClasses {
     data['recodeClassName'] = recodeClassName;
     data['classDate'] = classDate;
     data['classDetails'] = classDetails;
-    data['classVideoURL'] = classVideoURL;
+    if (classVideoURL != null) {
+      data['classVideoURL'] = classVideoURL!.toJson();
+    }
     return data;
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/materials/record_class/view/record_class_details_view.dart';
@@ -8,8 +7,6 @@ import 'package:prostuti/features/course/materials/record_class/viewmodel/get_re
 import 'package:prostuti/features/course/materials/record_class/viewmodel/record_class_viewmodel.dart';
 import 'package:prostuti/features/course/materials/shared/widgets/material_list_skeleton.dart';
 import 'package:prostuti/features/course/materials/shared/widgets/trailing_icon.dart';
-
-import '../../shared/helper/functions.dart';
 
 class RecordClassView extends ConsumerStatefulWidget {
   const RecordClassView({super.key});
@@ -32,7 +29,7 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
           return ListView.builder(
             itemCount: recordClass.length,
             itemBuilder: (context, index) {
-              bool isItemComplete = true;
+              bool isItemComplete = false;
 
               return InkWell(
                 onTap: () {
@@ -40,7 +37,7 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
                       .watch(getRecordClassIdProvider.notifier)
                       .setRecordClassId(recordClass[index].sId!);
                   Nav().push(RecordClassDetailsView(
-                    videoUrl: recordClass[index].classVideoURL![0],
+                    videoUrl: recordClass[index].classVideoURL!.path!,
                   ));
                 },
                 child: lessonItem(theme,
