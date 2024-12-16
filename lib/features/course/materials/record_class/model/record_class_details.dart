@@ -8,7 +8,7 @@ class RecordClassDetails {
   RecordClassDetails.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    data = json['data'] != null ? Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -29,7 +29,7 @@ class Data {
   String? recodeClassName;
   String? classDate;
   String? classDetails;
-  List<String>? classVideoURL;
+  ClassVideoURL? classVideoURL;
   String? createdAt;
   String? updatedAt;
 
@@ -51,7 +51,9 @@ class Data {
     recodeClassName = json['recodeClassName'];
     classDate = json['classDate'];
     classDetails = json['classDetails'];
-    classVideoURL = json['classVideoURL'].cast<String>();
+    classVideoURL = json['classVideoURL'] != null
+        ? new ClassVideoURL.fromJson(json['classVideoURL'])
+        : null;
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
   }
@@ -64,9 +66,44 @@ class Data {
     data['recodeClassName'] = recodeClassName;
     data['classDate'] = classDate;
     data['classDetails'] = classDetails;
-    data['classVideoURL'] = classVideoURL;
+    if (classVideoURL != null) {
+      data['classVideoURL'] = classVideoURL!.toJson();
+    }
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
+    return data;
+  }
+}
+
+class ClassVideoURL {
+  String? diskType;
+  String? path;
+  String? originalName;
+  String? modifiedName;
+  String? fileId;
+
+  ClassVideoURL(
+      {this.diskType,
+      this.path,
+      this.originalName,
+      this.modifiedName,
+      this.fileId});
+
+  ClassVideoURL.fromJson(Map<String, dynamic> json) {
+    diskType = json['diskType'];
+    path = json['path'];
+    originalName = json['originalName'];
+    modifiedName = json['modifiedName'];
+    fileId = json['fileId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['diskType'] = diskType;
+    data['path'] = path;
+    data['originalName'] = originalName;
+    data['modifiedName'] = modifiedName;
+    data['fileId'] = fileId;
     return data;
   }
 }

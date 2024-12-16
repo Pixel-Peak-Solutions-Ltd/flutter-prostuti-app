@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:pod_player/pod_player.dart';
+import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/features/course/materials/record_class/viewmodel/record_class_details_viewmodel.dart';
 import 'package:prostuti/features/course/materials/record_class/widgets/record_class_skeleton.dart';
 
@@ -23,7 +23,7 @@ class RecordClassDetailsViewState extends ConsumerState<RecordClassDetailsView>
   void initState() {
     _controller = PodPlayerController(
       playVideoFrom: PlayVideoFrom.network(
-        'https://all-users.s3.us-west-004.backblazeb2.com/videos/3+Awesome+Life+Hacks+with+Smartphones(720p).MP4',
+        widget.videoUrl,
       ),
     )..initialise();
     super.initState();

@@ -11,7 +11,7 @@ class RecordedClass {
     if (json['data'] != null) {
       data = <RecordedClassData>[];
       json['data'].forEach((v) {
-        data!.add(RecordedClassData.fromJson(v));
+        data!.add(new RecordedClassData.fromJson(v));
       });
     }
   }
@@ -32,7 +32,7 @@ class RecordedClassData {
   LessonId? lessonId;
   String? recodeClassName;
   String? classDate;
-  List<String>? classVideoURL;
+  ClassVideoURL? classVideoURL;
 
   RecordedClassData(
       {this.sId,
@@ -43,11 +43,14 @@ class RecordedClassData {
 
   RecordedClassData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    lessonId =
-        json['lesson_id'] != null ? LessonId.fromJson(json['lesson_id']) : null;
+    lessonId = json['lesson_id'] != null
+        ? new LessonId.fromJson(json['lesson_id'])
+        : null;
     recodeClassName = json['recodeClassName'];
     classDate = json['classDate'];
-    classVideoURL = json['classVideoURL'].cast<String>();
+    classVideoURL = json['classVideoURL'] != null
+        ? new ClassVideoURL.fromJson(json['classVideoURL'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -58,7 +61,9 @@ class RecordedClassData {
     }
     data['recodeClassName'] = recodeClassName;
     data['classDate'] = classDate;
-    data['classVideoURL'] = classVideoURL;
+    if (classVideoURL != null) {
+      data['classVideoURL'] = classVideoURL!.toJson();
+    }
     return data;
   }
 }
@@ -81,6 +86,39 @@ class LessonId {
     data['_id'] = sId;
     data['number'] = number;
     data['name'] = name;
+    return data;
+  }
+}
+
+class ClassVideoURL {
+  String? diskType;
+  String? path;
+  String? originalName;
+  String? modifiedName;
+  String? fileId;
+
+  ClassVideoURL(
+      {this.diskType,
+      this.path,
+      this.originalName,
+      this.modifiedName,
+      this.fileId});
+
+  ClassVideoURL.fromJson(Map<String, dynamic> json) {
+    diskType = json['diskType'];
+    path = json['path'];
+    originalName = json['originalName'];
+    modifiedName = json['modifiedName'];
+    fileId = json['fileId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['diskType'] = diskType;
+    data['path'] = path;
+    data['originalName'] = originalName;
+    data['modifiedName'] = modifiedName;
+    data['fileId'] = fileId;
     return data;
   }
 }
