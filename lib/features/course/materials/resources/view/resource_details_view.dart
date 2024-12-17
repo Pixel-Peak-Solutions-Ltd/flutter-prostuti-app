@@ -1,7 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/file_helper.dart';
 import 'package:prostuti/core/services/size_config.dart';
@@ -37,64 +38,84 @@ class ResourceDetailsViewState extends ConsumerState<ResourceDetailsView>
                 child: Container(
                   height: SizeConfig.h(64),
                   width: MediaQuery.sizeOf(context).width,
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(4)),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                   child: Center(
-                      child: ListTile(
-                    onTap: () async {
-                      Fluttertoast.showToast(msg: "Starting Download");
-                      String? filePath = await fileHelper.downloadFile(
-                          uploadItem.path!, uploadItem.originalName!);
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 4, horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        border: Border.all(color: Colors.grey.shade400),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                          child: ListTile(
+                            onTap: () async {
+                              Fluttertoast.showToast(msg: "Starting Download");
+                              String? filePath = await fileHelper.downloadFile(
+                                  uploadItem.path!, uploadItem.originalName!);
 
-                      if (filePath != null) {
-                        await fileHelper.openFile(filePath);
-                      } else {
-                        Fluttertoast.showToast(
-                            msg: "Failed to download the file.");
-                      }
-                    },
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        side: BorderSide(color: Colors.grey.shade300)),
-                    leading: Stack(
-                      children: [
-                        Image.asset("assets/icons/file_icon.png"),
-                        Positioned(
-                          top: 20,
-                          child: Container(
-                            height: SizeConfig.h(12),
-                            width: SizeConfig.w(30),
-                            decoration: BoxDecoration(
-                                color: const Color(0xffE86E35),
-                                borderRadius: BorderRadius.circular(4)),
-                            child: Center(
-                              child: Text(
-                                'PDF',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
+                              if (filePath != null) {
+                                await fileHelper.openFile(filePath);
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: "Failed to download the file.");
+                              }
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                side: BorderSide(color: Colors.grey.shade300)),
+                            leading: Stack(
+                              children: [
+                                Image.asset("assets/icons/file_icon.png"),
+                                Positioned(
+                                  top: 15,
+                                  child: Container(
+                                    height: SizeConfig.h(12),
+                                    width: SizeConfig.w(28),
+                                    decoration: BoxDecoration(
+                                        color: const Color(0xffE86E35),
+                                        borderRadius: BorderRadius.circular(4)),
+                                    child: Center(
+                                      child: Text(
+                                        'PDF',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
                                     ),
-                              ),
+                                  ),
+                                )
+                              ],
                             ),
+                            title: Text(
+                              uploadItem.originalName!,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(fontWeight: FontWeight.w700),
+                            ),
+                            trailing: const Icon(Icons.file_download_outlined),
                           ),
-                        )
-                      ],
+                        ),
+                      ),
                     ),
-                    title: Text(
-                      uploadItem.originalName!,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    trailing: const Icon(Icons.file_download_outlined),
-                  )),
+                  ),
                 ),
               );
             },
           );
         },
-        error: (error, stackTrace) => Text("$error"),
+        error: (error, stackTrace) => Center(child: Text("$error")),
         loading: () => const ResourceSkeleton(),
       ),
     );

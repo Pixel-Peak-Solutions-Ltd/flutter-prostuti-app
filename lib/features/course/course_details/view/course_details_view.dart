@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
-
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course/course_details/viewmodel/course_details_vm.dart';
@@ -91,24 +87,27 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                       ),
                       const Gap(21),
                       SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             const CourseDetailsPills(
                               value: '৩৪৫ শিক্ষাথী',
                               icon: Icons.groups_2_outlined,
                             ),
                             CourseDetailsPills(
-                              value: '${courseDetails.data!.totalTests} টেস্ট',
+                              value:
+                                  '${courseDetails.data!.totalTests}টি টেস্ট',
                               icon: Icons.menu_book,
                             ),
                             CourseDetailsPills(
                               value:
-                                  '${courseDetails.data!.totalRecodedClasses} রেকর্ডক্লাস',
+                                  '${courseDetails.data!.totalRecodedClasses}টি রেকর্ডক্লাস',
                               icon: Icons.video_collection_outlined,
                             ),
                             CourseDetailsPills(
-                              value: '${courseDetails.data!.totalLessons} লেসন',
+                              value:
+                                  '${courseDetails.data!.totalLessons}টি লেসন',
                               icon: Icons.view_module_outlined,
                             ),
                           ],
