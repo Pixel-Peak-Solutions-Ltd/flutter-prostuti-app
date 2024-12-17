@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
-import 'package:prostuti/features/home_screen/view/home_screen_view.dart';
 
 import 'common/helpers/theme_provider.dart';
 import 'common/view_model/auth_notifier.dart';
@@ -28,7 +27,7 @@ class MyApp extends ConsumerWidget {
       navigatorKey: Nav().navigatorKey,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: themeMode,
+      themeMode: ThemeMode.light,
       home: Builder(builder: (context) {
         SizeConfig.init(context);
         return LoginView();
