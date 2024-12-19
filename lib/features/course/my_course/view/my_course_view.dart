@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-
 import 'package:prostuti/core/services/nav.dart';
 
 import '../../../../common/widgets/common_widgets/common_widgets.dart';
+import '../../course_list/viewmodel/get_course_by_id.dart';
 import '../../enrolled_course_landing/view/enrolled_course_landing_view.dart';
 import '../widgets/explore_course_btn.dart';
 import '../widgets/my_course_widgets.dart';
@@ -25,6 +25,9 @@ class MyCourseView extends ConsumerWidget with CommonWidgets {
               for (int i = 0; i < 3; i++)
                 InkWell(
                     onTap: () {
+                      ref
+                          .watch(getCourseByIdProvider.notifier)
+                          .setId("675ef486113c2a9fdca7887f");
                       Nav().push(EnrolledCourseLandingView());
                     },
                     child: MyCourseCard(progress: _progress)),

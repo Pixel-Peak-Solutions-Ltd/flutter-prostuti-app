@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
+import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course/course_details/viewmodel/course_details_vm.dart';
 import 'package:prostuti/features/course/course_details/viewmodel/review_see_more_viewModel.dart';
 import 'package:prostuti/features/course/course_details/widgets/course_details_skeleton.dart';
+import 'package:prostuti/features/payment/view/payment_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../course_list/widgets/course_list_header.dart';
@@ -387,32 +389,38 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
           return const CourseDetailsSkeleton();
         },
       ),
-      bottomNavigationBar: InkWell(
-        onTap: () {},
-        child: Container(
-            height: SizeConfig.h(60),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: courseDetailsAsync.when(
-              data: (data) {
-                return courseEnrollRow(
+      bottomNavigationBar: Container(
+          height: SizeConfig.h(60),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: courseDetailsAsync.when(
+            data: (data) {
+              return InkWell(
+                onTap: () {
+                  Nav().push(PaymentView(
+                      id: data.data!.sId!,
+                      name: data.data!.name!,
+                      imgPath: data.data!.image!.path!,
+                      price: data.data!.price!.toString()));
+                },
+                child: courseEnrollRow(
                   price: '${data.data!.price ?? "Free"}',
                   theme: Theme.of(context),
-                );
-              },
-              error: (error, stackTrace) {
-                return Text("$error");
-              },
-              loading: () {
-                return Skeletonizer(
-                  enabled: true,
-                  child: courseEnrollRow(
-                    price: "Free",
-                    theme: Theme.of(context),
-                  ),
-                );
-              },
-            )),
-      ),
+                ),
+              );
+            },
+            error: (error, stackTrace) {
+              return Text("$error");
+            },
+            loading: () {
+              return Skeletonizer(
+                enabled: true,
+                child: courseEnrollRow(
+                  price: "Free",
+                  theme: Theme.of(context),
+                ),
+              );
+            },
+          )),
     );
   }
 }

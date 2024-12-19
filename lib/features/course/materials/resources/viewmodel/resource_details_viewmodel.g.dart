@@ -7,7 +7,7 @@ part of 'resource_details_viewmodel.dart';
 // **************************************************************************
 
 String _$resourceDetailsViewmodelHash() =>
-    r'a2baba5ffa20de65e2a9d9673c617e1b5af277d7';
+    r'3a72c1b69a562aa66d5860be62267b28338b11de';
 
 /// See also [ResourceDetailsViewmodel].
 @ProviderFor(ResourceDetailsViewmodel)

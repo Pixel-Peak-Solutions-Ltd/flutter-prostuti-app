@@ -31,6 +31,7 @@ class RecordClassDetailsViewState extends ConsumerState<RecordClassDetailsView>
 
   @override
   void dispose() {
+    _controller.pause();
     _controller.dispose();
     super.dispose();
   }

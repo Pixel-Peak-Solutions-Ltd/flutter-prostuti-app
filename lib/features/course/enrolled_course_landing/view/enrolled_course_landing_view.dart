@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
+import 'package:prostuti/features/course/course_details/widgets/course_details_skeleton.dart';
 import 'package:prostuti/features/course/materials/assignment/view/assignment_view.dart';
 import 'package:prostuti/features/course/materials/record_class/view/record_class_view.dart';
 import 'package:prostuti/features/course/materials/resources/view/resources_view.dart';
+import 'package:prostuti/features/course/materials/shared/widgets/trailing_icon.dart';
+
+import '../../course_details/viewmodel/course_details_vm.dart';
+import '../../course_details/widgets/expandable_text.dart';
 
 enum GridItem {
   recordedClass("assets/icons/video.png", "রেকর্ড ক্লাস"),
@@ -42,136 +46,325 @@ class EnrolledCourseLandingViewState
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    final courseDetailsAsync = ref.watch(courseDetailsViewmodelProvider);
 
     return Scaffold(
       appBar: commonAppbar("BCS ফাইনাল প্রিলি প্রিপারেশন"),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset("assets/images/welcome.png"),
-              const Gap(10),
-              Text(
-                'আপনাকে স্বাগতম',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              const Gap(24),
-              Text(
-                'আপনি আমাদের কোর্সে যোগদান করেছেন! মূল ক্লাস শুরু হওয়ার আগে, আপনি কোর্সের সাথে সম্পর্কিত ব্লগ, নিবন্ধ, ভিডিও ইত্যাদি অনুশীলন এবং পড়া শুরু করতে পারেন, যা আপনাকে আরও প্রোগ্রামে সহায়তা করবে',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const Gap(24),
-              Text(
-                'মডিউল সমূহ',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              const Gap(24),
-              SizedBox(
-                height: SizeConfig.h(280),
-                child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                  ),
-                  itemCount: GridItem.values.length,
-                  itemBuilder: (context, index) {
-                    final item = GridItem.values[index];
-                    return InkWell(
-                      onTap: () {
-                        switch (item) {
-                          case GridItem.recordedClass:
-                            Nav().push(const RecordClassView());
-                          case GridItem.resource:
-                            Nav().push(const ResourcesView());
-                          case GridItem.assignment:
-                            Nav().push(const AssignmentView());
-                          case GridItem.test:
-                          // TODO: Handle this case.
-                          case GridItem.routine:
-                          // TODO: Handle this case.
-                          case GridItem.reportCard:
-                          // TODO: Handle this case.
-                          case GridItem.leaderboard:
-                          // TODO: Handle this case.
-                          case GridItem.notice:
-                          // TODO: Handle this case.
-                        }
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.grey.shade300)),
-                        padding: const EdgeInsets.all(16),
-                        child: Center(
-                          child: Column(
-                            children: [
-                              Image.asset(
-                                item.image,
-                                scale: 0.9,
+      body: courseDetailsAsync.when(
+        data: (courseDetails) {
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: SingleChildScrollView(
+              child: SafeArea(
+                bottom: true,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset("assets/images/welcome.png"),
+                    const Gap(10),
+                    Text(
+                      'আপনাকে স্বাগতম',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const Gap(24),
+                    ExpandableText(text: courseDetails.data!.details!),
+                    const Gap(24),
+                    Text(
+                      'মডিউল সমূহ',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const Gap(24),
+                    SizedBox(
+                      height: SizeConfig.h(280),
+                      child: GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                        ),
+                        itemCount: GridItem.values.length,
+                        itemBuilder: (context, index) {
+                          final item = GridItem.values[index];
+                          return InkWell(
+                            onTap: () {
+                              switch (item) {
+                                case GridItem.recordedClass:
+                                  Nav().push(const RecordClassView());
+                                case GridItem.resource:
+                                  Nav().push(const ResourcesView());
+                                case GridItem.assignment:
+                                  Nav().push(const AssignmentView());
+                                case GridItem.test:
+                                // TODO: Handle this case.
+                                case GridItem.routine:
+                                // TODO: Handle this case.
+                                case GridItem.reportCard:
+                                // TODO: Handle this case.
+                                case GridItem.leaderboard:
+                                // TODO: Handle this case.
+                                case GridItem.notice:
+                                // TODO: Handle this case.
+                              }
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border:
+                                      Border.all(color: Colors.grey.shade300)),
+                              padding: const EdgeInsets.all(16),
+                              child: Center(
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                      item.image,
+                                      scale: 0.9,
+                                    ),
+                                    const Gap(6),
+                                    Text(
+                                      item.title,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
                               ),
-                              const Gap(6),
-                              Text(
-                                item.title,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const Gap(24),
+                    Text(
+                      'কোর্স কারিকুলাম',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const Gap(16),
+                    for (int i = 0;
+                        i < (courseDetails.data!.lessons!.length);
+                        i++)
+                      ListTileTheme(
+                        contentPadding: const EdgeInsets.all(0),
+                        dense: true,
+                        horizontalTitleGap: 0.0,
+                        minLeadingWidth: 0,
+                        child: ExpansionTile(
+                          title: lessonName(theme,
+                              '${courseDetails.data!.lessons![i].name} ${i + 1} '),
+                          children: [
+                            for (int j = 0;
+                                j <
+                                    courseDetails.data!.lessons![i]
+                                        .recodedClasses!.length;
+                                j++)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16)
+                                        .copyWith(top: 0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.video_collection_outlined,
+                                          size: 18,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                        const Gap(8),
+                                        SizedBox(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.7,
+                                          child: Text(
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            'Recorded Class: ${courseDetails.data!.lessons![i].recodedClasses![j].recodeClassName!}',
+                                            style: theme.textTheme.bodySmall!
+                                                .copyWith(
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    TrailingIcon(
+                                        classDate: courseDetails
+                                            .data!
+                                            .lessons![i]
+                                            .recodedClasses![j]
+                                            .classDate!,
+                                        isCompleted: false)
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
+                            for (int j = 0;
+                                j <
+                                    courseDetails
+                                        .data!.lessons![i].resources!.length;
+                                j++)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16)
+                                        .copyWith(top: 0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.picture_as_pdf_outlined,
+                                          size: 18,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                        const Gap(8),
+                                        SizedBox(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.7,
+                                          child: Text(
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            'Resource: ${courseDetails.data!.lessons![i].resources![j].name}',
+                                            style: theme.textTheme.bodySmall!
+                                                .copyWith(
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    TrailingIcon(
+                                        classDate: courseDetails
+                                            .data!
+                                            .lessons![i]
+                                            .resources![j]
+                                            .resourceDate!,
+                                        isCompleted: false)
+                                  ],
+                                ),
+                              ),
+                            for (int j = 0;
+                                j <
+                                    courseDetails
+                                        .data!.lessons![i].assignments!.length;
+                                j++)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16)
+                                        .copyWith(top: 0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.assignment_outlined,
+                                          size: 18,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                        const Gap(8),
+                                        SizedBox(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.7,
+                                          child: Text(
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            'Assignment: ${courseDetails.data!.lessons![i].assignments![j].assignmentNo!}',
+                                            style: theme.textTheme.bodySmall!
+                                                .copyWith(
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    TrailingIcon(
+                                        classDate: courseDetails
+                                            .data!
+                                            .lessons![i]
+                                            .assignments![j]
+                                            .unlockDate!,
+                                        isCompleted: false)
+                                  ],
+                                ),
+                              ),
+                            for (int j = 0;
+                                j <
+                                    courseDetails
+                                        .data!.lessons![i].tests!.length;
+                                j++)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16)
+                                        .copyWith(top: 0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.menu_book_rounded,
+                                          size: 18,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                        const Gap(8),
+                                        SizedBox(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.7,
+                                          child: Text(
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            'Test: ${courseDetails.data!.lessons![i].tests![j].name!}',
+                                            style: theme.textTheme.bodySmall!
+                                                .copyWith(
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    TrailingIcon(
+                                        classDate: courseDetails.data!
+                                            .lessons![i].tests![j].publishDate!,
+                                        isCompleted: false)
+                                  ],
+                                ),
+                              ),
+                          ],
                         ),
                       ),
-                    );
-                  },
+                  ],
                 ),
               ),
-              const Gap(24),
-              Text(
-                'কোর্স কারিকুলাম',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              const Gap(16),
-              for (int i = 0; i < 3; i++)
-                ListTileTheme(
-                  contentPadding: const EdgeInsets.all(0),
-                  dense: true,
-                  horizontalTitleGap: 0.0,
-                  minLeadingWidth: 0,
-                  child: ExpansionTile(
-                    trailing:
-                        isComplete ? courseCompletePill(theme) : Container(),
-                    title: lessonName(
-                        theme, 'লেসন ${i + 1} - বাংলা ভাষা ও সাহিত্য'),
-                    children: [
-                      for (int i = 0; i < 3; i++)
-                        lessonItem(theme,
-                            trailingIcon: Icon(
-                              Icons.check_circle,
-                              color: Colors.blue,
-                              size: 20,
-                            ),
-                            itemName: "েকর্ড ক্লাস - ${i + 1}",
-                            icon: Icons.video_collection_outlined,
-                            lessonName: 'Lesson - ${i + 1}')
-                    ],
-                  ),
-                ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
+        error: (error, stackTrace) {
+          return Center(
+            child: Text("$error"),
+          );
+        },
+        loading: () => const CourseDetailsSkeleton(),
       ),
     );
   }
