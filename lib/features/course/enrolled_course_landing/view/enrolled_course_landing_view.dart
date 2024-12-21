@@ -49,7 +49,15 @@ class EnrolledCourseLandingViewState
     final courseDetailsAsync = ref.watch(courseDetailsViewmodelProvider);
 
     return Scaffold(
-      appBar: commonAppbar("BCS ফাইনাল প্রিলি প্রিপারেশন"),
+      appBar: courseDetailsAsync.when(
+        data: (data) => commonAppbar(data.data!.name!),
+        error: (error, stackTrace) {
+          return commonAppbar("$error");
+        },
+        loading: () {
+          return commonAppbar("");
+        },
+      ),
       body: courseDetailsAsync.when(
         data: (courseDetails) {
           return Padding(
