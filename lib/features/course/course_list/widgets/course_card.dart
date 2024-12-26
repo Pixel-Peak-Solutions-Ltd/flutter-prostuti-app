@@ -59,6 +59,7 @@ class CourseCard extends StatelessWidget with CommonWidgets {
             priceType: priceType,
             price: price,
             theme: Theme.of(context),
+            title: 'বিস্তারিত দেখুন',
           )
         ],
       ),

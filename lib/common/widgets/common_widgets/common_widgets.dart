@@ -18,17 +18,19 @@ mixin CommonWidgets {
     );
   }
 
-  Widget courseEnrollRow({
-    required String? price,
-    required String? priceType,
-    required ThemeData theme,
-  }) {
+  Widget courseEnrollRow(
+      {required String? price,
+      required String? priceType,
+      required ThemeData theme,
+      required String title}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          priceType == "Free" ? "Free" : "৳ $price",
+          priceType == "Free" || priceType == "Subscription"
+              ? "$priceType"
+              : "৳ $price",
           style: theme.textTheme.titleLarge!
               .copyWith(color: AppColors.textActionSecondaryLight),
         ),
@@ -41,7 +43,7 @@ mixin CommonWidgets {
           ),
           child: Center(
             child: Text(
-              'এনরোল করুন',
+              title,
               style: theme.textTheme.titleMedium!.copyWith(color: Colors.white),
             ),
           ),

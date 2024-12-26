@@ -39,6 +39,7 @@ dependencies:
   open_filex:
   path_provider:
   webview_flutter: ^2.0.13
+  modal_bottom_sheet: ^3.0.0
 
 dev_dependencies:
   flutter_test:

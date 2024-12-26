@@ -197,10 +197,11 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                                   });
 
                                   if (response != null) {
-                                    if (response is String) {
-                                      Fluttertoast.showToast(msg: response);
+                                    if (response is bool) {
+                                      Fluttertoast.showToast(
+                                          msg: "Already enrolled");
                                     } else {
-                                      Nav().push(EasyCheckout(
+                                      Nav().pushReplacement(EasyCheckout(
                                           url: response.toString()));
                                     }
                                   } else {
