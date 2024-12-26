@@ -68,4 +68,17 @@ class PaymentRepo {
       return Left(errorResponse);
     }
   }
+
+  Future<bool> enrollSubscribedCourse(payload) async {
+    final response =
+        await _dioService.postRequest("/enroll-course/subscription", payload);
+
+    if (response.statusCode == 200) {
+      return response.data['success'];
+    } else if (response.statusCode == 409) {
+      return response.data["success"];
+    } else {
+      return response.data["success"];
+    }
+  }
 }

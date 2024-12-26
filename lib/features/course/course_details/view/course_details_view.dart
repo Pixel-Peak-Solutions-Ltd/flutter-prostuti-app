@@ -432,7 +432,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                       ref
                                           .watch(getCourseByIdProvider.notifier)
                                           .setId(data.data!.sId!);
-                                      Nav().push(
+                                      Nav().pushReplacement(
                                           const EnrolledCourseLandingView());
                                     }
                                   : () async {
@@ -449,11 +449,24 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                             false) {
                                           Nav().push(SubscriptionView());
                                         } else {
-                                          await Fluttertoast.showToast(
-                                              msg:
-                                                  "You are Already subscribed user");
+                                          final response = await ref
+                                              .read(paymentRepoProvider)
+                                              .enrollSubscribedCourse({
+                                            "course_id": [data.data!.sId]
+                                          });
 
-                                          Nav().push(MyCourseView());
+                                          if (response) {
+                                            ref
+                                                .watch(getCourseByIdProvider
+                                                    .notifier)
+                                                .setId(data.data!.sId!);
+                                            Nav().pushReplacement(
+                                                const EnrolledCourseLandingView());
+                                          } else {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "Contact Prostuti for enrollment");
+                                          }
                                         }
                                       } else if (data.data!.priceType ==
                                           "Free") {
@@ -489,12 +502,9 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                       priceType: data.data!.priceType,
                       price: '${data.data!.price ?? "Free"}',
                       theme: Theme.of(context),
-                      title: subscriptionAsyncValue.value == true &&
-                              data.data!.priceType == "Subscription"
-                          ? "কোর্স দেখুন"
-                          : isEnrolled.value == true
-                              ? "ভিজিট করুন"
-                              : "এনরোল করুন",
+                      title: isEnrolled.value == true
+                          ? "ভিজিট করুন"
+                          : "এনরোল করুন",
                     ),
                   ),
                 ),

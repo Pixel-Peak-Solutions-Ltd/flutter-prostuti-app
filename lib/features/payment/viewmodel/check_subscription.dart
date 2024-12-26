@@ -17,7 +17,10 @@ class UserSubscribed extends _$UserSubscribed {
     return response.fold(
       (l) => throw Exception(l.message), // Handle error case
       (r) {
-        // Check subscription status using the helper function
+        if (r.data!.subscriptionStartDate == null ||
+            r.data!.subscriptionEndDate == null) {
+          return false;
+        }
         return HelperFunc.isUserSubscribed(
           r.data!.subscriptionStartDate!,
           r.data!.subscriptionEndDate!,
