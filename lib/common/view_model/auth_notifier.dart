@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:prostuti/features/auth/login/model/login_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,8 +47,6 @@ class AuthNotifier extends _$AuthNotifier {
           data: {'refreshToken': refreshToken},
         );
 
-        debugPrint(
-            "createAcessToken response: $response ${response.statusCode}");
         if (response.statusCode == 200) {
           final newAccessTokenResponse = Login.fromJson(response.data);
           final accessToken = newAccessTokenResponse.data!.accessToken!;

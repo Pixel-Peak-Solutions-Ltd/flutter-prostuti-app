@@ -7,7 +7,7 @@ part of 'record_class_viewmodel.dart';
 // **************************************************************************
 
 String _$recordClassViewmodelHash() =>
-    r'd8855205cfe54f2115c2e4ade0d1a6c6705256b6';
+    r'd818976b5fc085ec6e5910b59eb432f5f7a6e9a3';
 
 /// See also [RecordClassViewmodel].
 @ProviderFor(RecordClassViewmodel)

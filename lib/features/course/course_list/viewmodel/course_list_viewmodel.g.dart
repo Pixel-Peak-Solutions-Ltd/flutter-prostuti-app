@@ -6,12 +6,12 @@ part of 'course_list_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$publishedCourseHash() => r'a00f0be6cb6a1da94beb5ea74b840664c5be07fe';
+String _$publishedCourseHash() => r'05610ff4f737e947cd5bd50ebc9a1fb8da48b141';
 
 /// See also [PublishedCourse].
 @ProviderFor(PublishedCourse)
-final publishedCourseProvider =
-    AsyncNotifierProvider<PublishedCourse, List<PublishedCourseData>>.internal(
+final publishedCourseProvider = AutoDisposeAsyncNotifierProvider<
+    PublishedCourse, List<PublishedCourseData>>.internal(
   PublishedCourse.new,
   name: r'publishedCourseProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,6 +21,6 @@ final publishedCourseProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$PublishedCourse = AsyncNotifier<List<PublishedCourseData>>;
+typedef _$PublishedCourse = AutoDisposeAsyncNotifier<List<PublishedCourseData>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

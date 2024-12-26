@@ -7,7 +7,6 @@ import 'package:prostuti/features/auth/category/repository/category_repo.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/name_viewmodel.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/otp_viewmodel.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/password_viewmodel.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../login/view/login_view.dart';

@@ -1,12 +1,10 @@
 // __brick__/repository/category_repo.dart
+import 'package:prostuti/core/services/api_response.dart';
 import 'package:prostuti/core/services/dio_service.dart';
-import 'package:prostuti/features/auth/category/model/category_model.dart';
-
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
 import 'package:prostuti/core/services/error_handler.dart';
 import 'package:prostuti/core/services/error_response.dart';
-import 'package:prostuti/core/services/api_response.dart';
+import 'package:prostuti/features/auth/category/model/category_model.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'category_repo.g.dart';
 

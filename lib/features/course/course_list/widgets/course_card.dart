@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class CourseCard extends StatelessWidget with CommonWidgets {
   CourseCard({
@@ -8,10 +9,11 @@ class CourseCard extends StatelessWidget with CommonWidgets {
     required this.title,
     required this.price,
     required this.imgPath,
+    required this.priceType,
   });
 
   final String? title;
-  final String? price;
+  final String? price, priceType;
 
   final String imgPath;
 
@@ -29,12 +31,14 @@ class CourseCard extends StatelessWidget with CommonWidgets {
               fit: BoxFit.cover,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                        : null,
+                return Skeletonizer(
+                  enabled: true,
+                  child: Center(
+                    child: Container(
+                      width: MediaQuery.sizeOf(context).width,
+                      height: 110,
+                      color: Colors.grey,
+                    ),
                   ),
                 );
               },
@@ -52,6 +56,7 @@ class CourseCard extends StatelessWidget with CommonWidgets {
           ),
           const Gap(4),
           courseEnrollRow(
+            priceType: priceType,
             price: price,
             theme: Theme.of(context),
           )

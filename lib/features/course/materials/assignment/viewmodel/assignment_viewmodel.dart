@@ -2,6 +2,8 @@ import 'package:prostuti/features/course/materials/assignment/model/assignment_m
 import 'package:prostuti/features/course/materials/assignment/repository/assignment_repo.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../course_list/viewmodel/get_course_by_id.dart';
+
 part 'assignment_viewmodel.g.dart';
 
 @Riverpod(keepAlive: false)
@@ -12,10 +14,9 @@ class AssignmentViewmodel extends _$AssignmentViewmodel {
   }
 
   Future<List<AssignmentListData>> getCourseDetails() async {
-    // final String id = ref.watch(getCourseByIdProvider);
-    final response = await ref
-        .read(assignmentRepoProvider)
-        .getAssignmentList("675ef486113c2a9fdca7887f");
+    final String id = ref.watch(getCourseByIdProvider);
+    final response =
+        await ref.read(assignmentRepoProvider).getAssignmentList(id);
 
     return response.fold(
       (l) {

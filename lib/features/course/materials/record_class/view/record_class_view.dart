@@ -45,8 +45,7 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
                       classDate: recordClass[index].classDate!,
                       isCompleted: isItemComplete,
                     ),
-                    itemName:
-                        "রেকর্ড ক্লাস: ${recordClass[index].recodeClassName}",
+                    itemName: "${recordClass[index].recodeClassName}",
                     icon: Icons.video_collection_rounded,
                     lessonName: '${recordClass[index].lessonId!.number} '),
               );

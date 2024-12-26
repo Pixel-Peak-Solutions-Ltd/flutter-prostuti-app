@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
@@ -8,17 +9,20 @@ import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course/course_details/viewmodel/course_details_vm.dart';
 import 'package:prostuti/features/course/course_details/viewmodel/review_see_more_viewModel.dart';
 import 'package:prostuti/features/course/course_details/widgets/course_details_skeleton.dart';
+import 'package:prostuti/features/payment/repository/payment_repo.dart';
 import 'package:prostuti/features/payment/view/payment_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../../core/services/debouncer.dart';
 import '../../course_list/widgets/course_list_header.dart';
+import '../../my_course/view/my_course_view.dart';
 import '../viewmodel/lesson_see_more_viewmodel.dart';
 import '../widgets/course_details_pills.dart';
 import '../widgets/course_details_review_card.dart';
 import '../widgets/expandable_text.dart';
 
 class CourseDetailsView extends ConsumerStatefulWidget {
-  CourseDetailsView({super.key});
+  const CourseDetailsView({super.key});
 
   @override
   CourseDetailsViewState createState() => CourseDetailsViewState();
@@ -26,6 +30,9 @@ class CourseDetailsView extends ConsumerStatefulWidget {
 
 class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
     with CommonWidgets {
+  final _debouncer = Debouncer(milliseconds: 120);
+  final _loadingProvider = StateProvider<bool>((ref) => false);
+
   @override
   Widget build(BuildContext context) {
     final reviewMoreBtn = ref.watch(reviewSeeMoreViewmodelProvider);
@@ -33,6 +40,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
     ThemeData theme = Theme.of(context);
 
     final courseDetailsAsync = ref.watch(courseDetailsViewmodelProvider);
+    final isLoading = ref.watch(_loadingProvider);
 
     return Scaffold(
       appBar: commonAppbar("Course Preview"),
@@ -75,8 +83,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                             icon: Icons.star_border_outlined,
                           ),
                           Text(
-                            courseDetails.data!.price == 0 ||
-                                    courseDetails.data!.price == null
+                            courseDetails.data!.priceType == "Free"
                                 ? "Free"
                                 : '৳ ${courseDetails.data!.price}',
                             style: Theme.of(context)
@@ -142,7 +149,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                       i <
                           (lessonMoreBtn
                               ? courseDetails.data!.lessons!.length
-                              : 3);
+                              : 1);
                       i++)
                     ListTileTheme(
                       contentPadding: const EdgeInsets.all(0),
@@ -394,17 +401,52 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: courseDetailsAsync.when(
             data: (data) {
-              return InkWell(
-                onTap: () {
-                  Nav().push(PaymentView(
-                      id: data.data!.sId!,
-                      name: data.data!.name!,
-                      imgPath: data.data!.image!.path!,
-                      price: data.data!.price!.toString()));
-                },
-                child: courseEnrollRow(
-                  price: '${data.data!.price ?? "Free"}',
-                  theme: Theme.of(context),
+              return Skeletonizer(
+                enabled: isLoading,
+                child: InkWell(
+                  onTap: isLoading
+                      ? () {}
+                      : () async {
+                          _debouncer.run(
+                              action: () async {
+                                if (data.data!.priceType == "Paid") {
+                                  Nav().push(PaymentView(
+                                      id: data.data!.sId!,
+                                      name: data.data!.name!,
+                                      imgPath: data.data!.image!.path!,
+                                      price: data.data!.price!.toString()));
+                                } else if (data.data!.priceType ==
+                                    "Subscription") {
+                                } else if (data.data!.priceType == "Free") {
+                                  final response = await ref
+                                      .read(paymentRepoProvider)
+                                      .enrollFreeCourse({
+                                    "course_id": [data.data!.sId!]
+                                  });
+
+                                  print(response);
+                                  if (response) {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            "Enrolled into the free course. Enjoy");
+                                    Nav().pushReplacement(MyCourseView());
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg: "Already Enrolled in the course");
+                                  }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "Contact Prostuti for enrollment");
+                                }
+                              },
+                              loadingController:
+                                  ref.read(_loadingProvider.notifier));
+                        },
+                  child: courseEnrollRow(
+                    priceType: data.data!.priceType,
+                    price: '${data.data!.price ?? "Free"}',
+                    theme: Theme.of(context),
+                  ),
                 ),
               );
             },
@@ -415,6 +457,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
               return Skeletonizer(
                 enabled: true,
                 child: courseEnrollRow(
+                  priceType: "",
                   price: "Free",
                   theme: Theme.of(context),
                 ),

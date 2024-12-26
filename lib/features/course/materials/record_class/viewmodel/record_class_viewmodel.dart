@@ -2,6 +2,8 @@ import 'package:prostuti/features/course/materials/record_class/model/record_cla
 import 'package:prostuti/features/course/materials/record_class/repository/record_class_repo.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../course_list/viewmodel/get_course_by_id.dart';
+
 part 'record_class_viewmodel.g.dart';
 
 @Riverpod(keepAlive: false)
@@ -12,10 +14,9 @@ class RecordClassViewmodel extends _$RecordClassViewmodel {
   }
 
   Future<List<RecordedClassData>> getCourseDetails() async {
-    // final String id = ref.watch(getCourseByIdProvider);
-    final response = await ref
-        .read(recordClassRepoProvider)
-        .getRecordedClassList("675ef486113c2a9fdca7887f");
+    final String id = ref.watch(getCourseByIdProvider);
+    final response =
+        await ref.read(recordClassRepoProvider).getRecordedClassList(id);
 
     return response.fold(
       (l) {

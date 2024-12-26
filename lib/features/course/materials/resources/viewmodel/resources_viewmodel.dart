@@ -2,6 +2,8 @@ import 'package:prostuti/features/course/materials/resources/model/resources_mod
 import 'package:prostuti/features/course/materials/resources/repository/resources_repo.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../course_list/viewmodel/get_course_by_id.dart';
+
 part 'resources_viewmodel.g.dart';
 
 @Riverpod(keepAlive: false)
@@ -12,10 +14,8 @@ class ResourceViewmodel extends _$ResourceViewmodel {
   }
 
   Future<List<ResourceListData>> getCourseDetails() async {
-    // final String id = ref.watch(getCourseByIdProvider);
-    final response = await ref
-        .read(resourcesRepoProvider)
-        .getResourcesList("675ef486113c2a9fdca7887f");
+    final String id = ref.watch(getCourseByIdProvider);
+    final response = await ref.read(resourcesRepoProvider).getResourcesList(id);
 
     return response.fold(
       (l) {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_list/viewmodel/get_course_by_id.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -93,6 +92,7 @@ class CourseListViewState extends ConsumerState<CourseListView>
                           Nav().push(CourseDetailsView());
                         },
                         child: CourseCard(
+                          priceType: course.priceType,
                           title: course.name,
                           price: course.price.toString(),
                           imgPath: course.image!.path ??

@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/size_config.dart';
-import 'package:prostuti/features/course/course_details/model/course_details_model.dart';
 
 mixin CommonWidgets {
   final ThemeData appTheme = ThemeData();
@@ -22,6 +20,7 @@ mixin CommonWidgets {
 
   Widget courseEnrollRow({
     required String? price,
+    required String? priceType,
     required ThemeData theme,
   }) {
     return Row(
@@ -29,9 +28,7 @@ mixin CommonWidgets {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          price == "null" || price == null || price == "0"
-              ? "Free"
-              : "৳ $price",
+          priceType == "Free" ? "Free" : "৳ $price",
           style: theme.textTheme.titleLarge!
               .copyWith(color: AppColors.textActionSecondaryLight),
         ),

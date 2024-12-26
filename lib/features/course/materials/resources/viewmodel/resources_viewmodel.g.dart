@@ -6,7 +6,7 @@ part of 'resources_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$resourceViewmodelHash() => r'917f244d0e591ae57676ad3177e49f64b6933a2b';
+String _$resourceViewmodelHash() => r'42d4ec25dcc710c4db0def60c7f5eb163fcc9e41';
 
 /// See also [ResourceViewmodel].
 @ProviderFor(ResourceViewmodel)

@@ -3,11 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/features/course/materials/resources/view/resource_details_view.dart';
 import 'package:prostuti/features/course/materials/resources/viewmodel/get_resource_by_id.dart';
-import 'package:prostuti/features/course/materials/resources/viewmodel/resource_details_viewmodel.dart';
 import 'package:prostuti/features/course/materials/resources/viewmodel/resources_viewmodel.dart';
 
 import '../../../../../core/services/nav.dart';
-import '../../record_class/view/record_class_details_view.dart';
 import '../../shared/widgets/material_list_skeleton.dart';
 import '../../shared/widgets/trailing_icon.dart';
 
@@ -50,7 +48,7 @@ class ResourcesViewState extends ConsumerState<ResourcesView>
                       classDate: resource[index].resourceDate!,
                       isCompleted: isItemComplete,
                     ),
-                    itemName: "রিসোর্স: ${resource[index].name}",
+                    itemName: "${resource[index].name}",
                     icon: Icons.video_collection_rounded,
                     lessonName: '${resource[index].lessonId!.number} '),
               );

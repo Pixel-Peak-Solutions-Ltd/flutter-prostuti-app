@@ -48,7 +48,7 @@ class AssignmentViewState extends ConsumerState<AssignmentView>
                       classDate: assignment[index].unlockDate!,
                       isCompleted: isItemComplete,
                     ),
-                    itemName: "রেকর্ড ক্লাস: ${assignment[index].assignmentNo}",
+                    itemName: "${assignment[index].assignmentNo}",
                     icon: Icons.video_collection_rounded,
                     lessonName: '${assignment[index].lessonId!.number} '),
               );

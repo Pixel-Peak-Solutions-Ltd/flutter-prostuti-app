@@ -38,6 +38,7 @@ dependencies:
   fluttertoast:
   open_filex:
   path_provider:
+  webview_flutter: ^2.0.13
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:prostuti/secrets/secrets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -33,7 +32,6 @@ Dio dio(DioRef ref) {
           // Refresh the access token
           final authNotifier = ref.read(authNotifierProvider.notifier);
           final newAccessToken = await authNotifier.createAccessToken();
-          debugPrint("newAccessToken $newAccessToken");
 
           if (newAccessToken == null || newAccessToken == "") {
             Fluttertoast.showToast(

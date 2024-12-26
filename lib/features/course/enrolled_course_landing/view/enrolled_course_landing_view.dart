@@ -5,12 +5,12 @@ import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course/course_details/widgets/course_details_skeleton.dart';
+import 'package:prostuti/features/course/enrolled_course_landing/viewmodel/enrolled_course_landing_viewmodel.dart';
 import 'package:prostuti/features/course/materials/assignment/view/assignment_view.dart';
 import 'package:prostuti/features/course/materials/record_class/view/record_class_view.dart';
 import 'package:prostuti/features/course/materials/resources/view/resources_view.dart';
 import 'package:prostuti/features/course/materials/shared/widgets/trailing_icon.dart';
 
-import '../../course_details/viewmodel/course_details_vm.dart';
 import '../../course_details/widgets/expandable_text.dart';
 
 enum GridItem {
@@ -46,7 +46,7 @@ class EnrolledCourseLandingViewState
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    final courseDetailsAsync = ref.watch(courseDetailsViewmodelProvider);
+    final courseDetailsAsync = ref.watch(enrolledCourseLandingProvider);
 
     return Scaffold(
       appBar: courseDetailsAsync.when(

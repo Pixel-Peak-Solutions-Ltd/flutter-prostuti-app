@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_list/view/course_list_view.dart';
+import 'package:prostuti/features/payment/repository/payment_repo.dart';
+import 'package:prostuti/features/payment/view/easy_checkout.dart';
 import 'package:prostuti/features/payment/widgets/course_name_price.dart';
 import 'package:prostuti/features/payment/widgets/price_row.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../core/services/debouncer.dart';
 import '../../../core/services/size_config.dart';
 import '../../course/course_list/viewmodel/course_list_viewmodel.dart';
 import '../widgets/stepper.dart';
+
+final _loadingProvider = StateProvider<bool>((ref) => false);
 
 class PaymentView extends ConsumerWidget with CommonWidgets {
   final String id, name, imgPath, price;
@@ -24,7 +31,11 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
 
   @override
   Widget build(BuildContext context, ref) {
+    final _debouncer = Debouncer(milliseconds: 120);
+
     final publishedCourseNotifier = ref.watch(publishedCourseProvider.notifier);
+    final publishedCourseAsync = ref.watch(publishedCourseProvider);
+    final isLoading = ref.watch(_loadingProvider);
 
     return Scaffold(
       appBar: commonAppbar("Cart"),
@@ -58,44 +69,58 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                   itemBuilder: (context, index) {
                     final course =
                         publishedCourseNotifier.filteredCourses[index];
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                course.image!.path!,
-                                height: SizeConfig.h(50),
-                                width: SizeConfig.w(80),
-                                filterQuality: FilterQuality.high,
-                                fit: BoxFit.cover,
+
+                    return Skeletonizer(
+                      enabled: publishedCourseAsync.isLoading,
+                      child: course.priceType == "Paid"
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 6),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Image.network(
+                                          course.image!.path!,
+                                          height: SizeConfig.h(50),
+                                          width: SizeConfig.w(80),
+                                          filterQuality: FilterQuality.high,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      Positioned(
+                                          right: 2,
+                                          bottom: 2,
+                                          child: Icon(
+                                            id == course.sId!
+                                                ? Icons.check_circle
+                                                : Icons.add_box,
+                                            size: 22,
+                                            color: Colors.purple,
+                                          ))
+                                    ],
+                                  ),
+                                  const Gap(16),
+                                  SizedBox(
+                                    width: SizeConfig.w(80),
+                                    child: Text(
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      course.name!,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(
+                                              fontWeight: FontWeight.w600),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Positioned(
-                                right: 0,
-                                bottom: 0,
-                                child: Icon(
-                                  id == course.sId!
-                                      ? Icons.check_circle
-                                      : Icons.add_box,
-                                  color: Colors.blue,
-                                ))
-                          ],
-                        ),
-                        const Gap(16),
-                        SizedBox(
-                          width: SizeConfig.w(80),
-                          child: Text(
-                            course.name!,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ],
+                            )
+                          : Container(),
                     );
                   },
                 ),
@@ -124,7 +149,7 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                     .titleSmall!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
-              Gap(16),
+              const Gap(16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -136,7 +161,7 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                   ),
                 ],
               ),
-              Gap(16),
+              const Gap(16),
               PriceRow(
                 price: price,
                 name: name,
@@ -151,21 +176,48 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
           height: SizeConfig.h(60),
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Center(
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4)),
-                  backgroundColor: Color(0xff2970FF),
-                  fixedSize: Size(SizeConfig.w(356), SizeConfig.h(54))),
-              child: Text(
-                'পেমেন্ট পর্যালোচনা করুন',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {},
-            ),
+            child: isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4)),
+                        backgroundColor: const Color(0xff2970FF),
+                        fixedSize: Size(SizeConfig.w(356), SizeConfig.h(54))),
+                    onPressed: isLoading
+                        ? () {}
+                        : () async {
+                            _debouncer.run(
+                                action: () async {
+                                  final response = await ref
+                                      .watch(paymentRepoProvider)
+                                      .initiatePayment({
+                                    "totalPrice": int.parse(price),
+                                    "course_id": [id]
+                                  });
+
+                                  if (response != null) {
+                                    if (response is String) {
+                                      Fluttertoast.showToast(msg: response);
+                                    } else {
+                                      Nav().push(EasyCheckout(
+                                          url: response.toString()));
+                                    }
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            "Please try again after 10 seconds");
+                                  }
+                                },
+                                loadingController:
+                                    ref.read(_loadingProvider.notifier));
+                          },
+                    child: Text(
+                      'পেমেন্ট পর্যালোচনা করুন',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
           ),
         ),
       ),

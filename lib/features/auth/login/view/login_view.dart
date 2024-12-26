@@ -5,12 +5,12 @@ import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/debouncer.dart';
 import 'package:prostuti/core/services/error_handler.dart';
+import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/auth/forget_password/view/forget_password_view.dart';
 import 'package:prostuti/features/auth/login/repository/login_repo.dart';
 import 'package:prostuti/features/auth/login/viewmodel/login_viewmodel.dart';
 import 'package:prostuti/features/auth/signup/widgets/label.dart';
 import 'package:prostuti/features/home_screen/view/home_screen_view.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../signup/view/phone_view.dart';
@@ -198,10 +198,7 @@ class LoginViewState extends ConsumerState<LoginView> {
                                       ref: ref);
 
                               if (response.data != null) {
-                                Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute(
-                                  builder: (context) => HomeScreen(),
-                                ));
+                                Nav().pushAndRemoveUntil(HomeScreen());
                               } else if (response.error != null) {
                                 if (context.mounted) {
                                   ScaffoldMessenger.of(context)
