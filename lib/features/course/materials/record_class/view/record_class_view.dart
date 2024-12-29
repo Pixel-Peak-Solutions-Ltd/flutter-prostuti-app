@@ -33,12 +33,20 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
 
               return InkWell(
                 onTap: () {
-                  ref
-                      .watch(getRecordClassIdProvider.notifier)
-                      .setRecordClassId(recordClass[index].sId!);
-                  Nav().push(RecordClassDetailsView(
-                    videoUrl: recordClass[index].classVideoURL!.path!,
-                  ));
+                  DateTime parsedDate =
+                      DateTime.parse(recordClass[index].classDate!);
+                  DateTime now = DateTime.now();
+                  if ((parsedDate.day == now.day &&
+                          parsedDate.month == now.month &&
+                          parsedDate.year == now.year) ||
+                      (parsedDate.isBefore(now))) {
+                    ref
+                        .watch(getRecordClassIdProvider.notifier)
+                        .setRecordClassId(recordClass[index].sId!);
+                    Nav().push(RecordClassDetailsView(
+                      videoUrl: recordClass[index].classVideoURL!.path!,
+                    ));
+                  }
                 },
                 child: lessonItem(theme,
                     trailingIcon: TrailingIcon(

@@ -38,10 +38,18 @@ class ResourcesViewState extends ConsumerState<ResourcesView>
 
               return InkWell(
                 onTap: () {
-                  ref
-                      .watch(getResourceByIdProvider.notifier)
-                      .setResourceId(resource[index].sId!);
-                  Nav().push(const ResourceDetailsView());
+                  DateTime parsedDate =
+                      DateTime.parse(resource[index].resourceDate!);
+                  DateTime now = DateTime.now();
+                  if ((parsedDate.day == now.day &&
+                          parsedDate.month == now.month &&
+                          parsedDate.year == now.year) ||
+                      (parsedDate.isBefore(now))) {
+                    ref
+                        .watch(getResourceByIdProvider.notifier)
+                        .setResourceId(resource[index].sId!);
+                    Nav().push(const ResourceDetailsView());
+                  }
                 },
                 child: lessonItem(theme,
                     trailingIcon: TrailingIcon(

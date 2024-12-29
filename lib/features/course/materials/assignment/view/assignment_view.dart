@@ -38,10 +38,18 @@ class AssignmentViewState extends ConsumerState<AssignmentView>
 
               return InkWell(
                 onTap: () {
-                  ref
-                      .watch(getAssignmentByIdProvider.notifier)
-                      .setAssignmentId(assignment[index].sId!);
-                  Nav().push(const AssignmentDetailsView());
+                  DateTime parsedDate =
+                      DateTime.parse(assignment[index].unlockDate!);
+                  DateTime now = DateTime.now();
+                  if ((parsedDate.day == now.day &&
+                          parsedDate.month == now.month &&
+                          parsedDate.year == now.year) ||
+                      (parsedDate.isBefore(now))) {
+                    ref
+                        .watch(getAssignmentByIdProvider.notifier)
+                        .setAssignmentId(assignment[index].sId!);
+                    Nav().push(const AssignmentDetailsView());
+                  }
                 },
                 child: lessonItem(theme,
                     trailingIcon: TrailingIcon(

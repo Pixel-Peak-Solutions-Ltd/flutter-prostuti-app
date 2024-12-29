@@ -13,7 +13,9 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/services/debouncer.dart';
 import '../../../core/services/size_config.dart';
+import '../../course/course_details/view/course_details_view.dart';
 import '../../course/course_list/viewmodel/course_list_viewmodel.dart';
+import '../../course/course_list/viewmodel/get_course_by_id.dart';
 import '../widgets/stepper.dart';
 
 final _loadingProvider = StateProvider<bool>((ref) => false);
@@ -54,7 +56,7 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
               const Divider(),
               const Gap(24),
               Text(
-                'আরেকটি কোর্স যোগ করুন',
+                'টপ কোর্সগুলো দেখুন',
                 style: Theme.of(context)
                     .textTheme
                     .titleSmall!
@@ -76,48 +78,57 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                           ? Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 6),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Stack(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(8),
-                                        child: Image.network(
-                                          course.image!.path!,
-                                          height: SizeConfig.h(50),
-                                          width: SizeConfig.w(80),
-                                          filterQuality: FilterQuality.high,
-                                          fit: BoxFit.cover,
+                              child: InkWell(
+                                onTap: () {
+                                  ref
+                                      .watch(getCourseByIdProvider.notifier)
+                                      .setId(course.sId!);
+                                  Nav().push(const CourseDetailsView());
+                                },
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          child: Image.network(
+                                            course.image!.path!,
+                                            height: SizeConfig.h(50),
+                                            width: SizeConfig.w(80),
+                                            filterQuality: FilterQuality.high,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
-                                      ),
-                                      Positioned(
-                                          right: 2,
-                                          bottom: 2,
-                                          child: Icon(
-                                            id == course.sId!
-                                                ? Icons.check_circle
-                                                : Icons.add_box,
-                                            size: 22,
-                                            color: Colors.purple,
-                                          ))
-                                    ],
-                                  ),
-                                  const Gap(16),
-                                  SizedBox(
-                                    width: SizeConfig.w(80),
-                                    child: Text(
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
-                                      course.name!,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              fontWeight: FontWeight.w600),
+                                        Positioned(
+                                            right: 2,
+                                            bottom: 2,
+                                            child: Icon(
+                                              id == course.sId!
+                                                  ? Icons.check_circle
+                                                  : Icons.add_box,
+                                              size: 22,
+                                              color: Colors.purple,
+                                            ))
+                                      ],
                                     ),
-                                  ),
-                                ],
+                                    const Gap(16),
+                                    SizedBox(
+                                      width: SizeConfig.w(80),
+                                      child: Text(
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        course.name!,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .copyWith(
+                                                fontWeight: FontWeight.w600),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             )
                           : Container(),
@@ -133,7 +144,7 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     alignment: Alignment.centerLeft),
                 onPressed: () {
-                  Nav().push(CourseListView());
+                  Nav().pushReplacement(CourseListView());
                 },
                 child: Text(
                   'আরো কোর্স দেখুন',

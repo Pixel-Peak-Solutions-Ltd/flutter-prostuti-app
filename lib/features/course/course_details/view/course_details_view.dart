@@ -462,6 +462,9 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                                 .setId(data.data!.sId!);
                                             Nav().pushReplacement(
                                                 const EnrolledCourseLandingView());
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "Enrolled into the free course. Enjoy");
                                           } else {
                                             Fluttertoast.showToast(
                                                 msg:
