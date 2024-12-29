@@ -19,9 +19,9 @@ class SubscriptionView extends ConsumerWidget with CommonWidgets {
   @override
   Widget build(BuildContext context, ref) {
     final List<Map<String, String>> plans = [
-      {'plan': 'Premium', 'price': '\$50', 'duration': '1 year'},
-      {'plan': 'Standard', 'price': '\$20', 'duration': '6 months'},
-      {'plan': 'Basic', 'price': '\$10', 'duration': '1 month'},
+      {'plan': 'Premium', 'price': '৳ ${500 * 12}', 'duration': '1 year'},
+      {'plan': 'Standard', 'price': '৳ ${500 * 6}', 'duration': '6 months'},
+      {'plan': 'Basic', 'price': '৳ ${500}', 'duration': '1 month'},
     ];
 
     final selectedIndex = ref.watch(selectedIndexNotifierProvider);
