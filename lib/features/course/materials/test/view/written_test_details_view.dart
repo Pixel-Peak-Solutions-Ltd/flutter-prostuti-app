@@ -4,10 +4,10 @@ import 'package:gap/gap.dart';
 import 'package:prostuti/common/helpers/func.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
-import 'package:prostuti/features/course/materials/test/viewmodel/mcq_test_details_viewmodel.dart';
+import 'package:prostuti/features/course/materials/test/view/written_mock_test_view.dart';
 
 import '../../../../../core/configs/app_colors.dart';
-import '../../assignment/widgets/assignment_skeleton.dart';
+import '../../../../../core/services/nav.dart';
 import '../viewmodel/written_test_details_viewmodel.dart';
 import '../widgets/build_test_time_row.dart';
 import '../widgets/test_skeleton.dart';
@@ -117,7 +117,9 @@ class TestDetailsViewState extends ConsumerState<WrittenTestDetailsView>
                   buildTestTimeRow(theme, time['hour'].toString(), time['minute'].toString()),
                   const Gap(24),
                   // Start Test Button
-                  LongButton(onPressed: () {}, text: "টেস্ট শুরু করুন")
+                  LongButton(onPressed: () {
+                    Nav().push(const WrittenMockTestScreen());
+                  }, text: "টেস্ট শুরু করুন")
                 ],
               );
             },

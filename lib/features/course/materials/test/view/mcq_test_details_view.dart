@@ -7,9 +7,11 @@ import 'package:prostuti/features/course/materials/test/viewmodel/mcq_test_detai
 
 import '../../../../../common/helpers/func.dart';
 import '../../../../../core/configs/app_colors.dart';
+import '../../../../../core/services/nav.dart';
 import '../../assignment/widgets/assignment_skeleton.dart';
 import '../widgets/build_test_time_row.dart';
 import '../widgets/test_skeleton.dart';
+import 'mcq_mock_test_view.dart';
 
 class MCQTestDetailsView extends ConsumerStatefulWidget {
   const MCQTestDetailsView({Key? key}) : super(key: key);
@@ -116,7 +118,9 @@ class TestDetailsViewState extends ConsumerState<MCQTestDetailsView>
                   buildTestTimeRow(theme, time['hour'].toString(), time['minute'].toString()),
                   const Gap(24),
                   // Start Test Button
-                  LongButton(onPressed: () {}, text: "টেস্ট শুরু করুন")
+                  LongButton(onPressed: () {
+                    Nav().push(const MCQMockTestScreen());
+                  }, text: "টেস্ট শুরু করুন")
                 ],
               );
             },
@@ -124,7 +128,7 @@ class TestDetailsViewState extends ConsumerState<MCQTestDetailsView>
               print(error);
               print(stackTrace);
             },
-            loading: () => TestDetailsSkeleton(),
+            loading: () => const TestDetailsSkeleton(),
           ),
         ),
       ),
