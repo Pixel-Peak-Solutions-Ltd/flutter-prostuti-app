@@ -56,7 +56,20 @@ class MyCourseViewState extends ConsumerState<MyCourseView> with CommonWidgets {
                                   .watch(getCourseByIdProvider.notifier)
                                   .setId(course[i].courseId!.sId!);
 
-                              Nav().push(const EnrolledCourseLandingView());
+                              Nav()
+                                  .push(const EnrolledCourseLandingView())
+                                  .then(
+                                (value) {
+                                  ref
+                                      .read(courseProgressNotifierProvider
+                                          .notifier)
+                                      .getCourseProgress();
+                                  ref
+                                      .read(enrolledCourseViewmodelProvider
+                                          .notifier)
+                                      .getEnrolledCourseList();
+                                },
+                              );
                             },
                             child: MyCourseCard(
                               progress: combinedCourseList[i]['progress'],

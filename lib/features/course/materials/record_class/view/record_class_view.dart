@@ -32,55 +32,53 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
       body: recordClassAsync.when(
         data: (recordClass) {
           return completedAsync.when(
-            data: (completedId) {
-              final completedSet = Set<String>.from(completedId);
+              data: (completedId) {
+                final completedSet = Set<String>.from(completedId);
 
-              return ListView.builder(
-                itemCount: recordClass.length,
-                itemBuilder: (context, index) {
-                  final isCompleted =
-                      completedSet.contains(recordClass[index].sId);
+                return ListView.builder(
+                  itemCount: recordClass.length,
+                  itemBuilder: (context, index) {
+                    final isCompleted =
+                        completedSet.contains(recordClass[index].sId);
 
-                  return InkWell(
-                    onTap: () {
-                      DateTime parsedDate =
-                          DateTime.parse(recordClass[index].classDate!);
-                      DateTime now = DateTime.now();
-                      if ((parsedDate.day == now.day &&
-                              parsedDate.month == now.month &&
-                              parsedDate.year == now.year) ||
-                          (parsedDate.isBefore(now))) {
-                        ref
-                            .watch(getRecordClassIdProvider.notifier)
-                            .setRecordClassId(recordClass[index].sId!);
-                        Nav().push(RecordClassDetailsView(
-                          videoUrl: recordClass[index].classVideoURL!.path!,
-                          isCompleted: isCompleted,
-                        ));
+                    return InkWell(
+                      onTap: () {
+                        DateTime parsedDate =
+                            DateTime.parse(recordClass[index].classDate!);
+                        DateTime now = DateTime.now();
+                        if ((parsedDate.day == now.day &&
+                                parsedDate.month == now.month &&
+                                parsedDate.year == now.year) ||
+                            (parsedDate.isBefore(now))) {
+                          ref
+                              .watch(getRecordClassIdProvider.notifier)
+                              .setRecordClassId(recordClass[index].sId!);
+                          Nav().push(RecordClassDetailsView(
+                            videoUrl: recordClass[index].classVideoURL!.path!,
+                            isCompleted: isCompleted,
+                          ));
 
-                        ref.read(completedIdProvider(courseId));
-                      }
-                    },
-                    child: lessonItem(theme,
-                        trailingIcon: TrailingIcon(
-                          classDate: recordClass[index].classDate!,
-                          isCompleted: isCompleted,
-                        ),
-                        itemName: "${recordClass[index].recodeClassName}",
-                        icon: Icons.video_collection_rounded,
-                        lessonName: '${recordClass[index].lessonId!.number} '),
-                  );
-                },
-              );
-            },
-            error: (error, stackTrace) => const Icon(
-              Icons.dangerous,
-              color: Colors.red,
-            ),
-            loading: () => const Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+                          ref.read(completedIdProvider(courseId));
+                        }
+                      },
+                      child: lessonItem(theme,
+                          trailingIcon: TrailingIcon(
+                            classDate: recordClass[index].classDate!,
+                            isCompleted: isCompleted,
+                          ),
+                          itemName: "${recordClass[index].recodeClassName}",
+                          icon: Icons.video_collection_rounded,
+                          lessonName:
+                              '${recordClass[index].lessonId!.number} '),
+                    );
+                  },
+                );
+              },
+              error: (error, stackTrace) => const Icon(
+                    Icons.dangerous,
+                    color: Colors.red,
+                  ),
+              loading: () => MaterialListSkeleton());
         },
         error: (error, stackTrace) {
           return Text("$error");

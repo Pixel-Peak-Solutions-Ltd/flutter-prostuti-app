@@ -32,52 +32,49 @@ class AssignmentViewState extends ConsumerState<AssignmentView>
       body: assignmentListAsync.when(
         data: (assignment) {
           return completedAsync.when(
-            data: (completedId) {
-              final completedSet = Set<String>.from(completedId);
-              return ListView.builder(
-                itemCount: assignment.length,
-                itemBuilder: (context, index) {
-                  final isCompleted =
-                      completedSet.contains(assignment[index].sId);
+              data: (completedId) {
+                final completedSet = Set<String>.from(completedId);
+                return ListView.builder(
+                  itemCount: assignment.length,
+                  itemBuilder: (context, index) {
+                    final isCompleted =
+                        completedSet.contains(assignment[index].sId);
 
-                  return InkWell(
-                    onTap: () {
-                      DateTime parsedDate =
-                          DateTime.parse(assignment[index].unlockDate!);
-                      DateTime now = DateTime.now();
-                      if ((parsedDate.day == now.day &&
-                              parsedDate.month == now.month &&
-                              parsedDate.year == now.year) ||
-                          (parsedDate.isBefore(now))) {
-                        ref
-                            .watch(getAssignmentByIdProvider.notifier)
-                            .setAssignmentId(assignment[index].sId!);
+                    return InkWell(
+                      onTap: () {
+                        DateTime parsedDate =
+                            DateTime.parse(assignment[index].unlockDate!);
+                        DateTime now = DateTime.now();
+                        if ((parsedDate.day == now.day &&
+                                parsedDate.month == now.month &&
+                                parsedDate.year == now.year) ||
+                            (parsedDate.isBefore(now))) {
+                          ref
+                              .watch(getAssignmentByIdProvider.notifier)
+                              .setAssignmentId(assignment[index].sId!);
 
-                        Nav().push(AssignmentDetailsView(
-                          isCompleted: isCompleted,
-                        ));
-                      }
-                    },
-                    child: lessonItem(theme,
-                        trailingIcon: TrailingIcon(
-                          classDate: assignment[index].unlockDate!,
-                          isCompleted: isCompleted,
-                        ),
-                        itemName: "${assignment[index].assignmentNo}",
-                        icon: Icons.video_collection_rounded,
-                        lessonName: '${assignment[index].lessonId!.number} '),
-                  );
-                },
-              );
-            },
-            error: (error, stackTrace) => const Icon(
-              Icons.dangerous,
-              color: Colors.red,
-            ),
-            loading: () => const Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
+                          Nav().push(AssignmentDetailsView(
+                            isCompleted: isCompleted,
+                          ));
+                        }
+                      },
+                      child: lessonItem(theme,
+                          trailingIcon: TrailingIcon(
+                            classDate: assignment[index].unlockDate!,
+                            isCompleted: isCompleted,
+                          ),
+                          itemName: "${assignment[index].assignmentNo}",
+                          icon: Icons.video_collection_rounded,
+                          lessonName: '${assignment[index].lessonId!.number} '),
+                    );
+                  },
+                );
+              },
+              error: (error, stackTrace) => const Icon(
+                    Icons.dangerous,
+                    color: Colors.red,
+                  ),
+              loading: () => MaterialListSkeleton());
         },
         error: (error, stackTrace) {
           return Text("$error");
