@@ -1,8 +1,6 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,16 +10,18 @@ import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/services/file_helper.dart';
 import 'package:prostuti/features/course/materials/assignment/viewmodel/assignment_details_viewmodel.dart';
 import 'package:prostuti/features/course/materials/assignment/viewmodel/assignment_file_name.dart';
+import 'package:prostuti/features/course/materials/assignment/viewmodel/get_assignment_by_id.dart';
 import 'package:prostuti/features/course/materials/assignment/viewmodel/get_file_path.dart';
 import 'package:prostuti/features/course/materials/assignment/widgets/assignment_widgets.dart';
 
-import '../../../../../core/services/size_config.dart';
+import '../../../enrolled_course_landing/repository/enrolled_course_landing_repo.dart';
+import '../../record_class/viewmodel/change_btn_state.dart';
 import '../widgets/assignment_skeleton.dart';
 
 class AssignmentDetailsView extends ConsumerStatefulWidget {
-  const AssignmentDetailsView({
-    super.key,
-  });
+  final bool isCompleted;
+
+  const AssignmentDetailsView({super.key, required this.isCompleted});
 
   @override
   AssignmentDetailsViewState createState() => AssignmentDetailsViewState();
@@ -120,7 +120,29 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
                           },
                           child: submitBox(theme)),
                   const Gap(24),
-                  LongButton(onPressed: () {}, text: "সাবমিশন কনফার্ম করুন")
+                  LongButton(
+                      onPressed: ref.watch(changeBtnStateProvider) ||
+                              widget.isCompleted
+                          ? () {}
+                          : () async {
+                              final response = await ref
+                                  .read(enrolledCourseLandingRepoProvider)
+                                  .markAsComplete({
+                                "materialType": "assignment",
+                                "material_id":
+                                    ref.read(getAssignmentByIdProvider)
+                              });
+
+                              if (response) {
+                                ref
+                                    .watch(changeBtnStateProvider.notifier)
+                                    .setBtnState();
+                              }
+                            },
+                      text: ref.watch(changeBtnStateProvider) ||
+                              widget.isCompleted
+                          ? "এসাইনমেন্ট সাবমিট হয়েছে"
+                          : 'সাবমিট করুন')
                 ],
               );
             },

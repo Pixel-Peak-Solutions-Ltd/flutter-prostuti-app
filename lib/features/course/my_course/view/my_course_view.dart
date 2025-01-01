@@ -3,54 +3,79 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_list/viewmodel/get_course_by_id.dart';
+import 'package:prostuti/features/course/my_course/viewmodel/course_progress.dart';
 import 'package:prostuti/features/course/my_course/viewmodel/my_course_viewmodel.dart';
 import 'package:prostuti/features/course/my_course/widgets/my_course_list_skeleton.dart';
 
 import '../../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../enrolled_course_landing/view/enrolled_course_landing_view.dart';
+import '../model/course_progress_model.dart';
+import '../model/my_course_model.dart';
 import '../widgets/explore_course_btn.dart';
 import '../widgets/my_course_widgets.dart';
 
-class MyCourseView extends ConsumerWidget with CommonWidgets {
+class MyCourseView extends ConsumerStatefulWidget {
   MyCourseView({super.key});
 
   @override
-  Widget build(BuildContext context, ref) {
+  MyCourseViewState createState() => MyCourseViewState();
+}
+
+class MyCourseViewState extends ConsumerState<MyCourseView> with CommonWidgets {
+  @override
+  Widget build(BuildContext context) {
     final enrolledListAsync = ref.watch(enrolledCourseViewmodelProvider);
-    double _progress = 0.4;
+    final courseProgressAsync = ref.watch(courseProgressNotifierProvider);
 
     return Scaffold(
       appBar: commonAppbar("আমার কোর্স"),
       body: enrolledListAsync.when(
         data: (course) {
           if (course.isEmpty) {
-            return const Center(
-              child: Text("No Course Available"),
+            return Center(
+              child: Text(
+                "No Course Available",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
             );
           }
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  for (int i = 0; i < course.length; i++)
-                    InkWell(
-                        onTap: () {
-                          ref
-                              .watch(getCourseByIdProvider.notifier)
-                              .setId(course[i].courseId!.sId!);
-                          Nav().push(const EnrolledCourseLandingView());
-                        },
-                        child: MyCourseCard(
-                          progress: _progress,
-                          name: course[i].courseId!.name!,
-                          img: course[i].courseId!.image!.path!,
-                        )),
-                  const Gap(16),
-                  const ExploreCourseBtn()
-                ],
-              ),
-            ),
+          return courseProgressAsync.when(
+            data: (progress) {
+              final combinedCourseList =
+                  combineProgressAndCourses(progress, course);
+
+              return Padding(
+                padding: const EdgeInsets.all(16),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < course.length; i++)
+                        InkWell(
+                            onTap: () {
+                              ref
+                                  .watch(getCourseByIdProvider.notifier)
+                                  .setId(course[i].courseId!.sId!);
+
+                              Nav().push(const EnrolledCourseLandingView());
+                            },
+                            child: MyCourseCard(
+                              progress: combinedCourseList[i]['progress'],
+                              name: course[i].courseId!.name!,
+                              img: course[i].courseId!.image!.path!,
+                            )),
+                      const Gap(16),
+                      const ExploreCourseBtn(),
+                    ],
+                  ),
+                ),
+              );
+            },
+            error: (error, stackTrace) {
+              return Center(
+                child: Text("$error"),
+              );
+            },
+            loading: () => const MyCourseListSkeleton(),
           );
         },
         error: (err, stack) => Center(
@@ -60,4 +85,27 @@ class MyCourseView extends ConsumerWidget with CommonWidgets {
       ),
     );
   }
+}
+
+List<Map<String, dynamic>> combineProgressAndCourses(
+    List<CourseProgress> progressList,
+    List<EnrolledCourseListData> enrolledCourseList) {
+  // Create a Map for fast lookup of course progress by courseId
+  Map<String, CourseProgress> progressMap = {
+    for (var progress in progressList) progress.courseId: progress
+  };
+
+  // Now loop through enrolled courses and match with the progress data
+  List<Map<String, dynamic>> combinedList = enrolledCourseList
+      .where((enrolledCourse) =>
+          progressMap.containsKey(enrolledCourse.courseId?.sId))
+      .map((enrolledCourse) {
+    var progress = progressMap[enrolledCourse.courseId?.sId];
+    return {
+      'course': enrolledCourse,
+      'progress': progress?.completed ?? 0.0,
+    };
+  }).toList();
+
+  return combinedList;
 }
