@@ -6,10 +6,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/file_helper.dart';
 import 'package:prostuti/core/services/size_config.dart';
+import 'package:prostuti/features/course/materials/resources/view/resources_view.dart';
 import 'package:prostuti/features/course/materials/resources/viewmodel/get_resource_by_id.dart';
 import 'package:prostuti/features/course/materials/resources/viewmodel/resource_details_viewmodel.dart';
 import 'package:prostuti/features/course/materials/resources/widgets/resource_skeleton.dart';
 
+import '../../../../../core/services/nav.dart';
 import '../../../enrolled_course_landing/repository/enrolled_course_landing_repo.dart';
 import '../../record_class/viewmodel/change_btn_state.dart';
 
@@ -55,6 +57,8 @@ class ResourceDetailsViewState extends ConsumerState<ResourceDetailsView>
                         ref
                             .watch(changeBtnStateProvider.notifier)
                             .setBtnState();
+
+                        Nav().pushReplacement(const ResourcesView());
                       }
                     },
               style: ElevatedButton.styleFrom(

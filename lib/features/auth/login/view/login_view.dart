@@ -179,16 +179,10 @@ class LoginViewState extends ConsumerState<LoginView> {
                       if (_formKey.currentState!.validate()) {
                         _debouncer.run(
                             action: () async {
-                              final payload = rememberMe
-                                  ? {
-                                      "phone": "+88${_phoneController.text}",
-                                      "password": _passwordController.text,
-                                      "rememberMe": "30d"
-                                    }
-                                  : {
-                                      "phone": "+88${_phoneController.text}",
-                                      "password": _passwordController.text,
-                                    };
+                              final payload = {
+                                "phone": "+88${_phoneController.text}",
+                                "password": _passwordController.text,
+                              };
 
                               final response = await ref
                                   .read(loginRepoProvider)
