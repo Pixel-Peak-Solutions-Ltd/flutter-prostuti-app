@@ -7,6 +7,7 @@ import 'package:prostuti/common/view_model/auth_notifier.dart';
 
 import '../../../../../core/services/error_handler.dart';
 import '../../../../../core/services/error_response.dart';
+import '../model/mcq_result_model.dart';
 import '../model/mcq_test_details_model.dart';
 import '../model/test_model.dart';
 import '../model/written_test_details_model.dart';
@@ -77,13 +78,14 @@ class TestRepo {
     }
   }
 
-  Future<Either<ErrorResponse, WrittenTestDetails>> submitMCQTest(
-      {required Map<String, String> payload}) async {
-    final response = await _dioService.getRequest("/test/$id");
+  Future<Either<ErrorResponse, MCQResult>> submitMCQTest(
+      {required Map<String, dynamic> payload}) async {
+    final response = await _dioService.postRequest("/test-history/submit-test",payload);
 
     if (response.statusCode == 200) {
-      return Right(WrittenTestDetails.fromJson(response.data));
+      return Right(MCQResult.fromJson(response.data));
     } else {
+      print(response);
       final errorResponse = ErrorResponse.fromJson(response.data);
       ErrorHandler().setErrorMessage(errorResponse.message);
       return Left(errorResponse);

@@ -7,7 +7,7 @@ import 'package:prostuti/common/widgets/long_button.dart';
 import '../../../../../core/configs/app_colors.dart';
 import '../../../../../core/services/nav.dart';
 
-class TestResultScreen extends ConsumerWidget with CommonWidgets{
+class TestResultScreen extends ConsumerWidget with CommonWidgets {
   final Map<String, dynamic> resultData;
 
   TestResultScreen({
@@ -41,7 +41,7 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets{
                     width: 150,
                     height: 150,
                     child: CircularProgressIndicator(
-                      value: (resultData['scorePercentage']??0).toDouble() / 100.0,
+                      value: (resultData['scorePercentage'] ?? 0) / 100.0,
                       strokeWidth: 8,
                       backgroundColor: Colors.grey.shade300,
                       color: Colors.blue,
@@ -84,6 +84,59 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets{
                   Text(
                     "সময় নিয়েছেন ${resultData['timeTaken'] ?? "০০ঃ০০"}",
                     style: theme.textTheme.titleSmall,
+                  ),
+                ],
+              ),
+              const Gap(24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 8),
+                    decoration: BoxDecoration(color: const Color(0xffA1F3A9),borderRadius: BorderRadius.circular(4)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SvgPicture.asset("assets/icons/correct.svg"),
+                        const Gap(4),
+                        Text(
+                          "${resultData["correctAns"]}",
+                          style: theme.textTheme.titleMedium!.copyWith(color: const Color(0xff159021)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 8),
+                    decoration: BoxDecoration(color: const Color(0xffFFC9C9),borderRadius: BorderRadius.circular(4)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SvgPicture.asset("assets/icons/wrong.svg"),
+                        const Gap(4),
+                        Text(
+                          "${resultData["wrongAns"]}",
+                          style: theme.textTheme.titleMedium!.copyWith(color: const Color(0xffD60909)),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(10),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 8),
+                    decoration: BoxDecoration(color: const Color(0xffFDD489),borderRadius: BorderRadius.circular(4)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SvgPicture.asset("assets/icons/skiped_qus.svg"),
+                        const Gap(4),
+                        Text(
+                          "${resultData["skippedAns"]}",
+                          style: theme.textTheme.titleMedium!.copyWith(color: const Color(0xffC9860D)),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

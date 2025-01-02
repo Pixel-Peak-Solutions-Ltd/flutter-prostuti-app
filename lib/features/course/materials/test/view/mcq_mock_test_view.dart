@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/features/course/materials/test/view/test_result_view.dart';
@@ -7,6 +8,7 @@ import 'package:prostuti/features/course/materials/test/view/test_result_view.da
 import '../../../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../../../../core/configs/app_colors.dart';
 import '../../../../../core/services/nav.dart';
+import '../repository/test_repo.dart';
 import '../viewmodel/mcq_test_details_viewmodel.dart';
 import '../widgets/build_mcq_question_item.dart';
 import '../widgets/countdown_timer.dart';
@@ -25,9 +27,17 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
   final List<Map<String, dynamic>> answerList=[];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // ref.watch(countdownProvider.notifier).startTimer();
+  }
+  @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     final mCQTestDetailsAsync = ref.watch(mCQTestDetailsViewmodelProvider);
+/*    final countdownNotifier = ref.read(countdownProvider.notifier);
+    final countdownState = ref.watch(countdownProvider);*/
 
     return Scaffold(
       appBar: commonAppbar("মক টেস্ট"),
@@ -35,6 +45,8 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
           padding: const EdgeInsets.all(16.0),
           child: mCQTestDetailsAsync.when(
             data: (test) {
+
+              // countdownNotifier.startTimer();
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -112,7 +124,9 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                     ),
                   ),
                   LongButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        // countdownNotifier.stopTimer();
+                        // print("remainingTime: ${countdownState.remainingTime.inSeconds}");
                         print("Selected Answers: $answerList");
 
                         final payload = {
@@ -123,19 +137,31 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                           "timeTaken": 600
                         };
 
-                        print(payload);
-                        Nav().pushReplacement( TestResultScreen(
-                          resultData: const {
-                            "testTitle": "টেস্ট ০১",
-                            "scorePercentage": 80,
-                            "feedback": "চমৎকার",
-                            "pointsEarned": 19,
-                            "timeTaken": "২০ঃ২২",
-                            "correctAns": 20,
-                            "wrongAns" : 2,
-                            "skippedAns": 3,
-                          },
-                        ));
+                        if(answerList.length != test.data!.questionList!.length){
+                          Fluttertoast.showToast(
+                              msg: "Please ans all the question.");
+                        }else{
+                          final response = await ref.read(testRepoProvider).submitMCQTest(payload: payload);
+
+                          print(response);
+
+                          response.fold((l) {
+                            print(l.message);
+                          }, (testResult) {
+                            Nav().pushReplacement( TestResultScreen(
+                              resultData: {
+                                "testTitle": test.data!.name,
+                                "scorePercentage": ((testResult.data!.rightScore!.toInt()/testResult.data!.totalScore!.toInt())*100).toInt(),
+                                "feedback": "চমৎকার",
+                                "pointsEarned": testResult.data!.score!.toInt(),
+                                "timeTaken": "২০ঃ২২",
+                                "correctAns": testResult.data!.rightScore,
+                                "wrongAns" : testResult.data!.wrongScore,
+                                "skippedAns": 0,
+                              },
+                            ));
+                          },);
+                        }
                       },
                       text: "সাবমিট করুন")
                 ],
