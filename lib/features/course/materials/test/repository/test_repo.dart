@@ -76,4 +76,19 @@ class TestRepo {
       return Left(errorResponse);
     }
   }
+
+  Future<Either<ErrorResponse, WrittenTestDetails>> submitMCQTest(
+      {required Map<String, String> payload}) async {
+    final response = await _dioService.getRequest("/test/$id");
+
+    if (response.statusCode == 200) {
+      return Right(WrittenTestDetails.fromJson(response.data));
+    } else {
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      ErrorHandler().setErrorMessage(errorResponse.message);
+      return Left(errorResponse);
+    }
+  }
+
+
 }

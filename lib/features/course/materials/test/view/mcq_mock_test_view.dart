@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
+import 'package:prostuti/features/course/materials/test/view/test_result_view.dart';
 
 import '../../../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../../../../core/configs/app_colors.dart';
+import '../../../../../core/services/nav.dart';
 import '../viewmodel/mcq_test_details_viewmodel.dart';
 import '../widgets/build_mcq_question_item.dart';
 import '../widgets/countdown_timer.dart';
@@ -20,6 +22,7 @@ class MCQMockTestScreen extends ConsumerStatefulWidget {
 class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
     with CommonWidgets {
   final Map<int, int?> selectedAnswers = {};
+  final List<Map<String, dynamic>> answerList=[];
 
   @override
   Widget build(BuildContext context) {
@@ -103,14 +106,36 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                           theme: theme,
                           questionList: test.data!.questionList![index],
                           selectedAnswers: selectedAnswers,
+                          answerList: answerList,
                         );
                       },
                     ),
                   ),
                   LongButton(
                       onPressed: () {
-                        print("Selected Answers: $selectedAnswers");
-                        checkCorrectAns();
+                        print("Selected Answers: $answerList");
+
+                        final payload = {
+                          "course_id": test.data!.courseId,
+                          "lesson_id": test.data!.lessonId!.sId,
+                          "test_id": test.data!.sId,
+                          "answers":answerList,
+                          "timeTaken": 600
+                        };
+
+                        print(payload);
+                        Nav().pushReplacement( TestResultScreen(
+                          resultData: const {
+                            "testTitle": "টেস্ট ০১",
+                            "scorePercentage": 80,
+                            "feedback": "চমৎকার",
+                            "pointsEarned": 19,
+                            "timeTaken": "২০ঃ২২",
+                            "correctAns": 20,
+                            "wrongAns" : 2,
+                            "skippedAns": 3,
+                          },
+                        ));
                       },
                       text: "সাবমিট করুন")
                 ],
@@ -125,5 +150,4 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
     );
   }
 
-  void checkCorrectAns() {}
 }
