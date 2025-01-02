@@ -3,10 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:prostuti/core/services/nav.dart';
+import 'package:prostuti/features/auth/login/view/login_view.dart';
 
+import '../../../common/view_model/auth_notifier.dart';
 import '../../../core/configs/app_colors.dart';
 import '../../payment/viewmodel/check_subscription.dart';
 import '../viewmodel/profile_viewmodel.dart';
+import '../widgets/ProfileSkeleton.dart';
 import '../widgets/custom_list_tile.dart';
 import '../widgets/logout_button.dart';
 
@@ -193,16 +197,19 @@ class UserProfileView extends ConsumerWidget with CommonWidgets{
                   onTap: () {}),
               const Gap(24),
               LogoutButton(
-                onPressed: () {
-                  //logout
+                onPressed: () async {
+                  final authNotifier = ref.read(authNotifierProvider.notifier);
+                  await authNotifier.clearAccessToken();
+                  Nav().pushAndRemoveUntil(const LoginView());
+
                 },
               )
             ],
           );
         }, error: (error, stackTrace) {
-
+          return Text("$error");
         }, loading: () {
-
+          return const ProfileSkeleton();
         },),
         bottomNavigationBar: BottomNavigationBar(
             backgroundColor: Colors.white,
