@@ -7,7 +7,7 @@ part of 'test_viewmodel.dart';
 // **************************************************************************
 
 String _$mCQTestListViewmodelHash() =>
-    r'233131a21c41b09fe331d93c9e2581767568d2f6';
+    r'27af32fe1a8b70d29f52acf8323ef009299b86a7';
 
 /// See also [MCQTestListViewmodel].
 @ProviderFor(MCQTestListViewmodel)
