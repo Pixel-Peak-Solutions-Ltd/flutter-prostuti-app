@@ -136,9 +136,6 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                             ref.read(countdownProvider).remainingTime.inSeconds;
                         int totalTime = test.data!.time!.toInt() * 60;
                         print(totalTime - remainingTime);
-                        // countdownNotifier.stopTimer();
-                        // print("remainingTime: ${countdownState.remainingTime.inSeconds}");
-                        print("Selected Answers: $answerList");
 
                         final payload = {
                           "course_id": test.data!.courseId,
