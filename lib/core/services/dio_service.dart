@@ -13,8 +13,8 @@ Dio dio(DioRef ref) {
 
   return Dio(BaseOptions(
     baseUrl: BASE_URL,
-    connectTimeout: const Duration(milliseconds: 5000),
-    receiveTimeout: const Duration(milliseconds: 3000),
+    connectTimeout: const Duration(seconds: 20),
+    receiveTimeout: const Duration(seconds: 180),
   ))
     ..interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {

@@ -19,7 +19,7 @@ class Nav {
 
   // Pop the current screen
   void pop() {
-    navigatorKey.currentState?.pop();
+    navigatorKey.currentState?.pop(true);
   }
 
   // Push a new screen and remove all previous screens
