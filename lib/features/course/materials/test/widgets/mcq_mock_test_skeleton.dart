@@ -4,8 +4,6 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../common/widgets/long_button.dart';
 import '../../../../../core/configs/app_colors.dart';
-import 'build_mcq_question_item.dart';
-import 'build_test_time_row.dart';
 import 'countdown_timer.dart';
 
 class MockQuestionSkeleton extends StatelessWidget {
@@ -75,9 +73,7 @@ class MockQuestionSkeleton extends StatelessWidget {
             ),
           ),
           const Gap(16),
-          const CountdownTimer(
-            duration: Duration(minutes: 00),
-          ),
+          CountdownTimer(),
           const Gap(24),
           Expanded(
             child: ListView.builder(

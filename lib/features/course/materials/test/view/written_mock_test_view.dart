@@ -5,8 +5,8 @@ import 'package:prostuti/common/widgets/long_button.dart';
 
 import '../../../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../../../../core/configs/app_colors.dart';
+import '../../../../../core/services/timer.dart';
 import '../viewmodel/written_test_details_viewmodel.dart';
-import '../widgets/build_mcq_question_item.dart';
 import '../widgets/build_written_question_item.dart';
 import '../widgets/countdown_timer.dart';
 import '../widgets/mcq_mock_test_skeleton.dart';
@@ -23,9 +23,23 @@ class MockTestScreenState extends ConsumerState<WrittenMockTestScreen>
   final Map<int, int?> selectedAnswers = {};
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final testDetails = ref.read(writtenTestDetailsViewmodelProvider);
+      testDetails.whenData((test) {
+        final duration = Duration(minutes: test.data!.time!.toInt());
+        ref.read(countdownProvider.notifier).initialize(duration);
+        ref.read(countdownProvider.notifier).startTimer();
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    final writtenTestDetailsAsync = ref.watch(writtenTestDetailsViewmodelProvider);
+    final writtenTestDetailsAsync =
+        ref.watch(writtenTestDetailsViewmodelProvider);
 
     return Scaffold(
       appBar: commonAppbar("মক টেস্ট"),
@@ -91,9 +105,7 @@ class MockTestScreenState extends ConsumerState<WrittenMockTestScreen>
                     ),
                   ),
                   const Gap(16),
-                  CountdownTimer(
-                    duration: Duration(minutes: test.data!.time!.toInt()),
-                  ),
+                  CountdownTimer(),
                   const Gap(24),
                   Expanded(
                     child: ListView.builder(

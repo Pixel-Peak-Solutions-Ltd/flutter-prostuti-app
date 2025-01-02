@@ -8,6 +8,7 @@ import 'package:prostuti/features/course/materials/test/view/test_result_view.da
 import '../../../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../../../../core/configs/app_colors.dart';
 import '../../../../../core/services/nav.dart';
+import '../../../../../core/services/timer.dart';
 import '../repository/test_repo.dart';
 import '../viewmodel/mcq_test_details_viewmodel.dart';
 import '../widgets/build_mcq_question_item.dart';
@@ -24,14 +25,21 @@ class MCQMockTestScreen extends ConsumerStatefulWidget {
 class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
     with CommonWidgets {
   final Map<int, int?> selectedAnswers = {};
-  final List<Map<String, dynamic>> answerList=[];
+  final List<Map<String, dynamic>> answerList = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    // ref.watch(countdownProvider.notifier).startTimer();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final testDetails = ref.read(mCQTestDetailsViewmodelProvider);
+      testDetails.whenData((test) {
+        final duration = Duration(minutes: test.data!.time!.toInt());
+        ref.read(countdownProvider.notifier).initialize(duration);
+        ref.read(countdownProvider.notifier).startTimer();
+      });
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -45,7 +53,6 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
           padding: const EdgeInsets.all(16.0),
           child: mCQTestDetailsAsync.when(
             data: (test) {
-
               // countdownNotifier.startTimer();
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,9 +112,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                     ),
                   ),
                   const Gap(16),
-                  CountdownTimer(
-                    duration: Duration(minutes: test.data!.time!.toInt()),
-                  ),
+                  CountdownTimer(),
                   const Gap(24),
                   Expanded(
                     child: ListView.builder(
@@ -125,6 +130,12 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                   ),
                   LongButton(
                       onPressed: () async {
+                        ref.read(countdownProvider.notifier).stopTimer();
+
+                        int remainingTime =
+                            ref.read(countdownProvider).remainingTime.inSeconds;
+                        int totalTime = test.data!.time!.toInt() * 60;
+                        print(totalTime - remainingTime);
                         // countdownNotifier.stopTimer();
                         // print("remainingTime: ${countdownState.remainingTime.inSeconds}");
                         print("Selected Answers: $answerList");
@@ -133,34 +144,46 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                           "course_id": test.data!.courseId,
                           "lesson_id": test.data!.lessonId!.sId,
                           "test_id": test.data!.sId,
-                          "answers":answerList,
+                          "answers": answerList,
                           "timeTaken": 600
                         };
 
-                        if(answerList.length != test.data!.questionList!.length){
+                        if (answerList.length !=
+                            test.data!.questionList!.length) {
                           Fluttertoast.showToast(
                               msg: "Please ans all the question.");
-                        }else{
-                          final response = await ref.read(testRepoProvider).submitMCQTest(payload: payload);
+                        } else {
+                          final response = await ref
+                              .read(testRepoProvider)
+                              .submitMCQTest(payload: payload);
 
                           print(response);
 
-                          response.fold((l) {
-                            print(l.message);
-                          }, (testResult) {
-                            Nav().pushReplacement( TestResultScreen(
-                              resultData: {
-                                "testTitle": test.data!.name,
-                                "scorePercentage": ((testResult.data!.rightScore!.toInt()/testResult.data!.totalScore!.toInt())*100).toInt(),
-                                "feedback": "চমৎকার",
-                                "pointsEarned": testResult.data!.score!.toInt(),
-                                "timeTaken": "২০ঃ২২",
-                                "correctAns": testResult.data!.rightScore,
-                                "wrongAns" : testResult.data!.wrongScore,
-                                "skippedAns": 0,
-                              },
-                            ));
-                          },);
+                          response.fold(
+                            (l) {
+                              print(l.message);
+                            },
+                            (testResult) {
+                              Nav().pushReplacement(TestResultScreen(
+                                resultData: {
+                                  "testTitle": test.data!.name,
+                                  "scorePercentage":
+                                      ((testResult.data!.rightScore!.toInt() /
+                                                  testResult.data!.totalScore!
+                                                      .toInt()) *
+                                              100)
+                                          .toInt(),
+                                  "feedback": "চমৎকার",
+                                  "pointsEarned":
+                                      testResult.data!.score!.toInt(),
+                                  "timeTaken": "২০ঃ২২",
+                                  "correctAns": testResult.data!.rightScore,
+                                  "wrongAns": testResult.data!.wrongScore,
+                                  "skippedAns": 0,
+                                },
+                              ));
+                            },
+                          );
                         }
                       },
                       text: "সাবমিট করুন")
@@ -175,5 +198,4 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
           )),
     );
   }
-
 }
