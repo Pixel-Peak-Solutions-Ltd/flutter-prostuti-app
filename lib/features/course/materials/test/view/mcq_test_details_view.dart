@@ -36,7 +36,7 @@ class TestDetailsViewState extends ConsumerState<MCQTestDetailsView>
         child: SingleChildScrollView(
           child: mCQTestDetailsAsync.when(
             data: (test) {
-              final time = Func.timeConverter(test.data!.time!.toInt());
+              final time = Func.timeConverterMinToHour(test.data!.time!.toInt());
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,

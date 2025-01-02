@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 
@@ -121,8 +123,9 @@ class MockTestScreenState extends ConsumerState<WrittenMockTestScreen>
                   ),
                   LongButton(
                       onPressed: () {
-                        print("Selected Answers: $selectedAnswers");
-                        checkCorrectAns();
+                       /* print("Selected Answers: $selectedAnswers");
+                        checkCorrectAns();*/
+                        Fluttertoast.showToast(msg: "Coming soon");
                       },
                       text: "সাবমিট করুন")
                 ],

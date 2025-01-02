@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/common/helpers/func.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import '../../../../../core/configs/app_colors.dart';
@@ -48,7 +49,7 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets {
                     ),
                   ),
                   Text(
-                    "${translateToBengaliNumber(resultData['scorePercentage'] ?? 0)}%",
+                    "${resultData['scorePercentage'] ?? 0}%",
                     style: theme.textTheme.titleLarge!.copyWith(
                       color: Colors.blue,
                       fontSize: 30,
@@ -66,7 +67,7 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets {
               const Gap(8),
               // Points Earned
               Text(
-                "আপনি ${translateToBengaliNumber(resultData['pointsEarned'] ?? 0)} পয়েন্ট পেয়েছেন",
+                "আপনি ${resultData['pointsEarned'] ?? 0} পয়েন্ট পেয়েছেন",
                 style: theme.textTheme.titleSmall,
               ),
               const Gap(24),
@@ -82,7 +83,7 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets {
                   ),
                   const Gap(8),
                   Text(
-                    "সময় নিয়েছেন ${resultData['timeTaken'] ?? "০০ঃ০০"}",
+                    "সময় নিয়েছেন ${Func.timeConverterSecToMin(resultData['timeTaken'] ?? 00)}",
                     style: theme.textTheme.titleSmall,
                   ),
                 ],
@@ -92,8 +93,11 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 8),
-                    decoration: BoxDecoration(color: const Color(0xffA1F3A9),borderRadius: BorderRadius.circular(4)),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                    decoration: BoxDecoration(
+                        color: const Color(0xffA1F3A9),
+                        borderRadius: BorderRadius.circular(4)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -101,15 +105,19 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets {
                         const Gap(4),
                         Text(
                           "${resultData["correctAns"]}",
-                          style: theme.textTheme.titleMedium!.copyWith(color: const Color(0xff159021)),
+                          style: theme.textTheme.titleMedium!
+                              .copyWith(color: const Color(0xff159021)),
                         ),
                       ],
                     ),
                   ),
                   const Gap(10),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 8),
-                    decoration: BoxDecoration(color: const Color(0xffFFC9C9),borderRadius: BorderRadius.circular(4)),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                    decoration: BoxDecoration(
+                        color: const Color(0xffFFC9C9),
+                        borderRadius: BorderRadius.circular(4)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -117,15 +125,19 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets {
                         const Gap(4),
                         Text(
                           "${resultData["wrongAns"]}",
-                          style: theme.textTheme.titleMedium!.copyWith(color: const Color(0xffD60909)),
+                          style: theme.textTheme.titleMedium!
+                              .copyWith(color: const Color(0xffD60909)),
                         ),
                       ],
                     ),
                   ),
                   const Gap(10),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 3,horizontal: 8),
-                    decoration: BoxDecoration(color: const Color(0xffFDD489),borderRadius: BorderRadius.circular(4)),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                    decoration: BoxDecoration(
+                        color: const Color(0xffFDD489),
+                        borderRadius: BorderRadius.circular(4)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -133,7 +145,8 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets {
                         const Gap(4),
                         Text(
                           "${resultData["skippedAns"]}",
-                          style: theme.textTheme.titleMedium!.copyWith(color: const Color(0xffC9860D)),
+                          style: theme.textTheme.titleMedium!
+                              .copyWith(color: const Color(0xffC9860D)),
                         ),
                       ],
                     ),
@@ -165,12 +178,12 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets {
     );
   }
 
-  String translateToBengaliNumber(int number) {
+ /* String translateToBengaliNumber(num number) {
     const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
     return number
         .toString()
         .split('')
         .map((digit) => bengaliDigits[int.parse(digit)])
         .join();
-  }
+  }*/
 }

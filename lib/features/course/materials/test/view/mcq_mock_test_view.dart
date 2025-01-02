@@ -135,21 +135,21 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                         int remainingTime =
                             ref.read(countdownProvider).remainingTime.inSeconds;
                         int totalTime = test.data!.time!.toInt() * 60;
-                        print(totalTime - remainingTime);
+                        final timeTaken = totalTime - remainingTime;
 
                         final payload = {
                           "course_id": test.data!.courseId,
                           "lesson_id": test.data!.lessonId!.sId,
                           "test_id": test.data!.sId,
                           "answers": answerList,
-                          "timeTaken": 600
+                          "timeTaken": timeTaken
                         };
 
-                        if (answerList.length !=
+                        /*if (answerList.length !=
                             test.data!.questionList!.length) {
                           Fluttertoast.showToast(
                               msg: "Please ans all the question.");
-                        } else {
+                        } else {*/
                           final response = await ref
                               .read(testRepoProvider)
                               .submitMCQTest(payload: payload);
@@ -172,17 +172,17 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                                           .toInt(),
                                   "feedback": "চমৎকার",
                                   "pointsEarned":
-                                      testResult.data!.score!.toInt(),
-                                  "timeTaken": "২০ঃ২২",
+                                      testResult.data!.score,
+                                  "timeTaken": timeTaken,
                                   "correctAns": testResult.data!.rightScore,
                                   "wrongAns": testResult.data!.wrongScore,
-                                  "skippedAns": 0,
+                                  "skippedAns": testResult.data!.totalScore!-(testResult.data!.rightScore!.toInt()+testResult.data!.wrongScore!.toInt()),
                                 },
                               ));
                             },
                           );
-                        }
-                      },
+                        },
+                      // },
                       text: "সাবমিট করুন")
                 ],
               );

@@ -27,7 +27,7 @@ class Data {
   String? lessonId;
   String? testId;
   String? studentId;
-  double? score;
+  num? score;
   int? totalScore;
   int? wrongScore;
   int? rightScore;
