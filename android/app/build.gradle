@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.PixelPeakSolutionsLtd.prostuti"
+    namespace "PixelPeakSolutionsLtd.prostuti"
     compileSdk flutter.compileSdkVersion
     ndkVersion "26.1.10909125"
 

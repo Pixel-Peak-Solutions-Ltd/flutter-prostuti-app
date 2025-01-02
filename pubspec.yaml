@@ -38,7 +38,7 @@ dependencies:
   fluttertoast:
   open_filex:
   path_provider:
-  webview_flutter: ^2.0.13
+  webview_flutter: ^4.8.0
   modal_bottom_sheet: ^3.0.0
 
 dev_dependencies:
