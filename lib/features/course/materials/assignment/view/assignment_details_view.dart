@@ -15,6 +15,7 @@ import 'package:prostuti/features/course/materials/assignment/viewmodel/get_assi
 import 'package:prostuti/features/course/materials/assignment/viewmodel/get_file_path.dart';
 import 'package:prostuti/features/course/materials/assignment/widgets/assignment_widgets.dart';
 
+import '../../../../../core/services/debouncer.dart';
 import '../../../../../core/services/nav.dart';
 import '../../../enrolled_course_landing/repository/enrolled_course_landing_repo.dart';
 import '../../record_class/viewmodel/change_btn_state.dart';
@@ -32,12 +33,16 @@ class AssignmentDetailsView extends ConsumerStatefulWidget {
 class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
     with CommonWidgets, AssignmentWidgets {
   final fileHelper = FileHelper();
+  final _debouncer = Debouncer(milliseconds: 120);
+  final _loadingProvider = StateProvider<bool>((ref) => false);
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     final assignmentDetailsAsync =
         ref.watch(assignmentDetailsViewmodelProvider);
+
+    final isLoading = ref.watch(_loadingProvider);
 
     return Scaffold(
       appBar: commonAppbar("এসাইনমেন্ট"),
@@ -122,31 +127,41 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
                           },
                           child: submitBox(theme)),
                   const Gap(24),
-                  LongButton(
-                      onPressed: ref.watch(changeBtnStateProvider) ||
-                              widget.isCompleted
-                          ? () {}
-                          : () async {
-                              final response = await ref
-                                  .read(enrolledCourseLandingRepoProvider)
-                                  .markAsComplete({
-                                "materialType": "assignment",
-                                "material_id":
-                                    ref.read(getAssignmentByIdProvider)
-                              });
+                  isLoading
+                      ? const CircularProgressIndicator()
+                      : LongButton(
+                          onPressed: ref.watch(changeBtnStateProvider) ||
+                                  widget.isCompleted
+                              ? () {}
+                              : () {
+                                  _debouncer.run(
+                                      action: () async {
+                                        final response = await ref
+                                            .read(
+                                                enrolledCourseLandingRepoProvider)
+                                            .markAsComplete({
+                                          "materialType": "assignment",
+                                          "material_id": ref
+                                              .read(getAssignmentByIdProvider)
+                                        });
 
-                              if (response) {
-                                ref
-                                    .watch(changeBtnStateProvider.notifier)
-                                    .setBtnState();
+                                        if (response) {
+                                          ref
+                                              .watch(changeBtnStateProvider
+                                                  .notifier)
+                                              .setBtnState();
 
-                                Nav().pushReplacement(const AssignmentView());
-                              }
-                            },
-                      text: ref.watch(changeBtnStateProvider) ||
-                              widget.isCompleted
-                          ? "এসাইনমেন্ট সাবমিট হয়েছে"
-                          : 'সাবমিট করুন')
+                                          Nav().pushReplacement(
+                                              const AssignmentView());
+                                        }
+                                      },
+                                      loadingController:
+                                          ref.read(_loadingProvider.notifier));
+                                },
+                          text: ref.watch(changeBtnStateProvider) ||
+                                  widget.isCompleted
+                              ? "এসাইনমেন্ট সাবমিট হয়েছে"
+                              : 'সাবমিট করুন')
                 ],
               );
             },
