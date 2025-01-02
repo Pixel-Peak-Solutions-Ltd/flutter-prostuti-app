@@ -8,6 +8,7 @@ import 'package:prostuti/features/course/my_course/view/my_course_view.dart';
 
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../profile/view/profile_view.dart';
 import '../widget/calendar_widget.dart';
 import '../widget/category_card.dart';
 import '../widget/leaderboard_card.dart';
@@ -79,30 +80,35 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Row(
-                          children: [
-                            const CircleAvatar(
-                              backgroundImage: AssetImage(
-                                'assets/images/test_dp.jpg',
+                        GestureDetector(
+                    onTap: (){
+                      Nav().push(UserProfileView());
+                    },
+                          child: Row(
+                            children: [
+                              const CircleAvatar(
+                                backgroundImage: AssetImage(
+                                  'assets/images/test_dp.jpg',
+                                ),
                               ),
-                            ),
-                            const Gap(16),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'নাজমুল ইসলাম সিফাত',
-                                  style:
-                                      Theme.of(context).textTheme.titleSmall!,
-                                ),
-                                Text(
-                                  'প্রফাইল দেখুন',
-                                  style:
-                                      Theme.of(context).textTheme.bodyMedium!,
-                                ),
-                              ],
-                            ),
-                          ],
+                              const Gap(16),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'নাজমুল ইসলাম সিফাত',
+                                    style:
+                                        Theme.of(context).textTheme.titleSmall!,
+                                  ),
+                                  Text(
+                                    'প্রফাইল দেখুন',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium!,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                         const Gap(24),
                         Padding(

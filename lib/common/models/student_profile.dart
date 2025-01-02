@@ -35,6 +35,7 @@ class Data {
   String? subscriptionEndDate;
   String? createdAt;
   String? updatedAt;
+  Image? image;
 
   Data(
       {this.sId,
@@ -48,7 +49,8 @@ class Data {
       this.subscriptionStartDate,
       this.subscriptionEndDate,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.image});
 
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -63,6 +65,7 @@ class Data {
     subscriptionEndDate = json['subscriptionEndDate'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
+    image = json['image'] != null ? new Image.fromJson(json['image']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +82,43 @@ class Data {
     data['subscriptionEndDate'] = subscriptionEndDate;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
+    if (this.image != null) {
+      data['image'] = this.image!.toJson();
+    }
+    return data;
+  }
+}
+
+
+class Image {
+  String? diskType;
+  String? path;
+  String? originalName;
+  String? modifiedName;
+  String? fileId;
+
+  Image(
+      {this.diskType,
+        this.path,
+        this.originalName,
+        this.modifiedName,
+        this.fileId});
+
+  Image.fromJson(Map<String, dynamic> json) {
+    diskType = json['diskType'];
+    path = json['path'];
+    originalName = json['originalName'];
+    modifiedName = json['modifiedName'];
+    fileId = json['fileId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['diskType'] = this.diskType;
+    data['path'] = this.path;
+    data['originalName'] = this.originalName;
+    data['modifiedName'] = this.modifiedName;
+    data['fileId'] = this.fileId;
     return data;
   }
 }
