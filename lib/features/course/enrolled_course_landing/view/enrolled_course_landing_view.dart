@@ -12,6 +12,7 @@ import 'package:prostuti/features/course/materials/resources/view/resources_view
 import 'package:prostuti/features/course/materials/shared/widgets/trailing_icon.dart';
 
 import '../../course_details/widgets/expandable_text.dart';
+import 'package:prostuti/features/course/materials/test/view/test_view.dart';
 
 enum GridItem {
   recordedClass("assets/icons/video.png", "রেকর্ড ক্লাস"),
@@ -111,7 +112,7 @@ class EnrolledCourseLandingViewState
                                 case GridItem.assignment:
                                   Nav().push(const AssignmentView());
                                 case GridItem.test:
-                                // TODO: Handle this case.
+                                  Nav().push(const TestListView());
                                 case GridItem.routine:
                                 // TODO: Handle this case.
                                 case GridItem.reportCard:

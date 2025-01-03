@@ -54,8 +54,8 @@ class AppColors {
   static const shadePrimaryLight = Color(0xFFD1E0FF);
   static const shadePrimaryDark = Color(0xFFD1E0FF);
 
-  static const shadeSecondaryLight = Color(0xFFEFF4FF);
-  static const shadeSecondaryDark = Color(0xFFEFF4FF);
+  static const shadeSecondaryLight = Color(0xFFE1EAFF);
+  static const shadeSecondaryDark = Color(0xFFE1EAFF);
 
   static const shadeNeutralLight = Color(0xFFE5E7EB);
   static const shadeNeutralDark = Color(0xFFE5E7EB);
