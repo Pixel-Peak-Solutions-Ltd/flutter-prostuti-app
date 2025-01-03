@@ -120,7 +120,7 @@ class TestDetailsViewState extends ConsumerState<MCQTestDetailsView>
                   const Gap(24),
                   // Start Test Button
                   LongButton(onPressed: () {
-                    Nav().push(const MCQMockTestScreen());
+                    Nav().pushReplacement(const MCQMockTestScreen());
                   }, text: "টেস্ট শুরু করুন")
                 ],
               );

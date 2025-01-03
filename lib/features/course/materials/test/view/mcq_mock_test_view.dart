@@ -129,60 +129,66 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                     ),
                   ),
                   LongButton(
-                      onPressed: () async {
-                        ref.read(countdownProvider.notifier).stopTimer();
+                      onPressed: answerList.length > 1
+                          ? () async {
+                              ref.read(countdownProvider.notifier).stopTimer();
 
-                        int remainingTime =
-                            ref.read(countdownProvider).remainingTime.inSeconds;
-                        int totalTime = test.data!.time!.toInt() * 60;
-                        final timeTaken = totalTime - remainingTime;
+                              int remainingTime = ref
+                                  .read(countdownProvider)
+                                  .remainingTime
+                                  .inSeconds;
+                              int totalTime = test.data!.time!.toInt() * 60;
+                              final timeTaken = totalTime - remainingTime;
 
-                        final payload = {
-                          "course_id": test.data!.courseId,
-                          "lesson_id": test.data!.lessonId!.sId,
-                          "test_id": test.data!.sId,
-                          "answers": answerList,
-                          "timeTaken": timeTaken
-                        };
+                              final payload = {
+                                "course_id": test.data!.courseId,
+                                "lesson_id": test.data!.lessonId!.sId,
+                                "test_id": test.data!.sId,
+                                "answers": answerList,
+                                "timeTaken": timeTaken
+                              };
+                              final response = await ref
+                                  .read(testRepoProvider)
+                                  .submitMCQTest(payload: payload);
 
-                        /*if (answerList.length !=
-                            test.data!.questionList!.length) {
-                          Fluttertoast.showToast(
-                              msg: "Please ans all the question.");
-                        } else {*/
-                          final response = await ref
-                              .read(testRepoProvider)
-                              .submitMCQTest(payload: payload);
+                              print(response);
 
-                          print(response);
-
-                          response.fold(
-                            (l) {
-                              print(l.message);
-                            },
-                            (testResult) {
-                              Nav().pushReplacement(TestResultScreen(
-                                resultData: {
-                                  "testTitle": test.data!.name,
-                                  "scorePercentage":
-                                      ((testResult.data!.rightScore!.toInt() /
+                              response.fold(
+                                (l) {
+                                  print(l.message);
+                                },
+                                (testResult) {
+                                  Nav().pushReplacement(TestResultScreen(
+                                    resultData: {
+                                      "testTitle": test.data!.name,
+                                      "scorePercentage": ((testResult
+                                                      .data!.rightScore!
+                                                      .toInt() /
                                                   testResult.data!.totalScore!
                                                       .toInt()) *
                                               100)
                                           .toInt(),
-                                  "feedback": "চমৎকার",
-                                  "pointsEarned":
-                                      testResult.data!.score,
-                                  "timeTaken": timeTaken,
-                                  "correctAns": testResult.data!.rightScore,
-                                  "wrongAns": testResult.data!.wrongScore,
-                                  "skippedAns": testResult.data!.totalScore!-(testResult.data!.rightScore!.toInt()+testResult.data!.wrongScore!.toInt()),
+                                      "feedback": "চমৎকার",
+                                      "pointsEarned": testResult.data!.score,
+                                      "timeTaken": timeTaken,
+                                      "correctAns": testResult.data!.rightScore,
+                                      "wrongAns": testResult.data!.wrongScore,
+                                      "skippedAns":
+                                          testResult.data!.totalScore! -
+                                              (testResult.data!.rightScore!
+                                                      .toInt() +
+                                                  testResult.data!.wrongScore!
+                                                      .toInt()),
+                                    },
+                                  ));
                                 },
-                              ));
-                            },
-                          );
-                        },
-                      // },
+                              );
+                            }
+                          : () {
+                        Fluttertoast.showToast(
+                          msg: "You need to submit atleast 1 answer");
+
+                      },
                       text: "সাবমিট করুন")
                 ],
               );
