@@ -3,12 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/features/course/materials/test/view/mcq_test_details_view.dart';
 import 'package:prostuti/features/course/materials/test/view/written_test_details_view.dart';
+import 'package:prostuti/features/course/materials/test/viewmodel/get_mcq_test_history.dart';
 import 'package:prostuti/features/course/materials/test/viewmodel/get_test_by_id.dart';
 import 'package:prostuti/features/course/materials/test/viewmodel/test_viewmodel.dart';
 import '../../../../../core/services/nav.dart';
 import '../../shared/widgets/material_list_skeleton.dart';
 import '../../shared/widgets/trailing_icon.dart';
+import '../repository/test_repo.dart';
 import '../viewmodel/written_test_viewmodel.dart';
+import 'mcq_test_history_view.dart';
 
 class TestListView extends ConsumerStatefulWidget {
   const TestListView({Key? key}) : super(key: key);
@@ -41,7 +44,7 @@ class TestListViewState extends ConsumerState<TestListView>
     ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("টেস্ট"),
+        title: const Text("টেস্ট"),
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -73,12 +76,22 @@ class TestListViewState extends ConsumerState<TestListView>
                 itemCount: test.length,
                 itemBuilder: (context, index) {
                   return InkWell(
-                    onTap: () {
-                      ref
-                          .watch(getTestByIdProvider.notifier)
-                          .setTestId(test[index].sId!);
-                      Nav().push(const MCQTestDetailsView());
-                    },
+                    onTap: isUnlocked(test[index].publishDate!)
+                        ? () async {
+                      
+                            ref
+                                .watch(getTestByIdProvider.notifier)
+                                .setTestId(test[index].sId!);
+                            
+                            final testHistory = await ref.read(testRepoProvider).hasMCQTestGiven(test[index].sId!);
+
+                            if(testHistory){
+                              Nav().push(const MCQMockTestHistoryScreen());
+                            }else{
+                              Nav().push(const MCQTestDetailsView());
+                            }
+                          }
+                        : () {},
                     child: lessonItem(
                       theme,
                       trailingIcon: TrailingIcon(
@@ -103,12 +116,14 @@ class TestListViewState extends ConsumerState<TestListView>
                 itemCount: test.length,
                 itemBuilder: (context, index) {
                   return InkWell(
-                    onTap: () {
-                      ref
-                          .watch(getTestByIdProvider.notifier)
-                          .setTestId(test[index].sId!);
-                      Nav().push(const WrittenTestDetailsView());
-                    },
+                    onTap: isUnlocked(test[index].publishDate!)
+                        ? () {
+                            ref
+                                .watch(getTestByIdProvider.notifier)
+                                .setTestId(test[index].sId!);
+                            Nav().push(const WrittenTestDetailsView());
+                          }
+                        : () {},
                     child: lessonItem(
                       theme,
                       trailingIcon: TrailingIcon(
@@ -129,5 +144,15 @@ class TestListViewState extends ConsumerState<TestListView>
         ],
       ),
     );
+  }
+
+  isUnlocked(String s) {
+    DateTime parsedDate = DateTime.parse(s);
+    print(parsedDate);
+    DateTime now = DateTime.now();
+    return (parsedDate.day == now.day &&
+            parsedDate.month == now.month &&
+            parsedDate.year == now.year) ||
+        (parsedDate.isBefore(now));
   }
 }

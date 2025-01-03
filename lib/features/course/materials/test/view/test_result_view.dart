@@ -7,6 +7,7 @@ import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import '../../../../../core/configs/app_colors.dart';
 import '../../../../../core/services/nav.dart';
+import 'mcq_test_history_view.dart';
 
 class TestResultScreen extends ConsumerWidget with CommonWidgets {
   final Map<String, dynamic> resultData;
@@ -83,7 +84,7 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets {
                   ),
                   const Gap(8),
                   Text(
-                    "সময় নিয়েছেন ${Func.timeConverterSecToMin(resultData['timeTaken'] ?? 00)}",
+                    "সময় নিয়েছেন ${Func.timeConverterSecToMin(resultData['timeTaken'] ?? 00)} মিনিট",
                     style: theme.textTheme.titleSmall,
                   ),
                 ],
@@ -158,7 +159,7 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets {
                 children: [
                   LongButton(
                     onPressed: () {
-                      // Handle view full results
+                      Nav().push(const MCQMockTestHistoryScreen());
                     },
                     text: "সম্পূর্ণ ফলাফল দেখুন",
                   ),

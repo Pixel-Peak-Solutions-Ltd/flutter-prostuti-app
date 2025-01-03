@@ -9,6 +9,7 @@ import '../../../../../core/services/error_handler.dart';
 import '../../../../../core/services/error_response.dart';
 import '../model/mcq_result_model.dart';
 import '../model/mcq_test_details_model.dart';
+import '../model/test_history_model.dart';
 import '../model/test_model.dart';
 import '../model/written_test_details_model.dart';
 
@@ -92,5 +93,27 @@ class TestRepo {
     }
   }
 
+  Future<bool> hasMCQTestGiven(
+      String id) async {
+    final response = await _dioService.getRequest("/test-history/$id");
 
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<Either<ErrorResponse, TestHistory>> getMCQTestHistoryById(
+      String id) async {
+    final response = await _dioService.getRequest("/test-history/$id");
+
+    if (response.statusCode == 200) {
+      return Right(TestHistory.fromJson(response.data));
+    } else {
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      ErrorHandler().setErrorMessage(errorResponse.message);
+      return Left(errorResponse);
+    }
+  }
 }
