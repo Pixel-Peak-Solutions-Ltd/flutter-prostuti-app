@@ -4,11 +4,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/features/course/materials/test/view/test_result_view.dart';
+import 'package:prostuti/features/course/materials/test/viewmodel/get_test_by_id.dart';
 
 import '../../../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../../../../core/configs/app_colors.dart';
+import '../../../../../core/services/debouncer.dart';
 import '../../../../../core/services/nav.dart';
 import '../../../../../core/services/timer.dart';
+import '../../../enrolled_course_landing/repository/enrolled_course_landing_repo.dart';
 import '../repository/test_repo.dart';
 import '../viewmodel/mcq_test_details_viewmodel.dart';
 import '../widgets/build_mcq_question_item.dart';
@@ -26,6 +29,8 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
     with CommonWidgets {
   final Map<int, int?> selectedAnswers = {};
   final List<Map<String, dynamic>> answerList = [];
+  final _debouncer = Debouncer(milliseconds: 120);
+  final _loadingProvider = StateProvider<bool>((ref) => false);
 
   @override
   void initState() {
@@ -44,8 +49,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     final mCQTestDetailsAsync = ref.watch(mCQTestDetailsViewmodelProvider);
-/*    final countdownNotifier = ref.read(countdownProvider.notifier);
-    final countdownState = ref.watch(countdownProvider);*/
+    final isLoading = ref.watch(_loadingProvider);
 
     return Scaffold(
       appBar: commonAppbar("মক টেস্ট"),
@@ -128,68 +132,102 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                       },
                     ),
                   ),
-                  LongButton(
-                      onPressed: answerList.length > 1
-                          ? () async {
-                              ref.read(countdownProvider.notifier).stopTimer();
+                  isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : LongButton(
+                          onPressed: answerList.length > 1
+                              ? () {
+                                  _debouncer.run(
+                                      action: () async {
+                                        ref
+                                            .read(countdownProvider.notifier)
+                                            .stopTimer();
+                                        final markAsComplete = await ref
+                                            .read(
+                                                enrolledCourseLandingRepoProvider)
+                                            .markAsComplete({
+                                          "materialType": "test",
+                                          "material_id":
+                                              ref.read(getTestByIdProvider)
+                                        });
 
-                              int remainingTime = ref
-                                  .read(countdownProvider)
-                                  .remainingTime
-                                  .inSeconds;
-                              int totalTime = test.data!.time!.toInt() * 60;
-                              final timeTaken = totalTime - remainingTime;
+                                        int remainingTime = ref
+                                            .read(countdownProvider)
+                                            .remainingTime
+                                            .inSeconds;
+                                        int totalTime =
+                                            test.data!.time!.toInt() * 60;
+                                        final timeTaken =
+                                            totalTime - remainingTime;
 
-                              final payload = {
-                                "course_id": test.data!.courseId,
-                                "lesson_id": test.data!.lessonId!.sId,
-                                "test_id": test.data!.sId,
-                                "answers": answerList,
-                                "timeTaken": timeTaken
-                              };
-                              final response = await ref
-                                  .read(testRepoProvider)
-                                  .submitMCQTest(payload: payload);
+                                        final payload = {
+                                          "course_id": test.data!.courseId,
+                                          "lesson_id": test.data!.lessonId!.sId,
+                                          "test_id": test.data!.sId,
+                                          "answers": answerList,
+                                          "timeTaken": timeTaken
+                                        };
+                                        final response = await ref
+                                            .read(testRepoProvider)
+                                            .submitMCQTest(payload: payload);
 
-                              print(response);
+                                        print(response);
 
-                              response.fold(
-                                (l) {
-                                  print(l.message);
+                                        response.fold(
+                                          (l) {
+                                            print(l.message);
+                                          },
+                                          (testResult) {
+                                            if (markAsComplete) {
+                                              Nav().pushReplacement(
+                                                  TestResultScreen(
+                                                resultData: {
+                                                  "testTitle": test.data!.name,
+                                                  "scorePercentage": ((testResult
+                                                                  .data!
+                                                                  .rightScore!
+                                                                  .toInt() /
+                                                              testResult.data!
+                                                                  .totalScore!
+                                                                  .toInt()) *
+                                                          100)
+                                                      .toInt(),
+                                                  "feedback": "চমৎকার",
+                                                  "pointsEarned":
+                                                      testResult.data!.score,
+                                                  "timeTaken": timeTaken,
+                                                  "correctAns": testResult
+                                                      .data!.rightScore,
+                                                  "wrongAns": testResult
+                                                      .data!.wrongScore,
+                                                  "skippedAns": testResult
+                                                          .data!.totalScore! -
+                                                      (testResult
+                                                              .data!.rightScore!
+                                                              .toInt() +
+                                                          testResult
+                                                              .data!.wrongScore!
+                                                              .toInt()),
+                                                },
+                                              ));
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "You might have already given the exam");
+                                            }
+                                          },
+                                        );
+                                      },
+                                      loadingController:
+                                          ref.read(_loadingProvider.notifier));
+                                }
+                              : () {
+                                  print(answerList);
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          "You need to submit atleast 1 answer");
                                 },
-                                (testResult) {
-                                  Nav().pushReplacement(TestResultScreen(
-                                    resultData: {
-                                      "testTitle": test.data!.name,
-                                      "scorePercentage": ((testResult
-                                                      .data!.rightScore!
-                                                      .toInt() /
-                                                  testResult.data!.totalScore!
-                                                      .toInt()) *
-                                              100)
-                                          .toInt(),
-                                      "feedback": "চমৎকার",
-                                      "pointsEarned": testResult.data!.score,
-                                      "timeTaken": timeTaken,
-                                      "correctAns": testResult.data!.rightScore,
-                                      "wrongAns": testResult.data!.wrongScore,
-                                      "skippedAns":
-                                          testResult.data!.totalScore! -
-                                              (testResult.data!.rightScore!
-                                                      .toInt() +
-                                                  testResult.data!.wrongScore!
-                                                      .toInt()),
-                                    },
-                                  ));
-                                },
-                              );
-                            }
-                          : () {
-                              print(answerList);
-                              Fluttertoast.showToast(
-                                  msg: "You need to submit atleast 1 answer");
-                            },
-                      text: "সাবমিট করুন")
+                          text: "সাবমিট করুন")
                 ],
               );
             },

@@ -11,7 +11,6 @@ import '../../../course_list/viewmodel/get_course_by_id.dart';
 import '../../get_material_completion.dart';
 import '../../shared/widgets/material_list_skeleton.dart';
 import '../../shared/widgets/trailing_icon.dart';
-import '../repository/test_repo.dart';
 import '../viewmodel/written_test_viewmodel.dart';
 import 'mcq_test_history_view.dart';
 
@@ -92,11 +91,11 @@ class TestListViewState extends ConsumerState<TestListView>
                                     .watch(getTestByIdProvider.notifier)
                                     .setTestId(test[index].sId!);
 
-                                final testHistory = await ref
-                                    .read(testRepoProvider)
-                                    .hasMCQTestGiven(test[index].sId!);
+                                // final testHistory = await ref
+                                //     .read(testRepoProvider)
+                                //     .hasMCQTestGiven(test[index].sId!);
 
-                                if (testHistory) {
+                                if (isCompleted) {
                                   Nav().push(const MCQMockTestHistoryScreen());
                                 } else {
                                   Nav().push(const MCQTestDetailsView());
