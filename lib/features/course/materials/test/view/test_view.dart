@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/features/course/materials/test/view/mcq_test_details_view.dart';
 import 'package:prostuti/features/course/materials/test/view/written_test_details_view.dart';
-import 'package:prostuti/features/course/materials/test/viewmodel/get_mcq_test_history.dart';
 import 'package:prostuti/features/course/materials/test/viewmodel/get_test_by_id.dart';
 import 'package:prostuti/features/course/materials/test/viewmodel/test_viewmodel.dart';
+
 import '../../../../../core/services/nav.dart';
+import '../../../course_list/viewmodel/get_course_by_id.dart';
+import '../../get_material_completion.dart';
 import '../../shared/widgets/material_list_skeleton.dart';
 import '../../shared/widgets/trailing_icon.dart';
 import '../repository/test_repo.dart';
@@ -40,6 +42,8 @@ class TestListViewState extends ConsumerState<TestListView>
   Widget build(BuildContext context) {
     final mcqTestAsync = ref.watch(mCQTestListViewmodelProvider);
     final writtenTestAsync = ref.watch(writtenTestListViewmodelProvider);
+    final courseId = ref.read(getCourseByIdProvider);
+    final completedAsync = ref.watch(completedIdProvider(courseId));
 
     ThemeData theme = Theme.of(context);
     return Scaffold(
@@ -72,38 +76,51 @@ class TestListViewState extends ConsumerState<TestListView>
           // MCQ ListView
           mcqTestAsync.when(
             data: (test) {
-              return ListView.builder(
-                itemCount: test.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: isUnlocked(test[index].publishDate!)
-                        ? () async {
-                      
-                            ref
-                                .watch(getTestByIdProvider.notifier)
-                                .setTestId(test[index].sId!);
-                            
-                            final testHistory = await ref.read(testRepoProvider).hasMCQTestGiven(test[index].sId!);
+              return completedAsync.when(
+                data: (completedId) {
+                  final completedSet = Set<String>.from(completedId);
+                  return ListView.builder(
+                    itemCount: test.length,
+                    itemBuilder: (context, index) {
+                      final isCompleted =
+                          completedSet.contains(test[index].sId);
 
-                            if(testHistory){
-                              Nav().push(const MCQMockTestHistoryScreen());
-                            }else{
-                              Nav().push(const MCQTestDetailsView());
-                            }
-                          }
-                        : () {},
-                    child: lessonItem(
-                      theme,
-                      trailingIcon: TrailingIcon(
-                        classDate: test[index].publishDate!,
-                        isCompleted: true,
-                      ),
-                      itemName: "টেস্ট: ${test[index].name}",
-                      icon: Icons.question_answer_rounded,
-                      lessonName: '${test[index].lessonId!.number} ',
-                    ),
+                      return InkWell(
+                        onTap: isUnlocked(test[index].publishDate!)
+                            ? () async {
+                                ref
+                                    .watch(getTestByIdProvider.notifier)
+                                    .setTestId(test[index].sId!);
+
+                                final testHistory = await ref
+                                    .read(testRepoProvider)
+                                    .hasMCQTestGiven(test[index].sId!);
+
+                                if (testHistory) {
+                                  Nav().push(const MCQMockTestHistoryScreen());
+                                } else {
+                                  Nav().push(const MCQTestDetailsView());
+                                }
+                              }
+                            : () {},
+                        child: lessonItem(
+                          theme,
+                          trailingIcon: TrailingIcon(
+                            classDate: test[index].publishDate!,
+                            isCompleted: isCompleted,
+                          ),
+                          itemName: "টেস্ট: ${test[index].name}",
+                          icon: Icons.question_answer_rounded,
+                          lessonName: '${test[index].lessonId!.number} ',
+                        ),
+                      );
+                    },
                   );
                 },
+                error: (error, stackTrace) => Center(
+                  child: Text(error.toString()),
+                ),
+                loading: () => MaterialListSkeleton(),
               );
             },
             error: (error, stackTrace) => Text("$error"),
@@ -112,30 +129,43 @@ class TestListViewState extends ConsumerState<TestListView>
           // Written ListView
           writtenTestAsync.when(
             data: (test) {
-              return ListView.builder(
-                itemCount: test.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: isUnlocked(test[index].publishDate!)
-                        ? () {
-                            ref
-                                .watch(getTestByIdProvider.notifier)
-                                .setTestId(test[index].sId!);
-                            Nav().push(const WrittenTestDetailsView());
-                          }
-                        : () {},
-                    child: lessonItem(
-                      theme,
-                      trailingIcon: TrailingIcon(
-                        classDate: test[index].publishDate!,
-                        isCompleted: true,
-                      ),
-                      itemName: "টেস্ট: ${test[index].name}",
-                      icon: Icons.edit_note_rounded,
-                      lessonName: '${test[index].lessonId!.number} ',
-                    ),
+              return completedAsync.when(
+                data: (completedId) {
+                  final completedSet = Set<String>.from(completedId);
+                  return ListView.builder(
+                    itemCount: test.length,
+                    itemBuilder: (context, index) {
+                      final isCompleted =
+                          completedSet.contains(test[index].sId);
+                      return InkWell(
+                        onTap: isUnlocked(test[index].publishDate!)
+                            ? () {
+                                ref
+                                    .watch(getTestByIdProvider.notifier)
+                                    .setTestId(test[index].sId!);
+                                Nav().push(const WrittenTestDetailsView());
+                              }
+                            : () {},
+                        child: lessonItem(
+                          theme,
+                          trailingIcon: TrailingIcon(
+                            classDate: test[index].publishDate!,
+                            isCompleted: isCompleted,
+                          ),
+                          itemName: "টেস্ট: ${test[index].name}",
+                          icon: Icons.edit_note_rounded,
+                          lessonName: '${test[index].lessonId!.number} ',
+                        ),
+                      );
+                    },
                   );
                 },
+                error: (error, stackTrace) {
+                  return Center(
+                    child: Text(error.toString()),
+                  );
+                },
+                loading: () => MaterialListSkeleton(),
               );
             },
             error: (error, stackTrace) => Text("$error"),

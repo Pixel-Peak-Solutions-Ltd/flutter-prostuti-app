@@ -8,7 +8,6 @@ import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/services/file_helper.dart';
-import 'package:prostuti/features/course/materials/assignment/view/assignment_view.dart';
 import 'package:prostuti/features/course/materials/assignment/viewmodel/assignment_details_viewmodel.dart';
 import 'package:prostuti/features/course/materials/assignment/viewmodel/assignment_file_name.dart';
 import 'package:prostuti/features/course/materials/assignment/viewmodel/get_assignment_by_id.dart';
@@ -16,7 +15,6 @@ import 'package:prostuti/features/course/materials/assignment/viewmodel/get_file
 import 'package:prostuti/features/course/materials/assignment/widgets/assignment_widgets.dart';
 
 import '../../../../../core/services/debouncer.dart';
-import '../../../../../core/services/nav.dart';
 import '../../../enrolled_course_landing/repository/enrolled_course_landing_repo.dart';
 import '../../record_class/viewmodel/change_btn_state.dart';
 import '../widgets/assignment_skeleton.dart';
@@ -128,7 +126,7 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
                           child: submitBox(theme)),
                   const Gap(24),
                   isLoading
-                      ? const CircularProgressIndicator()
+                      ? const Center(child: CircularProgressIndicator())
                       : LongButton(
                           onPressed: ref.watch(changeBtnStateProvider) ||
                                   widget.isCompleted
@@ -151,8 +149,7 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
                                                   .notifier)
                                               .setBtnState();
 
-                                          Nav().pushReplacement(
-                                              const AssignmentView());
+                                          // Nav().push(AssignmentView());
                                         }
                                       },
                                       loadingController:

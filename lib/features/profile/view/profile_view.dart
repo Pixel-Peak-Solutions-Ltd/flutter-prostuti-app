@@ -8,13 +8,12 @@ import 'package:prostuti/features/auth/login/view/login_view.dart';
 
 import '../../../common/view_model/auth_notifier.dart';
 import '../../../core/configs/app_colors.dart';
-import '../../payment/viewmodel/check_subscription.dart';
 import '../viewmodel/profile_viewmodel.dart';
 import '../widgets/ProfileSkeleton.dart';
 import '../widgets/custom_list_tile.dart';
 import '../widgets/logout_button.dart';
 
-class UserProfileView extends ConsumerWidget with CommonWidgets{
+class UserProfileView extends ConsumerWidget with CommonWidgets {
   UserProfileView({super.key});
 
   @override
@@ -22,11 +21,11 @@ class UserProfileView extends ConsumerWidget with CommonWidgets{
     const isDarkTheme = true;
     final userProfileAsyncValue = ref.watch(userProfileProvider);
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: commonAppbar('আমার প্রোফাইল'),
-        body: userProfileAsyncValue.when(data: (userData) {
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: commonAppbar('আমার প্রোফাইল'),
+      body: userProfileAsyncValue.when(
+        data: (userData) {
           return ListView(
             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
             children: [
@@ -35,7 +34,10 @@ class UserProfileView extends ConsumerWidget with CommonWidgets{
                   children: [
                     CircleAvatar(
                       radius: 50,
-                      backgroundImage: userData.data!.image == null ? AssetImage('assets/images/test_dp.jpg') as ImageProvider:NetworkImage(userData.data!.image!.path!),
+                      backgroundImage: userData.data!.image == null
+                          ? AssetImage('assets/images/test_dp.jpg')
+                              as ImageProvider
+                          : NetworkImage(userData.data!.image!.path!),
                     ),
                     const Gap(8),
                     Text(
@@ -71,8 +73,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets{
                                     .textTheme
                                     .bodyLarge!
                                     .copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.textActionPrimaryLight),
+                                        fontWeight: FontWeight.w600,
+                                        color:
+                                            AppColors.textActionPrimaryLight),
                               ),
                               Text(
                                 'আপনার পয়েন্ট',
@@ -80,8 +83,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets{
                                     .textTheme
                                     .bodySmall!
                                     .copyWith(
-                                    fontWeight: FontWeight.w400,
-                                    color: AppColors.textActionPrimaryLight),
+                                        fontWeight: FontWeight.w400,
+                                        color:
+                                            AppColors.textActionPrimaryLight),
                               ),
                             ],
                           ),
@@ -106,8 +110,8 @@ class UserProfileView extends ConsumerWidget with CommonWidgets{
               Text(
                 "একাউন্ট",
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+                      fontWeight: FontWeight.w500,
+                    ),
               ),
               const Gap(10),
               CustomListTile(
@@ -115,13 +119,15 @@ class UserProfileView extends ConsumerWidget with CommonWidgets{
                   title: 'প্রোফাইল তথ্যাবলী',
                   onTap: () {}),
               CustomListTile(
-                  icon: "assets/icons/language.svg", title: 'ভাষা', onTap: () {}),
+                  icon: "assets/icons/language.svg",
+                  title: 'ভাষা',
+                  onTap: () {}),
               const Gap(24),
               Text(
                 "আমার আইটেম",
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+                      fontWeight: FontWeight.w500,
+                    ),
               ),
               const Gap(10),
               CustomListTile(
@@ -140,8 +146,8 @@ class UserProfileView extends ConsumerWidget with CommonWidgets{
               Text(
                 "সেটিংস",
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+                      fontWeight: FontWeight.w500,
+                    ),
               ),
               const Gap(10),
               Card(
@@ -171,8 +177,8 @@ class UserProfileView extends ConsumerWidget with CommonWidgets{
               Text(
                 "অন্যান্য",
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+                      fontWeight: FontWeight.w500,
+                    ),
               ),
               const Gap(10),
               CustomListTile(
@@ -201,57 +207,53 @@ class UserProfileView extends ConsumerWidget with CommonWidgets{
                   final authNotifier = ref.read(authNotifierProvider.notifier);
                   await authNotifier.clearAccessToken();
                   Nav().pushAndRemoveUntil(const LoginView());
-
                 },
               )
             ],
           );
-        }, error: (error, stackTrace) {
+        },
+        error: (error, stackTrace) {
           return Text("$error");
-        }, loading: () {
+        },
+        loading: () {
           return const ProfileSkeleton();
-        },),
-        bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.white,
-            showUnselectedLabels: true,
-            showSelectedLabels: true,
-            selectedLabelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColors.textTertiaryLight),
-            unselectedLabelStyle: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColors.textTertiaryLight),
-            items: [
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                    "assets/icons/bottom_nav_home_unselect.svg"),
-                label: "হোম",
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                    "assets/icons/bottom_nav_flash_card_unselect.svg"),
-                label: "ফ্ল্যাশ কার্ড",
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                    "assets/icons/bottom_nav_test_unselect.svg"),
-                label: "টেস্ট",
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                    "assets/icons/bottom_nav_notification_unselect.svg"),
-                label: "নটিফিকেশন",
-              ),
-              BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                    "assets/icons/bottom_nav_chat_unselect.svg"),
-                label: "ম্যাসেজ",
-              ),
-            ]),
+        },
       ),
+      bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.white,
+          showUnselectedLabels: true,
+          showSelectedLabels: true,
+          selectedLabelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+              fontWeight: FontWeight.w600, color: AppColors.textTertiaryLight),
+          unselectedLabelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
+              fontWeight: FontWeight.w600, color: AppColors.textTertiaryLight),
+          items: [
+            BottomNavigationBarItem(
+              icon:
+                  SvgPicture.asset("assets/icons/bottom_nav_home_unselect.svg"),
+              label: "হোম",
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                  "assets/icons/bottom_nav_flash_card_unselect.svg"),
+              label: "ফ্ল্যাশ কার্ড",
+            ),
+            BottomNavigationBarItem(
+              icon:
+                  SvgPicture.asset("assets/icons/bottom_nav_test_unselect.svg"),
+              label: "টেস্ট",
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                  "assets/icons/bottom_nav_notification_unselect.svg"),
+              label: "নটিফিকেশন",
+            ),
+            BottomNavigationBarItem(
+              icon:
+                  SvgPicture.asset("assets/icons/bottom_nav_chat_unselect.svg"),
+              label: "ম্যাসেজ",
+            ),
+          ]),
     );
   }
 }

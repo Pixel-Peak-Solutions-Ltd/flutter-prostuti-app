@@ -4,13 +4,11 @@ import 'package:gap/gap.dart';
 import 'package:pod_player/pod_player.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/features/course/enrolled_course_landing/repository/enrolled_course_landing_repo.dart';
-import 'package:prostuti/features/course/materials/record_class/view/record_class_view.dart';
 import 'package:prostuti/features/course/materials/record_class/viewmodel/change_btn_state.dart';
 import 'package:prostuti/features/course/materials/record_class/viewmodel/record_class_details_viewmodel.dart';
 import 'package:prostuti/features/course/materials/record_class/widgets/record_class_skeleton.dart';
 
 import '../../../../../core/services/debouncer.dart';
-import '../../../../../core/services/nav.dart';
 import '../../../../../core/services/size_config.dart';
 import '../viewmodel/get_record_class_id.dart';
 
@@ -83,7 +81,7 @@ class RecordClassDetailsViewState extends ConsumerState<RecordClassDetailsView>
                   ),
                   const Gap(32),
                   isLoading
-                      ? const CircularProgressIndicator()
+                      ? const Center(child: CircularProgressIndicator())
                       : ElevatedButton(
                           onPressed: ref.watch(changeBtnStateProvider) ||
                                   widget.isCompleted
@@ -106,8 +104,8 @@ class RecordClassDetailsViewState extends ConsumerState<RecordClassDetailsView>
                                                   .notifier)
                                               .setBtnState();
 
-                                          Nav().pushReplacement(
-                                              const RecordClassView());
+                                          // Nav().pushReplacement(
+                                          //     const RecordClassView());
                                         }
                                       },
                                       loadingController:

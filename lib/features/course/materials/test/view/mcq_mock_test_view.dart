@@ -185,10 +185,10 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                               );
                             }
                           : () {
-                        Fluttertoast.showToast(
-                          msg: "You need to submit atleast 1 answer");
-
-                      },
+                              print(answerList);
+                              Fluttertoast.showToast(
+                                  msg: "You need to submit atleast 1 answer");
+                            },
                       text: "সাবমিট করুন")
                 ],
               );
