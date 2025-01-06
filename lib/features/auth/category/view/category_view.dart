@@ -99,7 +99,8 @@ class CategoryView extends ConsumerWidget {
                                         context.mounted) {
                                       Fluttertoast.showToast(
                                           msg: "signup Successful");
-                                      Nav().pushReplacement(const LoginView());
+                                      Nav().pushAndRemoveUntil(
+                                          const LoginView());
                                     } else if (response.error != null) {
                                       if (context.mounted) {
                                         ScaffoldMessenger.of(context)
