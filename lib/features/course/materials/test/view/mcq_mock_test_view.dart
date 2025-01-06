@@ -38,6 +38,15 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final testDetails = ref.read(mCQTestDetailsViewmodelProvider);
       testDetails.whenData((test) {
+        // Pre-populate answerList
+        for (var question in test.data!.questionList!) {
+          answerList.add({
+            "question_id": question.sId,
+            "selectedOption": "null",
+          });
+        }
+
+        // Initialize and start the countdown timer
         final duration = Duration(minutes: test.data!.time!.toInt());
         ref.read(countdownProvider.notifier).initialize(duration);
         ref.read(countdownProvider.notifier).startTimer();
@@ -54,189 +63,184 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
     return Scaffold(
       appBar: commonAppbar("মক টেস্ট"),
       body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: mCQTestDetailsAsync.when(
-            data: (test) {
-              // countdownNotifier.startTimer();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: AppColors.shadeSecondaryLight,
-                      border:
-                          Border.all(color: AppColors.borderFocusPrimaryLight),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "বিষয় :",
-                              style: theme.textTheme.bodyLarge!.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.borderFocusPrimaryLight),
-                            ),
-                            Text(
-                              "${test.data!.name}",
-                              style: theme.textTheme.bodyLarge!.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.borderFocusPrimaryLight),
-                            ),
-                          ],
-                        ),
-                        const Gap(8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "টেস্ট টাইপ :",
-                              style: theme.textTheme.bodyLarge!.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.borderFocusPrimaryLight),
-                            ),
-                            Text(
-                              "${test.data!.type}",
-                              style: theme.textTheme.bodyLarge!.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.borderFocusPrimaryLight),
-                            ),
-                          ],
-                        ),
-                        const Gap(8),
-                        Text(
-                          "প্রতিটি প্রশ্নে 1 পয়েন্ট থাকে এবং প্রতিটি ভুল উত্তরের জন্য \n0.5 পয়েন্ট কাটা হবে।",
-                          style: theme.textTheme.bodyMedium,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
+        padding: const EdgeInsets.all(16.0),
+        child: mCQTestDetailsAsync.when(
+          data: (test) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Test Info Section
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: AppColors.shadeSecondaryLight,
+                    border:
+                    Border.all(color: AppColors.borderFocusPrimaryLight),
                   ),
-                  const Gap(16),
-                  CountdownTimer(),
-                  const Gap(24),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: test.data!.questionList!.length,
-                      itemBuilder: (context, index) {
-                        return MCQQuestionWidget(
-                          questionNumber: index + 1,
-                          theme: theme,
-                          questionList: test.data!.questionList![index],
-                          selectedAnswers: selectedAnswers,
-                          answerList: answerList,
-                        );
-                      },
-                    ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "বিষয় :",
+                            style: theme.textTheme.bodyLarge!.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.borderFocusPrimaryLight),
+                          ),
+                          Text(
+                            "${test.data!.name}",
+                            style: theme.textTheme.bodyLarge!.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.borderFocusPrimaryLight),
+                          ),
+                        ],
+                      ),
+                      const Gap(8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "টেস্ট টাইপ :",
+                            style: theme.textTheme.bodyLarge!.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.borderFocusPrimaryLight),
+                          ),
+                          Text(
+                            "${test.data!.type}",
+                            style: theme.textTheme.bodyLarge!.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.borderFocusPrimaryLight),
+                          ),
+                        ],
+                      ),
+                      const Gap(8),
+                      Text(
+                        "প্রতিটি প্রশ্নে 1 পয়েন্ট থাকে এবং প্রতিটি ভুল উত্তরের জন্য \n0.5 পয়েন্ট কাটা হবে।",
+                        style: theme.textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                  isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : LongButton(
-                          onPressed: answerList.length > 1
-                              ? () {
-                                  _debouncer.run(
-                                      action: () async {
-                                        ref
-                                            .read(countdownProvider.notifier)
-                                            .stopTimer();
-                                        final markAsComplete = await ref
-                                            .read(
-                                                enrolledCourseLandingRepoProvider)
-                                            .markAsComplete({
-                                          "materialType": "test",
-                                          "material_id":
-                                              ref.read(getTestByIdProvider)
-                                        });
-
-                                        int remainingTime = ref
-                                            .read(countdownProvider)
-                                            .remainingTime
-                                            .inSeconds;
-                                        int totalTime =
-                                            test.data!.time!.toInt() * 60;
-                                        final timeTaken =
-                                            totalTime - remainingTime;
-
-                                        final payload = {
-                                          "course_id": test.data!.courseId,
-                                          "lesson_id": test.data!.lessonId!.sId,
-                                          "test_id": test.data!.sId,
-                                          "answers": answerList,
-                                          "timeTaken": timeTaken
-                                        };
-                                        final response = await ref
-                                            .read(testRepoProvider)
-                                            .submitMCQTest(payload: payload);
-
-                                        print(response);
-
-                                        response.fold(
-                                          (l) {
-                                            print(l.message);
-                                          },
-                                          (testResult) {
-                                            if (markAsComplete) {
-                                              Nav().pushReplacement(
-                                                  TestResultScreen(
-                                                resultData: {
-                                                  "testTitle": test.data!.name,
-                                                  "scorePercentage": ((testResult
-                                                                  .data!
-                                                                  .rightScore!
-                                                                  .toInt() /
-                                                              testResult.data!
-                                                                  .totalScore!
-                                                                  .toInt()) *
-                                                          100)
-                                                      .toInt(),
-                                                  "feedback": "চমৎকার",
-                                                  "pointsEarned":
-                                                      testResult.data!.score,
-                                                  "timeTaken": timeTaken,
-                                                  "correctAns": testResult
-                                                      .data!.rightScore,
-                                                  "wrongAns": testResult
-                                                      .data!.wrongScore,
-                                                  "skippedAns": testResult
-                                                          .data!.totalScore! -
-                                                      (testResult
-                                                              .data!.rightScore!
-                                                              .toInt() +
-                                                          testResult
-                                                              .data!.wrongScore!
-                                                              .toInt()),
-                                                },
-                                              ));
-                                            } else {
-                                              Fluttertoast.showToast(
-                                                  msg:
-                                                      "You might have already given the exam");
-                                            }
-                                          },
-                                        );
-                                      },
-                                      loadingController:
-                                          ref.read(_loadingProvider.notifier));
-                                }
-                              : () {
-                                  print(answerList);
-                                  Fluttertoast.showToast(
-                                      msg:
-                                          "You need to submit atleast 1 answer");
-                                },
-                          text: "সাবমিট করুন")
-                ],
-              );
-            },
-            error: (error, stackTrace) {
-              print(error);
-              print(stackTrace);
-            },
-            loading: () => const MockQuestionSkeleton(),
-          )),
+                ),
+                const Gap(16),
+                CountdownTimer(),
+                const Gap(24),
+                // Questions Section
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: test.data!.questionList!.length,
+                    itemBuilder: (context, index) {
+                      return MCQQuestionWidget(
+                        questionNumber: index + 1,
+                        theme: theme,
+                        questionList: test.data!.questionList![index],
+                        selectedAnswers: selectedAnswers,
+                        answerList: answerList,
+                      );
+                    },
+                  ),
+                ),
+                // Submit Button
+                isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : LongButton(
+                  onPressed: () {
+                    if (answerList.any(
+                            (answer) => answer['selectedOption'] != "null")) {
+                      _submitTest(test);
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: "You need to submit at least 1 answer.",
+                      );
+                    }
+                  },
+                  text: "সাবমিট করুন",
+                ),
+              ],
+            );
+          },
+          error: (error, stackTrace) {
+            print(error);
+            print(stackTrace);
+          },
+          loading: () => const MockQuestionSkeleton(),
+        ),
+      ),
     );
+  }
+
+  Future<void> _submitTest(dynamic test) async {
+    _debouncer.run(
+      action: () async {
+        print(answerList);
+        ref.read(countdownProvider.notifier).stopTimer();
+
+        final remainingTime =
+            ref
+                .read(countdownProvider)
+                .remainingTime
+                .inSeconds;
+        final totalTime = test.data!.time!.toInt() * 60;
+        final timeTaken = totalTime - remainingTime;
+
+        final payload = {
+          "course_id": test.data!.courseId,
+          "lesson_id": test.data!.lessonId!.sId,
+          "test_id": test.data!.sId,
+          "answers": answerList,
+          "timeTaken": timeTaken,
+        };
+
+        final response =
+        await ref.read(testRepoProvider).submitMCQTest(payload: payload);
+
+        response.fold(
+              (l) => Fluttertoast.showToast(msg: l.message),
+              (testResult) => _navigateToResults(test, testResult, timeTaken),
+        );
+      },
+      loadingController: ref.read(_loadingProvider.notifier),
+    );
+  }
+
+  void _navigateToResults(dynamic test, dynamic testResult,
+      int timeTaken) async {
+    _debouncer.run(
+      action: () async {
+        final markAsComplete = await ref
+            .read(enrolledCourseLandingRepoProvider)
+            .markAsComplete({
+          "materialType": "test",
+          "material_id": ref.read(getTestByIdProvider)
+        });
+
+        if (markAsComplete) {
+          Nav().pushReplacement(
+            TestResultScreen(
+              resultData: {
+                "testTitle": test.data!.name,
+                "scorePercentage": ((testResult.data!.rightScore!.toInt() /
+                    testResult.data!.totalScore!.toInt()) *
+                    100)
+                    .toInt(),
+                "feedback": "চমৎকার",
+                "pointsEarned": testResult.data!.score,
+                "timeTaken": timeTaken,
+                "correctAns": testResult.data!.rightScore,
+                "wrongAns": testResult.data!.wrongScore,
+                "skippedAns": testResult.data!.totalScore! -
+                    (testResult.data!.rightScore!.toInt() +
+                        testResult.data!.wrongScore!.toInt()),
+              },
+            ),
+          );
+        } else {
+          Fluttertoast.showToast(
+            msg: "Something went wrong, Please try again.",
+          );
+        };
+      }, loadingController: ref.read(_loadingProvider.notifier),);
   }
 }

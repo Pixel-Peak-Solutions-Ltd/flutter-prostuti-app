@@ -159,7 +159,7 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets {
                 children: [
                   LongButton(
                     onPressed: () {
-                      Nav().push(const MCQMockTestHistoryScreen());
+                      Nav().pushReplacement(const MCQMockTestHistoryScreen());
                     },
                     text: "সম্পূর্ণ ফলাফল দেখুন",
                   ),

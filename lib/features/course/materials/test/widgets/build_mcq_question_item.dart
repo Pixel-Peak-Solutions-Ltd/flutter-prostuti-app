@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import '../../../../../core/configs/app_colors.dart';
@@ -24,33 +25,24 @@ class MCQQuestionWidget extends StatefulWidget {
 }
 
 class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
+  void updateAnswerList(int? selectedIndex) {
+    final answerIndex = widget.answerList.indexWhere(
+          (answer) => answer['question_id'] == widget.questionList.sId,
+    );
+
+    if (answerIndex != -1) {
+      widget.answerList[answerIndex]['selectedOption'] =
+      selectedIndex != null
+          ? widget.questionList.options![selectedIndex]
+          : "null";
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final ansOption = ["ক", "খ", "গ", "ঘ"];
     int? selectedOption = widget.selectedAnswers[widget.questionNumber];
-
-    void updateAnswerList(int? selectedOption) {
-      // Find the question object in the answer list.
-      var existingAnswer = widget.answerList.firstWhere(
-            (answer) => answer['question_id'] == widget.questionList.sId,
-        orElse: () => {},
-      );
-
-      if (existingAnswer.isNotEmpty) {
-        // Update the existing answer.
-        existingAnswer['selectedOption'] = selectedOption != null
-            ? widget.questionList.options![selectedOption]
-            : "";
-      } else {
-        // Add a new answer object.
-        widget.answerList.add({
-          "question_id": widget.questionList.sId,
-          "selectedOption": selectedOption != null
-              ? widget.questionList.options![selectedOption]
-              : "",
-        });
-      }
-    }
 
     return Column(
       children: [
@@ -64,6 +56,7 @@ class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Question Title
               Text(
                 "${widget.questionNumber}. ${widget.questionList.title}",
                 style: const TextStyle(
@@ -72,6 +65,7 @@ class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
                 ),
               ),
               const SizedBox(height: 8),
+              // Options
               Column(
                 children: List.generate(4, (index) {
                   bool isSelected = selectedOption == index;
@@ -102,7 +96,9 @@ class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
                             height: 24,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: isSelected ? Colors.blue : Colors.grey.shade300,
+                              color: isSelected
+                                  ? Colors.blue
+                                  : Colors.grey.shade300,
                             ),
                             child: Center(
                               child: Text(
@@ -115,11 +111,13 @@ class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
                             ),
                           ),
                           const SizedBox(width: 16),
-                          Text(
-                            widget.questionList.options![index],
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: isSelected ? Colors.blue : Colors.black,
+                          Expanded(
+                            child: Text(
+                              widget.questionList.options![index],
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: isSelected ? Colors.blue : Colors.black,
+                              ),
                             ),
                           ),
                         ],
@@ -136,4 +134,3 @@ class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
     );
   }
 }
-
