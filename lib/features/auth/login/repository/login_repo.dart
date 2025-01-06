@@ -1,14 +1,12 @@
 // __brick__/repository/login_repo.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/common/view_model/auth_notifier.dart';
+import 'package:prostuti/core/services/api_response.dart';
 import 'package:prostuti/core/services/dio_service.dart';
-import 'package:prostuti/features/auth/login/model/login_model.dart';
-
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
 import 'package:prostuti/core/services/error_handler.dart';
 import 'package:prostuti/core/services/error_response.dart';
-import 'package:prostuti/core/services/api_response.dart';
+import 'package:prostuti/features/auth/login/model/login_model.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'login_repo.g.dart';
 
@@ -33,17 +31,19 @@ class LoginRepo {
       final loginResponse = Login.fromJson(response.data);
       final accessToken = loginResponse.data!.accessToken!;
       final accessTokenExpiresIn = loginResponse.data!.accessTokenExpiresIn!;
-      final refreshToken = loginResponse.data!.refreshToken!;
-      final refreshTokenExpiresIn = loginResponse.data!.refreshTokenExpiresIn!;
+      final refreshToken = loginResponse.data!.refreshToken;
+      final refreshTokenExpiresIn = loginResponse.data!.refreshTokenExpiresIn;
 
       final accessExpiryTime = DateTime.now()
           .add(Duration(seconds: accessTokenExpiresIn))
           .millisecondsSinceEpoch;
-      final refreshExpiryTime = DateTime.now()
-          .add(Duration(seconds: refreshTokenExpiresIn))
-          .millisecondsSinceEpoch;
+      final refreshExpiryTime =
+          refreshToken != null && refreshTokenExpiresIn != null
+              ? DateTime.now()
+                  .add(Duration(seconds: refreshTokenExpiresIn))
+                  .millisecondsSinceEpoch
+              : null;
 
-      // print("$accessToken $accessExpiryTime, $refreshToken, $refreshExpiryTime,$rememberMe}");
       await ref.read(authNotifierProvider.notifier).setAccessToken(accessToken,
           accessExpiryTime, refreshToken, refreshExpiryTime, rememberMe);
 

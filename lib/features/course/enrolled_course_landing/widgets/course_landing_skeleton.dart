@@ -111,7 +111,7 @@ class CourseLandingSkeleton extends StatelessWidget with CommonWidgets {
                               size: 20,
                             ),
                             itemName: "েকর্ড ক্লাস - ${i + 1}",
-                            icon: Icons.video_collection_outlined,
+                            icon: "assets/icons/resource.svg",
                             lessonName: 'Lesson - ${i + 1}')
                     ],
                   ),

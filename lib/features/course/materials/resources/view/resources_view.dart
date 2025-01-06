@@ -63,7 +63,7 @@ class ResourcesViewState extends ConsumerState<ResourcesView>
                           isCompleted: isCompleted,
                         ),
                         itemName: "${resource[index].name}",
-                        icon: Icons.video_collection_rounded,
+                        icon: "assets/icons/resource.svg",
                         lessonName: '${resource[index].lessonId!.number} '),
                   );
                 },

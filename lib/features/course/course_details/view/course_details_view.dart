@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
@@ -186,10 +187,11 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                   children: [
                                     Row(
                                       children: [
-                                        Icon(
-                                          Icons.video_collection_outlined,
-                                          size: 18,
-                                          color: Colors.grey.shade600,
+                                        SvgPicture.asset(
+                                          "assets/icons/record_class.svg",
+                                          height: 20,
+                                          width: 20,
+                                          fit: BoxFit.cover,
                                         ),
                                         const Gap(8),
                                         SizedBox(
@@ -231,10 +233,11 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                   children: [
                                     Row(
                                       children: [
-                                        Icon(
-                                          Icons.picture_as_pdf_outlined,
-                                          size: 18,
-                                          color: Colors.grey.shade600,
+                                        SvgPicture.asset(
+                                          "assets/icons/resource.svg",
+                                          height: 20,
+                                          width: 20,
+                                          fit: BoxFit.cover,
                                         ),
                                         const Gap(8),
                                         SizedBox(
@@ -276,10 +279,11 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                   children: [
                                     Row(
                                       children: [
-                                        Icon(
-                                          Icons.assignment_outlined,
-                                          size: 18,
-                                          color: Colors.grey.shade600,
+                                        SvgPicture.asset(
+                                          "assets/icons/assignment.svg",
+                                          height: 20,
+                                          width: 20,
+                                          fit: BoxFit.cover,
                                         ),
                                         const Gap(8),
                                         SizedBox(
@@ -321,10 +325,11 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                   children: [
                                     Row(
                                       children: [
-                                        Icon(
-                                          Icons.menu_book_rounded,
-                                          size: 18,
-                                          color: Colors.grey.shade600,
+                                        SvgPicture.asset(
+                                          "assets/icons/test.svg",
+                                          height: 20,
+                                          width: 20,
+                                          fit: BoxFit.cover,
                                         ),
                                         const Gap(8),
                                         SizedBox(

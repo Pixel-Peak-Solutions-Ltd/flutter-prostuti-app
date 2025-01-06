@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/size_config.dart';
@@ -73,7 +74,7 @@ mixin CommonWidgets {
       {required Widget trailingIcon,
       required String lessonName,
       required String itemName,
-      required IconData icon}) {
+      required String icon}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
@@ -95,13 +96,11 @@ mixin CommonWidgets {
             style: theme.textTheme.bodySmall!.copyWith(
                 fontWeight: FontWeight.w600, color: Colors.grey.shade700),
           ),
-          leading: CircleAvatar(
-            backgroundColor: Colors.red,
-            child: Icon(
-              icon,
-              size: 20,
-              color: Colors.white,
-            ),
+          leading: SvgPicture.asset(
+            icon,
+            height: 25,
+            width: 25,
+            fit: BoxFit.cover,
           ),
           trailing: trailingIcon),
     );

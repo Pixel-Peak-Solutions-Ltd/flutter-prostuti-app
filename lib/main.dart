@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
 import 'package:prostuti/features/home_screen/view/home_screen_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'common/helpers/theme_provider.dart';
 import 'core/configs/app_themes.dart';
-import 'core/services/sharedpref_service.dart';
 import 'core/services/size_config.dart';
 
 void main() {
@@ -54,7 +54,13 @@ class MyApp extends ConsumerWidget {
 }
 
 final isLoggedInProvider = FutureProvider<bool>((ref) async {
-  final prefsService = SharedPreferencesService();
-  final accessToken = await prefsService.getAccessToken(); // Get access token
-  return accessToken != null; // Return true if the token exists
+  final prefs = await SharedPreferences.getInstance();
+  final accessToken = prefs.getString('accessToken');
+  final accessExpiryTime = prefs.getInt('accessExpiryTime');
+
+  if (accessToken != null && accessExpiryTime != null) {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    return accessExpiryTime > now;
+  }
+  return false;
 });

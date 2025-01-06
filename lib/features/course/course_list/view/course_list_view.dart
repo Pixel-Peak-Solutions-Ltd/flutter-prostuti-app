@@ -46,7 +46,7 @@ class CourseListViewState extends ConsumerState<CourseListView>
       body: Skeletonizer(
         enabled: publishedCourse.isLoading,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

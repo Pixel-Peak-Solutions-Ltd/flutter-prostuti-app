@@ -64,7 +64,7 @@ class AssignmentViewState extends ConsumerState<AssignmentView>
                             isCompleted: isCompleted,
                           ),
                           itemName: "${assignment[index].assignmentNo}",
-                          icon: Icons.video_collection_rounded,
+                          icon: "assets/icons/assignment.svg",
                           lessonName: '${assignment[index].lessonId!.number} '),
                     );
                   },

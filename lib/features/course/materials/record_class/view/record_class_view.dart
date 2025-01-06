@@ -67,7 +67,7 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
                             isCompleted: isCompleted,
                           ),
                           itemName: "${recordClass[index].recodeClassName}",
-                          icon: Icons.video_collection_rounded,
+                          icon: "assets/icons/record_class.svg",
                           lessonName:
                               '${recordClass[index].lessonId!.number} '),
                     );

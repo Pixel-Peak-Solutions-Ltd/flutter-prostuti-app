@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:prostuti/secrets/secrets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/view_model/auth_notifier.dart';
 
@@ -18,11 +19,25 @@ Dio dio(DioRef ref) {
   ))
     ..interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        // Get the accessToken from the AuthNotifier's state
-        if (authNotifier is AsyncData && authNotifier.value != null) {
-          final accessToken = authNotifier.value;
-          if (accessToken != "") {
+        // Get the accessToken and accessExpiryTime from SharedPreferences
+        final prefs = await SharedPreferences.getInstance();
+        final accessToken = prefs.getString('accessToken');
+        final accessExpiryTime = prefs.getInt('accessExpiryTime');
+
+        if (accessToken != null && accessExpiryTime != null) {
+          final now = DateTime.now().millisecondsSinceEpoch;
+          if (accessExpiryTime > now) {
             options.headers['Authorization'] = 'Bearer $accessToken';
+          } else {
+            // Token has expired, attempt to refresh
+            final authNotifier = ref.read(authNotifierProvider.notifier);
+            final newAccessToken = await authNotifier.createAccessToken();
+            if (newAccessToken != null) {
+              options.headers['Authorization'] = 'Bearer $newAccessToken';
+            } else {
+              // Handle refresh failure, e.g., logout the user
+              await authNotifier.clearAccessToken();
+            }
           }
         }
         handler.next(options);
@@ -33,9 +48,9 @@ Dio dio(DioRef ref) {
           final authNotifier = ref.read(authNotifierProvider.notifier);
           final newAccessToken = await authNotifier.createAccessToken();
 
-          if (newAccessToken == null || newAccessToken == "") {
-            Fluttertoast.showToast(
-                msg: "error with: ${error.response?.statusCode}");
+          if (newAccessToken == null || newAccessToken.isEmpty) {
+            // Handle refresh failure, e.g., logout the user
+            Fluttertoast.showToast(msg: "Authentication failed");
             return handler.reject(error);
           }
 

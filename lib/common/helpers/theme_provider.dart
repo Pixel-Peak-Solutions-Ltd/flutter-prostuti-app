@@ -29,7 +29,7 @@ class ThemeNotifier extends _$ThemeNotifier {
         themeMode = ThemeMode.light;
         break;
       default:
-        themeMode = ThemeMode.system; // Default to system if no saved theme
+        themeMode = ThemeMode.light; // Default to system if no saved theme
     }
 
     // Update the state after loading the saved theme
@@ -65,6 +65,6 @@ class ThemeNotifier extends _$ThemeNotifier {
             ? 'dark'
             : themeMode == ThemeMode.light
                 ? 'light'
-                : 'system');
+                : 'light');
   }
 }

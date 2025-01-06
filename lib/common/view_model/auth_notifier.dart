@@ -37,69 +37,56 @@ class AuthNotifier extends _$AuthNotifier {
   Future<String?> createAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     final refreshToken = prefs.getString('refreshToken');
-    // final refreshExpiryTime = prefs.getInt('refreshExpiryTime');
+    final refreshExpiryTime = prefs.getInt('refreshExpiryTime');
     final rememberMe = prefs.getBool('rememberMe');
 
-    if (refreshToken != null) {
-      try {
-        final response = await Dio().post(
-          '$BASE_URL/auth/student/refresh-token',
-          data: {'refreshToken': refreshToken},
-        );
+    if (refreshToken != null && refreshExpiryTime != null) {
+      final now = DateTime.now().millisecondsSinceEpoch;
+      if (refreshExpiryTime > now) {
+        try {
+          final response = await Dio().post(
+            '$BASE_URL/auth/student/refresh-token',
+            data: {'refreshToken': refreshToken},
+          );
 
-        if (response.statusCode == 200) {
-          final newAccessTokenResponse = Login.fromJson(response.data);
-          final accessToken = newAccessTokenResponse.data!.accessToken!;
-          final accessTokenExpiresIn =
-              newAccessTokenResponse.data!.accessTokenExpiresIn!;
-          final refreshToken = newAccessTokenResponse.data!.refreshToken ?? "";
-          final refreshTokenExpiresIn =
-              newAccessTokenResponse.data!.refreshTokenExpiresIn ?? 0;
-          final refreshExpiryTime = DateTime.now()
-              .add(Duration(seconds: refreshTokenExpiresIn))
-              .millisecondsSinceEpoch;
+          if (response.statusCode == 200) {
+            final newAccessTokenResponse = Login.fromJson(response.data);
+            final accessToken = newAccessTokenResponse.data!.accessToken!;
+            final accessTokenExpiresIn =
+                newAccessTokenResponse.data!.accessTokenExpiresIn!;
+            final newRefreshToken = newAccessTokenResponse.data!.refreshToken;
+            final refreshTokenExpiresIn =
+                newAccessTokenResponse.data!.refreshTokenExpiresIn;
 
-          final accessExpiryTime = DateTime.now()
-              .add(Duration(seconds: accessTokenExpiresIn))
-              .millisecondsSinceEpoch;
+            final accessExpiryTime = DateTime.now()
+                .add(Duration(seconds: accessTokenExpiresIn))
+                .millisecondsSinceEpoch;
+            final refreshExpiryTime =
+                newRefreshToken != null && refreshTokenExpiresIn != null
+                    ? DateTime.now()
+                        .add(Duration(seconds: refreshTokenExpiresIn))
+                        .millisecondsSinceEpoch
+                    : null;
 
-          await ref.read(authNotifierProvider.notifier).setAccessToken(
-              accessToken,
-              accessExpiryTime,
-              refreshToken,
-              refreshExpiryTime,
-              rememberMe);
+            await ref.read(authNotifierProvider.notifier).setAccessToken(
+                accessToken,
+                accessExpiryTime,
+                newRefreshToken,
+                refreshExpiryTime,
+                rememberMe);
 
-          return accessToken;
+            return accessToken;
+          }
+        } catch (e) {
+          await clearAccessToken(); // If refresh fails, logout the user
         }
-      } catch (e) {
-        await clearAccessToken(); // If refresh fails, logout the user
+      } else {
+        // Refresh token has expired, logout the user
+        await clearAccessToken();
       }
     }
     return null;
   }
-
-  // Auto-login logic (called on app start)
-  /*Future<void> autoLogin() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('accessToken');
-    final rememberMe = prefs.getBool('rememberMe');
-    final refreshToken = prefs.getString('refreshToken');
-    final refreshExpiryTime = DateTime.parse(prefs.getInt('refreshExpiryTime').toString());
-    final accessExpiryTime = DateTime.parse(prefs.getInt('accessExpiryTime').toString());
-
-    if (refreshExpiryTime.isBefore(DateTime.now())) {
-      // logout
-      // await setAccessToken(token);
-    } else {
-      if(accessExpiryTime.isBefore(DateTime.now())){
-        // newAccessToken
-      }else{
-        // homepage
-      }
-      await clearAccessToken();
-    }
-  }*/
 
   // Load the access token from SharedPreferences
   Future<String?> _loadAccessToken() async {
@@ -113,9 +100,9 @@ class AuthNotifier extends _$AuthNotifier {
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setString('accessToken', accessToken);
-    await prefs.setString('accessExpiryTime', accessExpiryTime.toString());
+    await prefs.setInt('accessExpiryTime', accessExpiryTime); // Store as int
 
-    if (refreshToken != null && refreshExpiryTime! > 0) {
+    if (refreshToken != null && refreshExpiryTime != null) {
       await prefs.setString('refreshToken', refreshToken);
       await prefs.setInt('refreshExpiryTime', refreshExpiryTime);
     }

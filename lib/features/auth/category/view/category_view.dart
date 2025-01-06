@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/debouncer.dart';
 import 'package:prostuti/core/services/error_handler.dart';
@@ -9,6 +10,7 @@ import 'package:prostuti/features/auth/signup/viewmodel/otp_viewmodel.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/password_viewmodel.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../../../../core/services/nav.dart';
 import '../../login/view/login_view.dart';
 import '../../signup/repository/signup_repo.dart';
 import '../../signup/viewmodel/email_viewmodel.dart';
@@ -95,10 +97,9 @@ class CategoryView extends ConsumerWidget {
 
                                     if (response.data != null &&
                                         context.mounted) {
-                                      Navigator.of(context)
-                                          .pushReplacement(MaterialPageRoute(
-                                        builder: (context) => const LoginView(),
-                                      ));
+                                      Fluttertoast.showToast(
+                                          msg: "signup Successful");
+                                      Nav().pushReplacement(const LoginView());
                                     } else if (response.error != null) {
                                       if (context.mounted) {
                                         ScaffoldMessenger.of(context)

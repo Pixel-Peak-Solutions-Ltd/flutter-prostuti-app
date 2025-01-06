@@ -109,7 +109,7 @@ class TestListViewState extends ConsumerState<TestListView>
                             isCompleted: isCompleted,
                           ),
                           itemName: "টেস্ট: ${test[index].name}",
-                          icon: Icons.question_answer_rounded,
+                          icon: "assets/icons/test.svg",
                           lessonName: '${test[index].lessonId!.number} ',
                         ),
                       );
@@ -152,7 +152,7 @@ class TestListViewState extends ConsumerState<TestListView>
                             isCompleted: isCompleted,
                           ),
                           itemName: "টেস্ট: ${test[index].name}",
-                          icon: Icons.edit_note_rounded,
+                          icon: "assets/icons/test.svg",
                           lessonName: '${test[index].lessonId!.number} ',
                         ),
                       );

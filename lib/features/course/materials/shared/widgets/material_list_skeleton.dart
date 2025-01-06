@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../../../../core/services/nav.dart';
-
 class MaterialListSkeleton extends StatelessWidget with CommonWidgets {
   MaterialListSkeleton({super.key});
 
@@ -31,9 +29,9 @@ class MaterialListSkeleton extends StatelessWidget with CommonWidgets {
                   children: [
                     for (int i = 0; i < 3; i++)
                       lessonItem(theme,
-                          icon: Icons.abc,
+                          icon: "assets/icons/resource.svg",
                           itemName: "",
-                          trailingIcon: Icon(
+                          trailingIcon: const Icon(
                             Icons.check_circle,
                             color: Colors.blue,
                             size: 20,

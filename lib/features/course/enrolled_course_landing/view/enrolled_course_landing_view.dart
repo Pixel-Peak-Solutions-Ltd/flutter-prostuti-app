@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
@@ -10,9 +11,9 @@ import 'package:prostuti/features/course/materials/assignment/view/assignment_vi
 import 'package:prostuti/features/course/materials/record_class/view/record_class_view.dart';
 import 'package:prostuti/features/course/materials/resources/view/resources_view.dart';
 import 'package:prostuti/features/course/materials/shared/widgets/trailing_icon.dart';
+import 'package:prostuti/features/course/materials/test/view/test_view.dart';
 
 import '../../course_details/widgets/expandable_text.dart';
-import 'package:prostuti/features/course/materials/test/view/test_view.dart';
 
 enum GridItem {
   recordedClass("assets/icons/video.png", "রেকর্ড ক্লাস"),
@@ -189,10 +190,11 @@ class EnrolledCourseLandingViewState
                                   children: [
                                     Row(
                                       children: [
-                                        Icon(
-                                          Icons.video_collection_outlined,
-                                          size: 18,
-                                          color: Colors.grey.shade600,
+                                        SvgPicture.asset(
+                                          "assets/icons/record_class.svg",
+                                          height: 20,
+                                          width: 20,
+                                          fit: BoxFit.cover,
                                         ),
                                         const Gap(8),
                                         SizedBox(
@@ -236,10 +238,11 @@ class EnrolledCourseLandingViewState
                                   children: [
                                     Row(
                                       children: [
-                                        Icon(
-                                          Icons.picture_as_pdf_outlined,
-                                          size: 18,
-                                          color: Colors.grey.shade600,
+                                        SvgPicture.asset(
+                                          "assets/icons/resource.svg",
+                                          height: 20,
+                                          width: 20,
+                                          fit: BoxFit.cover,
                                         ),
                                         const Gap(8),
                                         SizedBox(
@@ -283,10 +286,11 @@ class EnrolledCourseLandingViewState
                                   children: [
                                     Row(
                                       children: [
-                                        Icon(
-                                          Icons.assignment_outlined,
-                                          size: 18,
-                                          color: Colors.grey.shade600,
+                                        SvgPicture.asset(
+                                          "assets/icons/assignment.svg",
+                                          height: 20,
+                                          width: 20,
+                                          fit: BoxFit.cover,
                                         ),
                                         const Gap(8),
                                         SizedBox(
@@ -330,10 +334,11 @@ class EnrolledCourseLandingViewState
                                   children: [
                                     Row(
                                       children: [
-                                        Icon(
-                                          Icons.menu_book_rounded,
-                                          size: 18,
-                                          color: Colors.grey.shade600,
+                                        SvgPicture.asset(
+                                          "assets/icons/test.svg",
+                                          height: 20,
+                                          width: 20,
+                                          fit: BoxFit.cover,
                                         ),
                                         const Gap(8),
                                         SizedBox(
