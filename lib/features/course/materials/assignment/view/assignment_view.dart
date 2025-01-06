@@ -5,7 +5,6 @@ import 'package:prostuti/features/course/materials/assignment/view/assignment_de
 import 'package:prostuti/features/course/materials/assignment/viewmodel/assignment_viewmodel.dart';
 import 'package:prostuti/features/course/materials/assignment/viewmodel/get_assignment_by_id.dart';
 
-import '../../../../../core/services/nav.dart';
 import '../../../course_list/viewmodel/get_course_by_id.dart';
 import '../../get_material_completion.dart';
 import '../../shared/widgets/material_list_skeleton.dart';
@@ -41,7 +40,7 @@ class AssignmentViewState extends ConsumerState<AssignmentView>
                         completedSet.contains(assignment[index].sId);
 
                     return InkWell(
-                      onTap: () {
+                      onTap: () async {
                         DateTime parsedDate =
                             DateTime.parse(assignment[index].unlockDate!);
                         DateTime now = DateTime.now();
@@ -53,9 +52,18 @@ class AssignmentViewState extends ConsumerState<AssignmentView>
                               .watch(getAssignmentByIdProvider.notifier)
                               .setAssignmentId(assignment[index].sId!);
 
-                          Nav().push(AssignmentDetailsView(
-                            isCompleted: isCompleted,
-                          ));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AssignmentDetailsView(
+                                isCompleted: isCompleted,
+                              ),
+                            ),
+                          ).then((value) {
+                            if (value ?? false) {
+                              ref.refresh(completedIdProvider(courseId));
+                            }
+                          });
                         }
                       },
                       child: lessonItem(theme,

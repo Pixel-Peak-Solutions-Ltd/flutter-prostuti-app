@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
-import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/materials/record_class/view/record_class_details_view.dart';
 import 'package:prostuti/features/course/materials/record_class/viewmodel/get_record_class_id.dart';
 import 'package:prostuti/features/course/materials/record_class/viewmodel/record_class_viewmodel.dart';
@@ -53,12 +52,21 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
                           ref
                               .watch(getRecordClassIdProvider.notifier)
                               .setRecordClassId(recordClass[index].sId!);
-                          Nav().push(RecordClassDetailsView(
-                            videoUrl: recordClass[index].classVideoURL!.path!,
-                            isCompleted: isCompleted,
-                          ));
 
-                          ref.read(completedIdProvider(courseId));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RecordClassDetailsView(
+                                      videoUrl: recordClass[index]
+                                          .classVideoURL!
+                                          .path!,
+                                      isCompleted: isCompleted,
+                                    )),
+                          ).then((value) {
+                            if (value ?? false) {
+                              ref.refresh(completedIdProvider(courseId));
+                            }
+                          });
                         }
                       },
                       child: lessonItem(theme,

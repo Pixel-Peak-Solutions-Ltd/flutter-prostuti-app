@@ -5,7 +5,6 @@ import 'package:prostuti/features/course/materials/resources/view/resource_detai
 import 'package:prostuti/features/course/materials/resources/viewmodel/get_resource_by_id.dart';
 import 'package:prostuti/features/course/materials/resources/viewmodel/resources_viewmodel.dart';
 
-import '../../../../../core/services/nav.dart';
 import '../../../course_list/viewmodel/get_course_by_id.dart';
 import '../../get_material_completion.dart';
 import '../../shared/widgets/material_list_skeleton.dart';
@@ -52,9 +51,18 @@ class ResourcesViewState extends ConsumerState<ResourcesView>
                         ref
                             .watch(getResourceByIdProvider.notifier)
                             .setResourceId(resource[index].sId!);
-                        Nav().push(ResourceDetailsView(
-                          isCompleted: isCompleted,
-                        ));
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ResourceDetailsView(
+                                    isCompleted: isCompleted,
+                                  )),
+                        ).then((value) {
+                          if (value ?? false) {
+                            ref.refresh(completedIdProvider(courseId));
+                          }
+                        });
                       }
                     },
                     child: lessonItem(theme,

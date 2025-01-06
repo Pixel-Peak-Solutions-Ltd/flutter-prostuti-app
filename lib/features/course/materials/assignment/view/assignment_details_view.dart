@@ -149,7 +149,7 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
                                                   .notifier)
                                               .setBtnState();
 
-                                          // Nav().push(AssignmentView());
+                                          Navigator.pop(context, true);
                                         }
                                       },
                                       loadingController:

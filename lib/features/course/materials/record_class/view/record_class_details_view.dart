@@ -104,8 +104,7 @@ class RecordClassDetailsViewState extends ConsumerState<RecordClassDetailsView>
                                                   .notifier)
                                               .setBtnState();
 
-                                          // Nav().pushReplacement(
-                                          //     const RecordClassView());
+                                          Navigator.pop(context, true);
                                         }
                                       },
                                       loadingController:

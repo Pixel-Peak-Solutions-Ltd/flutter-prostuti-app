@@ -67,8 +67,7 @@ class ResourceDetailsViewState extends ConsumerState<ResourceDetailsView>
                                         .watch(changeBtnStateProvider.notifier)
                                         .setBtnState();
 
-                                    // Nav()
-                                    //     .pushReplacement(const ResourcesView());
+                                    Navigator.pop(context, true);
                                   }
                                 },
                                 loadingController:
