@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_list/viewmodel/get_course_by_id.dart';
 import 'package:prostuti/features/course/my_course/viewmodel/course_progress.dart';
 import 'package:prostuti/features/course/my_course/viewmodel/my_course_viewmodel.dart';
@@ -56,20 +55,17 @@ class MyCourseViewState extends ConsumerState<MyCourseView> with CommonWidgets {
                                   .watch(getCourseByIdProvider.notifier)
                                   .setId(course[i].courseId!.sId!);
 
-                              Nav()
-                                  .push(const EnrolledCourseLandingView())
-                                  .then(
-                                (value) {
-                                  ref
-                                      .read(courseProgressNotifierProvider
-                                          .notifier)
-                                      .getCourseProgress();
-                                  ref
-                                      .read(enrolledCourseViewmodelProvider
-                                          .notifier)
-                                      .getEnrolledCourseList();
-                                },
-                              );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const EnrolledCourseLandingView()),
+                              ).then((value) {
+                                if (value ?? false) {
+                                  ref.refresh(courseProgressNotifierProvider);
+                                  ref.refresh(enrolledCourseViewmodelProvider);
+                                }
+                              });
                             },
                             child: MyCourseCard(
                               progress: combinedCourseList[i]['progress'],

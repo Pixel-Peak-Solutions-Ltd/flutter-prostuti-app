@@ -1,21 +1,24 @@
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:prostuti/features/auth/login/view/login_view.dart';
 import 'package:prostuti/secrets/secrets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/view_model/auth_notifier.dart';
+import 'nav.dart';
 
 part 'dio_service.g.dart';
 
 @riverpod
 Dio dio(DioRef ref) {
-  final authNotifier = ref.watch(authNotifierProvider);
+  // Obtain authNotifier outside the async closure
+  final authNotifier = ref.read(authNotifierProvider.notifier);
 
   return Dio(BaseOptions(
     baseUrl: BASE_URL,
     connectTimeout: const Duration(seconds: 20),
-    receiveTimeout: const Duration(seconds: 180),
+    receiveTimeout: const Duration(seconds: 60),
   ))
     ..interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
@@ -30,7 +33,6 @@ Dio dio(DioRef ref) {
             options.headers['Authorization'] = 'Bearer $accessToken';
           } else {
             // Token has expired, attempt to refresh
-            final authNotifier = ref.read(authNotifierProvider.notifier);
             final newAccessToken = await authNotifier.createAccessToken();
             if (newAccessToken != null) {
               options.headers['Authorization'] = 'Bearer $newAccessToken';
@@ -44,13 +46,15 @@ Dio dio(DioRef ref) {
       },
       onError: (DioException error, handler) async {
         if (error.response?.statusCode == 401) {
-          // Refresh the access token
-          final authNotifier = ref.read(authNotifierProvider.notifier);
+          // Refresh the access token using the notifier obtained earlier
           final newAccessToken = await authNotifier.createAccessToken();
+
+          print(newAccessToken);
 
           if (newAccessToken == null || newAccessToken.isEmpty) {
             // Handle refresh failure, e.g., logout the user
             Fluttertoast.showToast(msg: "Authentication failed");
+            Nav().pushAndRemoveUntil(const LoginView());
             return handler.reject(error);
           }
 

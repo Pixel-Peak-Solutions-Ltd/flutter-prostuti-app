@@ -2,18 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
+import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
 
 mixin CommonWidgets {
   final ThemeData appTheme = ThemeData();
 
-  AppBar commonAppbar(String title) {
+  AppBar commonAppbar(String title, {Function()? onBack}) {
     return AppBar(
       title: Text(
         title,
         style: appTheme.textTheme.titleMedium,
       ),
-      automaticallyImplyLeading: true,
+      automaticallyImplyLeading: false,
+      leading: onBack != null
+          ? IconButton(
+              onPressed: onBack,
+              icon: const Icon(Icons.arrow_back_ios_new),
+            )
+          : IconButton(
+              onPressed: () {
+                Nav().pop();
+              },
+              icon: const Icon(Icons.arrow_back_ios_new),
+            ),
       centerTitle: true,
       backgroundColor: AppColors.shadeSecondaryLight,
     );

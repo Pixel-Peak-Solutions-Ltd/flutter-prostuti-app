@@ -68,12 +68,8 @@ class AuthNotifier extends _$AuthNotifier {
                         .millisecondsSinceEpoch
                     : null;
 
-            await ref.read(authNotifierProvider.notifier).setAccessToken(
-                accessToken,
-                accessExpiryTime,
-                newRefreshToken,
-                refreshExpiryTime,
-                rememberMe);
+            await setAccessToken(accessToken, accessExpiryTime, newRefreshToken,
+                refreshExpiryTime, rememberMe);
 
             return accessToken;
           }

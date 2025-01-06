@@ -43,11 +43,15 @@ class MyApp extends ConsumerWidget {
       },
       loading: () => const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(body: Center(child: CircularProgressIndicator())),
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
       ),
       error: (error, stackTrace) => const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: Scaffold(body: Center(child: Text('Error loading login state'))),
+        home: Scaffold(
+          body: Center(child: Text('Error loading login state')),
+        ),
       ),
     );
   }
