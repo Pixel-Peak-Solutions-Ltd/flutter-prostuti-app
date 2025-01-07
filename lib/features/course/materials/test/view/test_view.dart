@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prostuti/common/helpers/func.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/features/course/materials/test/view/mcq_test_details_view.dart';
+import 'package:prostuti/features/course/materials/test/view/opps_view.dart';
 import 'package:prostuti/features/course/materials/test/view/written_test_details_view.dart';
 import 'package:prostuti/features/course/materials/test/viewmodel/get_test_by_id.dart';
 import 'package:prostuti/features/course/materials/test/viewmodel/test_viewmodel.dart';
@@ -95,10 +97,18 @@ class TestListViewState extends ConsumerState<TestListView>
                                 //     .read(testRepoProvider)
                                 //     .hasMCQTestGiven(test[index].sId!);
 
+                                bool canAccessTest = Func.canAccessContent(
+                                    test[index].publishDate!,
+                                    test[index].time!);
+
                                 if (isCompleted) {
                                   Nav().push(const MCQMockTestHistoryScreen());
                                 } else {
-                                  Nav().push(const MCQTestDetailsView());
+                                  if (canAccessTest) {
+                                    Nav().push(const MCQTestDetailsView());
+                                  } else {
+                                    Nav().push(const OppsView());
+                                  }
                                 }
                               }
                             : () {},
