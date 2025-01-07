@@ -11,7 +11,9 @@ import '../../../../../core/configs/app_colors.dart';
 import '../../../../../core/services/debouncer.dart';
 import '../../../../../core/services/nav.dart';
 import '../../../../../core/services/timer.dart';
+import '../../../course_list/viewmodel/get_course_by_id.dart';
 import '../../../enrolled_course_landing/repository/enrolled_course_landing_repo.dart';
+import '../../get_material_completion.dart';
 import '../repository/test_repo.dart';
 import '../viewmodel/mcq_test_details_viewmodel.dart';
 import '../widgets/build_mcq_question_item.dart';
@@ -217,6 +219,10 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
         });
 
         if (markAsComplete) {
+
+          final courseId = ref.read(getCourseByIdProvider);
+          ref.invalidate(completedIdProvider(courseId));
+
           Nav().pushReplacement(
             TestResultScreen(
               resultData: {

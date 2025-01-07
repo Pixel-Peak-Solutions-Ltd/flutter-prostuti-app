@@ -17,7 +17,7 @@ import '../viewmodel/written_test_viewmodel.dart';
 import 'mcq_test_history_view.dart';
 
 class TestListView extends ConsumerStatefulWidget {
-  const TestListView({Key? key}) : super(key: key);
+  const TestListView({super.key});
 
   @override
   TestListViewState createState() => TestListViewState();
@@ -27,6 +27,12 @@ class TestListViewState extends ConsumerState<TestListView>
     with CommonWidgets, SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final courseId = ref.read(getCourseByIdProvider);
+    ref.invalidate(completedIdProvider(courseId));
+  }
   @override
   void initState() {
     super.initState();
@@ -107,7 +113,7 @@ class TestListViewState extends ConsumerState<TestListView>
                                   if (canAccessTest) {
                                     Nav().push(const MCQTestDetailsView());
                                   } else {
-                                    Nav().push(const OppsView());
+                                    Nav().push(TestMissedView(testName: test[index].name!,));
                                   }
                                 }
                               }
