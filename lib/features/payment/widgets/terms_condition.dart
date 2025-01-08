@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+import '../../../core/services/nav.dart';
 import '../../../core/services/size_config.dart';
 
 class TermsCondition extends StatelessWidget {
-  const TermsCondition({Key? key}) : super(key: key);
+  const TermsCondition({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +16,15 @@ class TermsCondition extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Align(
+            Align(
               alignment: Alignment.topRight,
-              child: Icon(Icons.close),
+              child: IconButton(
+                  onPressed: () {
+                    Nav().pop();
+                  },
+                  icon: const Icon(Icons.close)),
             ),
-            Gap(16),
+            const Gap(16),
             Text(
               'প্রিমিয়ামে আপগ্রেড করুন?',
               style: Theme.of(context)
@@ -27,21 +32,21 @@ class TermsCondition extends StatelessWidget {
                   .titleMedium!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
-            Gap(12),
+            const Gap(12),
             Text(
               textAlign: TextAlign.center,
               '"টু ডু অ্যাপ" এটি একটি উপকারী মোবাইল অ্যাপ্লিকেশন, যা ব্যবহারকারীদের বিভিন্ন কাজে সাহায্য করে। এই এপ্লিকেশনের মাধ্যমে ব্যবহারকারীরা তাদের কাজ, পরিকল্পনা।',
               style: Theme.of(context).textTheme.bodyLarge,
             ),
-            Gap(16),
+            const Gap(16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
+                const Icon(
                   Icons.check_circle,
                   color: Colors.green,
                 ),
-                Gap(4),
+                const Gap(4),
                 Text(
                   '"টু ডু অ্যাপ" এটি একটি উপকারী মোবাইল অ্যাপ্লিকেশন',
                   textAlign: TextAlign.center,
@@ -49,7 +54,7 @@ class TermsCondition extends StatelessWidget {
                 ),
               ],
             ),
-            Gap(32),
+            const Gap(32),
             Text(
               'আপনি কেনো আপগ্রেড করবেন?',
               style: Theme.of(context)
@@ -57,7 +62,7 @@ class TermsCondition extends StatelessWidget {
                   .titleMedium!
                   .copyWith(fontWeight: FontWeight.bold),
             ),
-            Gap(16),
+            const Gap(16),
             for (int i = 0; i < 4; i++)
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -67,7 +72,7 @@ class TermsCondition extends StatelessWidget {
                     height: 40,
                     width: 40,
                   ),
-                  Gap(14),
+                  const Gap(14),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -78,7 +83,7 @@ class TermsCondition extends StatelessWidget {
                             .titleSmall!
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
-                      Gap(8),
+                      const Gap(8),
                       SizedBox(
                         width: SizeConfig.screenWidth * 0.8,
                         child: Text(

@@ -103,7 +103,9 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
                     style: theme.textTheme.titleMedium,
                   ),
                   const Gap(24),
-                  filePath != ""
+                  filePath != "" ||
+                          ref.watch(changeBtnStateProvider) ||
+                          widget.isCompleted
                       ? fileBox(theme, fileName)
                       : InkWell(
                           onTap: () async {
@@ -113,11 +115,11 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
                             if (result != null) {
                               File file = File(result.files.single.path!);
                               ref
-                                  .watch(getFilePathProvider.notifier)
+                                  .read(getFilePathProvider.notifier)
                                   .setFilePath(file.path);
 
                               ref
-                                  .watch(assignmentFileNameProvider.notifier)
+                                  .read(assignmentFileNameProvider.notifier)
                                   .setFileName(file.path.split('/').last);
                             } else {
                               // User canceled the picker
@@ -134,6 +136,15 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
                               : () {
                                   _debouncer.run(
                                       action: () async {
+                                        final filePath =
+                                            ref.read(getFilePathProvider);
+                                        if (filePath == null ||
+                                            filePath == "") {
+                                          Fluttertoast.showToast(
+                                              msg: "You must submit the file");
+                                          return;
+                                        }
+
                                         final response = await ref
                                             .read(
                                                 enrolledCourseLandingRepoProvider)

@@ -10,8 +10,11 @@ import 'package:prostuti/features/payment/view/easy_checkout.dart';
 import 'package:prostuti/features/payment/viewmodel/check_subscription.dart';
 import 'package:prostuti/features/payment/widgets/subscription_card.dart';
 
+import '../../../core/services/debouncer.dart';
 import '../viewmodel/selected_index.dart';
 import '../widgets/terms_condition.dart';
+
+final _loadingProvider = StateProvider<bool>((ref) => false);
 
 class SubscriptionView extends ConsumerWidget with CommonWidgets {
   SubscriptionView({super.key});
@@ -26,6 +29,8 @@ class SubscriptionView extends ConsumerWidget with CommonWidgets {
 
     final selectedIndex = ref.watch(selectedIndexNotifierProvider);
     final subscriptionAsyncValue = ref.watch(userSubscribedProvider);
+    final _debouncer = Debouncer(milliseconds: 120);
+    final isLoading = ref.watch(_loadingProvider);
 
     return Scaffold(
         appBar: commonAppbar("সাবস্ক্রিপশন"),
@@ -61,30 +66,43 @@ class SubscriptionView extends ConsumerWidget with CommonWidgets {
               height: SizeConfig.h(150),
               child: Column(
                 children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      final response = await ref
-                          .read(paymentRepoProvider)
-                          .subscribe({
-                        "requestedPlan": "${plans[selectedIndex]['duration']}"
-                      });
+                  isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : ElevatedButton(
+                          onPressed: isLoading
+                              ? () {}
+                              : () {
+                                  _debouncer.run(
+                                      action: () async {
+                                        final response = await ref
+                                            .read(paymentRepoProvider)
+                                            .subscribe({
+                                          "requestedPlan":
+                                              "${plans[selectedIndex]['duration']}"
+                                        });
 
-                      print(response);
-
-                      Nav().pushReplacement(
-                          EasyCheckout(url: response.toString()));
-                    },
-                    style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4)),
-                        backgroundColor: const Color(0xff2970FF),
-                        fixedSize: Size(SizeConfig.w(356), SizeConfig.h(54))),
-                    child: Text(
-                      'পেমেন্ট পর্যালোচনা করুন',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: Colors.white, fontWeight: FontWeight.w800),
-                    ),
-                  ),
+                                        Nav().pushReplacement(EasyCheckout(
+                                            url: response.toString()));
+                                      },
+                                      loadingController:
+                                          ref.read(_loadingProvider.notifier));
+                                },
+                          style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4)),
+                              backgroundColor: const Color(0xff2970FF),
+                              fixedSize:
+                                  Size(SizeConfig.w(356), SizeConfig.h(54))),
+                          child: Text(
+                            'পেমেন্ট পর্যালোচনা করুন',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w800),
+                          ),
+                        ),
                   const Gap(16),
                   ElevatedButton(
                     onPressed: () {

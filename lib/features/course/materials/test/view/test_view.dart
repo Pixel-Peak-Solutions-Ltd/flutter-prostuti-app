@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prostuti/common/helpers/func.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/features/course/materials/test/view/mcq_test_details_view.dart';
 import 'package:prostuti/features/course/materials/test/view/opps_view.dart';
@@ -33,6 +32,7 @@ class TestListViewState extends ConsumerState<TestListView>
     final courseId = ref.read(getCourseByIdProvider);
     ref.invalidate(completedIdProvider(courseId));
   }
+
   @override
   void initState() {
     super.initState();
@@ -103,9 +103,11 @@ class TestListViewState extends ConsumerState<TestListView>
                                 //     .read(testRepoProvider)
                                 //     .hasMCQTestGiven(test[index].sId!);
 
-                                bool canAccessTest = Func.canAccessContent(
-                                    test[index].publishDate!,
-                                    test[index].time!);
+                                // bool canAccessTest = Func.canAccessContent(
+                                //     test[index].publishDate!,
+                                //     test[index].time!);
+                                final bool canAccessTest =
+                                    isToday(test[index].publishDate!);
 
                                 if (isCompleted) {
                                   Nav().push(const MCQMockTestHistoryScreen());
@@ -113,7 +115,9 @@ class TestListViewState extends ConsumerState<TestListView>
                                   if (canAccessTest) {
                                     Nav().push(const MCQTestDetailsView());
                                   } else {
-                                    Nav().push(TestMissedView(testName: test[index].name!,));
+                                    Nav().push(TestMissedView(
+                                      testName: test[index].name!,
+                                    ));
                                   }
                                 }
                               }
@@ -199,5 +203,13 @@ class TestListViewState extends ConsumerState<TestListView>
             parsedDate.month == now.month &&
             parsedDate.year == now.year) ||
         (parsedDate.isBefore(now));
+  }
+
+  bool isToday(String s) {
+    DateTime parsedDate = DateTime.parse(s);
+    DateTime now = DateTime.now();
+    return (parsedDate.day == now.day &&
+        parsedDate.month == now.month &&
+        parsedDate.year == now.year);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:prostuti/core/services/nav.dart';
-import 'package:prostuti/features/course/my_course/view/my_course_view.dart';
+import 'package:prostuti/features/payment/view/paymet_successful.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class EasyCheckout extends StatefulWidget {
@@ -26,15 +26,17 @@ class _EasyCheckoutState extends State<EasyCheckout> {
         NavigationDelegate(
           onUrlChange: (change) {
             print("change.url - ${change.url}");
-            if (change.url!.contains("https://www.google.com/payment/success")) {
-              Nav().pushReplacement(MyCourseView());
-            } else if (change.url!.contains("https://www.google.com/payment/failed")) {
+            if (change.url!
+                .contains("https://www.google.com/payment/success")) {
+              Nav().pushReplacement(const PaymetSuccessful());
+            } else if (change.url!
+                .contains("https://www.google.com/payment/failed")) {
               Nav().pop();
               Fluttertoast.showToast(msg: "Failed to purchase the course.");
-            } else if (change.url!.contains("https://www.google.com/payment/cancelled")) {
+            } else if (change.url!
+                .contains("https://www.google.com/payment/cancelled")) {
               Nav().pop();
             }
-
           },
         ),
       )
