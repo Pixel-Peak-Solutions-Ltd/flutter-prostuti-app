@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
 import 'package:prostuti/secrets/secrets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -12,7 +12,6 @@ part 'dio_service.g.dart';
 
 @riverpod
 Dio dio(DioRef ref) {
-  // Obtain authNotifier outside the async closure
   final authNotifier = ref.read(authNotifierProvider.notifier);
 
   return Dio(BaseOptions(
@@ -22,7 +21,6 @@ Dio dio(DioRef ref) {
   ))
     ..interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        // Get the accessToken and accessExpiryTime from SharedPreferences
         final prefs = await SharedPreferences.getInstance();
         final accessToken = prefs.getString('accessToken');
         final accessExpiryTime = prefs.getInt('accessExpiryTime');
@@ -33,12 +31,18 @@ Dio dio(DioRef ref) {
             options.headers['Authorization'] = 'Bearer $accessToken';
           } else {
             // Token has expired, attempt to refresh
-            final newAccessToken = await authNotifier.createAccessToken();
+            final newAccessToken = await authNotifier.refreshToken();
+            debugPrint("from onRequest: $newAccessToken");
             if (newAccessToken != null) {
               options.headers['Authorization'] = 'Bearer $newAccessToken';
             } else {
-              // Handle refresh failure, e.g., logout the user
-              await authNotifier.clearAccessToken();
+              // If refresh fails, clear tokens and redirect to login
+              await authNotifier.clearTokens();
+              Nav().pushAndRemoveUntil(const LoginView());
+              return handler.reject(DioException(
+                requestOptions: options,
+                error: 'Token refresh failed',
+              ));
             }
           }
         }
@@ -46,31 +50,22 @@ Dio dio(DioRef ref) {
       },
       onError: (DioException error, handler) async {
         if (error.response?.statusCode == 401) {
-          // Refresh the access token using the notifier obtained earlier
-          final newAccessToken = await authNotifier.createAccessToken();
-
-          print(newAccessToken);
-
-          if (newAccessToken == null || newAccessToken.isEmpty) {
-            // Handle refresh failure, e.g., logout the user
-            Fluttertoast.showToast(msg: "Authentication failed");
+          // Attempt to refresh the token
+          final newAccessToken = await authNotifier.refreshToken();
+          debugPrint("from onError: $newAccessToken");
+          if (newAccessToken != null) {
+            // Retry the original request with the new token
+            error.requestOptions.headers['Authorization'] =
+                'Bearer $newAccessToken';
+            final response = await Dio().fetch(error.requestOptions);
+            return handler.resolve(response);
+          } else {
+            // If refresh fails, clear tokens and redirect to login
+            await authNotifier.clearTokens();
             Nav().pushAndRemoveUntil(const LoginView());
             return handler.reject(error);
           }
-
-          // Update the original request's headers with the new token
-          error.requestOptions.headers['Authorization'] =
-              'Bearer $newAccessToken';
-
-          try {
-            // Retry the original request with the updated headers
-            final response = await Dio().fetch(error.requestOptions);
-            return handler.resolve(response);
-          } catch (e) {
-            return handler.reject(e as DioException);
-          }
         }
-        // Forward other errors
         handler.next(error);
       },
     ));

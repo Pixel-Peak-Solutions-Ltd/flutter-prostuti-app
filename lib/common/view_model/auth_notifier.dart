@@ -11,34 +11,35 @@ part 'auth_notifier.g.dart';
 class AuthNotifier extends _$AuthNotifier {
   @override
   Future<String?> build() async {
-    // Load the token from SharedPreferences asynchronously on initialization
     return await _loadAccessToken();
   }
 
-  // Method to set the access token
-  Future<void> setAccessToken(
-      String accessToken,
-      int accessTokenExpiresIn,
-      String? refreshToken,
-      int? refreshTokenExpiresIn,
-      bool? rememberMe) async {
+  Future<void> setTokens({
+    required String accessToken,
+    required int accessExpiryTime,
+    String? refreshToken,
+    int? refreshExpiryTime,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('accessToken', accessToken);
+    await prefs.setInt('accessExpiryTime', accessExpiryTime);
+    if (refreshToken != null && refreshExpiryTime != null) {
+      await prefs.setString('refreshToken', refreshToken);
+      await prefs.setInt('refreshExpiryTime', refreshExpiryTime);
+    }
     state = AsyncValue.data(accessToken);
-    await _saveAccessToken(accessToken, accessTokenExpiresIn, refreshToken,
-        refreshTokenExpiresIn, rememberMe);
   }
 
-  // Method to clear the access token (e.g., on logout)
-  Future<void> clearAccessToken() async {
+  Future<void> clearTokens() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
     state = const AsyncValue.data(null);
-    await _removeAccessToken();
   }
 
-  // Refresh token logic
-  Future<String?> createAccessToken() async {
+  Future<String?> refreshToken() async {
     final prefs = await SharedPreferences.getInstance();
     final refreshToken = prefs.getString('refreshToken');
     final refreshExpiryTime = prefs.getInt('refreshExpiryTime');
-    final rememberMe = prefs.getBool('rememberMe');
 
     if (refreshToken != null && refreshExpiryTime != null) {
       final now = DateTime.now().millisecondsSinceEpoch;
@@ -50,63 +51,40 @@ class AuthNotifier extends _$AuthNotifier {
           );
 
           if (response.statusCode == 200) {
-            final newAccessTokenResponse = Login.fromJson(response.data);
-            final accessToken = newAccessTokenResponse.data!.accessToken!;
-            final accessTokenExpiresIn =
-                newAccessTokenResponse.data!.accessTokenExpiresIn!;
-            final newRefreshToken = newAccessTokenResponse.data!.refreshToken;
-            final refreshTokenExpiresIn =
-                newAccessTokenResponse.data!.refreshTokenExpiresIn;
-
+            final loginResponse = Login.fromJson(response.data);
+            final accessToken = loginResponse.data!.accessToken!;
             final accessExpiryTime = DateTime.now()
-                .add(Duration(seconds: accessTokenExpiresIn))
+                .add(Duration(
+                    seconds: loginResponse.data!.accessTokenExpiresIn!))
                 .millisecondsSinceEpoch;
-            final refreshExpiryTime =
-                newRefreshToken != null && refreshTokenExpiresIn != null
-                    ? DateTime.now()
-                        .add(Duration(seconds: refreshTokenExpiresIn))
-                        .millisecondsSinceEpoch
-                    : null;
 
-            await setAccessToken(accessToken, accessExpiryTime, newRefreshToken,
-                refreshExpiryTime, rememberMe);
+            await setTokens(
+              accessToken: accessToken,
+              accessExpiryTime: accessExpiryTime,
+              refreshToken: loginResponse.data!.refreshToken,
+              refreshExpiryTime: loginResponse.data!.refreshTokenExpiresIn !=
+                      null
+                  ? DateTime.now()
+                      .add(Duration(
+                          seconds: loginResponse.data!.refreshTokenExpiresIn!))
+                      .millisecondsSinceEpoch
+                  : null,
+            );
 
             return accessToken;
           }
         } catch (e) {
-          await clearAccessToken(); // If refresh fails, logout the user
+          await clearTokens();
         }
       } else {
-        // Refresh token has expired, logout the user
-        await clearAccessToken();
+        await clearTokens();
       }
     }
     return null;
   }
 
-  // Load the access token from SharedPreferences
   Future<String?> _loadAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('accessToken');
-  }
-
-  // Save the access token to SharedPreferences
-  Future<void> _saveAccessToken(String accessToken, int accessExpiryTime,
-      String? refreshToken, int? refreshExpiryTime, bool? rememberMe) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    await prefs.setString('accessToken', accessToken);
-    await prefs.setInt('accessExpiryTime', accessExpiryTime); // Store as int
-
-    if (refreshToken != null && refreshExpiryTime != null) {
-      await prefs.setString('refreshToken', refreshToken);
-      await prefs.setInt('refreshExpiryTime', refreshExpiryTime);
-    }
-  }
-
-  // Remove the access token from SharedPreferences
-  Future<void> _removeAccessToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
   }
 }
