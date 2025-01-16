@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/debouncer.dart';
 import 'package:prostuti/core/services/error_handler.dart';
@@ -17,8 +18,8 @@ import '../../signup/viewmodel/email_viewmodel.dart';
 import '../../signup/viewmodel/phone_number_viewmodel.dart';
 import '../widgets/buildCategoryList.dart';
 
-class CategoryView extends ConsumerWidget {
-  const CategoryView({super.key});
+class CategoryView extends ConsumerWidget with CommonWidgets {
+  CategoryView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,12 +35,7 @@ class CategoryView extends ConsumerWidget {
     final isLoading = ref.watch(_loadingProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.shadeSecondaryLight,
-        elevation: 0,
-        title: const Text('ক্যাটাগরি'),
-        automaticallyImplyLeading: true,
-      ),
+      appBar: commonAppbar("ক্যাটাগরি"),
       body: categoryAsyncValue.when(
         loading: () => Skeletonizer(
           enableSwitchAnimation: true,
@@ -53,7 +49,7 @@ class CategoryView extends ConsumerWidget {
           return Skeletonizer(
             enabled: isLoading,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
@@ -66,6 +62,7 @@ class CategoryView extends ConsumerWidget {
                     return Container(
                       margin: const EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         border: Border.all(
                             color: AppColors.borderNormalLight, width: 2),
                         borderRadius: BorderRadius.circular(8),

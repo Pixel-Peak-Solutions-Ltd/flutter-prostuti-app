@@ -167,7 +167,7 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                         _debouncer.run(
                             action: () async {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const CategoryView()));
+                                  builder: (context) => CategoryView()));
                             },
                             loadingController:
                                 ref.read(_loadingProvider.notifier));
