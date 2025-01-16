@@ -12,22 +12,21 @@ mixin CommonWidgets {
     return AppBar(
       title: Text(
         title,
-        style: appTheme.textTheme.titleMedium,
       ),
       automaticallyImplyLeading: false,
       leading: onBack != null
           ? IconButton(
               onPressed: onBack,
-              icon: const Icon(Icons.arrow_back_ios_new),
+              icon: const Icon(Icons.arrow_back),
             )
           : IconButton(
               onPressed: () {
                 Nav().pop();
               },
-              icon: const Icon(Icons.arrow_back_ios_new),
+              icon: const Icon(Icons.arrow_back),
             ),
       centerTitle: true,
-      backgroundColor: AppColors.shadeSecondaryLight,
+      backgroundColor: appTheme.appBarTheme.backgroundColor,
     );
   }
 

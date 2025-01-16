@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:prostuti/core/configs/app_colors.dart';
 
 class SearchContainer extends StatelessWidget {
   final TextEditingController controller;
@@ -17,8 +16,7 @@ class SearchContainer extends StatelessWidget {
       height: 60,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: AppColors.shadeSecondaryLight,
-        border: Border.all(color: AppColors.borderFocusSecondaryLight),
+        color: Theme.of(context).colorScheme.outline,
       ),
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -30,10 +28,7 @@ class SearchContainer extends StatelessWidget {
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
                   hintText: 'কোর্স সার্চ করুন.....',
-                  hintStyle: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(color: AppColors.textTertiaryLight),
+                  hintStyle: Theme.of(context).textTheme.bodyLarge,
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   disabledBorder: InputBorder.none,
@@ -47,7 +42,6 @@ class SearchContainer extends StatelessWidget {
             const Icon(
               Icons.search_outlined,
               size: 32,
-              color: AppColors.textTertiaryLight,
             ),
           ],
         ),

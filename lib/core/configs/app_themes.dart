@@ -3,20 +3,60 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
-/*
-24px: titleLarge
-20px: titleMedium
-18px: titleSmall
-16px: bodyLarge
-14px: bodyMedium
-12px: bodySmall
- */
+class AppColorScheme {
+  static ColorScheme lightScheme = const ColorScheme(
+    brightness: Brightness.light,
+    primary: AppColors.backgroundPrimaryLight,
+    onPrimary: AppColors.textActionPrimaryLight,
+    secondary: AppColors.backgroundActionSecondaryLight,
+    onSecondary: AppColors.textActionSecondaryLight,
+    surface: AppColors.backgroundTertiaryLight,
+    onSurface: AppColors.textPrimaryLight,
+    background: AppColors.backgroundPrimaryLight,
+    onBackground: AppColors.textSecondaryLight,
+    error: Colors.red,
+    onError: Colors.white,
+    primaryContainer: AppColors.shadePrimaryLight,
+    secondaryContainer: AppColors.shadeSecondaryLight,
+    onPrimaryContainer: AppColors.textPrimaryLight,
+    onSecondaryContainer: AppColors.textSecondaryLight,
+    outline: AppColors.containerBackgroundLight,
+  );
+
+  static ColorScheme darkScheme = const ColorScheme(
+    brightness: Brightness.dark,
+    primary: AppColors.backgroundActionPrimaryDark,
+    onPrimary: AppColors.textActionPrimaryDark,
+    secondary: AppColors.backgroundActionSecondaryDark,
+    onSecondary: AppColors.textActionSecondaryDark,
+    surface: AppColors.backgroundTertiaryDark,
+    onSurface: AppColors.textPrimaryDark,
+    background: AppColors.backgroundPrimaryDark,
+    onBackground: AppColors.textSecondaryDark,
+    error: Colors.redAccent,
+    onError: Colors.black,
+    primaryContainer: AppColors.shadePrimaryDark,
+    secondaryContainer: AppColors.shadeSecondaryDark,
+    onPrimaryContainer: AppColors.textPrimaryDark,
+    onSecondaryContainer: AppColors.textSecondaryDark,
+    outline: AppColors.containerBackgroundDark,
+  );
+}
 
 class AppTheme {
   static final lightTheme = ThemeData(
+    colorScheme: AppColorScheme.lightScheme,
     primaryColor: AppColors.textActionPrimaryLight,
     scaffoldBackgroundColor: AppColors.backgroundPrimaryLight,
     brightness: Brightness.light,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.shadeSecondaryLight,
+      titleTextStyle: TextStyle(
+        color: AppColors.textPrimaryLight,
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
     textTheme: GoogleFonts.hindSiliguriTextTheme().copyWith(
       titleLarge: const TextStyle(
         color: AppColors.textPrimaryLight,
@@ -70,6 +110,16 @@ class AppTheme {
   );
 
   static final darkTheme = ThemeData(
+    colorScheme: AppColorScheme.darkScheme,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.shadeSecondaryDark,
+      foregroundColor: AppColors.textPrimaryDark,
+      titleTextStyle: TextStyle(
+        color: AppColors.textPrimaryDark,
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
     primaryColor: AppColors.textActionPrimaryDark,
     scaffoldBackgroundColor: AppColors.backgroundPrimaryDark,
     brightness: Brightness.dark,
@@ -106,7 +156,7 @@ class AppTheme {
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      fillColor: AppColors.backgroundSecondaryDark,
+      fillColor: const Color(0xff2B415B),
       hintStyle: const TextStyle(
         color: AppColors.textTertiaryDark,
         fontWeight: FontWeight.w500,
