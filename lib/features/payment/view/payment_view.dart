@@ -44,140 +44,148 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Tracker(),
-              const Gap(24),
-              const Divider(),
-              const Gap(24),
-              CourseNamePrice(name: name, imgPath: imgPath, price: "৳ $price"),
-              const Gap(24),
-              const Divider(),
-              const Gap(24),
-              Text(
-                'টপ কোর্সগুলো দেখুন',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              const Gap(16),
-              SizedBox(
-                height: SizeConfig.h(100),
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: publishedCourseNotifier.filteredCourses.length,
-                  itemBuilder: (context, index) {
-                    final course =
-                        publishedCourseNotifier.filteredCourses[index];
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(16)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Tracker(),
+                const Gap(24),
+                const Divider(),
+                const Gap(24),
+                CourseNamePrice(
+                    name: name, imgPath: imgPath, price: "৳ $price"),
+                const Gap(24),
+                const Divider(),
+                const Gap(24),
+                Text(
+                  'টপ কোর্সগুলো দেখুন',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const Gap(16),
+                SizedBox(
+                  height: SizeConfig.h(100),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: publishedCourseNotifier.filteredCourses.length,
+                    itemBuilder: (context, index) {
+                      final course =
+                          publishedCourseNotifier.filteredCourses[index];
 
-                    return Skeletonizer(
-                      enabled: publishedCourseAsync.isLoading,
-                      child: course.priceType == "Paid"
-                          ? Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 6),
-                              child: InkWell(
-                                onTap: () {
-                                  ref
-                                      .watch(getCourseByIdProvider.notifier)
-                                      .setId(course.sId!);
-                                  Nav().push(const CourseDetailsView());
-                                },
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Stack(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                          child: Image.network(
-                                            course.image!.path!,
-                                            height: SizeConfig.h(50),
-                                            width: SizeConfig.w(80),
-                                            filterQuality: FilterQuality.high,
-                                            fit: BoxFit.cover,
+                      return Skeletonizer(
+                        enabled: publishedCourseAsync.isLoading,
+                        child: course.priceType == "Paid"
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 6),
+                                child: InkWell(
+                                  onTap: () {
+                                    ref
+                                        .watch(getCourseByIdProvider.notifier)
+                                        .setId(course.sId!);
+                                    Nav().push(const CourseDetailsView());
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            child: Image.network(
+                                              course.image!.path!,
+                                              height: SizeConfig.h(50),
+                                              width: SizeConfig.w(80),
+                                              filterQuality: FilterQuality.high,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                        ),
-                                        Positioned(
-                                            right: 2,
-                                            bottom: 2,
-                                            child: Icon(
-                                              id == course.sId!
-                                                  ? Icons.check_circle
-                                                  : Icons.add_box,
-                                              size: 22,
-                                              color: Colors.purple,
-                                            ))
-                                      ],
-                                    ),
-                                    const Gap(16),
-                                    SizedBox(
-                                      width: SizeConfig.w(80),
-                                      child: Text(
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 2,
-                                        course.name!,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .copyWith(
-                                                fontWeight: FontWeight.w600),
+                                          Positioned(
+                                              right: 2,
+                                              bottom: 2,
+                                              child: Icon(
+                                                id == course.sId!
+                                                    ? Icons.check_circle
+                                                    : Icons.add_box,
+                                                size: 22,
+                                                color: Colors.purple,
+                                              ))
+                                        ],
                                       ),
-                                    ),
-                                  ],
+                                      const Gap(16),
+                                      SizedBox(
+                                        width: SizeConfig.w(80),
+                                        child: Text(
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          course.name!,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )
-                          : Container(),
-                    );
-                  },
-                ),
-              ),
-              const Gap(16),
-              TextButton(
-                style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(50, 30),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    alignment: Alignment.centerLeft),
-                onPressed: () {
-                  Nav().pushReplacement(CourseListView());
-                },
-                child: Text(
-                  'আরো কোর্স দেখুন',
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Colors.blue, fontWeight: FontWeight.w600),
-                ),
-              ),
-              const Gap(24),
-              Text(
-                'হিসাবের বিস্তারিত',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              const Gap(16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("সর্বমোট",
-                      style: Theme.of(context).textTheme.titleSmall),
-                  Text(
-                    "৳ $price",
-                    style: Theme.of(context).textTheme.titleSmall,
+                              )
+                            : Container(),
+                      );
+                    },
                   ),
-                ],
-              ),
-              const Gap(16),
-              PriceRow(
-                price: price,
-                name: name,
-              ),
-            ],
+                ),
+                const Gap(16),
+                TextButton(
+                  style: TextButton.styleFrom(
+                      padding: EdgeInsets.zero,
+                      minimumSize: const Size(50, 30),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      alignment: Alignment.centerLeft),
+                  onPressed: () {
+                    Nav().pushReplacement(CourseListView());
+                  },
+                  child: Text(
+                    'আরো কোর্স দেখুন',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Colors.blue, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                const Gap(24),
+                Text(
+                  'হিসাবের বিস্তারিত',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const Gap(16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("সর্বমোট",
+                        style: Theme.of(context).textTheme.titleSmall),
+                    Text(
+                      "৳ $price",
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                  ],
+                ),
+                const Gap(16),
+                PriceRow(
+                  price: price,
+                  name: name,
+                ),
+              ],
+            ),
           ),
         ),
       ),

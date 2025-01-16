@@ -34,52 +34,63 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
               data: (completedId) {
                 final completedSet = Set<String>.from(completedId);
 
-                return ListView.builder(
-                  itemCount: recordClass.length,
-                  itemBuilder: (context, index) {
-                    final isCompleted =
-                        completedSet.contains(recordClass[index].sId);
+                return Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 16),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(16)),
+                    child: ListView.builder(
+                      itemCount: recordClass.length,
+                      itemBuilder: (context, index) {
+                        final isCompleted =
+                            completedSet.contains(recordClass[index].sId);
 
-                    return InkWell(
-                      onTap: () {
-                        DateTime parsedDate =
-                            DateTime.parse(recordClass[index].classDate!);
-                        DateTime now = DateTime.now();
-                        if ((parsedDate.day == now.day &&
-                                parsedDate.month == now.month &&
-                                parsedDate.year == now.year) ||
-                            (parsedDate.isBefore(now))) {
-                          ref
-                              .watch(getRecordClassIdProvider.notifier)
-                              .setRecordClassId(recordClass[index].sId!);
+                        return InkWell(
+                          onTap: () {
+                            DateTime parsedDate =
+                                DateTime.parse(recordClass[index].classDate!);
+                            DateTime now = DateTime.now();
+                            if ((parsedDate.day == now.day &&
+                                    parsedDate.month == now.month &&
+                                    parsedDate.year == now.year) ||
+                                (parsedDate.isBefore(now))) {
+                              ref
+                                  .watch(getRecordClassIdProvider.notifier)
+                                  .setRecordClassId(recordClass[index].sId!);
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RecordClassDetailsView(
-                                      videoUrl: recordClass[index]
-                                          .classVideoURL!
-                                          .path!,
-                                      isCompleted: isCompleted,
-                                    )),
-                          ).then((value) {
-                            if (value ?? false) {
-                              ref.refresh(completedIdProvider(courseId));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        RecordClassDetailsView(
+                                          videoUrl: recordClass[index]
+                                              .classVideoURL!
+                                              .path!,
+                                          isCompleted: isCompleted,
+                                        )),
+                              ).then((value) {
+                                if (value ?? false) {
+                                  ref.refresh(completedIdProvider(courseId));
+                                }
+                              });
                             }
-                          });
-                        }
+                          },
+                          child: lessonItem(theme,
+                              trailingIcon: TrailingIcon(
+                                classDate: recordClass[index].classDate!,
+                                isCompleted: isCompleted,
+                              ),
+                              itemName: "${recordClass[index].recodeClassName}",
+                              icon: "assets/icons/record_class.svg",
+                              lessonName:
+                                  '${recordClass[index].lessonId!.number} '),
+                        );
                       },
-                      child: lessonItem(theme,
-                          trailingIcon: TrailingIcon(
-                            classDate: recordClass[index].classDate!,
-                            isCompleted: isCompleted,
-                          ),
-                          itemName: "${recordClass[index].recodeClassName}",
-                          icon: "assets/icons/record_class.svg",
-                          lessonName:
-                              '${recordClass[index].lessonId!.number} '),
-                    );
-                  },
+                    ),
+                  ),
                 );
               },
               error: (error, stackTrace) => const Icon(

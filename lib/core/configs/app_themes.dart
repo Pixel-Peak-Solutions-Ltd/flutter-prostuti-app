@@ -20,12 +20,12 @@ class AppColorScheme {
     secondaryContainer: AppColors.shadeSecondaryLight,
     onPrimaryContainer: AppColors.textPrimaryLight,
     onSecondaryContainer: AppColors.textSecondaryLight,
-    outline: AppColors.containerBackgroundLight,
+    outline: AppColors.scaffoldBackgroundLight,
   );
 
   static ColorScheme darkScheme = const ColorScheme(
     brightness: Brightness.dark,
-    primary: AppColors.backgroundActionPrimaryDark,
+    primary: AppColors.backgroundPrimaryDark,
     onPrimary: AppColors.textActionPrimaryDark,
     secondary: AppColors.backgroundActionSecondaryDark,
     onSecondary: AppColors.textActionSecondaryDark,
@@ -39,7 +39,7 @@ class AppColorScheme {
     secondaryContainer: AppColors.shadeSecondaryDark,
     onPrimaryContainer: AppColors.textPrimaryDark,
     onSecondaryContainer: AppColors.textSecondaryDark,
-    outline: AppColors.containerBackgroundDark,
+    outline: AppColors.scaffoldBackgroundDark,
   );
 }
 
@@ -47,7 +47,7 @@ class AppTheme {
   static final lightTheme = ThemeData(
     colorScheme: AppColorScheme.lightScheme,
     primaryColor: AppColors.textActionPrimaryLight,
-    scaffoldBackgroundColor: AppColors.backgroundPrimaryLight,
+    scaffoldBackgroundColor: AppColors.scaffoldBackgroundLight,
     brightness: Brightness.light,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.shadeSecondaryLight,
@@ -121,7 +121,7 @@ class AppTheme {
       ),
     ),
     primaryColor: AppColors.textActionPrimaryDark,
-    scaffoldBackgroundColor: AppColors.backgroundPrimaryDark,
+    scaffoldBackgroundColor: AppColors.scaffoldBackgroundDark,
     brightness: Brightness.dark,
     textTheme: GoogleFonts.hindSiliguriTextTheme().copyWith(
       titleLarge: const TextStyle(
@@ -163,13 +163,11 @@ class AppTheme {
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide:
-            const BorderSide(color: AppColors.borderNormalDark, width: 1),
+        borderSide: const BorderSide(color: Colors.white, width: 1),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide:
-            const BorderSide(color: AppColors.borderFocusPrimaryDark, width: 1),
+        borderSide: const BorderSide(color: Colors.white, width: 1),
       ),
     ),
   );

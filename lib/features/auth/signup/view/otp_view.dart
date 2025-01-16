@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
 import 'package:prostuti/features/auth/signup/view/register_view.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../common/widgets/long_button.dart';
@@ -32,9 +32,15 @@ class OtpViewState extends ConsumerState<OtpView> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(_loadingProvider);
+    bool isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBar(elevation: 0, automaticallyImplyLeading: false),
+      appBar: AppBar(
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
@@ -42,8 +48,10 @@ class OtpViewState extends ConsumerState<OtpView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  "assets/images/prostuti_logo.png",
+                SvgPicture.asset(
+                  isDarkMode
+                      ? "assets/images/prostuti_logo_dark.svg"
+                      : "assets/images/prostuti_logo_light.svg",
                   width: 154,
                   height: 101,
                 ),

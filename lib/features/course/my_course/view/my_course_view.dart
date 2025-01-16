@@ -27,6 +27,7 @@ class MyCourseViewState extends ConsumerState<MyCourseView> with CommonWidgets {
     final courseProgressAsync = ref.watch(courseProgressNotifierProvider);
 
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: commonAppbar("আমার কোর্স"),
       body: enrolledListAsync.when(
         data: (course) {
@@ -44,37 +45,46 @@ class MyCourseViewState extends ConsumerState<MyCourseView> with CommonWidgets {
                   combineProgressAndCourses(progress, course);
 
               return Padding(
-                padding: const EdgeInsets.all(16),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
                 child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      for (int i = 0; i < course.length; i++)
-                        InkWell(
-                            onTap: () {
-                              ref
-                                  .watch(getCourseByIdProvider.notifier)
-                                  .setId(course[i].courseId!.sId!);
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 16),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(16)),
+                    child: Column(
+                      children: [
+                        for (int i = 0; i < course.length; i++)
+                          InkWell(
+                              onTap: () {
+                                ref
+                                    .watch(getCourseByIdProvider.notifier)
+                                    .setId(course[i].courseId!.sId!);
 
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const EnrolledCourseLandingView()),
-                              ).then((value) {
-                                if (value ?? false) {
-                                  ref.refresh(courseProgressNotifierProvider);
-                                  ref.refresh(enrolledCourseViewmodelProvider);
-                                }
-                              });
-                            },
-                            child: MyCourseCard(
-                              progress: combinedCourseList[i]['progress'],
-                              name: course[i].courseId!.name!,
-                              img: course[i].courseId!.image!.path!,
-                            )),
-                      const Gap(16),
-                      const ExploreCourseBtn(),
-                    ],
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const EnrolledCourseLandingView()),
+                                ).then((value) {
+                                  if (value ?? false) {
+                                    ref.refresh(courseProgressNotifierProvider);
+                                    ref.refresh(
+                                        enrolledCourseViewmodelProvider);
+                                  }
+                                });
+                              },
+                              child: MyCourseCard(
+                                progress: combinedCourseList[i]['progress'],
+                                name: course[i].courseId!.name!,
+                                img: course[i].courseId!.image!.path!,
+                              )),
+                        const Gap(16),
+                        const ExploreCourseBtn(),
+                      ],
+                    ),
                   ),
                 ),
               );

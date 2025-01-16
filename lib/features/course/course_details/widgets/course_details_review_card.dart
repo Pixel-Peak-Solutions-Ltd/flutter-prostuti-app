@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/core/services/size_config.dart';
 
 import 'course_details_pills.dart';
 import 'expandable_text.dart';
@@ -30,7 +31,7 @@ class CourseDetailsReviewCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.78,
+                width: SizeConfig.w(255),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -48,7 +49,7 @@ class CourseDetailsReviewCard extends StatelessWidget {
               ),
               const Gap(4),
               SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.76,
+                width: SizeConfig.w(250),
                 child: const ExpandableText(
                     text:
                         "আল্লাহর অশেষ রহমতে আমি ২০২১-২২ সেশনের মেডিক্যাল ভর্তি পরীক্ষায় ৮৫ তম স্থান অধিকার করেছি। এর জন্য আমি আমার পরিবার, আমার আব্বু, আমার আম্মু... আরো দেখুন"),

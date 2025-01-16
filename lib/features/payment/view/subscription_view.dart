@@ -36,27 +36,33 @@ class SubscriptionView extends ConsumerWidget with CommonWidgets {
         appBar: commonAppbar("সাবস্ক্রিপশন"),
         body: Padding(
           padding: const EdgeInsets.all(16),
-          child: ListView.builder(
-            itemCount: plans.length,
-            itemBuilder: (context, index) {
-              final plan = plans[index];
-              return GestureDetector(
-                onTap: () {
-                  ref
-                      .read(selectedIndexNotifierProvider.notifier)
-                      .updateIndex(index);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: SubscriptionCard(
-                    plan: plan['plan']!,
-                    price: plan['price']!,
-                    duration: plan['duration']!,
-                    isSelected: index == selectedIndex,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(16)),
+            child: ListView.builder(
+              itemCount: plans.length,
+              itemBuilder: (context, index) {
+                final plan = plans[index];
+                return GestureDetector(
+                  onTap: () {
+                    ref
+                        .read(selectedIndexNotifierProvider.notifier)
+                        .updateIndex(index);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: SubscriptionCard(
+                      plan: plan['plan']!,
+                      price: plan['price']!,
+                      duration: plan['duration']!,
+                      isSelected: index == selectedIndex,
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
         bottomNavigationBar: subscriptionAsyncValue.when(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/services/debouncer.dart';
@@ -7,7 +8,6 @@ import 'package:prostuti/features/auth/category/view/category_view.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/name_viewmodel.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/password_viewmodel.dart';
 import 'package:prostuti/features/auth/signup/widgets/label.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../viewmodel/email_viewmodel.dart';
@@ -72,8 +72,15 @@ class RegisterViewState extends ConsumerState<RegisterView> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(_loadingProvider);
+    bool isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(elevation: 0, automaticallyImplyLeading: false),
+      appBar: AppBar(
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SingleChildScrollView(
@@ -82,8 +89,10 @@ class RegisterViewState extends ConsumerState<RegisterView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  "assets/images/prostuti_logo.png",
+                SvgPicture.asset(
+                  isDarkMode
+                      ? "assets/images/prostuti_logo_dark.svg"
+                      : "assets/images/prostuti_logo_light.svg",
                   width: 154,
                   height: 101,
                 ),

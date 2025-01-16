@@ -60,76 +60,83 @@ class RecordClassDetailsViewState extends ConsumerState<RecordClassDetailsView>
         child: recordClassAsync.when(
           data: (data) {
             return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  PodVideoPlayer(controller: _controller),
-                  const Gap(16),
-                  Text(
-                    data.data!.recodeClassName ?? "No Name",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const Gap(24),
-                  Text(
-                    "রেকর্ড সম্পর্কে",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  const Gap(8),
-                  Text(
-                    data.data!.classDetails ?? "No Details",
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  const Gap(32),
-                  isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : ElevatedButton(
-                          onPressed: ref.watch(changeBtnStateProvider) ||
-                                  widget.isCompleted
-                              ? () {}
-                              : () {
-                                  _debouncer.run(
-                                      action: () async {
-                                        final response = await ref
-                                            .read(
-                                                enrolledCourseLandingRepoProvider)
-                                            .markAsComplete({
-                                          "materialType": "record",
-                                          "material_id":
-                                              ref.read(getRecordClassIdProvider)
-                                        });
-
-                                        if (response) {
-                                          ref
-                                              .watch(changeBtnStateProvider
-                                                  .notifier)
-                                              .setBtnState();
-
-                                          Navigator.pop(context, true);
-                                        }
-                                      },
-                                      loadingController:
-                                          ref.read(_loadingProvider.notifier));
-                                },
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4)),
-                              backgroundColor: const Color(0xff2970FF),
-                              fixedSize:
-                                  Size(SizeConfig.w(356), SizeConfig.h(54))),
-                          child: Text(
-                            ref.watch(changeBtnStateProvider) ||
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(16)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    PodVideoPlayer(controller: _controller),
+                    const Gap(16),
+                    Text(
+                      data.data!.recodeClassName ?? "No Name",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const Gap(24),
+                    Text(
+                      "রেকর্ড সম্পর্কে",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const Gap(8),
+                    Text(
+                      data.data!.classDetails ?? "No Details",
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const Gap(32),
+                    isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : ElevatedButton(
+                            onPressed: ref.watch(changeBtnStateProvider) ||
                                     widget.isCompleted
-                                ? "সম্পন্ন হয়েছে"
-                                : 'কোর্স সম্পন্ন করুন',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w800),
+                                ? () {}
+                                : () {
+                                    _debouncer.run(
+                                        action: () async {
+                                          final response = await ref
+                                              .read(
+                                                  enrolledCourseLandingRepoProvider)
+                                              .markAsComplete({
+                                            "materialType": "record",
+                                            "material_id": ref
+                                                .read(getRecordClassIdProvider)
+                                          });
+
+                                          if (response) {
+                                            ref
+                                                .watch(changeBtnStateProvider
+                                                    .notifier)
+                                                .setBtnState();
+
+                                            Navigator.pop(context, true);
+                                          }
+                                        },
+                                        loadingController: ref
+                                            .read(_loadingProvider.notifier));
+                                  },
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4)),
+                                backgroundColor: const Color(0xff2970FF),
+                                fixedSize:
+                                    Size(SizeConfig.w(356), SizeConfig.h(54))),
+                            child: Text(
+                              ref.watch(changeBtnStateProvider) ||
+                                      widget.isCompleted
+                                  ? "সম্পন্ন হয়েছে"
+                                  : 'কোর্স সম্পন্ন করুন',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w800),
+                            ),
                           ),
-                        ),
-                ],
+                  ],
+                ),
               ),
             );
           },

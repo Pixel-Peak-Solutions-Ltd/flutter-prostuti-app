@@ -87,8 +87,9 @@ mixin CommonWidgets {
       required String itemName,
       required String icon}) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       decoration: BoxDecoration(
+        color: theme.scaffoldBackgroundColor,
         border: Border.all(color: Colors.grey.shade500),
         borderRadius: BorderRadius.circular(10),
       ),
@@ -105,12 +106,13 @@ mixin CommonWidgets {
           subtitle: Text(
             lessonName,
             style: theme.textTheme.bodySmall!.copyWith(
-                fontWeight: FontWeight.w600, color: Colors.grey.shade700),
+                fontWeight: FontWeight.w600, color: Colors.grey.shade500),
           ),
           leading: SvgPicture.asset(
             icon,
             height: 25,
             width: 25,
+            color: theme.colorScheme.onSurface,
             fit: BoxFit.cover,
           ),
           trailing: trailingIcon),

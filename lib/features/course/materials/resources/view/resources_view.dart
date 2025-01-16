@@ -33,48 +33,58 @@ class ResourcesViewState extends ConsumerState<ResourcesView>
           return completedAsync.when(
             data: (completedId) {
               final completedSet = Set<String>.from(completedId);
-              return ListView.builder(
-                itemCount: resource.length,
-                itemBuilder: (context, index) {
-                  final isCompleted =
-                      completedSet.contains(resource[index].sId);
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      borderRadius: BorderRadius.circular(16)),
+                  child: ListView.builder(
+                    itemCount: resource.length,
+                    itemBuilder: (context, index) {
+                      final isCompleted =
+                          completedSet.contains(resource[index].sId);
 
-                  return InkWell(
-                    onTap: () {
-                      DateTime parsedDate =
-                          DateTime.parse(resource[index].resourceDate!);
-                      DateTime now = DateTime.now();
-                      if ((parsedDate.day == now.day &&
-                              parsedDate.month == now.month &&
-                              parsedDate.year == now.year) ||
-                          (parsedDate.isBefore(now))) {
-                        ref
-                            .watch(getResourceByIdProvider.notifier)
-                            .setResourceId(resource[index].sId!);
+                      return InkWell(
+                        onTap: () {
+                          DateTime parsedDate =
+                              DateTime.parse(resource[index].resourceDate!);
+                          DateTime now = DateTime.now();
+                          if ((parsedDate.day == now.day &&
+                                  parsedDate.month == now.month &&
+                                  parsedDate.year == now.year) ||
+                              (parsedDate.isBefore(now))) {
+                            ref
+                                .watch(getResourceByIdProvider.notifier)
+                                .setResourceId(resource[index].sId!);
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ResourceDetailsView(
-                                    isCompleted: isCompleted,
-                                  )),
-                        ).then((value) {
-                          if (value ?? false) {
-                            ref.refresh(completedIdProvider(courseId));
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ResourceDetailsView(
+                                        isCompleted: isCompleted,
+                                      )),
+                            ).then((value) {
+                              if (value ?? false) {
+                                ref.refresh(completedIdProvider(courseId));
+                              }
+                            });
                           }
-                        });
-                      }
+                        },
+                        child: lessonItem(theme,
+                            trailingIcon: TrailingIcon(
+                              classDate: resource[index].resourceDate!,
+                              isCompleted: isCompleted,
+                            ),
+                            itemName: "${resource[index].name}",
+                            icon: "assets/icons/resource.svg",
+                            lessonName: '${resource[index].lessonId!.number} '),
+                      );
                     },
-                    child: lessonItem(theme,
-                        trailingIcon: TrailingIcon(
-                          classDate: resource[index].resourceDate!,
-                          isCompleted: isCompleted,
-                        ),
-                        itemName: "${resource[index].name}",
-                        icon: "assets/icons/resource.svg",
-                        lessonName: '${resource[index].lessonId!.number} '),
-                  );
-                },
+                  ),
+                ),
               );
             },
             error: (error, stackTrace) => const Icon(

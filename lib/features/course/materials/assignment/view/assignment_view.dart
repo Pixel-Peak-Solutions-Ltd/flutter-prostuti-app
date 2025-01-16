@@ -33,49 +33,60 @@ class AssignmentViewState extends ConsumerState<AssignmentView>
           return completedAsync.when(
               data: (completedId) {
                 final completedSet = Set<String>.from(completedId);
-                return ListView.builder(
-                  itemCount: assignment.length,
-                  itemBuilder: (context, index) {
-                    final isCompleted =
-                        completedSet.contains(assignment[index].sId);
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 24, horizontal: 16),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(16)),
+                    child: ListView.builder(
+                      itemCount: assignment.length,
+                      itemBuilder: (context, index) {
+                        final isCompleted =
+                            completedSet.contains(assignment[index].sId);
 
-                    return InkWell(
-                      onTap: () async {
-                        DateTime parsedDate =
-                            DateTime.parse(assignment[index].unlockDate!);
-                        DateTime now = DateTime.now();
-                        if ((parsedDate.day == now.day &&
-                                parsedDate.month == now.month &&
-                                parsedDate.year == now.year) ||
-                            (parsedDate.isBefore(now))) {
-                          ref
-                              .watch(getAssignmentByIdProvider.notifier)
-                              .setAssignmentId(assignment[index].sId!);
+                        return InkWell(
+                          onTap: () async {
+                            DateTime parsedDate =
+                                DateTime.parse(assignment[index].unlockDate!);
+                            DateTime now = DateTime.now();
+                            if ((parsedDate.day == now.day &&
+                                    parsedDate.month == now.month &&
+                                    parsedDate.year == now.year) ||
+                                (parsedDate.isBefore(now))) {
+                              ref
+                                  .watch(getAssignmentByIdProvider.notifier)
+                                  .setAssignmentId(assignment[index].sId!);
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AssignmentDetailsView(
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AssignmentDetailsView(
+                                    isCompleted: isCompleted,
+                                  ),
+                                ),
+                              ).then((value) {
+                                if (value ?? false) {
+                                  ref.refresh(completedIdProvider(courseId));
+                                }
+                              });
+                            }
+                          },
+                          child: lessonItem(theme,
+                              trailingIcon: TrailingIcon(
+                                classDate: assignment[index].unlockDate!,
                                 isCompleted: isCompleted,
                               ),
-                            ),
-                          ).then((value) {
-                            if (value ?? false) {
-                              ref.refresh(completedIdProvider(courseId));
-                            }
-                          });
-                        }
+                              itemName: "${assignment[index].assignmentNo}",
+                              icon: "assets/icons/assignment.svg",
+                              lessonName:
+                                  '${assignment[index].lessonId!.number} '),
+                        );
                       },
-                      child: lessonItem(theme,
-                          trailingIcon: TrailingIcon(
-                            classDate: assignment[index].unlockDate!,
-                            isCompleted: isCompleted,
-                          ),
-                          itemName: "${assignment[index].assignmentNo}",
-                          icon: "assets/icons/assignment.svg",
-                          lessonName: '${assignment[index].lessonId!.number} '),
-                    );
-                  },
+                    ),
+                  ),
                 );
               },
               error: (error, stackTrace) => const Icon(
