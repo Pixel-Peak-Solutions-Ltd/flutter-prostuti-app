@@ -92,7 +92,7 @@ class ResourceDetailsViewState extends ConsumerState<ResourceDetailsView>
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+              padding: const EdgeInsets.symmetric(vertical: 24),
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
                   borderRadius: BorderRadius.circular(16)),

@@ -119,6 +119,32 @@ mixin CommonWidgets {
     );
   }
 
+  Widget materialItem(ThemeData theme,
+      {required Widget trailingIcon,
+      required String itemName,
+      required String icon}) {
+    return ListTile(
+        contentPadding: const EdgeInsets.symmetric(vertical: 16),
+        enableFeedback: true,
+        title: Text(
+          itemName,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: theme.textTheme.bodyMedium!.copyWith(
+            fontWeight: FontWeight.w300,
+          ),
+        ),
+        horizontalTitleGap: 8,
+        leading: SvgPicture.asset(
+          icon,
+          height: 25,
+          width: 25,
+          color: theme.colorScheme.onSurface,
+          fit: BoxFit.cover,
+        ),
+        trailing: trailingIcon);
+  }
+
   /*
   Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,7 +182,7 @@ mixin CommonWidgets {
   Text lessonName(ThemeData theme, String name) {
     return Text(
       name,
-      style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+      style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700),
     );
   }
 

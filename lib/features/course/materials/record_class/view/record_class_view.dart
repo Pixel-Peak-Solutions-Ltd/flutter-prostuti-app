@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/features/course/materials/record_class/view/record_class_details_view.dart';
-import 'package:prostuti/features/course/materials/record_class/viewmodel/get_record_class_id.dart';
-import 'package:prostuti/features/course/materials/record_class/viewmodel/record_class_viewmodel.dart';
 import 'package:prostuti/features/course/materials/shared/widgets/material_list_skeleton.dart';
-import 'package:prostuti/features/course/materials/shared/widgets/trailing_icon.dart';
 
+import '../../../course_details/viewmodel/course_details_vm.dart';
 import '../../../course_list/viewmodel/get_course_by_id.dart';
 import '../../get_material_completion.dart';
+import '../../shared/widgets/trailing_icon.dart';
+import '../viewmodel/get_record_class_id.dart';
 
 class RecordClassView extends ConsumerStatefulWidget {
   const RecordClassView({super.key});
@@ -22,14 +22,14 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    final recordClassAsync = ref.watch(recordClassViewmodelProvider);
+    final courseDetailsAsync = ref.watch(courseDetailsViewmodelProvider);
     final courseId = ref.read(getCourseByIdProvider);
     final completedAsync = ref.watch(completedIdProvider(courseId));
 
     return Scaffold(
       appBar: commonAppbar("রেকর্ড ক্লাস"),
-      body: recordClassAsync.when(
-        data: (recordClass) {
+      body: courseDetailsAsync.when(
+        data: (courseDetails) {
           return completedAsync.when(
               data: (completedId) {
                 final completedSet = Set<String>.from(completedId);
@@ -37,60 +37,104 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
                 return Padding(
                   padding: const EdgeInsets.all(16),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 24, horizontal: 16),
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: BorderRadius.circular(16)),
-                    child: ListView.builder(
-                      itemCount: recordClass.length,
-                      itemBuilder: (context, index) {
-                        final isCompleted =
-                            completedSet.contains(recordClass[index].sId);
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 24, horizontal: 16),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(16)),
+                      child: Column(
+                        children: [
+                          for (int i = 0;
+                              i < (courseDetails.data!.lessons!.length);
+                              i++)
+                            if (courseDetails.data!.lessons!.isNotEmpty)
+                              ListTileTheme(
+                                contentPadding: const EdgeInsets.all(0),
+                                dense: true,
+                                horizontalTitleGap: 0.0,
+                                minLeadingWidth: 0,
+                                child: ExpansionTile(
+                                  title: lessonName(theme,
+                                      '${courseDetails.data!.lessons![i].name} ${i + 1} '),
+                                  children: [
+                                    for (int j = 0;
+                                        j <
+                                            courseDetails.data!.lessons![i]
+                                                .recodedClasses!.length;
+                                        j++)
+                                      InkWell(
+                                        onTap: () {
+                                          DateTime parsedDate = DateTime.parse(
+                                              courseDetails
+                                                  .data!
+                                                  .lessons![i]
+                                                  .recodedClasses![j]
+                                                  .classDate!);
+                                          DateTime now = DateTime.now();
+                                          if ((parsedDate.day == now.day &&
+                                                  parsedDate.month ==
+                                                      now.month &&
+                                                  parsedDate.year ==
+                                                      now.year) ||
+                                              (parsedDate.isBefore(now))) {
+                                            ref
+                                                .watch(getRecordClassIdProvider
+                                                    .notifier)
+                                                .setRecordClassId(courseDetails
+                                                    .data!
+                                                    .lessons![i]
+                                                    .recodedClasses![j]
+                                                    .sId!);
 
-                        return InkWell(
-                          onTap: () {
-                            DateTime parsedDate =
-                                DateTime.parse(recordClass[index].classDate!);
-                            DateTime now = DateTime.now();
-                            if ((parsedDate.day == now.day &&
-                                    parsedDate.month == now.month &&
-                                    parsedDate.year == now.year) ||
-                                (parsedDate.isBefore(now))) {
-                              ref
-                                  .watch(getRecordClassIdProvider.notifier)
-                                  .setRecordClassId(recordClass[index].sId!);
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        RecordClassDetailsView(
-                                          videoUrl: recordClass[index]
-                                              .classVideoURL!
-                                              .path!,
-                                          isCompleted: isCompleted,
-                                        )),
-                              ).then((value) {
-                                if (value ?? false) {
-                                  ref.refresh(completedIdProvider(courseId));
-                                }
-                              });
-                            }
-                          },
-                          child: lessonItem(theme,
-                              trailingIcon: TrailingIcon(
-                                classDate: recordClass[index].classDate!,
-                                isCompleted: isCompleted,
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      RecordClassDetailsView(
+                                                        videoUrl: courseDetails
+                                                            .data!
+                                                            .lessons![i]
+                                                            .recodedClasses![j]
+                                                            .classVideoURL!
+                                                            .path!,
+                                                        isCompleted: completedSet
+                                                            .contains(courseDetails
+                                                                .data!
+                                                                .lessons![i]
+                                                                .recodedClasses![
+                                                                    j]
+                                                                .sId),
+                                                      )),
+                                            ).then((value) {
+                                              if (value ?? false) {
+                                                ref.refresh(completedIdProvider(
+                                                    courseId));
+                                              }
+                                            });
+                                          }
+                                        },
+                                        child: materialItem(
+                                          theme,
+                                          trailingIcon: TrailingIcon(
+                                            classDate: courseDetails
+                                                .data!
+                                                .lessons![i]
+                                                .recodedClasses![j]
+                                                .classDate!,
+                                            isCompleted: completedSet.contains(
+                                                courseDetails.data!.lessons![i]
+                                                    .recodedClasses![j].sId),
+                                          ),
+                                          itemName:
+                                              "${courseDetails.data!.lessons![i].recodedClasses![j].recodeClassName}",
+                                          icon: "assets/icons/record_class.svg",
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
-                              itemName: "${recordClass[index].recodeClassName}",
-                              icon: "assets/icons/record_class.svg",
-                              lessonName:
-                                  '${recordClass[index].lessonId!.number} '),
-                        );
-                      },
-                    ),
-                  ),
+                        ],
+                      )),
                 );
               },
               error: (error, stackTrace) => const Icon(
