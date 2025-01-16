@@ -54,72 +54,80 @@ class CategoryView extends ConsumerWidget {
             enabled: isLoading,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView.builder(
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 16),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          color: AppColors.borderNormalLight, width: 2),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ListTile(
-                      leading: Image.asset(
-                        icons[index % icons.length], // Cycle through icons
-                        height: 40,
-                        width: 40,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(16)),
+                child: ListView.builder(
+                  itemCount: categories.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 16),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            color: AppColors.borderNormalLight, width: 2),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      title: Text(categories[index]),
-                      onTap: isLoading
-                          ? () {}
-                          : () {
-                              _debouncer.run(
-                                  action: () async {
-                                    final response = await ref
-                                        .read(signupRepoProvider)
-                                        .registerStudent(
-                                      {
-                                        "otpCode": ref.read(otpProvider),
-                                        "name": ref.read(nameViewmodelProvider),
-                                        "email":
-                                            ref.read(emailViewmodelProvider),
-                                        "phone":
-                                            "+88${ref.read(phoneNumberProvider)}",
-                                        "password":
-                                            ref.read(passwordViewmodelProvider),
-                                        "confirmPassword":
-                                            ref.read(passwordViewmodelProvider),
-                                        "categoryType":
-                                            categories[index].toString()
-                                      },
-                                    );
+                      child: ListTile(
+                        leading: Image.asset(
+                          icons[index % icons.length], // Cycle through icons
+                          height: 40,
+                          width: 40,
+                        ),
+                        title: Text(categories[index]),
+                        onTap: isLoading
+                            ? () {}
+                            : () {
+                                _debouncer.run(
+                                    action: () async {
+                                      final response = await ref
+                                          .read(signupRepoProvider)
+                                          .registerStudent(
+                                        {
+                                          "otpCode": ref.read(otpProvider),
+                                          "name":
+                                              ref.read(nameViewmodelProvider),
+                                          "email":
+                                              ref.read(emailViewmodelProvider),
+                                          "phone":
+                                              "+88${ref.read(phoneNumberProvider)}",
+                                          "password": ref
+                                              .read(passwordViewmodelProvider),
+                                          "confirmPassword": ref
+                                              .read(passwordViewmodelProvider),
+                                          "categoryType":
+                                              categories[index].toString()
+                                        },
+                                      );
 
-                                    if (response.data != null &&
-                                        context.mounted) {
-                                      Fluttertoast.showToast(
-                                          msg: "signup Successful");
-                                      Nav().pushAndRemoveUntil(
-                                          const LoginView());
-                                    } else if (response.error != null) {
-                                      if (context.mounted) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                          content: Text(
-                                              ErrorHandler().getErrorMessage()),
-                                        ));
-                                        _debouncer.cancel();
-                                        ErrorHandler().clearErrorMessage();
+                                      if (response.data != null &&
+                                          context.mounted) {
+                                        Fluttertoast.showToast(
+                                            msg: "signup Successful");
+                                        Nav().pushAndRemoveUntil(
+                                            const LoginView());
+                                      } else if (response.error != null) {
+                                        if (context.mounted) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            content: Text(ErrorHandler()
+                                                .getErrorMessage()),
+                                          ));
+                                          _debouncer.cancel();
+                                          ErrorHandler().clearErrorMessage();
+                                        }
                                       }
-                                    }
-                                  },
-                                  loadingController:
-                                      ref.read(_loadingProvider.notifier));
-                            },
-                      trailing: const Icon(Icons.keyboard_arrow_right),
-                    ),
-                  );
-                },
+                                    },
+                                    loadingController:
+                                        ref.read(_loadingProvider.notifier));
+                              },
+                        trailing: const Icon(Icons.keyboard_arrow_right),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           );
