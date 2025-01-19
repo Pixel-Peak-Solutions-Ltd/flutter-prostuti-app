@@ -82,23 +82,54 @@ class ResourcesViewState extends ConsumerState<ResourcesView>
 
                                           Navigator.push(
                                             context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ResourceDetailsView(
-                                                      isCompleted:
-                                                          completedSet.contains(
-                                                              courseDetails
-                                                                  .data!
-                                                                  .lessons![i]
-                                                                  .resources![j]
-                                                                  .sId),
-                                                    )),
-                                          ).then((value) {
-                                            if (value ?? false) {
-                                              ref.refresh(completedIdProvider(
-                                                  courseId));
-                                            }
-                                          });
+                                            PageRouteBuilder(
+                                              pageBuilder: (context, animation,
+                                                      secondaryAnimation) =>
+                                                  ResourceDetailsView(
+                                                isCompleted:
+                                                    completedSet.contains(
+                                                  courseDetails
+                                                      .data!
+                                                      .lessons![i]
+                                                      .resources![j]
+                                                      .sId,
+                                                ),
+                                              ),
+                                              transitionsBuilder: (context,
+                                                  animation,
+                                                  secondaryAnimation,
+                                                  child) {
+                                                const begin = Offset(0.0,
+                                                    1.0); // Start off-screen at the bottom
+                                                const end = Offset
+                                                    .zero; // End at its original position
+                                                const curve = Curves
+                                                    .easeInOut; // Smooth easing curve
+
+                                                final tween = Tween(
+                                                        begin: begin, end: end)
+                                                    .chain(CurveTween(
+                                                        curve: curve));
+                                                final offsetAnimation =
+                                                    animation.drive(tween);
+
+                                                return SlideTransition(
+                                                  position: offsetAnimation,
+                                                  child: child,
+                                                );
+                                              },
+                                              transitionDuration: const Duration(
+                                                  milliseconds:
+                                                      300), // Animation duration
+                                            ),
+                                          ).then(
+                                            (value) {
+                                              if (value ?? false) {
+                                                ref.refresh(completedIdProvider(
+                                                    courseId));
+                                              }
+                                            },
+                                          );
                                         }
                                       },
                                       child: materialItem(

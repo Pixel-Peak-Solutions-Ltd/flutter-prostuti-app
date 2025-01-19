@@ -406,6 +406,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
+  flutter_localizations:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -696,6 +701,38 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  monarch:
+    dependency: "direct dev"
+    description:
+      name: monarch
+      sha256: "411fb22fffed2dd16a1137652d12c89a76631b2bfe74caf1866f1b90e633bdf5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.8.1"
+  monarch_annotations:
+    dependency: transitive
+    description:
+      name: monarch_annotations
+      sha256: dd52c4a37f6c9ffe8e2bbb32edc5e4baba42075db5febc59bd92f8c5f673560e
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
+  monarch_definitions:
+    dependency: transitive
+    description:
+      name: monarch_definitions
+      sha256: "089af2e69acf9cfac13a49ec976357c7ffff9d4b4efeb942f229e2197fee3b32"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.5.1"
+  monarch_utils:
+    dependency: transitive
+    description:
+      name: monarch_utils
+      sha256: "9f983f28971fc2955b3bb3e21a0fb3de3779837bb1739e2320b18959d9ed717f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   nm:
     dependency: transitive
     description:

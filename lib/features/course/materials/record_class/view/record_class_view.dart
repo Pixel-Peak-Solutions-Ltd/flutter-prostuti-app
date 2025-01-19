@@ -51,6 +51,7 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
                               ListTileTheme(
                                 contentPadding: const EdgeInsets.all(0),
                                 dense: true,
+                                enableFeedback: true,
                                 horizontalTitleGap: 0.0,
                                 minLeadingWidth: 0,
                                 child: ExpansionTile(
@@ -88,23 +89,54 @@ class RecordClassViewState extends ConsumerState<RecordClassView>
 
                                             Navigator.push(
                                               context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      RecordClassDetailsView(
-                                                        videoUrl: courseDetails
-                                                            .data!
-                                                            .lessons![i]
-                                                            .recodedClasses![j]
-                                                            .classVideoURL!
-                                                            .path!,
-                                                        isCompleted: completedSet
-                                                            .contains(courseDetails
-                                                                .data!
-                                                                .lessons![i]
-                                                                .recodedClasses![
-                                                                    j]
-                                                                .sId),
-                                                      )),
+                                              PageRouteBuilder(
+                                                pageBuilder: (context,
+                                                        animation,
+                                                        secondaryAnimation) =>
+                                                    RecordClassDetailsView(
+                                                  videoUrl: courseDetails
+                                                      .data!
+                                                      .lessons![i]
+                                                      .recodedClasses![j]
+                                                      .classVideoURL!
+                                                      .path!,
+                                                  isCompleted:
+                                                      completedSet.contains(
+                                                    courseDetails
+                                                        .data!
+                                                        .lessons![i]
+                                                        .recodedClasses![j]
+                                                        .sId,
+                                                  ),
+                                                ),
+                                                transitionsBuilder: (context,
+                                                    animation,
+                                                    secondaryAnimation,
+                                                    child) {
+                                                  const begin = Offset(0.0,
+                                                      1.0); // Start from bottom
+                                                  const end = Offset
+                                                      .zero; // End at its original position
+                                                  const curve =
+                                                      Curves.easeInOut;
+
+                                                  final tween = Tween(
+                                                          begin: begin,
+                                                          end: end)
+                                                      .chain(CurveTween(
+                                                          curve: curve));
+                                                  final offsetAnimation =
+                                                      animation.drive(tween);
+
+                                                  return SlideTransition(
+                                                    position: offsetAnimation,
+                                                    child: child,
+                                                  );
+                                                },
+                                                transitionDuration: const Duration(
+                                                    milliseconds:
+                                                        300), // Smooth animation
+                                              ),
                                             ).then((value) {
                                               if (value ?? false) {
                                                 ref.refresh(completedIdProvider(

@@ -11,30 +11,39 @@ class Nav {
 
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
+  Route _createPageRoute(Widget page) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    );
+  }
+
   // Push a new screen (widget class)
   Future<void> push(Widget page) async {
-    await navigatorKey.currentState
-        ?.push(MaterialPageRoute(builder: (context) => page));
+    await navigatorKey.currentState?.push(_createPageRoute(page));
   }
 
   // Pop the current screen
   void pop() {
-    navigatorKey.currentState?.pop(true);
+    navigatorKey.currentState?.pop();
   }
 
   // Push a new screen and remove all previous screens
   Future<void> pushAndRemoveUntil(Widget page) async {
     await navigatorKey.currentState?.pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => page),
+      _createPageRoute(page),
       (route) => false,
     );
   }
 
   // Replace the current screen with a new one
   Future<void> pushReplacement(Widget page) async {
-    await navigatorKey.currentState?.pushReplacement(
-      MaterialPageRoute(builder: (context) => page),
-    );
+    await navigatorKey.currentState?.pushReplacement(_createPageRoute(page));
   }
 
   // Pop until a specific screen
