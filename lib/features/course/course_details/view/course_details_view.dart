@@ -56,361 +56,361 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
       body: courseDetailsAsync.when(
         data: (courseDetails) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 48),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(
-                      courseDetails.data!.image!.path ??
-                          "https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png",
-                      fit: BoxFit.cover,
-                      width: MediaQuery.sizeOf(context).width,
-                      filterQuality: FilterQuality.high,
-                    ),
-                  ),
-                  const Gap(16),
-                  Text(
-                    courseDetails.data!.name ?? "No Name",
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(fontWeight: FontWeight.w800),
-                    maxLines: 2,
-                  ),
-                  const Gap(8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const CourseDetailsPills(
-                            value: '4.5 rating',
-                            icon: Icons.star_border_outlined,
-                          ),
-                          Text(
-                            courseDetails.data!.priceType == "Free" ||
-                                    courseDetails.data!.priceType ==
-                                        "Subscription"
-                                ? "${courseDetails.data!.priceType}"
-                                : '৳ ${courseDetails.data!.price}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .copyWith(
-                                    color: AppColors.textActionSecondaryLight),
-                          ),
-                        ],
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(16)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.network(
+                        courseDetails.data!.image!.path ??
+                            "https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png",
+                        fit: BoxFit.cover,
+                        width: MediaQuery.sizeOf(context).width,
+                        filterQuality: FilterQuality.high,
                       ),
-                      const Gap(21),
-                      SingleChildScrollView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    ),
+                    const Gap(16),
+                    Text(
+                      courseDetails.data!.name ?? "No Name",
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(fontWeight: FontWeight.w800),
+                      maxLines: 2,
+                    ),
+                    const Gap(8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const CourseDetailsPills(
-                              value: '৩৪৫ শিক্ষাথী',
-                              icon: Icons.groups_2_outlined,
+                              value: '4.5 rating',
+                              icon: Icons.star_border_outlined,
                             ),
-                            CourseDetailsPills(
-                              value:
-                                  '${courseDetails.data!.totalTests}টি টেস্ট',
-                              icon: Icons.menu_book,
-                            ),
-                            CourseDetailsPills(
-                              value:
-                                  '${courseDetails.data!.totalRecodedClasses}টি রেকর্ডক্লাস',
-                              icon: Icons.video_collection_outlined,
-                            ),
-                            CourseDetailsPills(
-                              value:
-                                  '${courseDetails.data!.totalLessons}টি লেসন',
-                              icon: Icons.view_module_outlined,
+                            Text(
+                              courseDetails.data!.priceType == "Free" ||
+                                      courseDetails.data!.priceType ==
+                                          "Subscription"
+                                  ? "${courseDetails.data!.priceType}"
+                                  : '৳ ${courseDetails.data!.price}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(
+                                      color:
+                                          AppColors.textActionSecondaryLight),
                             ),
                           ],
                         ),
+                        const Gap(21),
+                        SingleChildScrollView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              const CourseDetailsPills(
+                                value: '৩৪৫ শিক্ষাথী',
+                                icon: Icons.groups_2_outlined,
+                              ),
+                              CourseDetailsPills(
+                                value:
+                                    '${courseDetails.data!.totalTests}টি টেস্ট',
+                                icon: Icons.menu_book,
+                              ),
+                              CourseDetailsPills(
+                                value:
+                                    '${courseDetails.data!.totalRecodedClasses}টি রেকর্ডক্লাস',
+                                icon: Icons.video_collection_outlined,
+                              ),
+                              CourseDetailsPills(
+                                value:
+                                    '${courseDetails.data!.totalLessons}টি লেসন',
+                                icon: Icons.view_module_outlined,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Gap(32),
+                        const CourseListHeader(text: 'টেস্ট সম্পর্কে'),
+                        const Gap(8),
+                        ExpandableText(text: courseDetails.data!.details!),
+                        // RichText(
+                        //   text: TextSpan(
+                        //     text: 'সময়ঃ ',
+                        //     style: Theme.of(context)
+                        //         .textTheme
+                        //         .bodyMedium!
+                        //         .copyWith(fontWeight: FontWeight.w700),
+                        //     children: <TextSpan>[
+                        //       TextSpan(
+                        //           text: 'সোম ও বুধ  রাত ৮.৩০ - ৯.৪৫ ঘোটীকায়',
+                        //           style: Theme.of(context).textTheme.bodyMedium),
+                        //     ],
+                        //   ),
+                        // )
+                      ],
+                    ),
+                    const Gap(32),
+                    const CourseListHeader(text: 'কোর্স কারিকুলাম'),
+                    const Gap(16),
+                    for (int i = 0;
+                        i <
+                            (lessonMoreBtn
+                                ? courseDetails.data!.lessons!.length
+                                : 1);
+                        i++)
+                      if (courseDetails.data!.lessons!.isNotEmpty)
+                        ListTileTheme(
+                          contentPadding: const EdgeInsets.all(0),
+                          dense: true,
+                          horizontalTitleGap: 0.0,
+                          minLeadingWidth: 0,
+                          child: ExpansionTile(
+                            title: lessonName(theme,
+                                '${courseDetails.data!.lessons![i].name} ${i + 1} '),
+                            children: [
+                              for (int j = 0;
+                                  j <
+                                      courseDetails.data!.lessons![i]
+                                          .recodedClasses!.length;
+                                  j++)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16)
+                                          .copyWith(top: 0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            "assets/icons/record_class.svg",
+                                            height: 20,
+                                            width: 20,
+                                            color: theme.colorScheme.onSurface,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          const Gap(8),
+                                          SizedBox(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.7,
+                                            child: Text(
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              'Recorded Class: ${courseDetails.data!.lessons![i].recodedClasses![j].recodeClassName!}',
+                                              style: theme.textTheme.bodySmall!
+                                                  .copyWith(
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Icon(
+                                        Icons.lock_outline_rounded,
+                                        size: 18,
+                                        color: Colors.grey.shade600,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              for (int j = 0;
+                                  j <
+                                      courseDetails
+                                          .data!.lessons![i].resources!.length;
+                                  j++)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16)
+                                          .copyWith(top: 0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            "assets/icons/resource.svg",
+                                            height: 20,
+                                            width: 20,
+                                            color: theme.colorScheme.onSurface,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          const Gap(8),
+                                          SizedBox(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.7,
+                                            child: Text(
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              'Resource: ${courseDetails.data!.lessons![i].resources![j].name}',
+                                              style: theme.textTheme.bodySmall!
+                                                  .copyWith(
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Icon(
+                                        Icons.lock_outline_rounded,
+                                        size: 18,
+                                        color: Colors.grey.shade600,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              for (int j = 0;
+                                  j <
+                                      courseDetails.data!.lessons![i]
+                                          .assignments!.length;
+                                  j++)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16)
+                                          .copyWith(top: 0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            "assets/icons/assignment.svg",
+                                            height: 20,
+                                            width: 20,
+                                            color: theme.colorScheme.onSurface,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          const Gap(8),
+                                          SizedBox(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.7,
+                                            child: Text(
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              'Assignment: ${courseDetails.data!.lessons![i].assignments![j].assignmentNo!}',
+                                              style: theme.textTheme.bodySmall!
+                                                  .copyWith(
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Icon(
+                                        Icons.lock_outline_rounded,
+                                        size: 18,
+                                        color: Colors.grey.shade600,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              for (int j = 0;
+                                  j <
+                                      courseDetails
+                                          .data!.lessons![i].tests!.length;
+                                  j++)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16)
+                                          .copyWith(top: 0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          SvgPicture.asset(
+                                            "assets/icons/test.svg",
+                                            height: 20,
+                                            width: 20,
+                                            color: theme.colorScheme.onSurface,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          const Gap(8),
+                                          SizedBox(
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                0.7,
+                                            child: Text(
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              'Test: ${courseDetails.data!.lessons![i].tests![j].name!}',
+                                              style: theme.textTheme.bodySmall!
+                                                  .copyWith(
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Icon(
+                                        Icons.lock_outline_rounded,
+                                        size: 18,
+                                        color: Colors.grey.shade600,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                    const Gap(8),
+                    Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                            elevation: 0),
+                        onPressed: () {
+                          ref
+                              .watch(lessonSeeMoreViewmodelProvider.notifier)
+                              .toggleBtn();
+                        },
+                        child: Text(lessonMoreBtn ? "কম দেখুন" : 'আরও দেখুন',
+                            style: Theme.of(context).textTheme.bodySmall),
                       ),
-                      const Gap(32),
-                      const CourseListHeader(text: 'টেস্ট সম্পর্কে'),
-                      const Gap(8),
-                      ExpandableText(text: courseDetails.data!.details!),
-                      // RichText(
-                      //   text: TextSpan(
-                      //     text: 'সময়ঃ ',
-                      //     style: Theme.of(context)
-                      //         .textTheme
-                      //         .bodyMedium!
-                      //         .copyWith(fontWeight: FontWeight.w700),
-                      //     children: <TextSpan>[
-                      //       TextSpan(
-                      //           text: 'সোম ও বুধ  রাত ৮.৩০ - ৯.৪৫ ঘোটীকায়',
-                      //           style: Theme.of(context).textTheme.bodyMedium),
-                      //     ],
-                      //   ),
-                      // )
-                    ],
-                  ),
-                  const Gap(32),
-                  const CourseListHeader(text: 'কোর্স কারিকুলাম'),
-                  const Gap(16),
-                  for (int i = 0;
-                      i <
-                          (lessonMoreBtn
-                              ? courseDetails.data!.lessons!.length
-                              : 1);
-                      i++)
-                    if (courseDetails.data!.lessons!.isNotEmpty)
-                      ListTileTheme(
-                        contentPadding: const EdgeInsets.all(0),
-                        dense: true,
-                        horizontalTitleGap: 0.0,
-                        minLeadingWidth: 0,
-                        child: ExpansionTile(
-                          title: lessonName(theme,
-                              '${courseDetails.data!.lessons![i].name} ${i + 1} '),
-                          children: [
-                            for (int j = 0;
-                                j <
-                                    courseDetails.data!.lessons![i]
-                                        .recodedClasses!.length;
-                                j++)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16)
-                                        .copyWith(top: 0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          "assets/icons/record_class.svg",
-                                          height: 20,
-                                          width: 20,
-                                          color: theme.colorScheme.onSurface,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        const Gap(8),
-                                        SizedBox(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  0.7,
-                                          child: Text(
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            'Recorded Class: ${courseDetails.data!.lessons![i].recodedClasses![j].recodeClassName!}',
-                                            style: theme.textTheme.bodySmall!
-                                                .copyWith(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Icon(
-                                      Icons.lock_outline_rounded,
-                                      size: 18,
-                                      color: Colors.grey.shade600,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            for (int j = 0;
-                                j <
-                                    courseDetails
-                                        .data!.lessons![i].resources!.length;
-                                j++)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16)
-                                        .copyWith(top: 0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          "assets/icons/resource.svg",
-                                          height: 20,
-                                          width: 20,
-                                          color: theme.colorScheme.onSurface,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        const Gap(8),
-                                        SizedBox(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  0.7,
-                                          child: Text(
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            'Resource: ${courseDetails.data!.lessons![i].resources![j].name}',
-                                            style: theme.textTheme.bodySmall!
-                                                .copyWith(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Icon(
-                                      Icons.lock_outline_rounded,
-                                      size: 18,
-                                      color: Colors.grey.shade600,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            for (int j = 0;
-                                j <
-                                    courseDetails
-                                        .data!.lessons![i].assignments!.length;
-                                j++)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16)
-                                        .copyWith(top: 0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          "assets/icons/assignment.svg",
-                                          height: 20,
-                                          width: 20,
-                                          color: theme.colorScheme.onSurface,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        const Gap(8),
-                                        SizedBox(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  0.7,
-                                          child: Text(
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            'Assignment: ${courseDetails.data!.lessons![i].assignments![j].assignmentNo!}',
-                                            style: theme.textTheme.bodySmall!
-                                                .copyWith(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Icon(
-                                      Icons.lock_outline_rounded,
-                                      size: 18,
-                                      color: Colors.grey.shade600,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            for (int j = 0;
-                                j <
-                                    courseDetails
-                                        .data!.lessons![i].tests!.length;
-                                j++)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16)
-                                        .copyWith(top: 0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          "assets/icons/test.svg",
-                                          height: 20,
-                                          width: 20,
-                                          color: theme.colorScheme.onSurface,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        const Gap(8),
-                                        SizedBox(
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  0.7,
-                                          child: Text(
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            'Test: ${courseDetails.data!.lessons![i].tests![j].name!}',
-                                            style: theme.textTheme.bodySmall!
-                                                .copyWith(
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Icon(
-                                      Icons.lock_outline_rounded,
-                                      size: 18,
-                                      color: Colors.grey.shade600,
-                                    )
-                                  ],
-                                ),
-                              ),
-                          ],
+                    ),
+                    const Gap(32),
+                    const CourseListHeader(text: 'টেস্ট রিভিউ'),
+                    const Gap(16),
+                    for (int i = 0; i < (reviewMoreBtn ? 10 : 3); i++)
+                      const CourseDetailsReviewCard(),
+                    const Gap(8),
+                    Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                            elevation: 0),
+                        onPressed: () {
+                          ref
+                              .watch(reviewSeeMoreViewmodelProvider.notifier)
+                              .toggleBtn();
+                        },
+                        child: Text(
+                          reviewMoreBtn ? "কম দেখুন" : 'আরও দেখুন',
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
-                  const Gap(8),
-                  Center(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                          elevation: 0),
-                      onPressed: () {
-                        ref
-                            .watch(lessonSeeMoreViewmodelProvider.notifier)
-                            .toggleBtn();
-                      },
-                      child: Text(
-                        lessonMoreBtn ? "কম দেখুন" : 'আরও দেখুন',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(color: Colors.black),
-                      ),
-                    ),
-                  ),
-                  const Gap(32),
-                  const CourseListHeader(text: 'টেস্ট রিভিউ'),
-                  const Gap(16),
-                  for (int i = 0; i < (reviewMoreBtn ? 10 : 3); i++)
-                    const CourseDetailsReviewCard(),
-                  const Gap(8),
-                  Center(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                          elevation: 0),
-                      onPressed: () {
-                        ref
-                            .watch(reviewSeeMoreViewmodelProvider.notifier)
-                            .toggleBtn();
-                      },
-                      child: Text(
-                        reviewMoreBtn ? "কম দেখুন" : 'আরও দেখুন',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(color: Colors.black),
-                      ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           );
@@ -423,8 +423,9 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
         },
       ),
       bottomNavigationBar: Container(
+          color: Theme.of(context).colorScheme.primary,
           height: SizeConfig.h(60),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
           child: courseDetailsAsync.when(
             data: (data) {
               return Skeletonizer(

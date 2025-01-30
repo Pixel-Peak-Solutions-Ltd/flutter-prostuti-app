@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/services/debouncer.dart';
@@ -8,7 +9,6 @@ import 'package:prostuti/features/auth/forget_password/repository/forget_passwor
 import 'package:prostuti/features/auth/login/view/login_view.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/otp_viewmodel.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/phone_number_viewmodel.dart';
-
 import 'package:skeletonizer/skeletonizer.dart';
 
 class NewPasswordView extends ConsumerStatefulWidget {
@@ -47,10 +47,14 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(_loadingProvider);
+    bool isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -58,8 +62,10 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.asset(
-                "assets/images/prostuti_logo.png",
+              SvgPicture.asset(
+                isDarkMode
+                    ? "assets/images/prostuti_logo_dark.svg"
+                    : "assets/images/prostuti_logo_light.svg",
                 width: 154,
                 height: 101,
               ),

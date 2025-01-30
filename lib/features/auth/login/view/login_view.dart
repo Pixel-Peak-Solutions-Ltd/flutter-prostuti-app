@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
@@ -52,6 +53,8 @@ class LoginViewState extends ConsumerState<LoginView> {
   Widget build(BuildContext context) {
     bool rememberMe = ref.watch(rememberMeProvider);
     final isLoading = ref.watch(_loadingProvider);
+    bool isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
 
     return Scaffold(
       body: Padding(
@@ -61,8 +64,10 @@ class LoginViewState extends ConsumerState<LoginView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Gap(80),
-              Image.asset(
-                "assets/images/prostuti_logo.png",
+              SvgPicture.asset(
+                isDarkMode
+                    ? "assets/images/prostuti_logo_dark.svg"
+                    : "assets/images/prostuti_logo_light.svg",
                 width: 154,
                 height: 101,
               ),
@@ -110,7 +115,7 @@ class LoginViewState extends ConsumerState<LoginView> {
                     TextFormField(
                       validator: _validatePassword,
                       keyboardType: TextInputType.text,
-                      obscureText: true,
+                      obscureText: ref.watch(rememberMeProvider) ? false : true,
                       controller: _passwordController,
                       decoration: const InputDecoration(
                           hintText: "আপনার পাসওয়ার্ড লিখুন"),
@@ -126,16 +131,17 @@ class LoginViewState extends ConsumerState<LoginView> {
                               width: 16,
                               child: Checkbox(
                                 value: rememberMe,
+                                checkColor: Colors.white,
                                 onChanged: (value) {
                                   ref
-                                      .watch(rememberMeProvider.notifier)
+                                      .read(rememberMeProvider.notifier)
                                       .toggleCheckBox(value);
                                 },
                               ),
                             ),
                             const Gap(8),
                             Text(
-                              '30 দিনের জন্য মনে রাখবেন',
+                              'পাসওয়ার্ড দেখুন',
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],

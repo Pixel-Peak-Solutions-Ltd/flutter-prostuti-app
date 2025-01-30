@@ -17,7 +17,8 @@ class CategoryTile extends StatelessWidget {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.outline,
+              color: Theme.of(context).scaffoldBackgroundColor,
+              border: Border.all(width: 0.2, color: Colors.grey.shade900),
               borderRadius: BorderRadius.circular(8),
             ),
             padding: const EdgeInsets.all(10),

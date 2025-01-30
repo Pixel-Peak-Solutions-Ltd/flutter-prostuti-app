@@ -26,8 +26,8 @@ class AppColors {
   static const textDisableLight = Color(0xFFD1D5DB);
   static const textDisableDark = Color(0xFFD1D5DB);
 
-  static const containerBackgroundDark = Color(0xff15212F);
-  static const containerBackgroundLight = Color(0xffFFFFFF);
+  static const scaffoldBackgroundDark = Color(0xff15212F);
+  static const scaffoldBackgroundLight = Color(0xffFFFFFF);
 
   // Background colors
   static const backgroundPrimaryLight = Color(0xFFF6F7FB);

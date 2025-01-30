@@ -15,8 +15,9 @@ class SearchContainer extends StatelessWidget {
     return Container(
       height: 60,
       decoration: BoxDecoration(
+        border: Border.all(width: 0.2, color: Colors.grey.shade900),
         borderRadius: BorderRadius.circular(8),
-        color: Theme.of(context).colorScheme.outline,
+        color: Theme.of(context).scaffoldBackgroundColor,
       ),
       child: Padding(
         padding: const EdgeInsets.all(12),
