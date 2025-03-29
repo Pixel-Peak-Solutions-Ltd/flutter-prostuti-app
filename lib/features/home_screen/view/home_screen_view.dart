@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/services/nav.dart';
@@ -9,17 +11,20 @@ import 'package:prostuti/features/course/my_course/view/my_course_view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../profile/view/profile_view.dart';
+import '../../profile/viewmodel/profile_viewmodel.dart';
 import '../widget/calendar_widget.dart';
 import '../widget/category_card.dart';
 import '../widget/leaderboard_card.dart';
 import '../../../core/configs/app_colors.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
+  const HomeScreen({super.key});
+
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   final PageController _adController = PageController();
 
   // Temporary List of flashcards
@@ -53,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userProfileAsyncValue = ref.watch(userProfileProvider);
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -81,35 +87,49 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         GestureDetector(
-                    onTap: (){
-                      Nav().push(UserProfileView());
-                    },
-                          child: Row(
-                            children: [
-                              const CircleAvatar(
-                                backgroundImage: AssetImage(
-                                  'assets/images/test_dp.jpg',
-                                ),
-                              ),
-                              const Gap(16),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'নাজমুল ইসলাম সিফাত',
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall!,
-                                  ),
-                                  Text(
-                                    'প্রফাইল দেখুন',
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium!,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
+                            onTap: () {
+                              Nav().push(UserProfileView());
+                            },
+                            child: userProfileAsyncValue.when(
+                              data: (userData) {
+                                return Row(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundImage: userData.data!.image ==
+                                              null
+                                          ? const AssetImage(
+                                                  'assets/images/test_dp.jpg')
+                                              as ImageProvider
+                                          : CachedNetworkImageProvider(
+                                              userData.data!.image!.path!),
+                                    ),
+                                    const Gap(16),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${userData.data!.name}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall!,
+                                        ),
+                                        Text(
+                                          'প্রফাইল দেখুন',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              },
+                              error: (error, stackTrace) {
+                                print(error.toString());
+                              },
+                              loading: () {},
+                            )),
                         const Gap(24),
                         Padding(
                           padding: EdgeInsets.symmetric(

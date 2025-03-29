@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,6 +9,7 @@ import 'package:prostuti/features/auth/login/view/login_view.dart';
 
 import '../../../common/view_model/auth_notifier.dart';
 import '../../../core/configs/app_colors.dart';
+import '../../payment/viewmodel/check_subscription.dart';
 import '../viewmodel/profile_viewmodel.dart';
 import '../widgets/ProfileSkeleton.dart';
 import '../widgets/custom_list_tile.dart';
@@ -20,6 +22,7 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
   Widget build(BuildContext context, WidgetRef ref) {
     const isDarkTheme = true;
     final userProfileAsyncValue = ref.watch(userProfileProvider);
+    final subscriptionAsyncValue = ref.watch(userSubscribedProvider);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -37,7 +40,7 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                       backgroundImage: userData.data!.image == null
                           ? AssetImage('assets/images/test_dp.jpg')
                               as ImageProvider
-                          : NetworkImage(userData.data!.image!.path!),
+                          : CachedNetworkImageProvider(userData.data!.image!.path!),
                     ),
                     const Gap(8),
                     Text(
@@ -48,50 +51,46 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                           .copyWith(fontWeight: FontWeight.w500),
                     ),
                     const Gap(24),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * .081,
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        image: const DecorationImage(
-                          image: AssetImage(
-                              "assets/images/upgrade_to_premium_background.png"),
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Row(
-                        children: [
-                          SvgPicture.asset("assets/icons/premium_upgrade.svg"),
-                          const Gap(10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'প্রিমিয়ামে আপগ্রেড করুন',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        color:
-                                            AppColors.textActionPrimaryLight),
-                              ),
-                              Text(
-                                'আপনার পয়েন্ট',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                        fontWeight: FontWeight.w400,
-                                        color:
-                                            AppColors.textActionPrimaryLight),
-                              ),
-                            ],
+                    subscriptionAsyncValue.when(data: (data) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * .081,
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          image: const DecorationImage(
+                            image: AssetImage(
+                                "assets/images/upgrade_to_premium_background.png"),
+                            fit: BoxFit.cover,
                           ),
-                        ],
-                      ),
-                    ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          children: [
+                            SvgPicture.asset("assets/icons/premium_upgrade.svg"),
+                            const Gap(10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  data? 'প্রিমিয়ামে আপগ্রেড করুন' : "আপনি প্রিমিয়াম প্ল্যানে আছেন",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      color:
+                                      AppColors.textActionPrimaryLight),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }, error: (error, stackTrace) {
+                      return Text(error.toString());
+                    }, loading: () {
+                      return Container();
+                    },)
                   ],
                 ),
               ),
