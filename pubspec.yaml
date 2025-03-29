@@ -35,8 +35,8 @@ dependencies:
   dartz:
   pod_player: ^0.2.2
   ionicons: ^0.2.2
-  fluttertoast:
-  open_filex:
+  fluttertoast: ^8.2.12
+  open_filex: ^4.7.0
   path_provider:
   webview_flutter: ^4.8.0
   modal_bottom_sheet: ^3.0.0
