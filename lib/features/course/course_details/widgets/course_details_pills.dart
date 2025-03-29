@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:prostuti/core/configs/app_colors.dart';
 
 class CourseDetailsPills extends StatelessWidget {
   const CourseDetailsPills({
@@ -21,16 +20,10 @@ class CourseDetailsPills extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: AppColors.textTertiaryLight,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
           const Gap(4),
-          Text(
-            value,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall!
-                .copyWith(color: AppColors.textTertiaryLight),
-          ),
+          Text(value, style: Theme.of(context).textTheme.bodySmall),
         ],
       ),
     );

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/features/course/materials/assignment/view/assignment_details_view.dart';
-import 'package:prostuti/features/course/materials/assignment/viewmodel/assignment_viewmodel.dart';
 import 'package:prostuti/features/course/materials/assignment/viewmodel/get_assignment_by_id.dart';
 
+import '../../../course_details/viewmodel/course_details_vm.dart';
 import '../../../course_list/viewmodel/get_course_by_id.dart';
 import '../../get_material_completion.dart';
 import '../../shared/widgets/material_list_skeleton.dart';
@@ -21,61 +21,138 @@ class AssignmentViewState extends ConsumerState<AssignmentView>
     with CommonWidgets {
   @override
   Widget build(BuildContext context) {
-    final assignmentListAsync = ref.watch(assignmentViewmodelProvider);
+    final courseDetailsAsync = ref.watch(courseDetailsViewmodelProvider);
     final courseId = ref.read(getCourseByIdProvider);
     final completedAsync = ref.watch(completedIdProvider(courseId));
 
     ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: commonAppbar("এসাইনমেন্ট"),
-      body: assignmentListAsync.when(
-        data: (assignment) {
+      body: courseDetailsAsync.when(
+        data: (courseDetails) {
           return completedAsync.when(
               data: (completedId) {
                 final completedSet = Set<String>.from(completedId);
-                return ListView.builder(
-                  itemCount: assignment.length,
-                  itemBuilder: (context, index) {
-                    final isCompleted =
-                        completedSet.contains(assignment[index].sId);
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 24, horizontal: 16),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary,
+                          borderRadius: BorderRadius.circular(16)),
+                      child: Column(
+                        children: [
+                          for (int i = 0;
+                              i < (courseDetails.data!.lessons!.length);
+                              i++)
+                            if (courseDetails.data!.lessons!.isNotEmpty)
+                              ListTileTheme(
+                                contentPadding: const EdgeInsets.all(0),
+                                dense: true,
+                                horizontalTitleGap: 0.0,
+                                minLeadingWidth: 0,
+                                child: ExpansionTile(
+                                  title: lessonName(theme,
+                                      '${courseDetails.data!.lessons![i].name} ${i + 1} '),
+                                  children: [
+                                    for (int j = 0;
+                                        j <
+                                            courseDetails.data!.lessons![i]
+                                                .assignments!.length;
+                                        j++)
+                                      InkWell(
+                                        onTap: () async {
+                                          DateTime parsedDate = DateTime.parse(
+                                              courseDetails.data!.lessons![i]
+                                                  .assignments![j].unlockDate!);
+                                          DateTime now = DateTime.now();
+                                          if ((parsedDate.day == now.day &&
+                                                  parsedDate.month ==
+                                                      now.month &&
+                                                  parsedDate.year ==
+                                                      now.year) ||
+                                              (parsedDate.isBefore(now))) {
+                                            ref
+                                                .watch(getAssignmentByIdProvider
+                                                    .notifier)
+                                                .setAssignmentId(courseDetails
+                                                    .data!
+                                                    .lessons![i]
+                                                    .assignments![j]
+                                                    .sId!);
 
-                    return InkWell(
-                      onTap: () async {
-                        DateTime parsedDate =
-                            DateTime.parse(assignment[index].unlockDate!);
-                        DateTime now = DateTime.now();
-                        if ((parsedDate.day == now.day &&
-                                parsedDate.month == now.month &&
-                                parsedDate.year == now.year) ||
-                            (parsedDate.isBefore(now))) {
-                          ref
-                              .watch(getAssignmentByIdProvider.notifier)
-                              .setAssignmentId(assignment[index].sId!);
+                                            Navigator.push(
+                                              context,
+                                              PageRouteBuilder(
+                                                pageBuilder: (context,
+                                                        animation,
+                                                        secondaryAnimation) =>
+                                                    AssignmentDetailsView(
+                                                  isCompleted:
+                                                      completedSet.contains(
+                                                    courseDetails
+                                                        .data!
+                                                        .lessons![i]
+                                                        .assignments![j]
+                                                        .sId,
+                                                  ),
+                                                ),
+                                                transitionsBuilder: (context,
+                                                    animation,
+                                                    secondaryAnimation,
+                                                    child) {
+                                                  const begin = Offset(0.0,
+                                                      1.0); // Start from bottom
+                                                  const end = Offset
+                                                      .zero; // End at original position
+                                                  const curve =
+                                                      Curves.easeInOut;
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AssignmentDetailsView(
-                                isCompleted: isCompleted,
+                                                  final tween = Tween(
+                                                          begin: begin,
+                                                          end: end)
+                                                      .chain(CurveTween(
+                                                          curve: curve));
+                                                  final offsetAnimation =
+                                                      animation.drive(tween);
+
+                                                  return SlideTransition(
+                                                    position: offsetAnimation,
+                                                    child: child,
+                                                  );
+                                                },
+                                              ),
+                                            ).then((value) {
+                                              if (value ?? false) {
+                                                ref.refresh(completedIdProvider(
+                                                    courseId));
+                                              }
+                                            });
+                                          }
+                                        },
+                                        child: materialItem(
+                                          theme,
+                                          trailingIcon: TrailingIcon(
+                                            classDate: courseDetails
+                                                .data!
+                                                .lessons![i]
+                                                .assignments![j]
+                                                .unlockDate!,
+                                            isCompleted: completedSet.contains(
+                                                courseDetails.data!.lessons![i]
+                                                    .assignments![j].sId),
+                                          ),
+                                          itemName:
+                                              "${courseDetails.data!.lessons![i].assignments![j].assignmentNo}",
+                                          icon: "assets/icons/assignment.svg",
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ).then((value) {
-                            if (value ?? false) {
-                              ref.refresh(completedIdProvider(courseId));
-                            }
-                          });
-                        }
-                      },
-                      child: lessonItem(theme,
-                          trailingIcon: TrailingIcon(
-                            classDate: assignment[index].unlockDate!,
-                            isCompleted: isCompleted,
-                          ),
-                          itemName: "${assignment[index].assignmentNo}",
-                          icon: "assets/icons/assignment.svg",
-                          lessonName: '${assignment[index].lessonId!.number} '),
-                    );
-                  },
+                        ],
+                      )),
                 );
               },
               error: (error, stackTrace) => const Icon(

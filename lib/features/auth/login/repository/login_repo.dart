@@ -21,11 +21,13 @@ class LoginRepo {
 
   LoginRepo(this._dioService);
 
-  Future<ApiResponse> loginUser(
-      {required Map<String, String> payload,
-      required WidgetRef ref,
-      required bool rememberMe}) async {
-    final response = await _dioService.postRequest("/auth/login", payload);
+  Future<ApiResponse> loginUser({
+    required Map<String, String> payload,
+    required WidgetRef ref,
+    required bool rememberMe,
+  }) async {
+    final dioService = ref.read(dioServiceProvider);
+    final response = await dioService.postRequest("/auth/login", payload);
 
     if (response.statusCode == 200) {
       final loginResponse = Login.fromJson(response.data);
@@ -34,6 +36,7 @@ class LoginRepo {
       final refreshToken = loginResponse.data!.refreshToken;
       final refreshTokenExpiresIn = loginResponse.data!.refreshTokenExpiresIn;
 
+      // Calculate expiry times
       final accessExpiryTime = DateTime.now()
           .add(Duration(seconds: accessTokenExpiresIn))
           .millisecondsSinceEpoch;
@@ -44,8 +47,13 @@ class LoginRepo {
                   .millisecondsSinceEpoch
               : null;
 
-      await ref.read(authNotifierProvider.notifier).setAccessToken(accessToken,
-          accessExpiryTime, refreshToken, refreshExpiryTime, rememberMe);
+      // Store tokens using AuthNotifier
+      await ref.read(authNotifierProvider.notifier).setTokens(
+            accessToken: accessToken,
+            accessExpiryTime: accessExpiryTime,
+            refreshToken: refreshToken,
+            refreshExpiryTime: refreshExpiryTime,
+          );
 
       return ApiResponse.success(loginResponse);
     } else {

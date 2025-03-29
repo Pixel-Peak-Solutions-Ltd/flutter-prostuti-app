@@ -26,9 +26,12 @@ class AppColors {
   static const textDisableLight = Color(0xFFD1D5DB);
   static const textDisableDark = Color(0xFFD1D5DB);
 
+  static const scaffoldBackgroundDark = Color(0xff15212F);
+  static const scaffoldBackgroundLight = Color(0xffFFFFFF);
+
   // Background colors
   static const backgroundPrimaryLight = Color(0xFFF6F7FB);
-  static const backgroundPrimaryDark = Color(0xFF15212F);
+  static const backgroundPrimaryDark = Color(0xFF233243);
 
   static const backgroundSecondaryLight = Color(0xFFD1D5DB);
   static const backgroundSecondaryDark = Color(0xFF030712);
@@ -55,7 +58,7 @@ class AppColors {
   static const shadePrimaryDark = Color(0xFFD1E0FF);
 
   static const shadeSecondaryLight = Color(0xFFE1EAFF);
-  static const shadeSecondaryDark = Color(0xFFE1EAFF);
+  static const shadeSecondaryDark = Color(0xFF233243);
 
   static const shadeNeutralLight = Color(0xFFE5E7EB);
   static const shadeNeutralDark = Color(0xFFE5E7EB);

@@ -51,126 +51,134 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
             data: (assignment) {
               String filePath = ref.watch(getFilePathProvider);
               String fileName = ref.watch(assignmentFileNameProvider);
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'এসাইনমেন্ট গাইডলাইন',
-                    style: theme.textTheme.titleMedium,
-                  ),
-                  const Gap(24),
-                  Text(
-                    'এসাইনমেন্ট মার্কস',
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                  const Gap(6),
-                  TextFormField(
-                    enabled: false,
-                    decoration: InputDecoration(
-                        hintText: assignment.data!.marks.toString()),
-                  ),
-                  const Gap(24),
-                  Text(
-                    'সাবমিশনের ডিটেইলস',
-                    style: theme.textTheme.bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const Gap(6),
-                  Text(
-                    textAlign: TextAlign.justify,
-                    assignment.data!.details ?? "No details",
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                  const Gap(24),
-                  for (var file in assignment.data!.uploadFileResources!)
-                    InkWell(
-                        onTap: () async {
-                          Fluttertoast.showToast(msg: "Starting Download");
-                          String? filePath = await fileHelper.downloadFile(
-                              file.path!, file.originalName!);
-
-                          if (filePath != null) {
-                            await fileHelper.openFile(filePath);
-                          } else {
-                            Fluttertoast.showToast(
-                                msg: "Failed to download the file.");
-                          }
-                        },
-                        child: fileBox(theme, file.originalName!)),
-                  const Gap(24),
-                  Text(
-                    'সাবমিট করুন',
-                    style: theme.textTheme.titleMedium,
-                  ),
-                  const Gap(24),
-                  filePath != "" ||
-                          ref.watch(changeBtnStateProvider) ||
-                          widget.isCompleted
-                      ? fileBox(theme, fileName)
-                      : InkWell(
+              return Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(16)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'এসাইনমেন্ট গাইডলাইন',
+                      style: theme.textTheme.titleMedium,
+                    ),
+                    const Gap(24),
+                    Text(
+                      'এসাইনমেন্ট মার্কস',
+                      style: theme.textTheme.bodyLarge,
+                    ),
+                    const Gap(6),
+                    TextFormField(
+                      enabled: false,
+                      decoration: InputDecoration(
+                          hintText: assignment.data!.marks.toString()),
+                    ),
+                    const Gap(24),
+                    Text(
+                      'সাবমিশনের ডিটেইলস',
+                      style: theme.textTheme.bodyMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const Gap(6),
+                    Text(
+                      textAlign: TextAlign.justify,
+                      assignment.data!.details ?? "No details",
+                      style: theme.textTheme.bodyMedium,
+                    ),
+                    const Gap(24),
+                    for (var file in assignment.data!.uploadFileResources!)
+                      InkWell(
                           onTap: () async {
-                            final result = await FilePicker.platform
-                                .pickFiles(type: FileType.any);
+                            Fluttertoast.showToast(msg: "Starting Download");
+                            String? filePath = await fileHelper.downloadFile(
+                                file.path!, file.originalName!);
 
-                            if (result != null) {
-                              File file = File(result.files.single.path!);
-                              ref
-                                  .read(getFilePathProvider.notifier)
-                                  .setFilePath(file.path);
-
-                              ref
-                                  .read(assignmentFileNameProvider.notifier)
-                                  .setFileName(file.path.split('/').last);
+                            if (filePath != null) {
+                              await fileHelper.openFile(filePath);
                             } else {
-                              // User canceled the picker
+                              Fluttertoast.showToast(
+                                  msg: "Failed to download the file.");
                             }
                           },
-                          child: submitBox(theme)),
-                  const Gap(24),
-                  isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : LongButton(
-                          onPressed: ref.watch(changeBtnStateProvider) ||
-                                  widget.isCompleted
-                              ? () {}
-                              : () {
-                                  _debouncer.run(
-                                      action: () async {
-                                        final filePath =
-                                            ref.read(getFilePathProvider);
-                                        if (filePath == null ||
-                                            filePath == "") {
-                                          Fluttertoast.showToast(
-                                              msg: "You must submit the file");
-                                          return;
-                                        }
+                          child: fileBox(theme, file.originalName!)),
+                    const Gap(24),
+                    Text(
+                      'সাবমিট করুন',
+                      style: theme.textTheme.titleMedium,
+                    ),
+                    const Gap(24),
+                    filePath != "" ||
+                            ref.watch(changeBtnStateProvider) ||
+                            widget.isCompleted
+                        ? fileBox(theme, fileName)
+                        : InkWell(
+                            onTap: () async {
+                              final result = await FilePicker.platform
+                                  .pickFiles(type: FileType.any);
 
-                                        final response = await ref
-                                            .read(
-                                                enrolledCourseLandingRepoProvider)
-                                            .markAsComplete({
-                                          "materialType": "assignment",
-                                          "material_id": ref
-                                              .read(getAssignmentByIdProvider)
-                                        });
+                              if (result != null) {
+                                File file = File(result.files.single.path!);
+                                ref
+                                    .read(getFilePathProvider.notifier)
+                                    .setFilePath(file.path);
 
-                                        if (response) {
-                                          ref
-                                              .watch(changeBtnStateProvider
-                                                  .notifier)
-                                              .setBtnState();
+                                ref
+                                    .read(assignmentFileNameProvider.notifier)
+                                    .setFileName(file.path.split('/').last);
+                              } else {
+                                // User canceled the picker
+                              }
+                            },
+                            child: submitBox(theme)),
+                    const Gap(24),
+                    isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : LongButton(
+                            onPressed: ref.watch(changeBtnStateProvider) ||
+                                    widget.isCompleted
+                                ? () {}
+                                : () {
+                                    _debouncer.run(
+                                        action: () async {
+                                          final filePath =
+                                              ref.read(getFilePathProvider);
+                                          if (filePath == null ||
+                                              filePath == "") {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "You must submit the file");
+                                            return;
+                                          }
 
-                                          Navigator.pop(context, true);
-                                        }
-                                      },
-                                      loadingController:
-                                          ref.read(_loadingProvider.notifier));
-                                },
-                          text: ref.watch(changeBtnStateProvider) ||
-                                  widget.isCompleted
-                              ? "এসাইনমেন্ট সাবমিট হয়েছে"
-                              : 'সাবমিট করুন')
-                ],
+                                          final response = await ref
+                                              .read(
+                                                  enrolledCourseLandingRepoProvider)
+                                              .markAsComplete({
+                                            "materialType": "assignment",
+                                            "material_id": ref
+                                                .read(getAssignmentByIdProvider)
+                                          });
+
+                                          if (response) {
+                                            ref
+                                                .watch(changeBtnStateProvider
+                                                    .notifier)
+                                                .setBtnState();
+
+                                            Navigator.pop(context, true);
+                                          }
+                                        },
+                                        loadingController: ref
+                                            .read(_loadingProvider.notifier));
+                                  },
+                            text: ref.watch(changeBtnStateProvider) ||
+                                    widget.isCompleted
+                                ? "এসাইনমেন্ট সাবমিট হয়েছে"
+                                : 'সাবমিট করুন')
+                  ],
+                ),
               );
             },
             error: (error, stackTrace) => Text("$error"),

@@ -61,36 +61,42 @@ class PaymetSuccessful extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(64.0),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                "assets/images/success_tick.svg",
-                height: 150,
-                width: 150,
-                fit: BoxFit.cover,
-              ),
-              const Gap(16),
-              Text(
-                textAlign: TextAlign.center,
-                'আপনার পেমেন্ট সফল হয়েছে',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              const Gap(16),
-              Text(
-                textAlign: TextAlign.center,
-                'সাবস্ক্রাইব্ড ইউজার পছন্দের কোর্স গুলো এনরোল করতে পারবেন',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .copyWith(fontWeight: FontWeight.w500),
-              ),
-              const Gap(32),
-            ],
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(16)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  "assets/images/success_tick.svg",
+                  height: 150,
+                  width: 150,
+                  fit: BoxFit.cover,
+                ),
+                const Gap(16),
+                Text(
+                  textAlign: TextAlign.center,
+                  'আপনার পেমেন্ট সফল হয়েছে',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const Gap(16),
+                Text(
+                  textAlign: TextAlign.center,
+                  'সাবস্ক্রাইব্ড ইউজার পছন্দের কোর্স গুলো এনরোল করতে পারবেন',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontWeight: FontWeight.w500),
+                ),
+                const Gap(32),
+              ],
+            ),
           ),
         ),
       ),

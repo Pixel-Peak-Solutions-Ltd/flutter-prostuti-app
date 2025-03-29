@@ -204,7 +204,7 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               LogoutButton(
                 onPressed: () async {
                   final authNotifier = ref.read(authNotifierProvider.notifier);
-                  await authNotifier.clearAccessToken();
+                  await authNotifier.clearTokens();
                   Nav().pushAndRemoveUntil(const LoginView());
                 },
               )

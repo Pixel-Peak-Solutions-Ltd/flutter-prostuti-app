@@ -12,22 +12,21 @@ mixin CommonWidgets {
     return AppBar(
       title: Text(
         title,
-        style: appTheme.textTheme.titleMedium,
       ),
       automaticallyImplyLeading: false,
       leading: onBack != null
           ? IconButton(
               onPressed: onBack,
-              icon: const Icon(Icons.arrow_back_ios_new),
+              icon: const Icon(Icons.arrow_back),
             )
           : IconButton(
               onPressed: () {
                 Nav().pop();
               },
-              icon: const Icon(Icons.arrow_back_ios_new),
+              icon: const Icon(Icons.arrow_back),
             ),
       centerTitle: true,
-      backgroundColor: AppColors.shadeSecondaryLight,
+      backgroundColor: appTheme.appBarTheme.backgroundColor,
     );
   }
 
@@ -88,8 +87,9 @@ mixin CommonWidgets {
       required String itemName,
       required String icon}) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       decoration: BoxDecoration(
+        color: theme.scaffoldBackgroundColor,
         border: Border.all(color: Colors.grey.shade500),
         borderRadius: BorderRadius.circular(10),
       ),
@@ -106,16 +106,43 @@ mixin CommonWidgets {
           subtitle: Text(
             lessonName,
             style: theme.textTheme.bodySmall!.copyWith(
-                fontWeight: FontWeight.w600, color: Colors.grey.shade700),
+                fontWeight: FontWeight.w600, color: Colors.grey.shade500),
           ),
           leading: SvgPicture.asset(
             icon,
             height: 25,
             width: 25,
+            color: theme.colorScheme.onSurface,
             fit: BoxFit.cover,
           ),
           trailing: trailingIcon),
     );
+  }
+
+  Widget materialItem(ThemeData theme,
+      {required Widget trailingIcon,
+      required String itemName,
+      required String icon}) {
+    return ListTile(
+        contentPadding: const EdgeInsets.symmetric(vertical: 16),
+        enableFeedback: true,
+        title: Text(
+          itemName,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style: theme.textTheme.bodyMedium!.copyWith(
+            fontWeight: FontWeight.w300,
+          ),
+        ),
+        horizontalTitleGap: 8,
+        leading: SvgPicture.asset(
+          icon,
+          height: 25,
+          width: 25,
+          color: theme.colorScheme.onSurface,
+          fit: BoxFit.cover,
+        ),
+        trailing: trailingIcon);
   }
 
   /*
@@ -155,7 +182,7 @@ mixin CommonWidgets {
   Text lessonName(ThemeData theme, String name) {
     return Text(
       name,
-      style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+      style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w700),
     );
   }
 

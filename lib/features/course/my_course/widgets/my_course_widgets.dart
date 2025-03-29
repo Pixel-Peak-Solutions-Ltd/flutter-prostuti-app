@@ -18,6 +18,7 @@ class MyCourseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
           border: Border.all(width: 0.2, color: Colors.grey.shade900),
           borderRadius: BorderRadius.circular(8)),
       padding: const EdgeInsets.all(16),
@@ -29,14 +30,14 @@ class MyCourseCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 child: Image.network(
                   img,
-                  width: SizeConfig.w(134),
+                  width: SizeConfig.w(125),
                   height: SizeConfig.h(90),
                 )),
             const Gap(16),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.sizeOf(context).width * 0.4,
                   child: Text(
                     name,

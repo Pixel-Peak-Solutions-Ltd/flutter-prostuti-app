@@ -34,10 +34,7 @@ class ExpandableText extends ConsumerWidget {
             },
             child: Text(
               isExpanded ? 'See less' : 'See more',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(fontWeight: FontWeight.bold, color: Colors.purple),
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
           ),
       ],
