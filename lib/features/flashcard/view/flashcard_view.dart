@@ -258,11 +258,6 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _createNewFlashcard,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
     );
   }
 

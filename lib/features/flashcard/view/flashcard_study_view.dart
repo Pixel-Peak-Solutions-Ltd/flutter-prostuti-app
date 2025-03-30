@@ -227,7 +227,11 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
             ],
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => Center(
+            child: CircularProgressIndicator(
+          semanticsLabel: "Loading Flashcards",
+          color: Theme.of(context).colorScheme.secondary,
+        )),
         error: (error, stack) => Center(
           child: Text('Error loading flashcards: ${error.toString()}'),
         ),
