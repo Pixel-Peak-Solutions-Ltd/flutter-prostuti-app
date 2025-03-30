@@ -8,6 +8,7 @@ import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:swipable_stack/swipable_stack.dart';
 
 import '../../../core/services/size_config.dart';
+import '../services/flashcard_tracker.dart';
 import '../viewmodel/flashcard_details_viewmodel.dart';
 import '../widgets/flashcard_card.dart';
 
@@ -36,10 +37,13 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
   // Set to track favorite cards
   final Set<int> _favoriteCards = {};
 
+  final FlashcardStudyTracker _tracker = FlashcardStudyTracker();
+
   @override
   void initState() {
     super.initState();
     _initTts();
+    _tracker.reset();
   }
 
   Future<void> _initTts() async {
@@ -53,20 +57,49 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
     await flutterTts.speak(text);
   }
 
+  void _onSwipeCompleted(int index, SwipeDirection direction) {
+    setState(() {
+      _currentIndex = index;
+      _showAnswer = false;
+    });
+
+    // Get the current flashcard item
+    final flashcardDetailAsync =
+        ref.read(flashcardDetailNotifierProvider(widget.flashcardId));
+    flashcardDetailAsync.whenData((flashcardDetail) {
+      final items = flashcardDetail.items ?? [];
+      if (items.isNotEmpty) {
+        final actualIndex = index % items.length;
+        final item = items[actualIndex];
+
+        // Record the swipe in the tracker
+        _tracker.recordSwipe(item.sId!, direction);
+
+        // Check if all cards have been processed
+        _tracker.checkCompletion(
+          context,
+          flashcardDetail,
+          widget.flashcardId,
+          widget.flashcardTitle,
+        );
+      }
+    });
+
+    // Process swipe direction logic
+    if (direction == SwipeDirection.left) {
+      // "Learn" logic
+      print("Swiped Left (Learn)");
+    } else if (direction == SwipeDirection.right) {
+      // "Know" logic
+      print("Swiped Right (Know)");
+    }
+  }
+
   @override
   void dispose() {
     _controller.dispose();
     flutterTts.stop();
     super.dispose();
-  }
-
-  void _toggleCardView() {
-    if (_cardKeys.isNotEmpty && _currentIndex < _cardKeys.length) {
-      _cardKeys[_currentIndex].currentState?.toggleCard();
-    }
-    setState(() {
-      _showAnswer = !_showAnswer;
-    });
   }
 
   void _nextCard() {
@@ -100,22 +133,6 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
       setState(() {
         _currentIndex--;
       });
-    }
-  }
-
-  void _onSwipeCompleted(int index, SwipeDirection direction) {
-    setState(() {
-      _currentIndex = index;
-      _showAnswer = false;
-    });
-
-    // Process swipe direction logic
-    if (direction == SwipeDirection.left) {
-      // TODO: Implement "Learn" logic
-      print("Swiped Left (Learn)");
-    } else if (direction == SwipeDirection.right) {
-      // TODO: Implement "Know" logic
-      print("Swiped Right (Know)");
     }
   }
 

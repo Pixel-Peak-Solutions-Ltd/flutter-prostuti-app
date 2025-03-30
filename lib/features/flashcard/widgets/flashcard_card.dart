@@ -86,16 +86,12 @@ class _FlashCardState extends State<FlashCard> {
                           borderRadius: BorderRadius.circular(24),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: widget.isFavorite
-                                ? const Icon(
-                                    Icons.favorite_outlined,
-                                    color: Colors.red,
-                                    size: 28,
-                                  )
-                                : SvgPicture.asset(
-                                    "assets/icons/flashcard_favourite.svg",
-                                    fit: BoxFit.cover,
-                                  ),
+                            child: SvgPicture.asset(
+                              widget.isFavorite
+                                  ? "assets/icons/favourite.svg"
+                                  : "assets/icons/flashcard_favourite.svg",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
