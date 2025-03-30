@@ -40,6 +40,9 @@ dependencies:
   path_provider:
   webview_flutter: ^4.8.0
   modal_bottom_sheet: ^3.0.0
+  swipable_stack: ^2.0.0
+  flutter_tts: ^4.2.2
+  flip_card: ^0.7.0
 
 dev_dependencies:
   flutter_test:

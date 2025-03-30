@@ -5,23 +5,23 @@ import 'app_colors.dart';
 
 class AppColorScheme {
   static ColorScheme lightScheme = const ColorScheme(
-    brightness: Brightness.light,
-    primary: AppColors.backgroundPrimaryLight,
-    onPrimary: AppColors.textActionPrimaryLight,
-    secondary: AppColors.backgroundActionSecondaryLight,
-    onSecondary: AppColors.textActionSecondaryLight,
-    surface: AppColors.backgroundTertiaryLight,
-    onSurface: AppColors.textPrimaryLight,
-    background: AppColors.backgroundPrimaryLight,
-    onBackground: AppColors.textSecondaryLight,
-    error: Colors.red,
-    onError: Colors.white,
-    primaryContainer: AppColors.shadePrimaryLight,
-    secondaryContainer: AppColors.shadeSecondaryLight,
-    onPrimaryContainer: AppColors.textPrimaryLight,
-    onSecondaryContainer: AppColors.textSecondaryLight,
-    outline: AppColors.scaffoldBackgroundLight,
-  );
+      brightness: Brightness.light,
+      primary: AppColors.backgroundPrimaryLight,
+      onPrimary: AppColors.textActionPrimaryLight,
+      secondary: AppColors.backgroundActionSecondaryLight,
+      onSecondary: AppColors.textActionSecondaryLight,
+      surface: AppColors.backgroundTertiaryLight,
+      onSurface: AppColors.textPrimaryLight,
+      background: AppColors.backgroundPrimaryLight,
+      onBackground: AppColors.textSecondaryLight,
+      error: Colors.red,
+      onError: Colors.white,
+      primaryContainer: AppColors.shadePrimaryLight,
+      secondaryContainer: AppColors.shadeSecondaryLight,
+      onPrimaryContainer: AppColors.textPrimaryLight,
+      onSecondaryContainer: AppColors.textSecondaryLight,
+      outline: AppColors.scaffoldBackgroundLight,
+      primaryFixed: Color(0xFF15212F));
 
   static ColorScheme darkScheme = const ColorScheme(
     brightness: Brightness.dark,
@@ -40,6 +40,7 @@ class AppColorScheme {
     onPrimaryContainer: AppColors.textPrimaryDark,
     onSecondaryContainer: AppColors.textSecondaryDark,
     outline: AppColors.scaffoldBackgroundDark,
+    primaryFixed: Color(0xFFFFFFFF),
   );
 }
 
