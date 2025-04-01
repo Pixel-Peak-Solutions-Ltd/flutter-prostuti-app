@@ -141,6 +141,7 @@ class QuestionList {
   String? categoryId;
   String? title;
   String? description;
+  bool? hasImage;
   List<String>? options;
   String? correctOption;
   String? createdBy;
@@ -148,6 +149,7 @@ class QuestionList {
   String? createdAt;
   String? updatedAt;
   int? iV;
+  ImageDetails? image;
 
   QuestionList(
       {this.sId,
@@ -155,13 +157,15 @@ class QuestionList {
         this.categoryId,
         this.title,
         this.description,
+        this.hasImage,
         this.options,
         this.correctOption,
         this.createdBy,
         this.updatedBy,
         this.createdAt,
         this.updatedAt,
-        this.iV});
+        this.iV,
+        this.image});
 
   QuestionList.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -169,6 +173,7 @@ class QuestionList {
     categoryId = json['category_id'];
     title = json['title'];
     description = json['description'];
+    hasImage = json['hasImage'];
     options = json['options'].cast<String>();
     correctOption = json['correctOption'];
     createdBy = json['createdBy'];
@@ -176,6 +181,7 @@ class QuestionList {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
+    image = json['image'] != null ? new ImageDetails.fromJson(json['image']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -185,6 +191,7 @@ class QuestionList {
     data['category_id'] = this.categoryId;
     data['title'] = this.title;
     data['description'] = this.description;
+    data['hasImage'] = this.hasImage;
     data['options'] = this.options;
     data['correctOption'] = this.correctOption;
     data['createdBy'] = this.createdBy;
@@ -192,6 +199,41 @@ class QuestionList {
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     data['__v'] = this.iV;
+    if (this.image != null) {
+      data['image'] = this.image!.toJson();
+    }
+    return data;
+  }
+}
+
+class ImageDetails {
+  String? diskType;
+  String? path;
+  String? originalName;
+  String? modifiedName;
+  String? fileId;
+
+  ImageDetails({this.diskType,
+    this.path,
+    this.originalName,
+    this.modifiedName,
+    this.fileId});
+
+  ImageDetails.fromJson(Map<String, dynamic> json) {
+    diskType = json['diskType'];
+    path = json['path'];
+    originalName = json['originalName'];
+    modifiedName = json['modifiedName'];
+    fileId = json['fileId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['diskType'] = this.diskType;
+    data['path'] = this.path;
+    data['originalName'] = this.originalName;
+    data['modifiedName'] = this.modifiedName;
+    data['fileId'] = this.fileId;
     return data;
   }
 }

@@ -1,21 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
-import 'package:prostuti/common/widgets/long_button.dart';
-import 'package:prostuti/features/course/materials/test/view/test_result_view.dart';
 import 'package:prostuti/features/course/materials/test/viewmodel/get_mcq_test_history.dart';
 
 import '../../../../../common/helpers/func.dart';
 import '../../../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../../../../core/configs/app_colors.dart';
-import '../../../../../core/services/nav.dart';
-import '../../../../../core/services/timer.dart';
-import '../repository/test_repo.dart';
-import '../viewmodel/mcq_test_details_viewmodel.dart';
-import '../widgets/build_mcq_question_item.dart';
-import '../widgets/countdown_timer.dart';
 import '../widgets/mcq_answer_widget.dart';
 import '../widgets/mcq_mock_test_skeleton.dart';
 
@@ -44,6 +35,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestHistoryScreen>
           padding: const EdgeInsets.all(16.0),
           child: mCQTestHistoryAsync.when(
             data: (test) {
+              print("${test.data!.testId!.sId}");
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

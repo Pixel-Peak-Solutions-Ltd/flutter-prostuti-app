@@ -46,6 +46,17 @@ class _MCQResultAnswerWidgetState extends State<MCQResultAnswerWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (widget.answerData.questionId!.hasImage == true &&
+                  widget.answerData.questionId!.image != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Image.network(
+                    widget.answerData.questionId!.image!.path!,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Text('Image not available');
+                    },
+                  ),
+                ),
               // Question Title
               Text(
                 "${widget.questionNumber}. ${widget.answerData.questionId!.title} (1 Point)",
