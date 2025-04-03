@@ -15,6 +15,8 @@ class ThemeNotifier extends _$ThemeNotifier {
     return ThemeMode.light;
   }
 
+  bool get isDarkTheme => state == ThemeMode.dark;
+
   // Load the theme mode from SharedPreferences asynchronously
   Future<void> _loadThemeMode() async {
     final prefs = await SharedPreferences.getInstance();

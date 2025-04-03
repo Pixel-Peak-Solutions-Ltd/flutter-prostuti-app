@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
@@ -20,12 +21,12 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const isDarkTheme = true;
+    final isDarkTheme = ref.watch(
+        themeNotifierProvider.select((value) => value == ThemeMode.dark));
     final userProfileAsyncValue = ref.watch(userProfileProvider);
     final subscriptionAsyncValue = ref.watch(userSubscribedProvider);
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: commonAppbar('আমার প্রোফাইল'),
       body: userProfileAsyncValue.when(
         data: (userData) {
@@ -38,9 +39,10 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                     CircleAvatar(
                       radius: 50,
                       backgroundImage: userData.data!.image == null
-                          ? AssetImage('assets/images/test_dp.jpg')
+                          ? const AssetImage('assets/images/test_dp.jpg')
                               as ImageProvider
-                          : CachedNetworkImageProvider(userData.data!.image!.path!),
+                          : CachedNetworkImageProvider(
+                              userData.data!.image!.path!),
                     ),
                     const Gap(8),
                     Text(
@@ -51,46 +53,53 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                           .copyWith(fontWeight: FontWeight.w500),
                     ),
                     const Gap(24),
-                    subscriptionAsyncValue.when(data: (data) {
-                      return Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * .081,
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          image: const DecorationImage(
-                            image: AssetImage(
-                                "assets/images/upgrade_to_premium_background.png"),
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Row(
-                          children: [
-                            SvgPicture.asset("assets/icons/premium_upgrade.svg"),
-                            const Gap(10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  data? 'প্রিমিয়ামে আপগ্রেড করুন' : "আপনি প্রিমিয়াম প্ল্যানে আছেন",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      color:
-                                      AppColors.textActionPrimaryLight),
-                                ),
-                              ],
+                    subscriptionAsyncValue.when(
+                      data: (data) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height * .081,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            image: const DecorationImage(
+                              image: AssetImage(
+                                  "assets/images/upgrade_to_premium_background.png"),
+                              fit: BoxFit.cover,
                             ),
-                          ],
-                        ),
-                      );
-                    }, error: (error, stackTrace) {
-                      return Text(error.toString());
-                    }, loading: () {
-                      return Container();
-                    },)
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(
+                                  "assets/icons/premium_upgrade.svg"),
+                              const Gap(10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    data
+                                        ? 'প্রিমিয়ামে আপগ্রেড করুন'
+                                        : "আপনি প্রিমিয়াম প্ল্যানে আছেন",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge!
+                                        .copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColors
+                                                .textActionPrimaryLight),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      error: (error, stackTrace) {
+                        return Text(error.toString());
+                      },
+                      loading: () {
+                        return Container();
+                      },
+                    )
                   ],
                 ),
               ),
@@ -150,16 +159,20 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               ),
               const Gap(10),
               Card(
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.primary,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4),
                     side: const BorderSide(
                         width: 2, color: AppColors.shadeNeutralLight)),
                 child: ListTile(
-                  leading: SvgPicture.asset("assets/icons/dark_theme.svg"),
+                  leading: SvgPicture.asset(
+                    "assets/icons/dark_theme.svg",
+                    fit: BoxFit.cover,
+                    colorFilter: const ColorFilter.linearToSrgbGamma(),
+                  ),
                   // Icon on the left
-                  title: const Text('ডার্ক থিম'),
+                  title: Text('ডার্ক থিম'),
                   trailing: Switch(
                     value: isDarkTheme,
                     activeTrackColor: AppColors.textActionSecondaryLight,
@@ -167,7 +180,7 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                     inactiveThumbColor: Colors.white,
                     inactiveTrackColor: AppColors.borderNormalLight,
                     onChanged: (bool value) {
-                      print("isDarkTheme");
+                      ref.read(themeNotifierProvider.notifier).toggleTheme();
                     },
                   ), // Switch on the right
                 ),
