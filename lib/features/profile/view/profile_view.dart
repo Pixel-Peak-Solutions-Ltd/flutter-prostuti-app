@@ -10,6 +10,7 @@ import 'package:prostuti/features/auth/login/view/login_view.dart';
 
 import '../../../common/view_model/auth_notifier.dart';
 import '../../../core/configs/app_colors.dart';
+import '../../payment/view/subscription_view.dart';
 import '../../payment/viewmodel/check_subscription.dart';
 import '../viewmodel/profile_viewmodel.dart';
 import '../widgets/ProfileSkeleton.dart';
@@ -55,41 +56,46 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                     const Gap(24),
                     subscriptionAsyncValue.when(
                       data: (data) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * .081,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                              image: AssetImage(
-                                  "assets/images/upgrade_to_premium_background.png"),
-                              fit: BoxFit.cover,
-                            ),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                  "assets/icons/premium_upgrade.svg"),
-                              const Gap(10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    data
-                                        ? 'প্রিমিয়ামে আপগ্রেড করুন'
-                                        : "আপনি প্রিমিয়াম প্ল্যানে আছেন",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyLarge!
-                                        .copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: AppColors
-                                                .textActionPrimaryLight),
-                                  ),
-                                ],
+                        return InkWell(
+                          onTap: data
+                              ? () {}
+                              : () => Nav().push(SubscriptionView()),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * .081,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              image: const DecorationImage(
+                                image: AssetImage(
+                                    "assets/images/upgrade_to_premium_background.png"),
+                                fit: BoxFit.cover,
                               ),
-                            ],
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                    "assets/icons/premium_upgrade.svg"),
+                                const Gap(10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      data
+                                          ? "আপনি প্রিমিয়াম প্ল্যানে আছেন"
+                                          : 'প্রিমিয়ামে আপগ্রেড করুন',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge!
+                                          .copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color: AppColors
+                                                  .textActionPrimaryLight),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       },
