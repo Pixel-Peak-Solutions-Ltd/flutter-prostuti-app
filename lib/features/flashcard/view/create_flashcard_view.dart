@@ -10,6 +10,7 @@ import 'package:prostuti/core/services/size_config.dart';
 
 import '../model/create_flash_card.dart';
 import '../viewmodel/create_flashcard_viewmodel.dart';
+import '../viewmodel/flashcard_viewmodel.dart';
 
 class CreateFlashcardView extends ConsumerStatefulWidget {
   const CreateFlashcardView({super.key});
@@ -69,6 +70,8 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
           .createFlashcard(request);
 
       if (success) {
+        ref.invalidate(exploreFlashcardsProvider);
+        ref.invalidate(userFlashcardsProvider);
         Navigator.pop(context, true);
         Fluttertoast.showToast(msg: 'ফ্লাশকার্ড সফলভাবে তৈরি হয়েছে!');
       }

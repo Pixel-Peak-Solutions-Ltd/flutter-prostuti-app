@@ -43,6 +43,7 @@ dependencies:
   swipable_stack: ^2.0.0
   flutter_tts: ^4.2.2
   flip_card: ^0.7.0
+  pull_to_refresh_flutter3: ^2.0.2
 
 dev_dependencies:
   flutter_test:
