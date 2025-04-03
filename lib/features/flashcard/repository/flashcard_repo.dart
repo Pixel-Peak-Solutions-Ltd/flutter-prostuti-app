@@ -101,4 +101,53 @@ class FlashcardRepo {
       return Left(errorResponse);
     }
   }
+
+  Future<Either<ErrorResponse, bool>> toggleFavoriteFlashcardItem(
+      String itemId) async {
+    final response = await _dioService
+        .patchRequest("/flashcard/favorite-flashcard-item/$itemId");
+
+    if (response.statusCode == 200) {
+      return const Right(true);
+    } else {
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      ErrorHandler().setErrorMessage(errorResponse.message);
+      return Left(errorResponse);
+    }
+  }
+
+// Update the getFavoriteFlashcardItems method to parse the response correctly:
+
+  Future<Either<ErrorResponse, List<String>>>
+      getFavoriteFlashcardItems() async {
+    try {
+      print('Fetching favorite flashcard items');
+
+      final response =
+          await _dioService.getRequest("/flashcard/favorite-flashcard-items");
+
+      print('Get favorites API response status: ${response.statusCode}');
+      print('Get favorites response data: ${response.data}');
+
+      if (response.statusCode == 200) {
+        // The data field is a list of complete flashcard item objects, not just IDs
+        final List<dynamic> items = response.data['data'] ?? [];
+
+        // Extract the _id from each item
+        final List<String> favoriteIds =
+            items.map<String>((item) => item['_id'].toString()).toList();
+
+        print('Parsed favorite IDs: $favoriteIds');
+        return Right(favoriteIds);
+      } else {
+        final errorResponse = ErrorResponse.fromJson(response.data);
+        ErrorHandler().setErrorMessage(errorResponse.message);
+        print('Error getting favorites: ${errorResponse.message}');
+        return Left(errorResponse);
+      }
+    } catch (e) {
+      print('Exception in getFavoriteFlashcardItems: $e');
+      return Left(ErrorResponse(success: false, message: e.toString()));
+    }
+  }
 }

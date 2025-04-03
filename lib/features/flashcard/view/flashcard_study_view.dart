@@ -8,8 +8,10 @@ import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:swipable_stack/swipable_stack.dart';
 
 import '../../../core/services/size_config.dart';
+import '../model/flashcard_details_model.dart';
 import '../services/flashcard_tracker.dart';
 import '../viewmodel/flashcard_details_viewmodel.dart';
+import '../viewmodel/flashcard_favourite_viewmodel.dart';
 import '../widgets/flashcard_card.dart';
 
 class FlashcardStudyView extends ConsumerStatefulWidget {
@@ -34,16 +36,22 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
   bool _showAnswer = false;
   int _currentIndex = 0;
 
-  // Set to track favorite cards
-  final Set<int> _favoriteCards = {};
-
   final FlashcardStudyTracker _tracker = FlashcardStudyTracker();
+
+  void _toggleFavorite(String itemId) {
+    // Call the API through the provider
+    ref.read(favoriteFlashcardsProvider.notifier).toggleFavorite(itemId);
+  }
 
   @override
   void initState() {
     super.initState();
     _initTts();
     _tracker.reset();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(favoriteFlashcardsProvider.notifier).refreshFavorites();
+    });
   }
 
   Future<void> _initTts() async {
@@ -107,12 +115,6 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
       setState(() {
         _showAnswer = false;
       });
-      // Ensure card is showing front side
-      if (_cardKeys.isNotEmpty &&
-          _currentIndex < _cardKeys.length &&
-          _cardKeys[_currentIndex].currentState?.isFront == false) {
-        _cardKeys[_currentIndex].currentState?.toggleCard();
-      }
     }
     _controller.next(swipeDirection: SwipeDirection.right);
   }
@@ -122,12 +124,6 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
       setState(() {
         _showAnswer = false;
       });
-      // Ensure card is showing front side
-      if (_cardKeys.isNotEmpty &&
-          _currentIndex < _cardKeys.length &&
-          _cardKeys[_currentIndex].currentState?.isFront == false) {
-        _cardKeys[_currentIndex].currentState?.toggleCard();
-      }
     }
     if (_currentIndex > 0) {
       setState(() {
@@ -136,21 +132,13 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
     }
   }
 
-  void _toggleFavorite(int index) {
-    setState(() {
-      if (_favoriteCards.contains(index)) {
-        _favoriteCards.remove(index);
-      } else {
-        _favoriteCards.add(index);
-      }
-    });
-  }
-
   // Colors for the flashcards (using three from the design)
   final List<Color> _cardColors = [
-    const Color(0xFFC084FC), // Purple
-    const Color(0xFF60A5FA), // Blue
-    const Color(0xFFF97316), // Orange
+    const Color(0xFFC084FC),
+    const Color(0xFF656058),
+    const Color(0xFFF97316),
+    const Color(0xFF652E07),
+    const Color(0xFF534D65),
   ];
 
   Color _getCardColor(int index) {
@@ -291,27 +279,34 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
           builder: (context, properties) {
             final index = properties.index;
             final actualIndex = index % items.length;
-            final item = items[actualIndex];
+            final FlashcardItem item = items[actualIndex];
 
-            if (actualIndex >= _cardKeys.length) {
-              // In case we need more keys
-              _cardKeys.add(GlobalKey<FlipCardState>());
-            }
+            // IMPORTANT: Create a unique key for each position in the stack
+            // This ensures we don't reuse keys across cards
+            final key = GlobalKey<FlipCardState>();
+
+            // Get favorite status from provider
+            final favoritesAsync = ref.watch(favoriteFlashcardsProvider);
+            final isFavorite = favoritesAsync.when(
+              data: (favorites) => favorites.contains(item.sId),
+              loading: () => false,
+              error: (_, __) => false,
+            );
 
             // Use our FlashCard with TTS and Favorite buttons
             return FlashCard(
               frontText: item.term!,
               backText: item.answer!,
-              flipKey: _cardKeys[actualIndex],
-              isFavorite: _favoriteCards.contains(actualIndex),
+              flipKey: key,
+              // Use the newly created key
+              isFavorite: isFavorite,
               onTts: () {
-                final textToSpeak =
-                    _cardKeys[actualIndex].currentState?.isFront == true
-                        ? item.term!
-                        : item.answer!;
+                final textToSpeak = key.currentState?.isFront == true
+                    ? item.term!
+                    : item.answer!;
                 _speak(textToSpeak);
               },
-              onFavorite: () => _toggleFavorite(actualIndex),
+              onFavorite: () => _toggleFavorite(item.sId!),
               backgroundColor: _getCardColor(actualIndex),
             );
           },

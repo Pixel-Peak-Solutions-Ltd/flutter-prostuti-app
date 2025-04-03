@@ -111,6 +111,16 @@ class DioService {
     }
   }
 
+  Future<Response> patchRequest(String endpoint,
+      {dynamic data, Map<String, dynamic>? queryParameters}) async {
+    try {
+      return await _dio.patch(endpoint,
+          data: data, queryParameters: queryParameters);
+    } on DioException catch (e) {
+      return _handleError(e);
+    }
+  }
+
   Future<Response> deleteRequest(String endpoint,
       {Map<String, dynamic>? queryParameters}) async {
     try {
