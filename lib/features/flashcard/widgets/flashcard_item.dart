@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 
 import '../model/flashcard_model.dart';
+import '../viewmodel/flashcard_item_count_provider.dart';
 
-class FlashcardItem extends StatelessWidget {
+class FlashcardItem extends ConsumerWidget {
   final Flashcard flashcard;
   final VoidCallback onTap;
 
@@ -15,7 +17,17 @@ class FlashcardItem extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    final countAsync =
+        ref.watch(flashcardItemCountProvider(flashcard.sId ?? ''));
+
+    // Use a simple method to display the item count
+    final itemCountText = countAsync.when(
+      data: (count) => '$count items',
+      loading: () => 'Loading items', // Just show dots while loading
+      error: (_, __) => 'null items',
+    );
+
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -64,7 +76,7 @@ class FlashcardItem extends StatelessWidget {
               ),
               const Gap(8),
               Text(
-                '172 items',
+                itemCountText,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               const Gap(12),

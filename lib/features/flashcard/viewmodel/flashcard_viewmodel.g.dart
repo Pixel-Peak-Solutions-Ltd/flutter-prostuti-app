@@ -6,7 +6,7 @@ part of 'flashcard_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$exploreFlashcardsHash() => r'4168320fdef363ca1d529ea9fef1f3e2663cbe01';
+String _$exploreFlashcardsHash() => r'a7354db8f66e63346ae0a2792adc368d18903036';
 
 /// See also [ExploreFlashcards].
 @ProviderFor(ExploreFlashcards)
@@ -22,7 +22,7 @@ final exploreFlashcardsProvider = AutoDisposeAsyncNotifierProvider<
 );
 
 typedef _$ExploreFlashcards = AutoDisposeAsyncNotifier<List<Flashcard>>;
-String _$userFlashcardsHash() => r'ee0d76f7ad49c0ebc4b3b0897a76c4571f1712c4';
+String _$userFlashcardsHash() => r'a1f0e3a3a24fb241c2266ccb38b6d3652aa21f0b';
 
 /// See also [UserFlashcards].
 @ProviderFor(UserFlashcards)

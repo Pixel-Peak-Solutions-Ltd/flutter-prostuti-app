@@ -31,10 +31,9 @@ class ExploreFlashcards extends _$ExploreFlashcards {
 
   Future<List<Flashcard>> _fetchFlashcards(
       {required int page, int limit = 10}) async {
-    final response = await ref.read(flashcardRepoProvider).getAllFlashcards(
-          page: page,
-          limit: limit,
-        );
+    final response = await ref
+        .read(flashcardRepoProvider)
+        .getAllFlashcards(page: page, limit: limit, visibility: "EVERYONE");
 
     return response.fold(
       (l) {
@@ -129,10 +128,9 @@ class UserFlashcards extends _$UserFlashcards {
 
   Future<List<Flashcard>> _fetchFlashcards(
       {required int page, int limit = 10}) async {
-    final response = await ref.read(flashcardRepoProvider).getUserFlashcards(
-          page: page,
-          limit: limit,
-        );
+    final response = await ref
+        .read(flashcardRepoProvider)
+        .getAllFlashcards(page: page, limit: limit, visibility: "ONLY_ME");
 
     return response.fold(
       (l) {

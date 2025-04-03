@@ -32,21 +32,4 @@ class FlashcardDetailRepo {
       return Left(errorResponse);
     }
   }
-
-  // Additional method for future implementation - update flashcard item status
-  Future<Either<ErrorResponse, bool>> updateFlashcardItem(
-      String flashcardId, String itemId, Map<String, dynamic> updates) async {
-    final response = await _dioService.putRequest(
-      "/flashcard/item/$flashcardId/$itemId",
-      updates,
-    );
-
-    if (response.statusCode == 200) {
-      return const Right(true);
-    } else {
-      final errorResponse = ErrorResponse.fromJson(response.data);
-      ErrorHandler().setErrorMessage(errorResponse.message);
-      return Left(errorResponse);
-    }
-  }
 }

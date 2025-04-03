@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
+import 'package:prostuti/features/flashcard/view/create_flashcard_view.dart';
 import 'package:prostuti/features/flashcard/view/flashcard_study_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -64,12 +65,7 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
   }
 
   void _createNewFlashcard() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Create flashcard functionality will be implemented'),
-        duration: Duration(seconds: 2),
-      ),
-    );
+    Nav().push(const CreateFlashcardView());
   }
 
   void _changeTab(int index) {
