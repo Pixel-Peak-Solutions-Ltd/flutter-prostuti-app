@@ -264,10 +264,10 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8),
                     child: Container(
                       height: 60,
-                      color: Theme.of(context).appBarTheme.backgroundColor,
                       padding: EdgeInsets.only(right: SizeConfig.w(100)),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -293,38 +293,63 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           // Language Dropdown (Disabled)
-                          ListTile(
-                            title: const Text("Language"),
-                            trailing: DropdownButton<String>(
-                              value: "English",
-                              items: ["English"]
-                                  .map((e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e),
-                                      ))
-                                  .toList(),
-                              onChanged: null,
+                          Card(
+                            color: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              side: const BorderSide(
+                                width: 2,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            child: ListTile(
+                              title: const Text("Language"),
+                              trailing: DropdownButton<String>(
+                                value: "English",
+                                items: ["English"]
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
+                                    .toList(),
+                                onChanged: null,
+                              ),
                             ),
                           ),
                           // Visibility Dropdown
-                          ListTile(
-                            title: const Text("Visible By"),
-                            trailing: DropdownButton<String>(
-                              value: localVisibility,
-                              items: ["EVERYONE", "ONLY_ME"]
-                                  .map((e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e.contains("ONLY_ME")
-                                            ? "Only me"
-                                            : "Everyone"),
-                                      ))
-                                  .toList(),
-                              onChanged: (value) {
-                                if (value != null) {
-                                  setModalState(() => localVisibility = value);
-                                  setState(() => _visibility = value);
-                                }
-                              },
+                          Card(
+                            color: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              side: const BorderSide(
+                                width: 2,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            child: ListTile(
+                              title: const Text("Visible By"),
+                              trailing: DropdownButton<String>(
+                                value: localVisibility,
+                                items: ["EVERYONE", "ONLY_ME"]
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e.contains("ONLY_ME")
+                                              ? "Only me"
+                                              : "Everyone"),
+                                        ))
+                                    .toList(),
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    setModalState(
+                                        () => localVisibility = value);
+                                    setState(() => _visibility = value);
+                                  }
+                                },
+                              ),
                             ),
                           ),
                         ],

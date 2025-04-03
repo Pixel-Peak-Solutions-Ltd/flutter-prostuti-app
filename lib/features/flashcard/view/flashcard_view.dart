@@ -65,7 +65,29 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
   }
 
   void _createNewFlashcard() {
-    Nav().push(const CreateFlashcardView());
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const CreateFlashcardView(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(0.0, 1.0); // Start off-screen at the bottom
+          const end = Offset.zero; // End at its original position
+          const curve = Curves.easeInOut; // Smooth easing curve
+
+          final tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          final offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+        transitionDuration:
+            const Duration(milliseconds: 300), // Animation duration
+      ),
+    );
   }
 
   void _changeTab(int index) {
