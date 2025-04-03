@@ -23,7 +23,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final String _categoryId = "6741c05482bf38e485f98152";
-  final String _visibility = "EVERYONE";
+  String _visibility = "EVERYONE";
   final List<FlashcardItemFormField> _flashcardItems = [];
 
   @override
@@ -69,7 +69,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
           .createFlashcard(request);
 
       if (success) {
-        Nav().pop();
+        Navigator.pop(context, true);
         Fluttertoast.showToast(msg: 'ফ্লাশকার্ড সফলভাবে তৈরি হয়েছে!');
       }
     }
@@ -80,10 +80,8 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
     final createFlashcardState = ref.watch(createFlashcardNotifierProvider);
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('ফ্লাশকার্ড তৈরি করুন'),
-        backgroundColor: const Color(0xFFE0E7FF),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Nav().pop(),
@@ -91,9 +89,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () {
-              // Open settings
-            },
+            onPressed: _openSettingsModal,
           ),
         ],
       ),
@@ -103,12 +99,11 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
           padding: const EdgeInsets.all(16),
           children: [
             // Title section
-            const Text(
+            Text(
               'টাইটেল',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const Gap(8),
             // Input field with dashed border
@@ -134,12 +129,11 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
             // Flashcard items
             for (int i = 0; i < _flashcardItems.length; i++) ...[
               // Term field
-              const Text(
+              Text(
                 'টার্ম',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const Gap(8),
               TextField(
@@ -163,12 +157,11 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
               const Gap(16),
 
               // Answer field
-              const Text(
+              Text(
                 'বিবরণ',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const Gap(8),
               TextField(
@@ -205,17 +198,15 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
                       border: Border.all(
                           color: const Color(0xFF2970FF), width: 1.5),
                     ),
-                    child: const Icon(Icons.add,
-                        color: Color(0xFF2970FF), size: 20),
+                    child: Icon(Icons.add,
+                        color: Theme.of(context).colorScheme.onSecondary,
+                        size: 10),
                   ),
                   const Gap(10),
-                  const Text(
+                  Text(
                     'আরেকটি কার্ড যোগ করুন',
-                    style: TextStyle(
-                      color: Color(0xFF2970FF),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        color: Theme.of(context).colorScheme.onSecondary),
                   ),
                 ],
               ),
@@ -248,6 +239,101 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
           ],
         ),
       ),
+    );
+  }
+
+  void _openSettingsModal() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      // Enable making the modal fullscreen
+      useSafeArea: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            String localVisibility = _visibility;
+            return Padding(
+              // Use Padding to avoid overlap with top safe area
+              padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Container(
+                      height: 60,
+                      color: Theme.of(context).appBarTheme.backgroundColor,
+                      padding: EdgeInsets.only(right: SizeConfig.w(100)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          Text(
+                            'অপশন সেট করুন',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Language Dropdown (Disabled)
+                          ListTile(
+                            title: const Text("Language"),
+                            trailing: DropdownButton<String>(
+                              value: "English",
+                              items: ["English"]
+                                  .map((e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e),
+                                      ))
+                                  .toList(),
+                              onChanged: null,
+                            ),
+                          ),
+                          // Visibility Dropdown
+                          ListTile(
+                            title: const Text("Visible By"),
+                            trailing: DropdownButton<String>(
+                              value: localVisibility,
+                              items: ["EVERYONE", "ONLY_ME"]
+                                  .map((e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e.contains("ONLY_ME")
+                                            ? "Only me"
+                                            : "Everyone"),
+                                      ))
+                                  .toList(),
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setModalState(() => localVisibility = value);
+                                  setState(() => _visibility = value);
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
