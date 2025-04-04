@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 
 class SearchContainer extends StatelessWidget {
   final TextEditingController controller;
@@ -28,7 +29,7 @@ class SearchContainer extends StatelessWidget {
                 controller: controller,
                 textInputAction: TextInputAction.search,
                 decoration: InputDecoration(
-                  hintText: 'কোর্স সার্চ করুন.....',
+                  hintText: context.l10n!.searchCourses,
                   hintStyle: Theme.of(context).textTheme.bodyLarge,
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,

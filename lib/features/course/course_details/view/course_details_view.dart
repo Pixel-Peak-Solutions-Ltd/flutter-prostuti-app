@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course/course_details/viewmodel/course_details_vm.dart';
@@ -52,7 +53,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
     final isEnrolled = ref.watch(courseEnrollmentStatusProvider);
 
     return Scaffold(
-      appBar: commonAppbar("Course Preview"),
+      appBar: commonAppbar(context.l10n!.coursePreview),
       body: courseDetailsAsync.when(
         data: (courseDetails) {
           return Padding(
@@ -114,54 +115,38 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                         ),
                         const Gap(21),
                         SingleChildScrollView(
-                          physics: const NeverScrollableScrollPhysics(),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              const CourseDetailsPills(
-                                value: '৩৪৫ শিক্ষাথী',
-                                icon: Icons.groups_2_outlined,
-                              ),
+                              // CourseDetailsPills(
+                              //   value: '৩৪৫ ${context.l10n!.students}',
+                              //   icon: Icons.groups_2_outlined,
+                              // ),
                               CourseDetailsPills(
                                 value:
-                                    '${courseDetails.data!.totalTests}টি টেস্ট',
+                                    '${courseDetails.data!.totalTests} ${context.l10n!.tests}',
                                 icon: Icons.menu_book,
                               ),
                               CourseDetailsPills(
                                 value:
-                                    '${courseDetails.data!.totalRecodedClasses}টি রেকর্ডক্লাস',
+                                    '${courseDetails.data!.totalRecodedClasses} ${context.l10n!.recordedClasses}',
                                 icon: Icons.video_collection_outlined,
                               ),
                               CourseDetailsPills(
                                 value:
-                                    '${courseDetails.data!.totalLessons}টি লেসন',
+                                    '${courseDetails.data!.totalLessons} ${context.l10n!.lessons}',
                                 icon: Icons.view_module_outlined,
                               ),
                             ],
                           ),
                         ),
                         const Gap(32),
-                        const CourseListHeader(text: 'টেস্ট সম্পর্কে'),
+                        CourseListHeader(text: context.l10n!.aboutTest),
                         const Gap(8),
                         ExpandableText(text: courseDetails.data!.details!),
-                        // RichText(
-                        //   text: TextSpan(
-                        //     text: 'সময়ঃ ',
-                        //     style: Theme.of(context)
-                        //         .textTheme
-                        //         .bodyMedium!
-                        //         .copyWith(fontWeight: FontWeight.w700),
-                        //     children: <TextSpan>[
-                        //       TextSpan(
-                        //           text: 'সোম ও বুধ  রাত ৮.৩০ - ৯.৪৫ ঘোটীকায়',
-                        //           style: Theme.of(context).textTheme.bodyMedium),
-                        //     ],
-                        //   ),
-                        // )
                       ],
                     ),
                     const Gap(32),
-                    const CourseListHeader(text: 'কোর্স কারিকুলাম'),
+                    CourseListHeader(text: context.l10n!.courseCurriculum),
                     const Gap(16),
                     for (int i = 0;
                         i <
@@ -209,7 +194,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                             child: Text(
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
-                                              'Recorded Class: ${courseDetails.data!.lessons![i].recodedClasses![j].recodeClassName!}',
+                                              '${context.l10n!.recordedClass}: ${courseDetails.data!.lessons![i].recodedClasses![j].recodeClassName!}',
                                               style: theme.textTheme.bodySmall!
                                                   .copyWith(
                                                 fontWeight: FontWeight.w700,
@@ -256,7 +241,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                             child: Text(
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
-                                              'Resource: ${courseDetails.data!.lessons![i].resources![j].name}',
+                                              '${context.l10n!.resource}: ${courseDetails.data!.lessons![i].resources![j].name}',
                                               style: theme.textTheme.bodySmall!
                                                   .copyWith(
                                                 fontWeight: FontWeight.w700,
@@ -303,7 +288,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                             child: Text(
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
-                                              'Assignment: ${courseDetails.data!.lessons![i].assignments![j].assignmentNo!}',
+                                              '${context.l10n!.assignment}: ${courseDetails.data!.lessons![i].assignments![j].assignmentNo!}',
                                               style: theme.textTheme.bodySmall!
                                                   .copyWith(
                                                 fontWeight: FontWeight.w700,
@@ -350,7 +335,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                             child: Text(
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
-                                              'Test: ${courseDetails.data!.lessons![i].tests![j].name!}',
+                                              '${context.l10n!.test}: ${courseDetails.data!.lessons![i].tests![j].name!}',
                                               style: theme.textTheme.bodySmall!
                                                   .copyWith(
                                                 fontWeight: FontWeight.w700,
@@ -382,12 +367,15 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                               .watch(lessonSeeMoreViewmodelProvider.notifier)
                               .toggleBtn();
                         },
-                        child: Text(lessonMoreBtn ? "কম দেখুন" : 'আরও দেখুন',
+                        child: Text(
+                            lessonMoreBtn
+                                ? context.l10n!.showLess
+                                : context.l10n!.showMore,
                             style: Theme.of(context).textTheme.bodySmall),
                       ),
                     ),
                     const Gap(32),
-                    const CourseListHeader(text: 'টেস্ট রিভিউ'),
+                    CourseListHeader(text: context.l10n!.testReviews),
                     const Gap(16),
                     for (int i = 0; i < (reviewMoreBtn ? 10 : 3); i++)
                       const CourseDetailsReviewCard(),
@@ -404,7 +392,9 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                               .toggleBtn();
                         },
                         child: Text(
-                          reviewMoreBtn ? "কম দেখুন" : 'আরও দেখুন',
+                          reviewMoreBtn
+                              ? context.l10n!.showLess
+                              : context.l10n!.showMore,
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
@@ -416,7 +406,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
           );
         },
         error: (error, stackTrace) {
-          return Text('$error');
+          return Text('${context.l10n!.error}: $error');
         },
         loading: () {
           return const CourseDetailsSkeleton();
@@ -473,12 +463,12 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                             Nav().pushReplacement(
                                                 const EnrolledCourseLandingView());
                                             Fluttertoast.showToast(
-                                                msg:
-                                                    "Enrolled into the free course. Enjoy");
+                                                msg: context
+                                                    .l10n!.enrolledSuccess);
                                           } else {
                                             Fluttertoast.showToast(
-                                                msg:
-                                                    "Contact Prostuti for enrollment");
+                                                msg: context
+                                                    .l10n!.contactProstuti);
                                           }
                                         }
                                       } else if (data.data!.priceType ==
@@ -491,18 +481,17 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
 
                                         if (response) {
                                           Fluttertoast.showToast(
-                                              msg:
-                                                  "Enrolled into the free course. Enjoy");
+                                              msg: context
+                                                  .l10n!.enrolledSuccess);
                                           Nav().pushReplacement(MyCourseView());
                                         } else {
                                           Fluttertoast.showToast(
-                                              msg:
-                                                  "Already Enrolled in the course");
+                                              msg: context
+                                                  .l10n!.alreadyEnrolled);
                                         }
                                       } else {
                                         Fluttertoast.showToast(
-                                            msg:
-                                                "Contact Prostuti for enrollment");
+                                            msg: context.l10n!.contactProstuti);
                                       }
                                     },
                               loadingController:
@@ -516,15 +505,15 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                       price: '${data.data!.price ?? "Free"}',
                       theme: Theme.of(context),
                       title: isEnrolled.value == true
-                          ? "ভিজিট করুন"
-                          : "এনরোল করুন",
+                          ? context.l10n!.visitCourse
+                          : context.l10n!.enrollInCourse,
                     ),
                   ),
                 ),
               );
             },
             error: (error, stackTrace) {
-              return Text("$error");
+              return Text("${context.l10n!.error}: $error");
             },
             loading: () {
               return Skeletonizer(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class CourseCard extends StatelessWidget with CommonWidgets {
@@ -59,7 +60,7 @@ class CourseCard extends StatelessWidget with CommonWidgets {
             priceType: priceType,
             price: price,
             theme: Theme.of(context),
-            title: 'বিস্তারিত দেখুন',
+            title: context.l10n!.seeDetails,
           )
         ],
       ),

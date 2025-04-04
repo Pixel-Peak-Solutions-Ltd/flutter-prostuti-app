@@ -92,8 +92,9 @@ class AppTheme {
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      fillColor: AppColors.backgroundSecondaryLight,
-      // contentPadding: const EdgeInsets.all(30),
+      fillColor: AppColors.backgroundTertiaryLight,
+      filled: true,
+      // This is needed to apply the fill color
       hintStyle: GoogleFonts.hindSiliguri(
         color: AppColors.textTertiaryLight,
         fontWeight: FontWeight.w500,
@@ -104,6 +105,11 @@ class AppTheme {
             const BorderSide(color: AppColors.borderNormalLight, width: 1),
       ),
       enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide:
+            const BorderSide(color: AppColors.borderNormalLight, width: 1),
+      ),
+      focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: const BorderSide(
             color: AppColors.borderFocusPrimaryLight, width: 1),
@@ -159,18 +165,27 @@ class AppTheme {
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
-      fillColor: const Color(0xff2B415B),
+      fillColor: AppColors.backgroundTertiaryDark,
+      filled: true,
+      // This is needed to apply the fill color
       hintStyle: GoogleFonts.hindSiliguri(
         color: AppColors.textTertiaryDark,
         fontWeight: FontWeight.w500,
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: Colors.white, width: 1),
+        borderSide:
+            const BorderSide(color: AppColors.borderNormalDark, width: 1),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: Colors.white, width: 1),
+        borderSide:
+            const BorderSide(color: AppColors.borderNormalDark, width: 1),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide:
+            const BorderSide(color: AppColors.borderFocusPrimaryDark, width: 1),
       ),
     ),
   );

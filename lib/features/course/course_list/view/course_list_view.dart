@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_list/viewmodel/get_course_by_id.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -43,7 +44,7 @@ class CourseListViewState extends ConsumerState<CourseListView>
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: commonAppbar("কোর্সসমূহ"),
+      appBar: commonAppbar(context.l10n!.courses),
       body: Skeletonizer(
         enabled: publishedCourse.isLoading,
         child: SingleChildScrollView(
@@ -67,7 +68,7 @@ class CourseListViewState extends ConsumerState<CourseListView>
                     ),
                   ),
                   const Gap(24),
-                  const CourseListHeader(text: 'টেস্ট ক্যাটাগরি'),
+                  CourseListHeader(text: context.l10n!.testCategory),
                   const Gap(10),
                   // Category List
                   SizedBox(
@@ -84,8 +85,20 @@ class CourseListViewState extends ConsumerState<CourseListView>
                     ),
                   ),
                   const Gap(24),
-                  const CourseListHeader(text: 'টপ কোর্স লিস্ট'),
+                  CourseListHeader(text: context.l10n!.topCourseList),
                   const Gap(10),
+
+                  if (publishedCourseNotifier.filteredCourses.isEmpty &&
+                      !publishedCourse.isLoading)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          context.l10n!.noCourses,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                    ),
 
                   for (var course in publishedCourseNotifier.filteredCourses)
                     Column(
@@ -95,13 +108,13 @@ class CourseListViewState extends ConsumerState<CourseListView>
                             ref
                                 .watch(getCourseByIdProvider.notifier)
                                 .setId(course.sId!);
-                            Nav().push(CourseDetailsView());
+                            Nav().push(const CourseDetailsView());
                           },
                           child: CourseCard(
                             priceType: course.priceType,
                             title: course.name,
                             price: course.price.toString(),
-                            imgPath: course.image!.path ??
+                            imgPath: course.image?.path ??
                                 "assets/images/course_thumbnail.png",
                           ),
                         )

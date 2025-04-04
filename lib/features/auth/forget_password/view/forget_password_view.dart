@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/services/debouncer.dart';
 import 'package:prostuti/core/services/error_handler.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/auth/forget_password/repository/forget_password_repo.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -57,7 +58,7 @@ class ForgetPasswordViewState extends ConsumerState<ForgetPasswordView> {
               ),
               const Gap(118),
               Text(
-                'পাসওয়ার্ড ভুলে গেছেন',
+                context.l10n!.forgotPassword,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const Gap(32),
@@ -68,24 +69,24 @@ class ForgetPasswordViewState extends ConsumerState<ForgetPasswordView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'ফোন নম্বর',
+                      context.l10n!.phoneNumber,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const Gap(6),
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'ফোন নম্বর প্রয়োজন';
+                          return context.l10n!.phoneRequired;
                         }
                         if (value.length != 11) {
-                          return 'ফোন নম্বর অবশ্যই ১১ সংখ্যার হতে হবে';
+                          return context.l10n!.phoneMustBe11Digits;
                         }
                         return null; // Returns null if validation is successful
                       },
                       keyboardType: TextInputType.number,
                       controller: _phoneController,
-                      decoration: const InputDecoration(
-                          hintText: "আপনার ফোন নম্বর লিখুন"),
+                      decoration: InputDecoration(
+                          hintText: context.l10n!.enterYourPhoneNumber),
                     ),
                   ],
                 ),
@@ -94,7 +95,7 @@ class ForgetPasswordViewState extends ConsumerState<ForgetPasswordView> {
               Skeletonizer(
                 enabled: isLoading,
                 child: LongButton(
-                  text: 'এগিয়ে যাই',
+                  text: context.l10n!.continueText,
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _debouncer.run(
