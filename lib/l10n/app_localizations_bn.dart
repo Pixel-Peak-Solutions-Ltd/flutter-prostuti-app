@@ -499,4 +499,37 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get examReminder => 'পরীক্ষার রিমাইন্ডার';
+
+  @override
+  String get filter => 'ফিল্টার';
+
+  @override
+  String get type => 'টাইপ';
+
+  @override
+  String get division => 'বিভাগ';
+
+  @override
+  String get subject => 'বিষয়';
+
+  @override
+  String get selectTypeFirst => 'প্রথমে একটি টাইপ নির্বাচন করুন';
+
+  @override
+  String get noDivisionsAvailable => 'এই টাইপের জন্য কোন বিভাগ উপলব্ধ নেই';
+
+  @override
+  String get noSubjectsAvailable => 'এই নির্বাচনের জন্য কোন বিষয় উপলব্ধ নেই';
+
+  @override
+  String get noTypesAvailable => 'কোন টাইপ উপলব্ধ নেই';
+
+  @override
+  String get applyFilter => 'ফিল্টার প্রয়োগ করুন';
+
+  @override
+  String get resetFilter => 'ফিল্টার রিসেট করুন';
+
+  @override
+  String get searchHint => 'সার্চ করুন...';
 }

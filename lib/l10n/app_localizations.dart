@@ -1078,6 +1078,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Exam Reminder'**
   String get examReminder;
+
+  /// No description provided for @filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
+  /// No description provided for @type.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get type;
+
+  /// No description provided for @division.
+  ///
+  /// In en, this message translates to:
+  /// **'Division'**
+  String get division;
+
+  /// No description provided for @subject.
+  ///
+  /// In en, this message translates to:
+  /// **'Subject'**
+  String get subject;
+
+  /// No description provided for @selectTypeFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a type first'**
+  String get selectTypeFirst;
+
+  /// No description provided for @noDivisionsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No divisions available for this type'**
+  String get noDivisionsAvailable;
+
+  /// No description provided for @noSubjectsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No subjects available for this selection'**
+  String get noSubjectsAvailable;
+
+  /// No description provided for @noTypesAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No types available'**
+  String get noTypesAvailable;
+
+  /// No description provided for @applyFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply Filter'**
+  String get applyFilter;
+
+  /// No description provided for @resetFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Filter'**
+  String get resetFilter;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search...'**
+  String get searchHint;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

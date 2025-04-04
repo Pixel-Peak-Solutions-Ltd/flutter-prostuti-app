@@ -163,5 +163,16 @@
   "yesterdaysNotices": "Yesterday's Notices",
   "olderNotices": "Older Notices",
   "noNotices": "No notices available",
-  "examReminder": "Exam Reminder"
+  "examReminder": "Exam Reminder",
+  "filter": "Filter",
+  "type": "Type",
+  "division": "Division",
+  "subject": "Subject",
+  "selectTypeFirst": "Select a type first",
+  "noDivisionsAvailable": "No divisions available for this type",
+  "noSubjectsAvailable": "No subjects available for this selection",
+  "noTypesAvailable": "No types available",
+  "applyFilter": "Apply Filter",
+  "resetFilter": "Reset Filter",
+  "searchHint": "Search..."
 }

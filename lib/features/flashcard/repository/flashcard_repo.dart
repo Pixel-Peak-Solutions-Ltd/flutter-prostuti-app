@@ -4,6 +4,7 @@ import 'package:prostuti/core/services/error_handler.dart';
 import 'package:prostuti/core/services/error_response.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../model/category_model.dart';
 import '../model/create_flash_card.dart';
 import '../model/flashcard_model.dart';
 
@@ -24,36 +25,32 @@ class FlashcardRepo {
     int page = 1,
     int limit = 10,
     required String visibility,
+    String? categoryType,
+    String? categoryDivision,
+    String? categorySubject,
   }) async {
+    final queryParams = {
+      "page": page,
+      "limit": limit,
+      "visibility": visibility,
+    };
+
+    // Add filter parameters if they're provided
+    if (categoryType != null && categoryType.isNotEmpty) {
+      queryParams["categoryType"] = categoryType;
+    }
+
+    if (categoryDivision != null && categoryDivision.isNotEmpty) {
+      queryParams["categoryDivision"] = categoryDivision;
+    }
+
+    if (categorySubject != null && categorySubject.isNotEmpty) {
+      queryParams["categorySubject"] = categorySubject;
+    }
+
     final response = await _dioService.getRequest(
       "/flashcard/all-flashcard",
-      queryParameters: {
-        "page": page,
-        "limit": limit,
-        "visibility": visibility,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      return Right(FlashcardResponse.fromJson(response.data));
-    } else {
-      final errorResponse = ErrorResponse.fromJson(response.data);
-      ErrorHandler().setErrorMessage(errorResponse.message);
-      return Left(errorResponse);
-    }
-  }
-
-  Future<Either<ErrorResponse, FlashcardResponse>> getUserFlashcards({
-    int page = 1,
-    int limit = 10,
-  }) async {
-    final response = await _dioService.getRequest(
-      "/flashcard/user-flashcards",
-      queryParameters: {
-        "page": page,
-        "limit": limit,
-        "visibility": "ONLY_ME",
-      },
+      queryParameters: queryParams,
     );
 
     if (response.statusCode == 200) {
@@ -147,6 +144,22 @@ class FlashcardRepo {
       }
     } catch (e) {
       print('Exception in getFavoriteFlashcardItems: $e');
+      return Left(ErrorResponse(success: false, message: e.toString()));
+    }
+  }
+
+  Future<Either<ErrorResponse, CategoryResponse>> getCategories() async {
+    try {
+      final response = await _dioService.getRequest("/category");
+
+      if (response.statusCode == 200) {
+        return Right(CategoryResponse.fromJson(response.data));
+      } else {
+        final errorResponse = ErrorResponse.fromJson(response.data);
+        ErrorHandler().setErrorMessage(errorResponse.message);
+        return Left(errorResponse);
+      }
+    } catch (e) {
       return Left(ErrorResponse(success: false, message: e.toString()));
     }
   }

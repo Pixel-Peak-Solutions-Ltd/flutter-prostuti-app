@@ -163,5 +163,16 @@
   "yesterdaysNotices": "গতকালের নোটিশ",
   "olderNotices": "পুরানো নোটিশ",
   "noNotices": "কোন নোটিশ নেই",
-  "examReminder": "পরীক্ষার রিমাইন্ডার"
+  "examReminder": "পরীক্ষার রিমাইন্ডার",
+  "filter": "ফিল্টার",
+  "type": "টাইপ",
+  "division": "বিভাগ",
+  "subject": "বিষয়",
+  "selectTypeFirst": "প্রথমে একটি টাইপ নির্বাচন করুন",
+  "noDivisionsAvailable": "এই টাইপের জন্য কোন বিভাগ উপলব্ধ নেই",
+  "noSubjectsAvailable": "এই নির্বাচনের জন্য কোন বিষয় উপলব্ধ নেই",
+  "noTypesAvailable": "কোন টাইপ উপলব্ধ নেই",
+  "applyFilter": "ফিল্টার প্রয়োগ করুন",
+  "resetFilter": "ফিল্টার রিসেট করুন",
+  "searchHint": "সার্চ করুন..."
 }

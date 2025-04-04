@@ -6,12 +6,15 @@ import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/flashcard/view/create_flashcard_view.dart';
 import 'package:prostuti/features/flashcard/view/flashcard_study_view.dart';
+import 'package:prostuti/features/flashcard/viewmodel/flashcard_filter_viewmodel.dart';
+import 'package:prostuti/features/flashcard/widgets/flashcard_filter_sheet.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/services/size_config.dart';
 import '../model/flashcard_model.dart';
 import '../viewmodel/flashcard_viewmodel.dart';
 import '../widgets/flashcard_empty_state.dart';
+import '../widgets/flashcard_filter_btn.dart';
 import '../widgets/flashcard_header.dart';
 import '../widgets/flashcard_item.dart';
 import '../widgets/flashcard_search_container.dart';
@@ -101,7 +104,28 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
       );
       _searchController.clear();
       _updateSearch('');
+
+      // Reset filters if they're active when changing tabs
+      final filterNotifier = ref.read(flashcardFilterProvider.notifier);
+      if (ref.read(flashcardFilterProvider).isFilterActive) {
+        filterNotifier.resetFilters();
+        // Refresh the data
+        if (index == 0) {
+          ref.invalidate(exploreFlashcardsProvider);
+        } else {
+          ref.invalidate(userFlashcardsProvider);
+        }
+      }
     });
+  }
+
+  void _showFilterBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const FlashcardFilterSheet(),
+    );
   }
 
   @override
@@ -229,9 +253,21 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
 
                   const Gap(16),
                   // Search Container
-                  FlashcardSearchContainer(
-                    controller: _searchController,
-                    onChanged: _updateSearch,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FlashcardSearchContainer(
+                          controller: _searchController,
+                          onChanged: _updateSearch,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      FlashcardFilterButton(
+                        onTap: _showFilterBottomSheet,
+                        isFilterActive:
+                            ref.watch(flashcardFilterProvider).isFilterActive,
+                      ),
+                    ],
                   ),
                 ],
               ),

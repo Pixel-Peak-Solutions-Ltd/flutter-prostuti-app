@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/flashcard_model.dart';
 import '../repository/flashcard_repo.dart';
+import 'flashcard_filter_viewmodel.dart';
 
 part 'flashcard_viewmodel.g.dart';
 
@@ -22,18 +23,38 @@ class ExploreFlashcards extends _$ExploreFlashcards {
 
   @override
   Future<List<Flashcard>> build() async {
-    _allFlashcards = await _fetchFlashcards(page: 1);
+    final filterState = ref.watch(flashcardFilterProvider);
+
+    _allFlashcards = await _fetchFlashcards(
+      page: 1,
+      categoryType:
+          filterState.isFilterActive ? filterState.selectedType : null,
+      categoryDivision:
+          filterState.isFilterActive ? filterState.selectedDivision : null,
+      categorySubject:
+          filterState.isFilterActive ? filterState.selectedSubject : null,
+    );
     _filteredFlashcards = _allFlashcards;
     _currentPage = 1;
     _hasMoreData = true;
     return _allFlashcards;
   }
 
-  Future<List<Flashcard>> _fetchFlashcards(
-      {required int page, int limit = 10}) async {
-    final response = await ref
-        .read(flashcardRepoProvider)
-        .getAllFlashcards(page: page, limit: limit, visibility: "EVERYONE");
+  Future<List<Flashcard>> _fetchFlashcards({
+    required int page,
+    int limit = 10,
+    String? categoryType,
+    String? categoryDivision,
+    String? categorySubject,
+  }) async {
+    final response = await ref.read(flashcardRepoProvider).getAllFlashcards(
+          page: page,
+          limit: limit,
+          visibility: "EVERYONE",
+          categoryType: categoryType,
+          categoryDivision: categoryDivision,
+          categorySubject: categorySubject,
+        );
 
     return response.fold(
       (l) {
@@ -42,7 +63,7 @@ class ExploreFlashcards extends _$ExploreFlashcards {
       (flashcardList) {
         final newFlashcards = flashcardList.data?.data ?? [];
 
-        // Check if we have more data (based on meta data or by checking if we received fewer items than requested)
+        // Check if we have more data
         final totalCount = flashcardList.data?.meta?.count ?? 0;
         final currentCount = (_currentPage - 1) * limit + newFlashcards.length;
         _hasMoreData = currentCount < totalCount;
@@ -57,9 +78,18 @@ class ExploreFlashcards extends _$ExploreFlashcards {
 
     try {
       _isLoadingMore = true;
+      final filterState = ref.read(flashcardFilterProvider);
 
       final nextPage = _currentPage + 1;
-      final moreFlashcards = await _fetchFlashcards(page: nextPage);
+      final moreFlashcards = await _fetchFlashcards(
+        page: nextPage,
+        categoryType:
+            filterState.isFilterActive ? filterState.selectedType : null,
+        categoryDivision:
+            filterState.isFilterActive ? filterState.selectedDivision : null,
+        categorySubject:
+            filterState.isFilterActive ? filterState.selectedSubject : null,
+      );
 
       if (moreFlashcards.isNotEmpty) {
         _currentPage = nextPage;

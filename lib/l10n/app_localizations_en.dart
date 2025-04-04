@@ -499,4 +499,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get examReminder => 'Exam Reminder';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get type => 'Type';
+
+  @override
+  String get division => 'Division';
+
+  @override
+  String get subject => 'Subject';
+
+  @override
+  String get selectTypeFirst => 'Select a type first';
+
+  @override
+  String get noDivisionsAvailable => 'No divisions available for this type';
+
+  @override
+  String get noSubjectsAvailable => 'No subjects available for this selection';
+
+  @override
+  String get noTypesAvailable => 'No types available';
+
+  @override
+  String get applyFilter => 'Apply Filter';
+
+  @override
+  String get resetFilter => 'Reset Filter';
+
+  @override
+  String get searchHint => 'Search...';
 }
