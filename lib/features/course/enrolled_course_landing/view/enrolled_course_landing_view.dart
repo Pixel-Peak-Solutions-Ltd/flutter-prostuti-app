@@ -7,6 +7,7 @@ import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course/course_details/widgets/course_details_skeleton.dart';
+import 'package:prostuti/features/course/course_list/viewmodel/get_course_by_id.dart';
 import 'package:prostuti/features/course/enrolled_course_landing/viewmodel/enrolled_course_landing_viewmodel.dart';
 import 'package:prostuti/features/course/materials/assignment/view/assignment_view.dart';
 import 'package:prostuti/features/course/materials/notice/view/notice_view.dart';
@@ -16,6 +17,14 @@ import 'package:prostuti/features/course/materials/shared/widgets/trailing_icon.
 import 'package:prostuti/features/course/materials/test/view/test_view.dart';
 
 import '../../course_details/widgets/expandable_text.dart';
+import '../../materials/get_material_completion.dart';
+
+// Constants
+const double kBorderRadius = 16.0;
+const double kGridSpacing = 16.0;
+const double kPadding = 16.0;
+const double kVerticalPadding = 24.0;
+const int kGridCrossAxisCount = 3;
 
 class GridItemData {
   final String image;
@@ -75,6 +84,46 @@ enum GridItem {
         return "notice";
     }
   }
+
+  String svgIconPath() {
+    switch (this) {
+      case GridItem.recordedClass:
+        return "assets/icons/record_class.svg";
+      case GridItem.resource:
+        return "assets/icons/resource.svg";
+      case GridItem.test:
+        return "assets/icons/test.svg";
+      case GridItem.assignment:
+        return "assets/icons/assignment.svg";
+      case GridItem.notice:
+        return "assets/icons/notice.svg";
+      default:
+        return "assets/icons/record_class.svg"; // Default icon
+    }
+  }
+
+  void navigate(BuildContext context, String courseId) {
+    switch (this) {
+      case GridItem.recordedClass:
+        Nav().push(const RecordClassView());
+        break;
+      case GridItem.resource:
+        Nav().push(const ResourcesView());
+        break;
+      case GridItem.assignment:
+        Nav().push(const AssignmentView());
+        break;
+      case GridItem.test:
+        Nav().push(const TestListView());
+        break;
+      case GridItem.notice:
+        Nav().push(NoticeView(courseId: courseId));
+        break;
+      default:
+        // TODO: Implement navigation for other grid items
+        break;
+    }
+  }
 }
 
 class EnrolledCourseLandingView extends ConsumerStatefulWidget {
@@ -87,14 +136,118 @@ class EnrolledCourseLandingView extends ConsumerStatefulWidget {
 
 class EnrolledCourseLandingViewState
     extends ConsumerState<EnrolledCourseLandingView> with CommonWidgets {
-  bool isToday = true;
-  bool isComplete = true;
-  bool isItemComplete = true;
+  // Reusable method to get localized title based on grid item
+  String _getLocalizedTitle(GridItem item) {
+    switch (item) {
+      case GridItem.recordedClass:
+        return context.l10n!.recordedClass;
+      case GridItem.resource:
+        return context.l10n!.resource;
+      case GridItem.test:
+        return context.l10n!.test;
+      case GridItem.assignment:
+        return context.l10n!.assignment;
+      case GridItem.routine:
+        return context.l10n!.routine;
+      case GridItem.reportCard:
+        return context.l10n!.reportCard;
+      case GridItem.leaderboard:
+        return context.l10n!.leaderboard;
+      case GridItem.notice:
+        return context.l10n!.notice;
+    }
+  }
+
+  // Reusable method to create a grid item
+  Widget _buildGridItem(GridItem item, String courseId, ThemeData theme) {
+    return InkWell(
+      onTap: () => item.navigate(context, courseId),
+      child: Container(
+        decoration: BoxDecoration(
+          color: theme.scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey.shade300),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                item.image,
+                scale: 0.9,
+              ),
+              Text(
+                _getLocalizedTitle(item),
+                style: theme.textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Reusable method to create a curriculum item
+  Widget _buildCurriculumItem({
+    required String itemId,
+    required String date,
+    required String icon,
+    required String name,
+    required Set<String> completedSet,
+    required ThemeData theme,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: kPadding).copyWith(top: 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              SvgPicture.asset(
+                icon,
+                height: 20,
+                width: 20,
+                color: theme.colorScheme.onSurface,
+                fit: BoxFit.cover,
+              ),
+              const Gap(8),
+              SizedBox(
+                width: MediaQuery.sizeOf(context).width * 0.7,
+                child: Text(
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  name,
+                  style: theme.textTheme.bodySmall!.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          TrailingIcon(
+            classDate: date,
+            isCompleted: completedSet.contains(itemId),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorWidget(String error) {
+    return Center(
+      child: Text("${context.l10n!.error}: $error"),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
     final courseDetailsAsync = ref.watch(enrolledCourseLandingProvider);
+    final courseId = ref.read(getCourseByIdProvider);
+    final completedAsync = ref.watch(completedIdProvider(courseId));
 
     return PopScope(
       canPop: false,
@@ -106,390 +259,202 @@ class EnrolledCourseLandingViewState
               Navigator.pop(context, true);
             },
           ),
-          error: (error, stackTrace) {
-            return commonAppbar("${context.l10n!.error}: $error");
-          },
-          loading: () {
-            return commonAppbar("");
-          },
+          error: (error, stackTrace) =>
+              commonAppbar("${context.l10n!.error}: $error"),
+          loading: () => commonAppbar(""),
         ),
         body: courseDetailsAsync.when(
           data: (courseDetails) {
-            return Padding(
-              padding: const EdgeInsets.all(16),
-              child: SingleChildScrollView(
-                child: SafeArea(
-                  bottom: true,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 24, horizontal: 16),
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset("assets/images/welcome.png"),
-                        const Gap(10),
-                        Text(
-                          context.l10n!.welcomeMessage,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const Gap(24),
-                        ExpandableText(text: courseDetails.data!.details!),
-                        const Gap(24),
-                        Text(
-                          context.l10n!.modules,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const Gap(24),
-                        SizedBox(
-                          height: SizeConfig.h(280),
-                          child: GridView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                            ),
-                            itemCount: GridItem.values.length,
-                            itemBuilder: (context, index) {
-                              final item = GridItem.values[index];
-                              String? localizedTitle;
-
-                              // Get localized title based on grid item
-                              switch (item) {
-                                case GridItem.recordedClass:
-                                  localizedTitle = context.l10n!.recordedClass;
-                                  break;
-                                case GridItem.resource:
-                                  localizedTitle = context.l10n!.resource;
-                                  break;
-                                case GridItem.test:
-                                  localizedTitle = context.l10n!.test;
-                                  break;
-                                case GridItem.assignment:
-                                  localizedTitle = context.l10n!.assignment;
-                                  break;
-                                case GridItem.routine:
-                                  localizedTitle = context.l10n!.routine;
-                                  break;
-                                case GridItem.reportCard:
-                                  localizedTitle = context.l10n!.reportCard;
-                                  break;
-                                case GridItem.leaderboard:
-                                  localizedTitle = context.l10n!.leaderboard;
-                                  break;
-                                case GridItem.notice:
-                                  localizedTitle = context.l10n!.notice;
-                                  break;
-                              }
-
-                              return InkWell(
-                                onTap: () {
-                                  switch (item) {
-                                    case GridItem.recordedClass:
-                                      Nav().push(const RecordClassView());
-                                    case GridItem.resource:
-                                      Nav().push(const ResourcesView());
-                                    case GridItem.assignment:
-                                      Nav().push(const AssignmentView());
-                                    case GridItem.test:
-                                      Nav().push(const TestListView());
-                                    case GridItem.routine:
-                                    // TODO: Handle this case.
-                                    case GridItem.reportCard:
-                                    // TODO: Handle this case.
-                                    case GridItem.leaderboard:
-                                    // TODO: Handle this case.
-                                    case GridItem.notice:
-                                      Nav().push(NoticeView(
-                                          courseId: courseDetails.data!.sId!));
-                                  }
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      color: theme.scaffoldBackgroundColor,
-                                      borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                          color: Colors.grey.shade300)),
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          item.image,
-                                          scale: 0.9,
-                                        ),
-                                        Text(
-                                          localizedTitle ?? '',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        const Gap(24),
-                        Text(
-                          context.l10n!.courseCurriculum,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge!
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const Gap(16),
-                        for (int i = 0;
-                            i < (courseDetails.data!.lessons!.length);
-                            i++)
-                          ListTileTheme(
-                            contentPadding: const EdgeInsets.all(0),
-                            dense: true,
-                            horizontalTitleGap: 0.0,
-                            minLeadingWidth: 0,
-                            child: ExpansionTile(
-                              title: lessonName(theme,
-                                  '${courseDetails.data!.lessons![i].name} ${i + 1} '),
-                              children: [
-                                for (int j = 0;
-                                    j <
-                                        courseDetails.data!.lessons![i]
-                                            .recodedClasses!.length;
-                                    j++)
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 16)
-                                            .copyWith(top: 0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                              "assets/icons/record_class.svg",
-                                              height: 20,
-                                              width: 20,
-                                              color:
-                                                  theme.colorScheme.onSurface,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            const Gap(8),
-                                            SizedBox(
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width *
-                                                  0.7,
-                                              child: Text(
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                '${context.l10n!.recordedClassItem}${courseDetails.data!.lessons![i].recodedClasses![j].recodeClassName!}',
-                                                style: theme
-                                                    .textTheme.bodySmall!
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        TrailingIcon(
-                                            classDate: courseDetails
-                                                .data!
-                                                .lessons![i]
-                                                .recodedClasses![j]
-                                                .classDate!,
-                                            isCompleted: false)
-                                      ],
-                                    ),
-                                  ),
-                                for (int j = 0;
-                                    j <
-                                        courseDetails.data!.lessons![i]
-                                            .resources!.length;
-                                    j++)
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 16)
-                                            .copyWith(top: 0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                              "assets/icons/resource.svg",
-                                              height: 20,
-                                              width: 20,
-                                              color:
-                                                  theme.colorScheme.onSurface,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            const Gap(8),
-                                            SizedBox(
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width *
-                                                  0.7,
-                                              child: Text(
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                '${context.l10n!.resourceItem}${courseDetails.data!.lessons![i].resources![j].name}',
-                                                style: theme
-                                                    .textTheme.bodySmall!
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        TrailingIcon(
-                                            classDate: courseDetails
-                                                .data!
-                                                .lessons![i]
-                                                .resources![j]
-                                                .resourceDate!,
-                                            isCompleted: false)
-                                      ],
-                                    ),
-                                  ),
-                                for (int j = 0;
-                                    j <
-                                        courseDetails.data!.lessons![i]
-                                            .assignments!.length;
-                                    j++)
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 16)
-                                            .copyWith(top: 0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                              "assets/icons/assignment.svg",
-                                              height: 20,
-                                              width: 20,
-                                              color:
-                                                  theme.colorScheme.onSurface,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            const Gap(8),
-                                            SizedBox(
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width *
-                                                  0.7,
-                                              child: Text(
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                '${context.l10n!.assignmentItem}${courseDetails.data!.lessons![i].assignments![j].assignmentNo!}',
-                                                style: theme
-                                                    .textTheme.bodySmall!
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        TrailingIcon(
-                                            classDate: courseDetails
-                                                .data!
-                                                .lessons![i]
-                                                .assignments![j]
-                                                .unlockDate!,
-                                            isCompleted: false)
-                                      ],
-                                    ),
-                                  ),
-                                for (int j = 0;
-                                    j <
-                                        courseDetails
-                                            .data!.lessons![i].tests!.length;
-                                    j++)
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 16)
-                                            .copyWith(top: 0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            SvgPicture.asset(
-                                              "assets/icons/test.svg",
-                                              height: 20,
-                                              width: 20,
-                                              color:
-                                                  theme.colorScheme.onSurface,
-                                              fit: BoxFit.cover,
-                                            ),
-                                            const Gap(8),
-                                            SizedBox(
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width *
-                                                  0.7,
-                                              child: Text(
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                '${context.l10n!.testItem}${courseDetails.data!.lessons![i].tests![j].name!}',
-                                                style: theme
-                                                    .textTheme.bodySmall!
-                                                    .copyWith(
-                                                  fontWeight: FontWeight.w700,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        TrailingIcon(
-                                            classDate: courseDetails
-                                                .data!
-                                                .lessons![i]
-                                                .tests![j]
-                                                .publishDate!,
-                                            isCompleted: false)
-                                      ],
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+            return completedAsync.when(
+              data: (completedId) {
+                final completedSet = Set<String>.from(completedId);
+                return _buildCourseContent(theme, courseDetails, completedSet);
+              },
+              error: (error, stackTrace) => _buildErrorWidget(error.toString()),
+              loading: () => const CourseDetailsSkeleton(),
             );
           },
-          error: (error, stackTrace) {
-            return Center(
-              child: Text("${context.l10n!.error}: $error"),
-            );
-          },
+          error: (error, stackTrace) => _buildErrorWidget(error.toString()),
           loading: () => const CourseDetailsSkeleton(),
         ),
       ),
     );
+  }
+
+  Widget _buildCourseContent(
+      ThemeData theme, dynamic courseDetails, Set<String> completedSet) {
+    return Padding(
+      padding: const EdgeInsets.all(kPadding),
+      child: SingleChildScrollView(
+        child: SafeArea(
+          bottom: true,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+                vertical: kVerticalPadding, horizontal: kPadding),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary,
+              borderRadius: BorderRadius.circular(kBorderRadius),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset("assets/images/welcome.png"),
+                const Gap(10),
+                Text(
+                  context.l10n!.welcomeMessage,
+                  style: theme.textTheme.bodyLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const Gap(24),
+                ExpandableText(text: courseDetails.data!.details!),
+                const Gap(24),
+                Text(
+                  context.l10n!.modules,
+                  style: theme.textTheme.bodyLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const Gap(24),
+                _buildModulesGrid(theme, courseDetails.data!.sId!),
+                const Gap(24),
+                Text(
+                  context.l10n!.courseCurriculum,
+                  style: theme.textTheme.bodyLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const Gap(16),
+                _buildCurriculum(theme, courseDetails, completedSet),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildModulesGrid(ThemeData theme, String courseId) {
+    return SizedBox(
+      height: SizeConfig.h(280),
+      child: GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: kGridCrossAxisCount,
+          crossAxisSpacing: kGridSpacing,
+          mainAxisSpacing: kGridSpacing,
+        ),
+        itemCount: GridItem.values.length,
+        itemBuilder: (context, index) {
+          final item = GridItem.values[index];
+          return _buildGridItem(item, courseId, theme);
+        },
+      ),
+    );
+  }
+
+  Widget _buildCurriculum(
+      ThemeData theme, dynamic courseDetails, Set<String> completedSet) {
+    return Column(
+      children: [
+        for (int i = 0; i < (courseDetails.data!.lessons!.length); i++)
+          ListTileTheme(
+            contentPadding: const EdgeInsets.all(0),
+            dense: true,
+            horizontalTitleGap: 0.0,
+            minLeadingWidth: 0,
+            child: ExpansionTile(
+              title: lessonName(
+                  theme, '${courseDetails.data!.lessons![i].name} ${i + 1} '),
+              children: [
+                // Recorded Classes
+                ..._buildLessonItems(
+                  itemsList: courseDetails.data!.lessons![i].recodedClasses!,
+                  itemType: GridItem.recordedClass,
+                  namePrefix: context.l10n!.recordedClassItem,
+                  nameKey: 'recodeClassName',
+                  dateKey: 'classDate',
+                  theme: theme,
+                  completedSet: completedSet,
+                ),
+
+                // Resources
+                ..._buildLessonItems(
+                  itemsList: courseDetails.data!.lessons![i].resources!,
+                  itemType: GridItem.resource,
+                  namePrefix: context.l10n!.resourceItem,
+                  nameKey: 'name',
+                  dateKey: 'resourceDate',
+                  theme: theme,
+                  completedSet: completedSet,
+                ),
+
+                // Assignments
+                ..._buildLessonItems(
+                  itemsList: courseDetails.data!.lessons![i].assignments!,
+                  itemType: GridItem.assignment,
+                  namePrefix: context.l10n!.assignmentItem,
+                  nameKey: 'assignmentNo',
+                  dateKey: 'unlockDate',
+                  theme: theme,
+                  completedSet: completedSet,
+                ),
+
+                // Tests
+                ..._buildLessonItems(
+                  itemsList: courseDetails.data!.lessons![i].tests!,
+                  itemType: GridItem.test,
+                  namePrefix: context.l10n!.testItem,
+                  nameKey: 'name',
+                  dateKey: 'publishDate',
+                  theme: theme,
+                  completedSet: completedSet,
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
+  List<Widget> _buildLessonItems({
+    required List itemsList,
+    required GridItem itemType,
+    required String namePrefix,
+    required String nameKey,
+    required String dateKey,
+    required ThemeData theme,
+    required Set<String> completedSet,
+  }) {
+    return [
+      for (int j = 0; j < itemsList.length; j++)
+        _buildCurriculumItem(
+          itemId: itemsList[j].sId ?? "",
+          date: _getPropertyValue(itemsList[j], dateKey),
+          icon: itemType.svgIconPath(),
+          name: "$namePrefix${_getPropertyValue(itemsList[j], nameKey)}",
+          completedSet: completedSet,
+          theme: theme,
+        ),
+    ];
+  }
+
+  // Helper method to safely access properties based on property name
+  String _getPropertyValue(dynamic item, String propertyName) {
+    switch (propertyName) {
+      case 'classDate':
+        return item.classDate ?? "";
+      case 'recodeClassName':
+        return item.recodeClassName ?? "";
+      case 'resourceDate':
+        return item.resourceDate ?? "";
+      case 'name':
+        return item.name ?? "";
+      case 'assignmentNo':
+        return item.assignmentNo ?? "";
+      case 'unlockDate':
+        return item.unlockDate ?? "";
+      case 'publishDate':
+        return item.publishDate ?? "";
+      default:
+        return "";
+    }
   }
 }
