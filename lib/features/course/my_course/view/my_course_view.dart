@@ -77,13 +77,17 @@ class MyCourseViewState extends ConsumerState<MyCourseView> with CommonWidgets {
                                   }
                                 });
                               },
-                              child: MyCourseCard(
-                                progress: combinedCourseList[i]['progress'],
-                                name: course[i].courseId!.name!,
-                                img: course[i].courseId!.image!.path!,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: MyCourseCard(
+                                  progress: combinedCourseList[i]['progress'],
+                                  name: course[i].courseId!.name!,
+                                  img: course[i].courseId!.image!.path!,
+                                ),
                               )),
                         const Gap(16),
-                        ExploreCourseBtn(),
+                        const ExploreCourseBtn(),
                       ],
                     ),
                   ),
