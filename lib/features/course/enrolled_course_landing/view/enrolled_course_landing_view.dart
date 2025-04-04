@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course/course_details/widgets/course_details_skeleton.dart';
@@ -15,20 +16,64 @@ import 'package:prostuti/features/course/materials/test/view/test_view.dart';
 
 import '../../course_details/widgets/expandable_text.dart';
 
-enum GridItem {
-  recordedClass("assets/icons/video.png", "রেকর্ড ক্লাস"),
-  resource("assets/icons/resource.png", "রিসোর্স"),
-  test("assets/icons/test.png", "টেস্ট"),
-  assignment("assets/icons/assignment.png", "এসাইনমেন্ট"),
-  routine("assets/icons/routine.png", "রুটিন"),
-  reportCard("assets/icons/report.png", "রিপোর্ট কার্ড"),
-  leaderboard("assets/icons/learderboard.png", "লিডারবোর্ড"),
-  notice("assets/icons/notice.png", "নোটিশ");
-
+class GridItemData {
   final String image;
-  final String title;
+  final String localizedTitleKey;
 
-  const GridItem(this.image, this.title);
+  const GridItemData(this.image, this.localizedTitleKey);
+}
+
+enum GridItem {
+  recordedClass,
+  resource,
+  test,
+  assignment,
+  routine,
+  reportCard,
+  leaderboard,
+  notice;
+
+  String get image {
+    switch (this) {
+      case GridItem.recordedClass:
+        return "assets/icons/video.png";
+      case GridItem.resource:
+        return "assets/icons/resource.png";
+      case GridItem.test:
+        return "assets/icons/test.png";
+      case GridItem.assignment:
+        return "assets/icons/assignment.png";
+      case GridItem.routine:
+        return "assets/icons/routine.png";
+      case GridItem.reportCard:
+        return "assets/icons/report.png";
+      case GridItem.leaderboard:
+        return "assets/icons/learderboard.png";
+      case GridItem.notice:
+        return "assets/icons/notice.png";
+    }
+  }
+
+  String getTitleKey() {
+    switch (this) {
+      case GridItem.recordedClass:
+        return "recordedClass";
+      case GridItem.resource:
+        return "resource";
+      case GridItem.test:
+        return "test";
+      case GridItem.assignment:
+        return "assignment";
+      case GridItem.routine:
+        return "routine";
+      case GridItem.reportCard:
+        return "reportCard";
+      case GridItem.leaderboard:
+        return "leaderboard";
+      case GridItem.notice:
+        return "notice";
+    }
+  }
 }
 
 class EnrolledCourseLandingView extends ConsumerStatefulWidget {
@@ -61,7 +106,7 @@ class EnrolledCourseLandingViewState
             },
           ),
           error: (error, stackTrace) {
-            return commonAppbar("$error");
+            return commonAppbar("${context.l10n!.error}: $error");
           },
           loading: () {
             return commonAppbar("");
@@ -86,7 +131,7 @@ class EnrolledCourseLandingViewState
                         Image.asset("assets/images/welcome.png"),
                         const Gap(10),
                         Text(
-                          'আপনাকে স্বাগতম',
+                          context.l10n!.welcomeMessage,
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge!
@@ -96,7 +141,7 @@ class EnrolledCourseLandingViewState
                         ExpandableText(text: courseDetails.data!.details!),
                         const Gap(24),
                         Text(
-                          'মডিউল সমূহ',
+                          context.l10n!.modules,
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge!
@@ -116,6 +161,36 @@ class EnrolledCourseLandingViewState
                             itemCount: GridItem.values.length,
                             itemBuilder: (context, index) {
                               final item = GridItem.values[index];
+                              String? localizedTitle;
+
+                              // Get localized title based on grid item
+                              switch (item) {
+                                case GridItem.recordedClass:
+                                  localizedTitle = context.l10n!.recordedClass;
+                                  break;
+                                case GridItem.resource:
+                                  localizedTitle = context.l10n!.resource;
+                                  break;
+                                case GridItem.test:
+                                  localizedTitle = context.l10n!.test;
+                                  break;
+                                case GridItem.assignment:
+                                  localizedTitle = context.l10n!.assignment;
+                                  break;
+                                case GridItem.routine:
+                                  localizedTitle = context.l10n!.routine;
+                                  break;
+                                case GridItem.reportCard:
+                                  localizedTitle = context.l10n!.reportCard;
+                                  break;
+                                case GridItem.leaderboard:
+                                  localizedTitle = context.l10n!.leaderboard;
+                                  break;
+                                case GridItem.notice:
+                                  localizedTitle = context.l10n!.notice;
+                                  break;
+                              }
+
                               return InkWell(
                                 onTap: () {
                                   switch (item) {
@@ -155,7 +230,7 @@ class EnrolledCourseLandingViewState
                                           scale: 0.9,
                                         ),
                                         Text(
-                                          item.title,
+                                          localizedTitle ?? '',
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium!
@@ -172,7 +247,7 @@ class EnrolledCourseLandingViewState
                         ),
                         const Gap(24),
                         Text(
-                          'কোর্স কারিকুলাম',
+                          context.l10n!.courseCurriculum,
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge!
@@ -222,7 +297,7 @@ class EnrolledCourseLandingViewState
                                               child: Text(
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
-                                                'Recorded Class: ${courseDetails.data!.lessons![i].recodedClasses![j].recodeClassName!}',
+                                                '${context.l10n!.recordedClassItem}${courseDetails.data!.lessons![i].recodedClasses![j].recodeClassName!}',
                                                 style: theme
                                                     .textTheme.bodySmall!
                                                     .copyWith(
@@ -273,7 +348,7 @@ class EnrolledCourseLandingViewState
                                               child: Text(
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
-                                                'Resource: ${courseDetails.data!.lessons![i].resources![j].name}',
+                                                '${context.l10n!.resourceItem}${courseDetails.data!.lessons![i].resources![j].name}',
                                                 style: theme
                                                     .textTheme.bodySmall!
                                                     .copyWith(
@@ -324,7 +399,7 @@ class EnrolledCourseLandingViewState
                                               child: Text(
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
-                                                'Assignment: ${courseDetails.data!.lessons![i].assignments![j].assignmentNo!}',
+                                                '${context.l10n!.assignmentItem}${courseDetails.data!.lessons![i].assignments![j].assignmentNo!}',
                                                 style: theme
                                                     .textTheme.bodySmall!
                                                     .copyWith(
@@ -375,7 +450,7 @@ class EnrolledCourseLandingViewState
                                               child: Text(
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
-                                                'Test: ${courseDetails.data!.lessons![i].tests![j].name!}',
+                                                '${context.l10n!.testItem}${courseDetails.data!.lessons![i].tests![j].name!}',
                                                 style: theme
                                                     .textTheme.bodySmall!
                                                     .copyWith(
@@ -407,7 +482,7 @@ class EnrolledCourseLandingViewState
           },
           error: (error, stackTrace) {
             return Center(
-              child: Text("$error"),
+              child: Text("${context.l10n!.error}: $error"),
             );
           },
           loading: () => const CourseDetailsSkeleton(),

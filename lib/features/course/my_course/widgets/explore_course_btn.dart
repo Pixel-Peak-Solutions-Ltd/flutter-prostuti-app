@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 
 import '../../course_list/view/course_list_view.dart';
@@ -21,7 +22,7 @@ class ExploreCourseBtn extends StatelessWidget {
       ),
       onPressed: () => Nav().push(CourseListView()),
       child: Text(
-        'এক্সপলোর টেস্ট কোর্স',
+        context.l10n!.exploreCourses,
         style: Theme.of(context).textTheme.titleSmall!.copyWith(
               color: AppColors.textActionSecondaryLight,
               fontWeight: FontWeight.w900,

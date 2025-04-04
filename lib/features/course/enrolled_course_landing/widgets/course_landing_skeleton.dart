@@ -70,7 +70,7 @@ class CourseLandingSkeleton extends StatelessWidget with CommonWidgets {
                               ),
                               const Gap(6),
                               Text(
-                                item.title,
+                                'item.title',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!

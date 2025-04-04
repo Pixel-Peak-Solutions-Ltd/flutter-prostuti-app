@@ -946,6 +946,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'See Details'**
   String get seeDetails;
+
+  /// No description provided for @noCourseAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No Course Available'**
+  String get noCourseAvailable;
+
+  /// No description provided for @exploreCourses.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore Courses'**
+  String get exploreCourses;
+
+  /// No description provided for @courseProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Course Progress'**
+  String get courseProgress;
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// No description provided for @startLearning.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Learning'**
+  String get startLearning;
+
+  /// No description provided for @welcomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome'**
+  String get welcomeMessage;
+
+  /// No description provided for @modules.
+  ///
+  /// In en, this message translates to:
+  /// **'Modules'**
+  String get modules;
+
+  /// No description provided for @routine.
+  ///
+  /// In en, this message translates to:
+  /// **'Routine'**
+  String get routine;
+
+  /// No description provided for @reportCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Card'**
+  String get reportCard;
+
+  /// No description provided for @leaderboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaderboard'**
+  String get leaderboard;
+
+  /// No description provided for @notice.
+  ///
+  /// In en, this message translates to:
+  /// **'Notice'**
+  String get notice;
+
+  /// No description provided for @recordedClassItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded Class: '**
+  String get recordedClassItem;
+
+  /// No description provided for @resourceItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Resource: '**
+  String get resourceItem;
+
+  /// No description provided for @assignmentItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Assignment: '**
+  String get assignmentItem;
+
+  /// No description provided for @testItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Test: '**
+  String get testItem;
+
+  /// No description provided for @payNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay Now'**
+  String get payNow;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

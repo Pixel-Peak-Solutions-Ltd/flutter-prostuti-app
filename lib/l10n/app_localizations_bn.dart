@@ -433,4 +433,52 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get seeDetails => 'বিস্তারিত দেখুন';
+
+  @override
+  String get noCourseAvailable => 'কোন কোর্স পাওয়া যায়নি';
+
+  @override
+  String get exploreCourses => 'কোর্স এক্সপ্লোর করুন';
+
+  @override
+  String get courseProgress => 'কোর্স প্রোগ্রেস';
+
+  @override
+  String get completed => 'সম্পূর্ণ হয়েছে';
+
+  @override
+  String get startLearning => 'শেখা শুরু করুন';
+
+  @override
+  String get welcomeMessage => 'আপনাকে স্বাগতম';
+
+  @override
+  String get modules => 'মডিউল সমূহ';
+
+  @override
+  String get routine => 'রুটিন';
+
+  @override
+  String get reportCard => 'রিপোর্ট কার্ড';
+
+  @override
+  String get leaderboard => 'লিডারবোর্ড';
+
+  @override
+  String get notice => 'নোটিশ';
+
+  @override
+  String get recordedClassItem => 'রেকর্ড ক্লাস: ';
+
+  @override
+  String get resourceItem => 'রিসোর্স: ';
+
+  @override
+  String get assignmentItem => 'এসাইনমেন্ট: ';
+
+  @override
+  String get testItem => 'টেস্ট: ';
+
+  @override
+  String get payNow => 'পেমেন্ট পর্যালোচনা করুন';
 }

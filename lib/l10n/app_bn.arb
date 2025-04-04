@@ -141,5 +141,21 @@
   "contactProstuti": "এনরোলমেন্টের জন্য প্রস্তুতির সাথে যোগাযোগ করুন",
   "enrollInCourse": "এনরোল করুন",
   "visitCourse": "ভিজিট করুন",
-  "seeDetails": "বিস্তারিত দেখুন"
+  "seeDetails": "বিস্তারিত দেখুন",
+  "noCourseAvailable": "কোন কোর্স পাওয়া যায়নি",
+  "exploreCourses": "কোর্স এক্সপ্লোর করুন",
+  "courseProgress": "কোর্স প্রোগ্রেস",
+  "completed": "সম্পূর্ণ হয়েছে",
+  "startLearning": "শেখা শুরু করুন",
+  "welcomeMessage": "আপনাকে স্বাগতম",
+  "modules": "মডিউল সমূহ",
+  "routine": "রুটিন",
+  "reportCard": "রিপোর্ট কার্ড",
+  "leaderboard": "লিডারবোর্ড",
+  "notice": "নোটিশ",
+  "recordedClassItem": "রেকর্ড ক্লাস: ",
+  "resourceItem": "রিসোর্স: ",
+  "assignmentItem": "এসাইনমেন্ট: ",
+  "testItem": "টেস্ট: ",
+  "payNow": "পেমেন্ট পর্যালোচনা করুন"
 }

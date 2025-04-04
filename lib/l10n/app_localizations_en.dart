@@ -433,4 +433,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get seeDetails => 'See Details';
+
+  @override
+  String get noCourseAvailable => 'No Course Available';
+
+  @override
+  String get exploreCourses => 'Explore Courses';
+
+  @override
+  String get courseProgress => 'Course Progress';
+
+  @override
+  String get completed => 'Completed';
+
+  @override
+  String get startLearning => 'Start Learning';
+
+  @override
+  String get welcomeMessage => 'Welcome';
+
+  @override
+  String get modules => 'Modules';
+
+  @override
+  String get routine => 'Routine';
+
+  @override
+  String get reportCard => 'Report Card';
+
+  @override
+  String get leaderboard => 'Leaderboard';
+
+  @override
+  String get notice => 'Notice';
+
+  @override
+  String get recordedClassItem => 'Recorded Class: ';
+
+  @override
+  String get resourceItem => 'Resource: ';
+
+  @override
+  String get assignmentItem => 'Assignment: ';
+
+  @override
+  String get testItem => 'Test: ';
+
+  @override
+  String get payNow => 'Pay Now';
 }
