@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
+import 'package:prostuti/features/flashcard/services/localization_service.dart';
 import 'package:prostuti/features/flashcard/view/create_flashcard_view.dart';
 import 'package:prostuti/features/flashcard/view/flashcard_study_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -113,7 +114,7 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text("ফ্লাশকার্ড"),
+        title: Text(context.l10n!.flashcards),
         centerTitle: true,
       ),
       body: Skeletonizer(

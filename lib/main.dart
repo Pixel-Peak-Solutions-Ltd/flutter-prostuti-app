@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
@@ -8,6 +9,8 @@ import 'common/helpers/theme_provider.dart';
 import 'common/view_model/auth_notifier.dart';
 import 'core/configs/app_themes.dart';
 import 'core/services/size_config.dart';
+import 'features/flashcard/services/localization_service.dart';
+import 'l10n/app_localizations.dart.backup';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +24,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final themeMode = ref.watch(themeNotifierProvider);
     final authNotifier = ref.watch(authNotifierProvider);
+    final currentLocale = ref.watch(localeProvider);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -29,6 +33,17 @@ class MyApp extends ConsumerWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
+      locale: currentLocale,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('bn'),
+      ],
       home: Builder(
         builder: (context) {
           SizeConfig.init(context);

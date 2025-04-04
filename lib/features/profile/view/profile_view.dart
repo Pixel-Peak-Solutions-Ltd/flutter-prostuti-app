@@ -10,6 +10,7 @@ import 'package:prostuti/features/auth/login/view/login_view.dart';
 
 import '../../../common/view_model/auth_notifier.dart';
 import '../../../core/configs/app_colors.dart';
+import '../../flashcard/services/localization_service.dart';
 import '../../payment/view/subscription_view.dart';
 import '../../payment/viewmodel/check_subscription.dart';
 import '../viewmodel/profile_viewmodel.dart';
@@ -26,6 +27,13 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
         themeNotifierProvider.select((value) => value == ThemeMode.dark));
     final userProfileAsyncValue = ref.watch(userProfileProvider);
     final subscriptionAsyncValue = ref.watch(userSubscribedProvider);
+
+// Get current locale
+    final currentLocale = ref.watch(localeProvider);
+    final currentLanguage = languages.firstWhere(
+      (lang) => lang.code == currentLocale.languageCode,
+      orElse: () => languages[1], // Default to Bangla
+    );
 
     return Scaffold(
       appBar: commonAppbar('আমার প্রোফাইল'),
@@ -133,9 +141,23 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                   title: 'প্রোফাইল তথ্যাবলী',
                   onTap: () {}),
               CustomListTile(
-                  icon: "assets/icons/language.svg",
-                  title: 'ভাষা',
-                  onTap: () {}),
+                icon: "assets/icons/language.svg",
+                title: 'ভাষা',
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      currentLanguage.localName,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 14,
+                      ),
+                    ),
+                    const Icon(Icons.chevron_right, size: 20),
+                  ],
+                ),
+                onTap: () => _showLanguageSelector(context, ref),
+              ),
               const Gap(24),
               Text(
                 "আমার আইটেম",
@@ -272,6 +294,104 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               label: "ম্যাসেজ",
             ),
           ]),
+    );
+  }
+
+  void _showLanguageSelector(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.watch(localeProvider);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return Container(
+            padding: EdgeInsets.only(
+              top: 16,
+              left: 16,
+              right: 16,
+              bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Header with title and close button
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    Text(
+                      'ভাষা নির্বাচন করুন',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(width: 48), // Balance space
+                  ],
+                ),
+                const SizedBox(height: 24),
+
+                // Language options
+                ...languages.map((language) => _buildLanguageOption(
+                    context, ref, language,
+                    isSelected: currentLocale.languageCode == language.code)),
+
+                const SizedBox(height: 16),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildLanguageOption(
+      BuildContext context, WidgetRef ref, Language language,
+      {required bool isSelected}) {
+    return InkWell(
+      onTap: () {
+        ref.read(localeProvider.notifier).changeLanguage(language.code);
+        Navigator.pop(context);
+      },
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? const Color(0xFF2970FF).withOpacity(0.1)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: isSelected
+                ? const Color(0xFF2970FF)
+                : Colors.grey.withOpacity(0.5),
+            width: 1.5,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              language.localName,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected ? const Color(0xFF2970FF) : null,
+              ),
+            ),
+            if (isSelected)
+              const Icon(
+                Icons.check_circle,
+                color: Color(0xFF2970FF),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
