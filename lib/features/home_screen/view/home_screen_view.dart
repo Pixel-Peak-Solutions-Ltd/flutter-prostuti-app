@@ -203,16 +203,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   // Top section with profile and category cards
   Widget _buildTopSection(double maxWidth) {
     final userProfileAsyncValue = ref.watch(userProfileProvider);
+    bool isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
 
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            AppColors.homeScreenTopLight,
-            AppColors.homeScreenBottomLight,
-          ],
-          stops: [0.0, 0.5],
+          colors: isDarkMode
+              ? [
+                  AppColors.homeScreenTopDark,
+                  AppColors.scaffoldBackgroundDark,
+                ]
+              : [
+                  AppColors.homeScreenTopLight,
+                  AppColors.homeScreenBottomLight,
+                ],
+          stops: const [0.0, 0.5],
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
         ),
