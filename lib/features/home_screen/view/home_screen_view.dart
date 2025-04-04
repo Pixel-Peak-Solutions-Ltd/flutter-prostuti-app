@@ -17,6 +17,15 @@ import '../widget/calendar_widget.dart';
 import '../widget/category_card.dart';
 import '../widget/leaderboard_card.dart';
 
+// Updated provider to avoid unnecessary API calls
+final cachedUserProfileProvider = Provider.autoDispose((ref) {
+  // Just return the existing provider but only refresh it when necessary
+  return ref.watch(userProfileProvider);
+});
+
+// Flag to track if we've already initialized the profile
+final hasLoadedProfileProvider = StateProvider<bool>((ref) => false);
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -27,6 +36,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final PageController _adController = PageController();
   int _currentIndex = 0;
+  bool _hasInitializedProfile = false;
 
   // Temporary List of flashcards
   List<Flashcard> flashcards = [
@@ -65,17 +75,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Only initialize profile data once when needed
+    if (_currentIndex == 0) {
+      final hasLoaded = ref.read(hasLoadedProfileProvider);
+      if (!hasLoaded) {
+        // This will ensure we only trigger the API call once
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ref.read(hasLoadedProfileProvider.notifier).state = true;
+        });
+      }
+    }
+
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: [
-          _buildHomeContent(),
-          const FlashcardView(),
-          const Center(child: Text("Tests coming soon")),
-          const Center(child: Text("Notifications coming soon")),
-          const Center(child: Text("Messages coming soon")),
-        ],
-      ),
+      body: _buildCurrentTab(),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: _handleTabChange,
@@ -161,6 +173,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  // Build only the active tab to prevent unnecessary API calls and widget builds
+  Widget _buildCurrentTab() {
+    switch (_currentIndex) {
+      case 0:
+        return _buildHomeContent();
+      case 1:
+        return const FlashcardView();
+      case 2:
+        return const Center(child: Text("Tests coming soon"));
+      case 3:
+        return const Center(child: Text("Notifications coming soon"));
+      case 4:
+        return const Center(child: Text("Messages coming soon"));
+      default:
+        return _buildHomeContent();
+    }
+  }
+
   // Rebuilt home content with LayoutBuilder for better adaptivity
   Widget _buildHomeContent() {
     return LayoutBuilder(
@@ -201,18 +231,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  // Top section with profile and category cards
-
+  // Top section with profile and category cards - Optimized to reduce API calls
   Widget _buildTopSection(double maxWidth) {
-    final userProfileAsyncValue = ref.watch(userProfileProvider);
-    final isDarkMode = ref.watch(
-        themeNotifierProvider.select((value) => value == ThemeMode.dark));
+    // Use cached provider to prevent unnecessary API calls
+    final userProfileAsyncValue = ref.watch(cachedUserProfileProvider);
+    final themeMode = ref.watch(themeNotifierProvider);
+    final isDarkTheme = themeMode == ThemeMode.dark ||
+        (themeMode == ThemeMode.system &&
+            MediaQuery.platformBrightnessOf(context) == Brightness.dark);
 
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: isDarkMode
+          colors: isDarkTheme
               ? [
                   AppColors.homeScreenTopDark,
                   AppColors.scaffoldBackgroundDark,

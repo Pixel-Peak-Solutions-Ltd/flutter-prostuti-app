@@ -50,7 +50,7 @@ class MyApp extends ConsumerWidget {
           return authNotifier.when(
             data: (token) {
               if (token != null) {
-                return HomeScreen(); // User is logged in
+                return const HomeScreen(); // User is logged in
               } else {
                 return const LoginView(); // Redirect to login
               }
