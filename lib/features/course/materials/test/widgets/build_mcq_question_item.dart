@@ -12,13 +12,13 @@ class MCQQuestionWidget extends StatefulWidget {
   final List<Map<String, dynamic>> answerList; // List to store answers.
 
   const MCQQuestionWidget({
-    Key? key,
+    super.key,
     required this.questionNumber,
     required this.theme,
     required this.questionList,
     required this.selectedAnswers,
     required this.answerList,
-  }) : super(key: key);
+  });
 
   @override
   State<MCQQuestionWidget> createState() => _MCQQuestionWidgetState();
@@ -56,6 +56,17 @@ class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (widget.questionList.hasImage == true &&
+                widget.questionList.image != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Image.network(
+                  widget.questionList.image!.path!,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Text('Image not available');
+                  },
+                ),
+              ),
               // Question Title
               Text(
                 "${widget.questionNumber}. ${widget.questionList.title}",

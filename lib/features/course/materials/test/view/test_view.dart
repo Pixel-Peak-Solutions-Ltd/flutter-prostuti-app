@@ -95,6 +95,7 @@ class TestListViewState extends ConsumerState<TestListView>
                       return InkWell(
                         onTap: isUnlocked(test[index].publishDate!)
                             ? () async {
+                          print(test[index].sId!);
                                 ref
                                     .watch(getTestByIdProvider.notifier)
                                     .setTestId(test[index].sId!);
