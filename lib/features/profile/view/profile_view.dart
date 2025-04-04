@@ -23,8 +23,10 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDarkTheme = ref.watch(
-        themeNotifierProvider.select((value) => value == ThemeMode.dark));
+    final themeMode = ref.watch(themeNotifierProvider);
+    final isDarkTheme = themeMode == ThemeMode.dark ||
+        (themeMode == ThemeMode.system &&
+            MediaQuery.platformBrightnessOf(context) == Brightness.dark);
     final userProfileAsyncValue = ref.watch(userProfileProvider);
     final subscriptionAsyncValue = ref.watch(userSubscribedProvider);
 
@@ -207,7 +209,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                     inactiveThumbColor: Colors.white,
                     inactiveTrackColor: AppColors.borderNormalLight,
                     onChanged: (bool value) {
-                      ref.read(themeNotifierProvider.notifier).toggleTheme();
+                      ref
+                          .read(themeNotifierProvider.notifier)
+                          .toggleTheme(context);
                     },
                   ),
                 ),
