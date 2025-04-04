@@ -219,7 +219,7 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
                     ),
                     onPressed: _createNewFlashcard,
                     child: Text(
-                      'নতুন ফ্ল্যাশকার্ড তৈরি করুন',
+                      context.l10n!.createNewFlashcard,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -252,22 +252,23 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
                   // Explore Tab
                   _buildFlashcardsList(
                     exploreFlashcards,
-                    'সাম্প্রতিক ফ্লাশকার্ড',
+                    context.l10n!.recentFlashcards,
                     false, // We'll check in the method
                     false, // We'll check in the method
-                    onEmptyState: () => const FlashcardEmptyState(
-                      message: 'এখানে কোন ফ্লাশকার্ড নেই',
+                    onEmptyState: () => FlashcardEmptyState(
+                      message: context.l10n!.emptyFlashcardMessage,
                     ),
                   ),
 
                   // User Flashcards Tab
                   _buildFlashcardsList(
                     userFlashcards,
-                    'আপনার ফ্লাশকার্ড সমূহ',
+                    context.l10n!.yourFlashcardsList,
+
                     false, // We'll check in the method
                     false, // We'll check in the method
                     onEmptyState: () => FlashcardEmptyState(
-                      message: 'আপনার কোন ফ্লাশকার্ড নেই',
+                      message: context.l10n!.emptyYourFlashcardMessage,
                       onCreateTap: _createNewFlashcard,
                     ),
                   ),
@@ -352,7 +353,7 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Center(
                       child: Text(
-                        'আপনি সব ফ্লাশকার্ড দেখেছেন',
+                        context.l10n!.endOfList,
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
                                   color: Colors.grey,
@@ -388,7 +389,7 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
               itemBuilder: (context, index) {
                 return FlashcardItem(
                   flashcard: Flashcard(
-                    title: 'Loading Flashcard',
+                    title: context.l10n!.loading,
                     studentId: Student(name: 'Loading'),
                   ),
                   onTap: () {},

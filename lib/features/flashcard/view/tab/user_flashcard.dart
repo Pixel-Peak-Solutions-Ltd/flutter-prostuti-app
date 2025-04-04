@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 
 import '../../model/flashcard_model.dart';
 import '../../viewmodel/flashcard_viewmodel.dart';
@@ -53,7 +54,7 @@ class UserFlashcardsTabState extends ConsumerState<UserFlashcardsTab> {
       data: (flashcards) {
         if (flashcards.isEmpty) {
           return FlashcardEmptyState(
-            message: 'আপনার কোন ফ্লাশকার্ড নেই',
+            message: context.l10n!.emptyYourFlashcardMessage,
             onCreateTap: widget.onCreateTap,
           );
         }
@@ -62,7 +63,7 @@ class UserFlashcardsTabState extends ConsumerState<UserFlashcardsTab> {
       },
       loading: () => _buildLoadingState(context),
       error: (error, stack) => Center(
-        child: Text('Error: ${error.toString()}'),
+        child: Text('${context.l10n!.error}: ${error.toString()}'),
       ),
     );
   }
@@ -82,7 +83,7 @@ class UserFlashcardsTabState extends ConsumerState<UserFlashcardsTab> {
           padding: const EdgeInsets.all(16),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              const FlashcardHeader(text: 'আপনার ফ্লাশকার্ড সমূহ'),
+              FlashcardHeader(text: context.l10n!.yourFlashcardsList),
               const Gap(16),
             ]),
           ),
@@ -99,7 +100,7 @@ class UserFlashcardsTabState extends ConsumerState<UserFlashcardsTab> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                            'Open your flashcard: ${flashcards[index].title}'),
+                            '${context.l10n!.openYourFlashcard}: ${flashcards[index].title}'),
                         duration: const Duration(seconds: 1),
                       ),
                     );
@@ -113,10 +114,12 @@ class UserFlashcardsTabState extends ConsumerState<UserFlashcardsTab> {
 
         // Loading indicator at the bottom
         if (isLoadingMore)
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Center(child: CircularProgressIndicator()),
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             ),
           ),
 
@@ -127,7 +130,7 @@ class UserFlashcardsTabState extends ConsumerState<UserFlashcardsTab> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
                 child: Text(
-                  'আপনি সব ফ্লাশকার্ড দেখেছেন',
+                  context.l10n!.endOfList,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Colors.grey,
                       ),
@@ -146,7 +149,7 @@ class UserFlashcardsTabState extends ConsumerState<UserFlashcardsTab> {
           padding: const EdgeInsets.all(16),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              const FlashcardHeader(text: 'আপনার ফ্লাশকার্ড সমূহ'),
+              FlashcardHeader(text: context.l10n!.yourFlashcardsList),
               const Gap(16),
             ]),
           ),
@@ -158,8 +161,8 @@ class UserFlashcardsTabState extends ConsumerState<UserFlashcardsTab> {
               (context, index) {
                 return FlashcardItem(
                   flashcard: Flashcard(
-                    title: 'Loading Flashcard',
-                    studentId: Student(name: 'Loading'),
+                    title: context.l10n!.loading,
+                    studentId: Student(name: context.l10n!.loading),
                   ),
                   onTap: () {},
                 );

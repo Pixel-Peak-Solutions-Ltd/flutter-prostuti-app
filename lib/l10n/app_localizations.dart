@@ -346,6 +346,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loading more...'**
   String get loadingMore;
+
+  /// No description provided for @noFlashcardItems.
+  ///
+  /// In en, this message translates to:
+  /// **'No flashcard items found for this set'**
+  String get noFlashcardItems;
+
+  /// No description provided for @swipeLeftToLearn.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe Left to Learn'**
+  String get swipeLeftToLearn;
+
+  /// No description provided for @swipeRightToKnow.
+  ///
+  /// In en, this message translates to:
+  /// **'Swipe Right to Know'**
+  String get swipeRightToKnow;
+
+  /// No description provided for @favoriteAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to favorites'**
+  String get favoriteAdded;
+
+  /// No description provided for @favoriteRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from favorites'**
+  String get favoriteRemoved;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

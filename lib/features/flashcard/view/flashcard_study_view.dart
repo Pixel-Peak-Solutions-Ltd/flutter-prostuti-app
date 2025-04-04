@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:swipable_stack/swipable_stack.dart';
 
 import '../../../core/services/size_config.dart';
@@ -158,8 +159,8 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
         data: (flashcardDetail) {
           final items = flashcardDetail.items ?? [];
           if (items.isEmpty) {
-            return const Center(
-              child: Text('No flashcard items found for this set'),
+            return Center(
+              child: Text(context.l10n!.emptyFlashcardMessage),
             );
           }
 
@@ -186,7 +187,7 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
                       onPressed: _previousCard,
                     ),
                     Text(
-                      'সোয়াইপ করুন',
+                      context.l10n!.swipe,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -222,7 +223,7 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
                       backgroundColor: const Color(0xffD1E0FF),
                       fixedSize: Size(SizeConfig.w(356), SizeConfig.h(40))),
                   child: Text(
-                    'কার্ড লিস্ট দেখুন',
+                    context.l10n!.viewCardList,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: const Color(0xff2970FF),
                         fontWeight: FontWeight.w900),
@@ -234,11 +235,11 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
         },
         loading: () => Center(
             child: CircularProgressIndicator(
-          semanticsLabel: "Loading Flashcards",
+          semanticsLabel: context.l10n!.loading,
           color: Theme.of(context).colorScheme.secondary,
         )),
         error: (error, stack) => Center(
-          child: Text('Error loading flashcards: ${error.toString()}'),
+          child: Text('${context.l10n!.error}: ${error.toString()}'),
         ),
       ),
     );
@@ -262,13 +263,13 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
 
             if (direction == SwipeDirection.left) {
               return _buildSwipeOverlay(
-                "Swipe Left to Learn",
+                context.l10n!.swipeLeftToLearn,
                 direction,
                 const Color(0xFF60A5FA),
               );
             } else if (direction == SwipeDirection.right) {
               return _buildSwipeOverlay(
-                "Swipe Right to Know",
+                context.l10n!.swipeRightToKnow,
                 direction,
                 const Color(0xFF60A5FA),
               );

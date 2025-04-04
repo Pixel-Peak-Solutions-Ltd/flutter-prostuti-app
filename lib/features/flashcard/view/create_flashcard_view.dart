@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
 
@@ -73,7 +74,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
         ref.invalidate(exploreFlashcardsProvider);
         ref.invalidate(userFlashcardsProvider);
         Navigator.pop(context, true);
-        Fluttertoast.showToast(msg: 'ফ্লাশকার্ড সফলভাবে তৈরি হয়েছে!');
+        Fluttertoast.showToast(msg: context.l10n!.cardCreatedSuccessfully);
       }
     }
   }
@@ -84,7 +85,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ফ্লাশকার্ড তৈরি করুন'),
+        title: Text(context.l10n!.createFlashcard),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Nav().pop(),
@@ -103,7 +104,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
           children: [
             // Title section
             Text(
-              'টাইটেল',
+              context.l10n!.title,
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -119,11 +120,11 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
               ),
               child: TextField(
                 controller: _titleController,
-                decoration: const InputDecoration(
-                  hintText: 'সাবজেক্ট, চাপ্টার এবং ইউনিট',
+                decoration: InputDecoration(
+                  hintText: context.l10n!.titleHint,
                   border: InputBorder.none,
                   contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
               ),
             ),
@@ -133,7 +134,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
             for (int i = 0; i < _flashcardItems.length; i++) ...[
               // Term field
               Text(
-                'টার্ম',
+                context.l10n!.term,
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -161,7 +162,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
 
               // Answer field
               Text(
-                'বিবরণ',
+                context.l10n!.description,
                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -207,7 +208,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
                   ),
                   const Gap(10),
                   Text(
-                    'আরেকটি কার্ড যোগ করুন',
+                    context.l10n!.addCard,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         color: Theme.of(context).colorScheme.onSecondary),
                   ),
@@ -231,9 +232,9 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
               ),
               child: createFlashcardState.isLoading
                   ? const CircularProgressIndicator(color: Colors.white)
-                  : const Text(
-                      'তৈরি করুন',
-                      style: TextStyle(
+                  : Text(
+                      context.l10n!.create,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -279,7 +280,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
                             },
                           ),
                           Text(
-                            'অপশন সেট করুন',
+                            context.l10n!.setOptions,
                             style: Theme.of(context).textTheme.titleMedium,
                           ),
                         ],
@@ -294,7 +295,6 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
                         children: [
                           // Language Dropdown (Disabled)
                           Card(
-                            color: Colors.white,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -305,7 +305,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
                             ),
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             child: ListTile(
-                              title: const Text("Language"),
+                              title: Text(context.l10n!.language),
                               trailing: DropdownButton<String>(
                                 value: "English",
                                 items: ["English"]
@@ -320,7 +320,6 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
                           ),
                           // Visibility Dropdown
                           Card(
-                            color: Colors.white,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -331,15 +330,15 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
                             ),
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             child: ListTile(
-                              title: const Text("Visible By"),
+                              title: Text(context.l10n!.visibleBy),
                               trailing: DropdownButton<String>(
                                 value: localVisibility,
                                 items: ["EVERYONE", "ONLY_ME"]
                                     .map((e) => DropdownMenuItem(
                                           value: e,
                                           child: Text(e.contains("ONLY_ME")
-                                              ? "Only me"
-                                              : "Everyone"),
+                                              ? context.l10n!.onlyMe
+                                              : context.l10n!.everyone),
                                         ))
                                     .toList(),
                                 onChanged: (value) {

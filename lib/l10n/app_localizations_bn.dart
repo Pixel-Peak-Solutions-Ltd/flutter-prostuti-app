@@ -133,4 +133,22 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get loadingMore => 'আরও লোড হচ্ছে...';
+
+  @override
+  String get noFlashcardItems => 'এই সেটের জন্য কোন ফ্লাশকার্ড আইটেম পাওয়া যায়নি';
+
+  @override
+  String get swipeLeftToLearn => 'শিখতে বামে সোয়াইপ করুন';
+
+  @override
+  String get swipeRightToKnow => 'জানতে ডানে সোয়াইপ করুন';
+
+  @override
+  String get favoriteAdded => 'ফেভারিটে যোগ করা হয়েছে';
+
+  @override
+  String get favoriteRemoved => 'ফেভারিট থেকে সরানো হয়েছে';
+
+  @override
+  String get close => 'বন্ধ করুন';
 }

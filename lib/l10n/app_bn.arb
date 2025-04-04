@@ -41,5 +41,11 @@
   "delete": "মুছুন",
   "edit": "সম্পাদনা",
   "share": "শেয়ার",
-  "loadingMore": "আরও লোড হচ্ছে..."
+  "loadingMore": "আরও লোড হচ্ছে...",
+  "noFlashcardItems": "এই সেটের জন্য কোন ফ্লাশকার্ড আইটেম পাওয়া যায়নি",
+  "swipeLeftToLearn": "শিখতে বামে সোয়াইপ করুন",
+  "swipeRightToKnow": "জানতে ডানে সোয়াইপ করুন",
+  "favoriteAdded": "ফেভারিটে যোগ করা হয়েছে",
+  "favoriteRemoved": "ফেভারিট থেকে সরানো হয়েছে",
+  "close": "বন্ধ করুন"
 }

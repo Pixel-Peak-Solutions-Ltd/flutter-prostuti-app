@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
 
@@ -71,11 +72,12 @@ class _FlashcardCompletionViewState extends State<FlashcardCompletionView>
                 child: Column(
                   children: [
                     Text(
-                      'চমৎকার',
+                      context.l10n!.excellent,
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
+
                     const Gap(12),
-                    Text('আপনি অর্জন করেছেন',
+                    Text(context.l10n!.youHaveAchieved,
                         style: Theme.of(context).textTheme.titleSmall),
                     const Gap(32),
 
@@ -123,7 +125,7 @@ class _FlashcardCompletionViewState extends State<FlashcardCompletionView>
                               SvgPicture.asset("assets/icons/correct.svg"),
                               const Gap(4),
                               Text(
-                                '${widget.knownCount} লার্নড',
+                                '${widget.knownCount} ${context.l10n!.learned}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleMedium!
@@ -145,7 +147,7 @@ class _FlashcardCompletionViewState extends State<FlashcardCompletionView>
                               SvgPicture.asset("assets/icons/skiped_qus.svg"),
                               const Gap(4),
                               Text(
-                                '${widget.learnCount} লার্নিং',
+                                '${widget.learnCount} ${context.l10n!.learning}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleMedium!
@@ -165,6 +167,7 @@ class _FlashcardCompletionViewState extends State<FlashcardCompletionView>
             // Review button
             ElevatedButton(
               onPressed: () {
+                // Navigation logic commented out in original
                 // Nav().pop();
                 // Nav().push(
                 //   FlashcardStudyView(
@@ -184,9 +187,9 @@ class _FlashcardCompletionViewState extends State<FlashcardCompletionView>
                 ),
                 minimumSize: Size(SizeConfig.w(356), SizeConfig.h(48)),
               ),
-              child: const Text(
-                'কার্ড আবার রিভিউ করুন',
-                style: TextStyle(
+              child: Text(
+                context.l10n!.reviewCardsAgain,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,

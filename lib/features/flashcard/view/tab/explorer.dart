@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 
 import '../../model/flashcard_model.dart';
 import '../../viewmodel/flashcard_viewmodel.dart';
@@ -47,8 +48,8 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
     return flashcardsAsync.when(
       data: (flashcards) {
         if (flashcards.isEmpty) {
-          return const FlashcardEmptyState(
-            message: 'এখানে কোন ফ্লাশকার্ড নেই',
+          return FlashcardEmptyState(
+            message: context.l10n!.emptyFlashcardMessage,
           );
         }
 
@@ -56,7 +57,7 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
       },
       loading: () => _buildLoadingState(context),
       error: (error, stack) => Center(
-        child: Text('Error: ${error.toString()}'),
+        child: Text('${context.l10n!.error}: ${error.toString()}'),
       ),
     );
   }
@@ -76,7 +77,7 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
           padding: const EdgeInsets.all(16),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              const FlashcardHeader(text: 'সাম্প্রতিক ফ্লাশকার্ড'),
+              FlashcardHeader(text: context.l10n!.recentFlashcards),
               const Gap(16),
             ]),
           ),
@@ -92,8 +93,8 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
                     // Navigate to flashcard details
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content:
-                            Text('Open flashcard: ${flashcards[index].title}'),
+                        content: Text(
+                            '${context.l10n!.openFlashcard}: ${flashcards[index].title}'),
                         duration: const Duration(seconds: 1),
                       ),
                     );
@@ -110,7 +111,9 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
-              child: Center(child: CircularProgressIndicator()),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
             ),
           ),
 
@@ -121,7 +124,7 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
                 child: Text(
-                  'আপনি সব ফ্লাশকার্ড দেখেছেন',
+                  context.l10n!.endOfList,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Colors.grey,
                       ),
@@ -140,7 +143,7 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
           padding: const EdgeInsets.all(16),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              const FlashcardHeader(text: 'সাম্প্রতিক ফ্লাশকার্ড'),
+              FlashcardHeader(text: context.l10n!.recentFlashcards),
               const Gap(16),
             ]),
           ),
@@ -152,8 +155,8 @@ class ExploreTabState extends ConsumerState<ExploreTab> {
               (context, index) {
                 return FlashcardItem(
                   flashcard: Flashcard(
-                    title: 'Loading Flashcard',
-                    studentId: Student(name: 'Loading'),
+                    title: context.l10n!.loading,
+                    studentId: Student(name: context.l10n!.loading),
                   ),
                   onTap: () {},
                 );

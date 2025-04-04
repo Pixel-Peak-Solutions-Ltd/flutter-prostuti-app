@@ -41,5 +41,11 @@
   "delete": "Delete",
   "edit": "Edit",
   "share": "Share",
-  "loadingMore": "Loading more..."
+  "loadingMore": "Loading more...",
+  "noFlashcardItems": "No flashcard items found for this set",
+  "swipeLeftToLearn": "Swipe Left to Learn",
+  "swipeRightToKnow": "Swipe Right to Know",
+  "favoriteAdded": "Added to favorites",
+  "favoriteRemoved": "Removed from favorites",
+  "close": "Close"
 }

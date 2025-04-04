@@ -133,4 +133,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loadingMore => 'Loading more...';
+
+  @override
+  String get noFlashcardItems => 'No flashcard items found for this set';
+
+  @override
+  String get swipeLeftToLearn => 'Swipe Left to Learn';
+
+  @override
+  String get swipeRightToKnow => 'Swipe Right to Know';
+
+  @override
+  String get favoriteAdded => 'Added to favorites';
+
+  @override
+  String get favoriteRemoved => 'Removed from favorites';
+
+  @override
+  String get close => 'Close';
 }
