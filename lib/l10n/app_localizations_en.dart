@@ -532,4 +532,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get searchHint => 'Search...';
+
+  @override
+  String get selectCategory => 'Select Category';
+
+  @override
+  String get availableCategories => 'Available Categories';
+
+  @override
+  String get noCategoriesAvailable => 'No categories available';
+
+  @override
+  String get selectType => 'Select a type';
+
+  @override
+  String get selectDivision => 'Select a division';
+
+  @override
+  String get selectSubject => 'Select a subject';
+
+  @override
+  String get noSelectedCategory => 'No category selected';
+
+  @override
+  String get select => 'Select';
+
+  @override
+  String get visibilityOptions => 'Visibility Options';
+
+  @override
+  String get visibilityDescription => 'Choose who can see your flashcards';
+
+  @override
+  String get everyoneDescription => 'Your flashcard will be visible to all users';
+
+  @override
+  String get onlyMeDescription => 'Your flashcard will be visible only to you';
+
+  @override
+  String get confirm => 'Confirm';
 }

@@ -174,5 +174,18 @@
   "noTypesAvailable": "কোন টাইপ উপলব্ধ নেই",
   "applyFilter": "ফিল্টার প্রয়োগ করুন",
   "resetFilter": "ফিল্টার রিসেট করুন",
-  "searchHint": "সার্চ করুন..."
+  "searchHint": "সার্চ করুন...",
+  "selectCategory": "ক্যাটাগরি নির্বাচন করুন",
+  "availableCategories": "উপলব্ধ ক্যাটাগরিগুলি",
+  "noCategoriesAvailable": "কোন ক্যাটাগরি উপলব্ধ নেই",
+  "selectType": "একটি টাইপ নির্বাচন করুন",
+  "selectDivision": "একটি বিভাগ নির্বাচন করুন",
+  "selectSubject": "একটি বিষয় নির্বাচন করুন",
+  "noSelectedCategory": "কোন ক্যাটাগরি নির্বাচিত নেই",
+  "select": "নির্বাচন করুন",
+  "visibilityOptions": "ভিজিবিলিটি অপশন",
+  "visibilityDescription": "কে আপনার ফ্ল্যাশকার্ড দেখতে পারবে তা চয়ন করুন",
+  "everyoneDescription": "আপনার ফ্ল্যাশকার্ড সব ব্যবহারকারীদের কাছে দৃশ্যমান হবে",
+  "onlyMeDescription": "আপনার ফ্ল্যাশকার্ড শুধুমাত্র আপনার কাছে দৃশ্যমান হবে",
+  "confirm": "নিশ্চিত করুন"
 }

@@ -532,4 +532,43 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get searchHint => 'সার্চ করুন...';
+
+  @override
+  String get selectCategory => 'ক্যাটাগরি নির্বাচন করুন';
+
+  @override
+  String get availableCategories => 'উপলব্ধ ক্যাটাগরিগুলি';
+
+  @override
+  String get noCategoriesAvailable => 'কোন ক্যাটাগরি উপলব্ধ নেই';
+
+  @override
+  String get selectType => 'একটি টাইপ নির্বাচন করুন';
+
+  @override
+  String get selectDivision => 'একটি বিভাগ নির্বাচন করুন';
+
+  @override
+  String get selectSubject => 'একটি বিষয় নির্বাচন করুন';
+
+  @override
+  String get noSelectedCategory => 'কোন ক্যাটাগরি নির্বাচিত নেই';
+
+  @override
+  String get select => 'নির্বাচন করুন';
+
+  @override
+  String get visibilityOptions => 'ভিজিবিলিটি অপশন';
+
+  @override
+  String get visibilityDescription => 'কে আপনার ফ্ল্যাশকার্ড দেখতে পারবে তা চয়ন করুন';
+
+  @override
+  String get everyoneDescription => 'আপনার ফ্ল্যাশকার্ড সব ব্যবহারকারীদের কাছে দৃশ্যমান হবে';
+
+  @override
+  String get onlyMeDescription => 'আপনার ফ্ল্যাশকার্ড শুধুমাত্র আপনার কাছে দৃশ্যমান হবে';
+
+  @override
+  String get confirm => 'নিশ্চিত করুন';
 }

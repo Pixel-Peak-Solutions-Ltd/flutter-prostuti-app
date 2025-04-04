@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
@@ -9,9 +10,14 @@ import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
 
+import '../model/category_model.dart';
 import '../model/create_flash_card.dart';
 import '../viewmodel/create_flashcard_viewmodel.dart';
+import '../viewmodel/flashcard_filter_viewmodel.dart';
+import '../viewmodel/flashcard_settings_viewmodel.dart';
 import '../viewmodel/flashcard_viewmodel.dart';
+import '../widgets/category_picker.dart';
+import '../widgets/visibilty_picker.dart';
 
 class CreateFlashcardView extends ConsumerStatefulWidget {
   const CreateFlashcardView({super.key});
@@ -24,15 +30,37 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
     with CommonWidgets {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
-  final String _categoryId = "6741c05482bf38e485f98152";
+  String _categoryId = ""; // We'll initialize this from SharedPreferences
   String _visibility = "EVERYONE";
   final List<FlashcardItemFormField> _flashcardItems = [];
+
+  // Add new fields to track selected category details for display
+  String? _selectedCategoryType;
+  String? _selectedCategoryDivision;
+  String? _selectedCategorySubject;
 
   @override
   void initState() {
     super.initState();
     // Add the first flashcard item by default
     _addFlashcardItem();
+    // Load saved settings
+    _loadSavedSettings();
+  }
+
+  Future<void> _loadSavedSettings() async {
+    final settings = await ref.read(flashcardSettingsNotifierProvider.future);
+    setState(() {
+      if (settings.categoryId != null && settings.categoryId!.isNotEmpty) {
+        _categoryId = settings.categoryId!;
+      }
+      if (settings.visibility != null && settings.visibility!.isNotEmpty) {
+        _visibility = settings.visibility!;
+      }
+      _selectedCategoryType = settings.categoryType;
+      _selectedCategoryDivision = settings.categoryDivision;
+      _selectedCategorySubject = settings.categorySubject;
+    });
   }
 
   @override
@@ -52,6 +80,12 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
+      // Check if category is selected
+      if (_categoryId.isEmpty) {
+        Fluttertoast.showToast(msg: context.l10n!.noSelectedCategory);
+        return;
+      }
+
       // Create the request object
       final request = CreateFlashcardRequest(
         title: _titleController.text.trim(),
@@ -91,10 +125,17 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
           onPressed: () => Nav().pop(),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: _openSettingsModal,
-          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: InkWell(
+              onTap: _openSettingsModal,
+              child: SvgPicture.asset(
+                'assets/icons/settings.svg',
+                colorFilter: const ColorFilter.linearToSrgbGamma(),
+                fit: BoxFit.cover,
+              ),
+            ),
+          )
         ],
       ),
       body: Form(
@@ -129,6 +170,26 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
               ),
             ),
             const Gap(24),
+
+            // Category indicator
+            if (_selectedCategorySubject != null &&
+                _selectedCategorySubject!.isNotEmpty) ...[
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.category, size: 16),
+                    const Gap(8),
+                    Expanded(child: _buildCategorySubtitle()),
+                  ],
+                ),
+              ),
+              const Gap(16),
+            ],
 
             // Flashcard items
             for (int i = 0; i < _flashcardItems.length; i++) ...[
@@ -249,7 +310,6 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
   void _openSettingsModal() {
     showModalBottomSheet(
       isScrollControlled: true,
-      // Enable making the modal fullscreen
       useSafeArea: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -258,9 +318,10 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
       builder: (context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
+            // Store current visibility in modal's state to update UI when changed
             String localVisibility = _visibility;
+
             return Padding(
-              // Use Padding to avoid overlap with top safe area
               padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
               child: Column(
                 children: [
@@ -293,7 +354,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          // Language Dropdown (Disabled)
+                          // Category Selector Card
                           Card(
                             elevation: 0,
                             shape: RoundedRectangleBorder(
@@ -305,20 +366,23 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
                             ),
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             child: ListTile(
-                              title: Text(context.l10n!.language),
-                              trailing: DropdownButton<String>(
-                                value: "English",
-                                items: ["English"]
-                                    .map((e) => DropdownMenuItem(
-                                          value: e,
-                                          child: Text(e),
-                                        ))
-                                    .toList(),
-                                onChanged: null,
+                              title: Text(context.l10n!.category),
+                              subtitle: _buildCategorySubtitle(),
+                              trailing: ElevatedButton(
+                                onPressed: () => _showCategoryPicker(
+                                  context,
+                                  setModalState,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF2970FF),
+                                  foregroundColor: Colors.white,
+                                ),
+                                child: Text(context.l10n!.select),
                               ),
                             ),
                           ),
-                          // Visibility Dropdown
+
+                          // Visibility Card - now with a better UI
                           Card(
                             elevation: 0,
                             shape: RoundedRectangleBorder(
@@ -331,23 +395,23 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             child: ListTile(
                               title: Text(context.l10n!.visibleBy),
-                              trailing: DropdownButton<String>(
-                                value: localVisibility,
-                                items: ["EVERYONE", "ONLY_ME"]
-                                    .map((e) => DropdownMenuItem(
-                                          value: e,
-                                          child: Text(e.contains("ONLY_ME")
-                                              ? context.l10n!.onlyMe
-                                              : context.l10n!.everyone),
-                                        ))
-                                    .toList(),
-                                onChanged: (value) {
-                                  if (value != null) {
-                                    setModalState(
-                                        () => localVisibility = value);
-                                    setState(() => _visibility = value);
-                                  }
-                                },
+                              subtitle: Text(localVisibility == "EVERYONE"
+                                  ? context.l10n!.everyone
+                                  : context.l10n!.onlyMe),
+                              leading: Icon(
+                                localVisibility == "EVERYONE"
+                                    ? Icons.public
+                                    : Icons.lock,
+                                color: Theme.of(context).unselectedWidgetColor,
+                              ),
+                              trailing: ElevatedButton(
+                                onPressed: () => _showVisibilityPicker(
+                                    context, setModalState),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF2970FF),
+                                  foregroundColor: Colors.white,
+                                ),
+                                child: Text(context.l10n!.select),
                               ),
                             ),
                           ),
@@ -359,6 +423,102 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
               ),
             );
           },
+        );
+      },
+    );
+  }
+
+// Pass setModalState to update the parent modal when visibility changes
+  void _showVisibilityPicker(BuildContext context, StateSetter setModalState) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: VisibilityPicker(
+            initialVisibility: _visibility,
+            onVisibilitySelected: (visibility) {
+              // Update the state in both the view and the modal
+              setState(() {
+                _visibility = visibility;
+              });
+              setModalState(() {
+                // This updates the UI in the settings modal
+              });
+            },
+            onClose: () => Navigator.pop(context),
+          ),
+        );
+      },
+    );
+  }
+
+// Fixed category subtitle builder
+  Widget _buildCategorySubtitle() {
+    if (_categoryId.isEmpty ||
+        (_selectedCategorySubject == null ||
+            _selectedCategorySubject!.isEmpty)) {
+      return Text(context.l10n!.noSelectedCategory);
+    }
+
+    final parts = <String>[];
+    if (_selectedCategoryType != null && _selectedCategoryType!.isNotEmpty) {
+      parts.add(_selectedCategoryType!);
+    }
+    if (_selectedCategoryDivision != null &&
+        _selectedCategoryDivision!.isNotEmpty) {
+      parts.add(_selectedCategoryDivision!);
+    }
+    if (_selectedCategorySubject != null &&
+        _selectedCategorySubject!.isNotEmpty) {
+      parts.add(_selectedCategorySubject!);
+    }
+
+    return Text(parts.join(' > '));
+  }
+
+  // Helper method to build the category subtitle text
+
+  // Method to show the category picker
+  // Updated method to correctly pass setModalState and update the UI
+  void _showCategoryPicker(BuildContext context, StateSetter setModalState) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.9,
+          child: CategoryPicker(
+            onCategorySelected: (categoryId) {
+              // Update the displayed category info
+              ref.read(categoriesProvider.future).then((categories) {
+                final selectedCategory = categories.firstWhere(
+                  (c) => c.sId == categoryId,
+                  orElse: () => Category(),
+                );
+
+                setState(() {
+                  _categoryId = categoryId;
+                  _selectedCategoryType = selectedCategory.type;
+                  _selectedCategoryDivision = selectedCategory.division;
+                  _selectedCategorySubject = selectedCategory.subject;
+                });
+
+                // Important: Update the modal UI with the new selection
+                setModalState(() {});
+              });
+
+              Navigator.pop(context); // Close the category picker
+            },
+            onClose: () => Navigator.pop(context),
+          ),
         );
       },
     );

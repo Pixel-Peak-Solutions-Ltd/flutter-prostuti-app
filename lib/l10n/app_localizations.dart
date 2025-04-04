@@ -1144,6 +1144,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search...'**
   String get searchHint;
+
+  /// No description provided for @selectCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Category'**
+  String get selectCategory;
+
+  /// No description provided for @availableCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Categories'**
+  String get availableCategories;
+
+  /// No description provided for @noCategoriesAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories available'**
+  String get noCategoriesAvailable;
+
+  /// No description provided for @selectType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a type'**
+  String get selectType;
+
+  /// No description provided for @selectDivision.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a division'**
+  String get selectDivision;
+
+  /// No description provided for @selectSubject.
+  ///
+  /// In en, this message translates to:
+  /// **'Select a subject'**
+  String get selectSubject;
+
+  /// No description provided for @noSelectedCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'No category selected'**
+  String get noSelectedCategory;
+
+  /// No description provided for @select.
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get select;
+
+  /// No description provided for @visibilityOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Visibility Options'**
+  String get visibilityOptions;
+
+  /// No description provided for @visibilityDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose who can see your flashcards'**
+  String get visibilityDescription;
+
+  /// No description provided for @everyoneDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your flashcard will be visible to all users'**
+  String get everyoneDescription;
+
+  /// No description provided for @onlyMeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Your flashcard will be visible only to you'**
+  String get onlyMeDescription;
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

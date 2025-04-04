@@ -174,5 +174,18 @@
   "noTypesAvailable": "No types available",
   "applyFilter": "Apply Filter",
   "resetFilter": "Reset Filter",
-  "searchHint": "Search..."
+  "searchHint": "Search...",
+  "selectCategory": "Select Category",
+  "availableCategories": "Available Categories",
+  "noCategoriesAvailable": "No categories available",
+  "selectType": "Select a type",
+  "selectDivision": "Select a division",
+  "selectSubject": "Select a subject",
+  "noSelectedCategory": "No category selected",
+  "select": "Select",
+  "visibilityOptions": "Visibility Options",
+  "visibilityDescription": "Choose who can see your flashcards",
+  "everyoneDescription": "Your flashcard will be visible to all users",
+  "onlyMeDescription": "Your flashcard will be visible only to you",
+  "confirm": "Confirm"
 }
