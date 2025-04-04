@@ -206,7 +206,7 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    backgroundColor: const Color(0xff2970FF),
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
                   onPressed: () {
@@ -348,7 +348,7 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: isSelected
-                          ? Theme.of(context).colorScheme.primary
+                          ? Theme.of(context).colorScheme.secondary
                           : Colors.grey,
                       width: 2,
                     ),
@@ -360,7 +360,7 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                             height: 10,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Theme.of(context).colorScheme.primary,
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                           ),
                         )
@@ -371,13 +371,13 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                 Expanded(
                   child: Text(
                     item,
-                    style: TextStyle(
-                      fontWeight:
-                          isSelected ? FontWeight.bold : FontWeight.normal,
-                      color: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).textTheme.bodyLarge!.color,
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          fontWeight:
+                              isSelected ? FontWeight.w800 : FontWeight.w400,
+                          color: isSelected
+                              ? Theme.of(context).colorScheme.secondary
+                              : Theme.of(context).colorScheme.onSurface,
+                        ),
                   ),
                 ),
               ],
