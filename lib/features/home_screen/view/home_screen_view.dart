@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:logger/logger.dart';
 import 'package:prostuti/common/helpers/theme_provider.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_list/view/course_list_view.dart';
 import 'package:prostuti/features/course/my_course/view/my_course_view.dart';
@@ -396,9 +397,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     onTap: () {
                       Nav().push(CourseListView());
                     },
-                    child: const CategoryCard(
+                    child: CategoryCard(
                       icon: "assets/icons/courses_icon.png",
-                      text: 'কোর্সসমূহ',
+                      text: context.l10n!.courses,
                       image: 'assets/images/courses_background.png',
                     ),
                   ),
@@ -407,9 +408,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Expanded(
                   child: InkWell(
                     onTap: () => Nav().push(MyCourseView()),
-                    child: const CategoryCard(
+                    child: CategoryCard(
                       icon: "assets/icons/my_courses_icon.png",
-                      text: 'আমার কোর্সসমূহ',
+                      text: context.l10n!.myCourses,
                       image: 'assets/images/my_courses_background.png',
                     ),
                   ),
