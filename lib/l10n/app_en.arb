@@ -28,5 +28,18 @@
   "youHaveAchieved": "You have achieved",
   "learned": "Learned",
   "learning": "Learning",
-  "reviewCardsAgain": "Review Cards Again"
+  "reviewCardsAgain": "Review Cards Again",
+  "search": "Search",
+  "searchFlashcards": "Search flashcards...",
+  "loading": "Loading",
+  "error": "Error",
+  "openFlashcard": "Open flashcard",
+  "openYourFlashcard": "Open your flashcard",
+  "createButton": "Create",
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "share": "Share",
+  "loadingMore": "Loading more..."
 }

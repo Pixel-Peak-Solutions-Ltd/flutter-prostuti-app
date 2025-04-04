@@ -94,4 +94,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reviewCardsAgain => 'Review Cards Again';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get searchFlashcards => 'Search flashcards...';
+
+  @override
+  String get loading => 'Loading';
+
+  @override
+  String get error => 'Error';
+
+  @override
+  String get openFlashcard => 'Open flashcard';
+
+  @override
+  String get openYourFlashcard => 'Open your flashcard';
+
+  @override
+  String get createButton => 'Create';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get loadingMore => 'Loading more...';
 }

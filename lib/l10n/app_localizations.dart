@@ -66,8 +66,8 @@ abstract class AppLocalizations {
 
   final String localeName;
 
-  static AppLocalizations? of(BuildContext context) {
-    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  static AppLocalizations of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations)!;
   }
 
   static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
@@ -268,6 +268,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Review Cards Again'**
   String get reviewCardsAgain;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// No description provided for @searchFlashcards.
+  ///
+  /// In en, this message translates to:
+  /// **'Search flashcards...'**
+  String get searchFlashcards;
+
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get loading;
+
+  /// No description provided for @error.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get error;
+
+  /// No description provided for @openFlashcard.
+  ///
+  /// In en, this message translates to:
+  /// **'Open flashcard'**
+  String get openFlashcard;
+
+  /// No description provided for @openYourFlashcard.
+  ///
+  /// In en, this message translates to:
+  /// **'Open your flashcard'**
+  String get openYourFlashcard;
+
+  /// No description provided for @createButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get createButton;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @edit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get edit;
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @loadingMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading more...'**
+  String get loadingMore;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

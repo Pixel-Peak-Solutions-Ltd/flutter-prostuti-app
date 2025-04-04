@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
-import 'package:prostuti/features/flashcard/services/localization_service.dart';
 import 'package:prostuti/features/flashcard/view/create_flashcard_view.dart';
 import 'package:prostuti/features/flashcard/view/flashcard_study_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -149,7 +149,7 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
                             ),
                             child: Center(
                               child: Text(
-                                'এক্সপ্লোর',
+                                context.l10n!.exploration,
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall!
@@ -187,7 +187,7 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
                             ),
                             child: Center(
                               child: Text(
-                                'আপনার ফ্লাশকার্ড',
+                                context.l10n!.yourFlashcards,
                                 style: Theme.of(context)
                                     .textTheme
                                     .titleSmall!

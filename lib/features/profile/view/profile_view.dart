@@ -10,7 +10,7 @@ import 'package:prostuti/features/auth/login/view/login_view.dart';
 
 import '../../../common/view_model/auth_notifier.dart';
 import '../../../core/configs/app_colors.dart';
-import '../../flashcard/services/localization_service.dart';
+import '../../../core/services/localization_service.dart';
 import '../../payment/view/subscription_view.dart';
 import '../../payment/viewmodel/check_subscription.dart';
 import '../viewmodel/profile_viewmodel.dart';

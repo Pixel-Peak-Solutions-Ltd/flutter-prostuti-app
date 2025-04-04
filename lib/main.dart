@@ -8,9 +8,9 @@ import 'package:prostuti/features/home_screen/view/home_screen_view.dart';
 import 'common/helpers/theme_provider.dart';
 import 'common/view_model/auth_notifier.dart';
 import 'core/configs/app_themes.dart';
+import 'core/services/localization_service.dart';
 import 'core/services/size_config.dart';
-import 'features/flashcard/services/localization_service.dart';
-import 'l10n/app_localizations.dart.backup';
+import 'l10n/app_localizations.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

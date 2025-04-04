@@ -60,16 +60,16 @@ class AppLocalizationsBn extends AppLocalizations {
   String get setOptions => 'অপশন সেট করুন';
 
   @override
-  String get language => 'Language';
+  String get language => 'ভাষা';
 
   @override
-  String get visibleBy => 'Visible By';
+  String get visibleBy => 'দৃশ্যমান';
 
   @override
-  String get onlyMe => 'Only me';
+  String get onlyMe => 'শুধুমাত্র আমি';
 
   @override
-  String get everyone => 'Everyone';
+  String get everyone => 'সবাই';
 
   @override
   String get cardCreatedSuccessfully => 'ফ্লাশকার্ড সফলভাবে তৈরি হয়েছে!';
@@ -94,4 +94,43 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get reviewCardsAgain => 'কার্ড আবার রিভিউ করুন';
+
+  @override
+  String get search => 'অনুসন্ধান';
+
+  @override
+  String get searchFlashcards => 'ফ্লাশকার্ড খুঁজুন...';
+
+  @override
+  String get loading => 'লোড হচ্ছে';
+
+  @override
+  String get error => 'ত্রুটি';
+
+  @override
+  String get openFlashcard => 'ফ্লাশকার্ড খুলুন';
+
+  @override
+  String get openYourFlashcard => 'আপনার ফ্লাশকার্ড খুলুন';
+
+  @override
+  String get createButton => 'তৈরি করুন';
+
+  @override
+  String get cancel => 'বাতিল';
+
+  @override
+  String get save => 'সংরক্ষণ';
+
+  @override
+  String get delete => 'মুছুন';
+
+  @override
+  String get edit => 'সম্পাদনা';
+
+  @override
+  String get share => 'শেয়ার';
+
+  @override
+  String get loadingMore => 'আরও লোড হচ্ছে...';
 }

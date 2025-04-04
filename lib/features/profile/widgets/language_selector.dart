@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../flashcard/services/localization_service.dart';
+import '../../../core/services/localization_service.dart';
 
 class LanguageSelectorSheet extends ConsumerWidget {
   const LanguageSelectorSheet({super.key});
