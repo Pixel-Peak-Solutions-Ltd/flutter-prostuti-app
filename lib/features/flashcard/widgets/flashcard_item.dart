@@ -23,7 +23,7 @@ class FlashcardItem extends ConsumerWidget {
 
     // Use a simple method to display the item count
     final itemCountText = countAsync.when(
-      data: (count) => '$count items',
+      data: (count) => count == 0 ? "Private" : '$count items',
       loading: () => 'Loading items', // Just show dots while loading
       error: (_, __) => 'null items',
     );

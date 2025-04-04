@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/services/error_handler.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/auth/signup/repository/signup_repo.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/phone_number_viewmodel.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -34,8 +36,8 @@ class PhoneViewState extends ConsumerState<PhoneView> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(_loadingProvider);
-    bool isDarkMode =
-        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final isDarkMode = ref.watch(
+        themeNotifierProvider.select((value) => value == ThemeMode.dark));
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +60,7 @@ class PhoneViewState extends ConsumerState<PhoneView> {
               ),
               const Gap(118),
               Text(
-                'আপনার ফোন নম্বর লিখুন',
+                context.l10n!.enterYourPhoneNumber,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const Gap(32),
@@ -68,24 +70,24 @@ class PhoneViewState extends ConsumerState<PhoneView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Label(
-                      text: 'ফোন নম্বর',
+                    Label(
+                      text: context.l10n!.phoneNumber,
                     ),
                     const Gap(6),
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'ফোন নম্বর প্রয়োজন';
+                          return context.l10n!.phoneRequired;
                         }
                         if (value.length != 11) {
-                          return 'ফোন নম্বর অবশ্যই ১১ সংখ্যার হতে হবে';
+                          return context.l10n!.phoneMustBe11Digits;
                         }
                         return null; // Returns null if validation is successful
                       },
                       keyboardType: TextInputType.number,
                       controller: _phoneController,
-                      decoration: const InputDecoration(
-                          hintText: "আপনার ফোন নম্বর লিখুন"),
+                      decoration: InputDecoration(
+                          hintText: context.l10n!.enterYourPhoneNumber),
                     ),
                   ],
                 ),
@@ -94,7 +96,7 @@ class PhoneViewState extends ConsumerState<PhoneView> {
               Skeletonizer(
                 enabled: isLoading,
                 child: LongButton(
-                  text: 'এগিয়ে যাই',
+                  text: context.l10n!.continueText,
                   onPressed: isLoading
                       ? () {}
                       : () {

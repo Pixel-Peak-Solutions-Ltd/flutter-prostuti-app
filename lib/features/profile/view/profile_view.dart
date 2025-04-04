@@ -23,12 +23,14 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isDarkTheme = ref.watch(
-        themeNotifierProvider.select((value) => value == ThemeMode.dark));
+    final themeMode = ref.watch(themeNotifierProvider);
+    final isDarkTheme = themeMode == ThemeMode.dark ||
+        (themeMode == ThemeMode.system &&
+            MediaQuery.platformBrightnessOf(context) == Brightness.dark);
     final userProfileAsyncValue = ref.watch(userProfileProvider);
     final subscriptionAsyncValue = ref.watch(userSubscribedProvider);
 
-// Get current locale
+    // Get current locale
     final currentLocale = ref.watch(localeProvider);
     final currentLanguage = languages.firstWhere(
       (lang) => lang.code == currentLocale.languageCode,
@@ -36,7 +38,7 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
     );
 
     return Scaffold(
-      appBar: commonAppbar('আমার প্রোফাইল'),
+      appBar: commonAppbar(context.l10n!.myProfile),
       body: userProfileAsyncValue.when(
         data: (userData) {
           return ListView(
@@ -90,8 +92,8 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                                   children: [
                                     Text(
                                       data
-                                          ? "আপনি প্রিমিয়াম প্ল্যানে আছেন"
-                                          : 'প্রিমিয়ামে আপগ্রেড করুন',
+                                          ? context.l10n!.youAreOnPremiumPlan
+                                          : context.l10n!.upgradeToPremium,
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyLarge!
@@ -120,17 +122,17 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               const Gap(24),
               CustomListTile(
                 icon: "assets/icons/your_point.svg",
-                title: 'আপনার পয়েন্ট',
+                title: context.l10n!.yourPoints,
                 onTap: () {},
               ),
               CustomListTile(
                 icon: "assets/icons/category.svg",
-                title: 'ক্যাটাগরি',
+                title: context.l10n!.category,
                 onTap: () {},
               ),
               const Gap(24),
               Text(
-                "একাউন্ট",
+                context.l10n!.account,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -138,11 +140,11 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               const Gap(10),
               CustomListTile(
                   icon: "assets/icons/user.svg",
-                  title: 'প্রোফাইল তথ্যাবলী',
+                  title: context.l10n!.profileInformation,
                   onTap: () {}),
               CustomListTile(
                 icon: "assets/icons/language.svg",
-                title: 'ভাষা',
+                title: context.l10n!.language,
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -160,7 +162,7 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               ),
               const Gap(24),
               Text(
-                "আমার আইটেম",
+                context.l10n!.myItems,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -168,19 +170,19 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               const Gap(10),
               CustomListTile(
                   icon: "assets/icons/courses.svg",
-                  title: 'আমার কোর্সসমহূ',
+                  title: context.l10n!.myCourses,
                   onTap: () {}),
               CustomListTile(
                   icon: "assets/icons/favourites_profile.svg",
-                  title: 'ফেভারিট',
+                  title: context.l10n!.favorites,
                   onTap: () {}),
               CustomListTile(
                   icon: "assets/icons/progress_history.svg",
-                  title: 'টেস্ট হিস্টোরি',
+                  title: context.l10n!.testHistory,
                   onTap: () {}),
               const Gap(24),
               Text(
-                "সেটিংস",
+                context.l10n!.settings,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -199,8 +201,7 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                     fit: BoxFit.cover,
                     colorFilter: const ColorFilter.linearToSrgbGamma(),
                   ),
-                  // Icon on the left
-                  title: Text('ডার্ক থিম'),
+                  title: Text(context.l10n!.darkTheme),
                   trailing: Switch(
                     value: isDarkTheme,
                     activeTrackColor: AppColors.textActionSecondaryLight,
@@ -208,14 +209,16 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                     inactiveThumbColor: Colors.white,
                     inactiveTrackColor: AppColors.borderNormalLight,
                     onChanged: (bool value) {
-                      ref.read(themeNotifierProvider.notifier).toggleTheme();
+                      ref
+                          .read(themeNotifierProvider.notifier)
+                          .toggleTheme(context);
                     },
-                  ), // Switch on the right
+                  ),
                 ),
               ),
               const Gap(24),
               Text(
-                "অন্যান্য",
+                context.l10n!.others,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
@@ -223,23 +226,23 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               const Gap(10),
               CustomListTile(
                   icon: "assets/icons/subscription.svg",
-                  title: 'সাবসক্রিপশন',
+                  title: context.l10n!.subscription,
                   onTap: () {}),
               CustomListTile(
                   icon: "assets/icons/customer-support.svg",
-                  title: 'সাপোর্ট',
+                  title: context.l10n!.support,
                   onTap: () {}),
               CustomListTile(
                   icon: "assets/icons/f_and_q.svg",
-                  title: 'এফ এন্ড কিউ',
+                  title: context.l10n!.faq,
                   onTap: () {}),
               CustomListTile(
                   icon: "assets/icons/terms.svg",
-                  title: 'টার্মস এন্ড কন্ডিশন',
+                  title: context.l10n!.termsAndConditions,
                   onTap: () {}),
               CustomListTile(
                   icon: "assets/icons/privacy.svg",
-                  title: 'প্রাইভেসি পলিসি',
+                  title: context.l10n!.privacyPolicy,
                   onTap: () {}),
               const Gap(24),
               LogoutButton(
@@ -253,7 +256,7 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
           );
         },
         error: (error, stackTrace) {
-          return Text("$error");
+          return Text("${context.l10n!.error}: $error");
         },
         loading: () {
           return const ProfileSkeleton();
@@ -271,27 +274,27 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
             BottomNavigationBarItem(
               icon:
                   SvgPicture.asset("assets/icons/bottom_nav_home_unselect.svg"),
-              label: "হোম",
+              label: context.l10n!.home,
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                   "assets/icons/bottom_nav_flash_card_unselect.svg"),
-              label: "ফ্ল্যাশ কার্ড",
+              label: context.l10n!.flashCard,
             ),
             BottomNavigationBarItem(
               icon:
                   SvgPicture.asset("assets/icons/bottom_nav_test_unselect.svg"),
-              label: "টেস্ট",
+              label: context.l10n!.test,
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                   "assets/icons/bottom_nav_notification_unselect.svg"),
-              label: "নটিফিকেশন",
+              label: context.l10n!.notification,
             ),
             BottomNavigationBarItem(
               icon:
                   SvgPicture.asset("assets/icons/bottom_nav_chat_unselect.svg"),
-              label: "ম্যাসেজ",
+              label: context.l10n!.message,
             ),
           ]),
     );
@@ -327,7 +330,7 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                       onPressed: () => Navigator.pop(context),
                     ),
                     Text(
-                      'ভাষা নির্বাচন করুন',
+                      context.l10n!.selectLanguage,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(width: 48), // Balance space

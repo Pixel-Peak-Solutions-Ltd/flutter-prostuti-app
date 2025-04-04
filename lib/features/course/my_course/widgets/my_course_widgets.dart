@@ -22,32 +22,32 @@ class MyCourseCard extends StatelessWidget {
           border: Border.all(width: 0.2, color: Colors.grey.shade900),
           borderRadius: BorderRadius.circular(8)),
       padding: const EdgeInsets.all(16),
-      child: Center(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: Image.network(
-                  img,
-                  width: SizeConfig.w(125),
-                  height: SizeConfig.h(90),
-                )),
-            const Gap(16),
-            Column(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Image.network(
+                img,
+                width: SizeConfig.w(90),
+                height: SizeConfig.h(70),
+                fit: BoxFit.cover,
+              )),
+          const Gap(8),
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width * 0.4,
-                  child: Text(
-                    name,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyLarge!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
+                Text(
+                  name,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                const Gap(24),
+                const Gap(16),
                 Text(
                   "প্রোগ্রেস",
                   style: Theme.of(context)
@@ -57,8 +57,8 @@ class MyCourseCard extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    SizedBox(
-                      width: MediaQuery.sizeOf(context).width * 0.28,
+                    Expanded(
+                      flex: 7,
                       child: LinearProgressIndicator(
                         value: progress,
                         borderRadius: BorderRadius.circular(16),
@@ -67,7 +67,7 @@ class MyCourseCard extends StatelessWidget {
                         color: AppColors.backgroundActionPrimaryLight,
                       ),
                     ),
-                    const Gap(16),
+                    const Gap(8),
                     Text(
                       '${(progress * 100).toInt()}%',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -78,9 +78,9 @@ class MyCourseCard extends StatelessWidget {
                   ],
                 )
               ],
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

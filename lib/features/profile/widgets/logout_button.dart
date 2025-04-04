@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 
 class LogoutButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const LogoutButton({Key? key, required this.onPressed}) : super(key: key);
+  const LogoutButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.textActionTertiaryDark,
@@ -27,9 +27,12 @@ class LogoutButton extends StatelessWidget {
           SvgPicture.asset("assets/icons/logout.svg"),
           const SizedBox(width: 10),
           Text(
-            "লগ আউট", // Bengali text for "Logout"
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(color: AppColors.textActionSecondaryLight),
-            ),
+            context.l10n!.logout, // Bengali text for "Logout"
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall!
+                .copyWith(color: AppColors.textActionSecondaryLight),
+          ),
         ],
       ),
     );

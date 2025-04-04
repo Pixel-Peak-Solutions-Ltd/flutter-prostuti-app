@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/debouncer.dart';
 import 'package:prostuti/core/services/error_handler.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/auth/forget_password/view/forget_password_view.dart';
 import 'package:prostuti/features/auth/login/repository/login_repo.dart';
@@ -39,12 +41,12 @@ class LoginViewState extends ConsumerState<LoginView> {
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'পাসওয়ার্ড প্রয়োজন';
+      return context.l10n!.passwordRequired;
     }
     // Password must contain at least one uppercase, one special character, and be at least 8 characters long
     final passwordRegex = RegExp(r'^(?=.*?[A-Z])(?=.*?[!@#\$&*~]).{8,}$');
     if (!passwordRegex.hasMatch(value)) {
-      return 'পাসওয়ার্ডে কমপক্ষে একটি বড় হাতের অক্ষর, একটি বিশেষ চিহ্ন এবং ৮ অক্ষর থাকতে হবে';
+      return context.l10n!.passwordValidationMessage;
     }
     return null;
   }
@@ -53,8 +55,8 @@ class LoginViewState extends ConsumerState<LoginView> {
   Widget build(BuildContext context) {
     bool rememberMe = ref.watch(rememberMeProvider);
     final isLoading = ref.watch(_loadingProvider);
-    bool isDarkMode =
-        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final isDarkMode = ref.watch(
+        themeNotifierProvider.select((value) => value == ThemeMode.dark));
 
     return Scaffold(
       body: Padding(
@@ -73,12 +75,12 @@ class LoginViewState extends ConsumerState<LoginView> {
               ),
               const Gap(60),
               Text(
-                'আপনার অ্যাকাউন্টে লগ ইন করুন',
+                context.l10n!.loginToYourAccount,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const Gap(8),
               Text(
-                'ফিরে আসার জন্য স্বাগতম! আপনার বিস্তারিত লিখুন.',
+                context.l10n!.welcomeBack,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               const Gap(32),
@@ -88,28 +90,28 @@ class LoginViewState extends ConsumerState<LoginView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Label(
-                      text: 'ফোন নম্বর',
+                    Label(
+                      text: context.l10n!.phoneNumber,
                     ),
                     const Gap(6),
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'ফোন নম্বর প্রয়োজন';
+                          return context.l10n!.phoneRequired;
                         }
                         if (value.length != 11) {
-                          return 'ফোন নম্বর অবশ্যই ১১ সংখ্যার হতে হবে';
+                          return context.l10n!.phoneMustBe11Digits;
                         }
                         return null; // Returns null if validation is successful
                       },
                       keyboardType: TextInputType.number,
                       controller: _phoneController,
-                      decoration: const InputDecoration(
-                          hintText: "আপনার ফোন নম্বর লিখুন"),
+                      decoration: InputDecoration(
+                          hintText: context.l10n!.enterYourPhoneNumber),
                     ),
                     const Gap(20),
-                    const Label(
-                      text: 'পাসওয়ার্ড',
+                    Label(
+                      text: context.l10n!.password,
                     ),
                     const Gap(6),
                     TextFormField(
@@ -117,8 +119,8 @@ class LoginViewState extends ConsumerState<LoginView> {
                       keyboardType: TextInputType.text,
                       obscureText: ref.watch(rememberMeProvider) ? false : true,
                       controller: _passwordController,
-                      decoration: const InputDecoration(
-                          hintText: "আপনার পাসওয়ার্ড লিখুন"),
+                      decoration: InputDecoration(
+                          hintText: context.l10n!.enterYourPassword),
                     ),
                     const Gap(16),
                     Row(
@@ -141,7 +143,7 @@ class LoginViewState extends ConsumerState<LoginView> {
                             ),
                             const Gap(8),
                             Text(
-                              'পাসওয়ার্ড দেখুন',
+                              context.l10n!.showPassword,
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
@@ -153,7 +155,7 @@ class LoginViewState extends ConsumerState<LoginView> {
                             ));
                           },
                           child: Text(
-                            'পাসওয়ার্ড ভুলে গেছেন',
+                            context.l10n!.forgotPassword,
                             style:
                                 Theme.of(context).textTheme.bodySmall!.copyWith(
                                       color: AppColors.textActionTertiaryLight,
@@ -170,14 +172,13 @@ class LoginViewState extends ConsumerState<LoginView> {
               Skeletonizer(
                 enabled: isLoading,
                 child: LongButton(
-                    text: 'লগ ইন',
+                    text: context.l10n!.login,
                     onPressed: () {
                       if (_phoneController.text.isEmpty &&
                           _passwordController.text.isEmpty) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
-                              "Phone number and password must not be empty"),
+                              "${context.l10n!.phoneNumber} ${context.l10n!.and} ${context.l10n!.password} ${context.l10n!.mustNotBeEmpty}"),
                         ));
                         return;
                       }
@@ -223,11 +224,11 @@ class LoginViewState extends ConsumerState<LoginView> {
                 )),
                 child: RichText(
                   text: TextSpan(
-                    text: 'অ্যাকাউন্ট নেই? ',
+                    text: '${context.l10n!.noAccount} ',
                     style: Theme.of(context).textTheme.bodyMedium,
                     children: <TextSpan>[
                       TextSpan(
-                          text: 'সাইন আপ',
+                          text: context.l10n!.signUp,
                           style:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
                                     color: AppColors.textActionSecondaryLight,

@@ -5,6 +5,7 @@ import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/debouncer.dart';
 import 'package:prostuti/core/services/error_handler.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/auth/category/repository/category_repo.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/name_viewmodel.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/otp_viewmodel.dart';
@@ -35,7 +36,7 @@ class CategoryView extends ConsumerWidget with CommonWidgets {
     final isLoading = ref.watch(_loadingProvider);
 
     return Scaffold(
-      appBar: commonAppbar("ক্যাটাগরি"),
+      appBar: commonAppbar(context.l10n!.category),
       body: categoryAsyncValue.when(
         loading: () => Skeletonizer(
           enableSwitchAnimation: true,
@@ -43,7 +44,8 @@ class CategoryView extends ConsumerWidget with CommonWidgets {
               context, icons, List.filled(3, 'Item with Text'),
               isSkeleton: true),
         ),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        error: (error, stack) =>
+            Center(child: Text('${context.l10n!.error}: $error')),
         data: (category) {
           final categories = category.data ?? [];
           return Skeletonizer(
@@ -102,7 +104,8 @@ class CategoryView extends ConsumerWidget with CommonWidgets {
                                       if (response.data != null &&
                                           context.mounted) {
                                         Fluttertoast.showToast(
-                                            msg: "signup Successful");
+                                            msg:
+                                                context.l10n!.signupSuccessful);
                                         Nav().pushAndRemoveUntil(
                                             const LoginView());
                                       } else if (response.error != null) {

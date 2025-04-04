@@ -382,6 +382,702 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Close'**
   String get close;
+
+  /// No description provided for @loginToYourAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Login to your account'**
+  String get loginToYourAccount;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back! Enter your details.'**
+  String get welcomeBack;
+
+  /// No description provided for @phoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number'**
+  String get phoneNumber;
+
+  /// No description provided for @enterYourPhoneNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number'**
+  String get enterYourPhoneNumber;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @enterYourPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password'**
+  String get enterYourPassword;
+
+  /// No description provided for @showPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get showPassword;
+
+  /// No description provided for @forgotPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Forgot password'**
+  String get forgotPassword;
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
+  /// No description provided for @noAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account?'**
+  String get noAccount;
+
+  /// No description provided for @signUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get signUp;
+
+  /// No description provided for @phoneRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number is required'**
+  String get phoneRequired;
+
+  /// No description provided for @phoneMustBe11Digits.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number must be 11 digits'**
+  String get phoneMustBe11Digits;
+
+  /// No description provided for @passwordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get passwordRequired;
+
+  /// No description provided for @passwordValidationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must contain at least one uppercase letter, one special character, and be at least 8 characters long'**
+  String get passwordValidationMessage;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get category;
+
+  /// No description provided for @signupSuccessful.
+  ///
+  /// In en, this message translates to:
+  /// **'Registration successful'**
+  String get signupSuccessful;
+
+  /// No description provided for @continueText.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueText;
+
+  /// No description provided for @verifyOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify OTP'**
+  String get verifyOtp;
+
+  /// No description provided for @enterOtpCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 4-digit code sent to your number'**
+  String get enterOtpCode;
+
+  /// No description provided for @resendCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend code'**
+  String get resendCode;
+
+  /// No description provided for @registerYourAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Register your account'**
+  String get registerYourAccount;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @enterYourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your name'**
+  String get enterYourName;
+
+  /// No description provided for @email.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get email;
+
+  /// No description provided for @enterYourEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email'**
+  String get enterYourEmail;
+
+  /// No description provided for @emailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get emailRequired;
+
+  /// No description provided for @validEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get validEmailRequired;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password'**
+  String get confirmPassword;
+
+  /// No description provided for @confirmYourPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your password'**
+  String get confirmYourPassword;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @mockTest.
+  ///
+  /// In en, this message translates to:
+  /// **'Mock Test'**
+  String get mockTest;
+
+  /// No description provided for @clearYourDoubts.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Your Doubts'**
+  String get clearYourDoubts;
+
+  /// No description provided for @onboardingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.'**
+  String get onboardingDesc;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStarted;
+
+  /// No description provided for @anErrorOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred'**
+  String get anErrorOccurred;
+
+  /// No description provided for @and.
+  ///
+  /// In en, this message translates to:
+  /// **'And'**
+  String get and;
+
+  /// No description provided for @mustNotBeEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'must not be empty'**
+  String get mustNotBeEmpty;
+
+  /// No description provided for @myProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'My Profile'**
+  String get myProfile;
+
+  /// No description provided for @youAreOnPremiumPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'You are on a premium plan'**
+  String get youAreOnPremiumPlan;
+
+  /// No description provided for @upgradeToPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Upgrade to premium'**
+  String get upgradeToPremium;
+
+  /// No description provided for @yourPoints.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Points'**
+  String get yourPoints;
+
+  /// No description provided for @account.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get account;
+
+  /// No description provided for @profileInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Information'**
+  String get profileInformation;
+
+  /// No description provided for @myItems.
+  ///
+  /// In en, this message translates to:
+  /// **'My Items'**
+  String get myItems;
+
+  /// No description provided for @myCourses.
+  ///
+  /// In en, this message translates to:
+  /// **'My Courses'**
+  String get myCourses;
+
+  /// No description provided for @favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favorites;
+
+  /// No description provided for @testHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Test History'**
+  String get testHistory;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @darkTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark Theme'**
+  String get darkTheme;
+
+  /// No description provided for @others.
+  ///
+  /// In en, this message translates to:
+  /// **'Others'**
+  String get others;
+
+  /// No description provided for @subscription.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription'**
+  String get subscription;
+
+  /// No description provided for @support.
+  ///
+  /// In en, this message translates to:
+  /// **'Support'**
+  String get support;
+
+  /// No description provided for @faq.
+  ///
+  /// In en, this message translates to:
+  /// **'FAQ'**
+  String get faq;
+
+  /// No description provided for @termsAndConditions.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms and Conditions'**
+  String get termsAndConditions;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @selectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
+  String get selectLanguage;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @flashCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Flash Card'**
+  String get flashCard;
+
+  /// No description provided for @test.
+  ///
+  /// In en, this message translates to:
+  /// **'Test'**
+  String get test;
+
+  /// No description provided for @notification.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification'**
+  String get notification;
+
+  /// No description provided for @message.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get message;
+
+  /// No description provided for @courses.
+  ///
+  /// In en, this message translates to:
+  /// **'Courses'**
+  String get courses;
+
+  /// No description provided for @testCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Category'**
+  String get testCategory;
+
+  /// No description provided for @topCourseList.
+  ///
+  /// In en, this message translates to:
+  /// **'Top Course List'**
+  String get topCourseList;
+
+  /// No description provided for @searchCourses.
+  ///
+  /// In en, this message translates to:
+  /// **'Search courses...'**
+  String get searchCourses;
+
+  /// No description provided for @noCourses.
+  ///
+  /// In en, this message translates to:
+  /// **'No courses found'**
+  String get noCourses;
+
+  /// No description provided for @courseDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Course Details'**
+  String get courseDetails;
+
+  /// No description provided for @free.
+  ///
+  /// In en, this message translates to:
+  /// **'Free'**
+  String get free;
+
+  /// No description provided for @premium.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get premium;
+
+  /// No description provided for @price.
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get price;
+
+  /// No description provided for @enroll.
+  ///
+  /// In en, this message translates to:
+  /// **'Enroll'**
+  String get enroll;
+
+  /// No description provided for @courseContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Course Content'**
+  String get courseContent;
+
+  /// No description provided for @coursePreview.
+  ///
+  /// In en, this message translates to:
+  /// **'Course Preview'**
+  String get coursePreview;
+
+  /// No description provided for @aboutTest.
+  ///
+  /// In en, this message translates to:
+  /// **'About Test'**
+  String get aboutTest;
+
+  /// No description provided for @courseCurriculum.
+  ///
+  /// In en, this message translates to:
+  /// **'Course Curriculum'**
+  String get courseCurriculum;
+
+  /// No description provided for @testReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Test Reviews'**
+  String get testReviews;
+
+  /// No description provided for @showLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Less'**
+  String get showLess;
+
+  /// No description provided for @showMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Show More'**
+  String get showMore;
+
+  /// No description provided for @visit.
+  ///
+  /// In en, this message translates to:
+  /// **'Visit'**
+  String get visit;
+
+  /// No description provided for @students.
+  ///
+  /// In en, this message translates to:
+  /// **'students'**
+  String get students;
+
+  /// No description provided for @tests.
+  ///
+  /// In en, this message translates to:
+  /// **'tests'**
+  String get tests;
+
+  /// No description provided for @recordedClasses.
+  ///
+  /// In en, this message translates to:
+  /// **'recorded classes'**
+  String get recordedClasses;
+
+  /// No description provided for @lessons.
+  ///
+  /// In en, this message translates to:
+  /// **'lessons'**
+  String get lessons;
+
+  /// No description provided for @recordedClass.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded Class'**
+  String get recordedClass;
+
+  /// No description provided for @resource.
+  ///
+  /// In en, this message translates to:
+  /// **'Resource'**
+  String get resource;
+
+  /// No description provided for @assignment.
+  ///
+  /// In en, this message translates to:
+  /// **'Assignment'**
+  String get assignment;
+
+  /// No description provided for @enrolledSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Enrolled into the free course. Enjoy'**
+  String get enrolledSuccess;
+
+  /// No description provided for @alreadyEnrolled.
+  ///
+  /// In en, this message translates to:
+  /// **'Already Enrolled in the course'**
+  String get alreadyEnrolled;
+
+  /// No description provided for @contactProstuti.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Prostuti for enrollment'**
+  String get contactProstuti;
+
+  /// No description provided for @enrollInCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'Enroll'**
+  String get enrollInCourse;
+
+  /// No description provided for @visitCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'Visit'**
+  String get visitCourse;
+
+  /// No description provided for @seeDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'See Details'**
+  String get seeDetails;
+
+  /// No description provided for @noCourseAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No Course Available'**
+  String get noCourseAvailable;
+
+  /// No description provided for @exploreCourses.
+  ///
+  /// In en, this message translates to:
+  /// **'Explore Courses'**
+  String get exploreCourses;
+
+  /// No description provided for @courseProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Course Progress'**
+  String get courseProgress;
+
+  /// No description provided for @completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completed;
+
+  /// No description provided for @startLearning.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Learning'**
+  String get startLearning;
+
+  /// No description provided for @welcomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome'**
+  String get welcomeMessage;
+
+  /// No description provided for @modules.
+  ///
+  /// In en, this message translates to:
+  /// **'Modules'**
+  String get modules;
+
+  /// No description provided for @routine.
+  ///
+  /// In en, this message translates to:
+  /// **'Routine'**
+  String get routine;
+
+  /// No description provided for @reportCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Report Card'**
+  String get reportCard;
+
+  /// No description provided for @leaderboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaderboard'**
+  String get leaderboard;
+
+  /// No description provided for @notice.
+  ///
+  /// In en, this message translates to:
+  /// **'Notice'**
+  String get notice;
+
+  /// No description provided for @recordedClassItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Recorded Class: '**
+  String get recordedClassItem;
+
+  /// No description provided for @resourceItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Resource: '**
+  String get resourceItem;
+
+  /// No description provided for @assignmentItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Assignment: '**
+  String get assignmentItem;
+
+  /// No description provided for @testItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Test: '**
+  String get testItem;
+
+  /// No description provided for @payNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay Now'**
+  String get payNow;
+
+  /// No description provided for @notices.
+  ///
+  /// In en, this message translates to:
+  /// **'Notices'**
+  String get notices;
+
+  /// No description provided for @todaysNotices.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Notices'**
+  String get todaysNotices;
+
+  /// No description provided for @yesterdaysNotices.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday\'s Notices'**
+  String get yesterdaysNotices;
+
+  /// No description provided for @olderNotices.
+  ///
+  /// In en, this message translates to:
+  /// **'Older Notices'**
+  String get olderNotices;
+
+  /// No description provided for @noNotices.
+  ///
+  /// In en, this message translates to:
+  /// **'No notices available'**
+  String get noNotices;
+
+  /// No description provided for @examReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Exam Reminder'**
+  String get examReminder;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

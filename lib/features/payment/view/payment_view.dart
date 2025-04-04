@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_list/view/course_list_view.dart';
 import 'package:prostuti/features/payment/repository/payment_repo.dart';
@@ -154,7 +155,7 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                     Nav().pushReplacement(CourseListView());
                   },
                   child: Text(
-                    'আরো কোর্স দেখুন',
+                    context.l10n!.topCourseList,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Colors.blue, fontWeight: FontWeight.w600),
                   ),
@@ -233,7 +234,7 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                                     ref.read(_loadingProvider.notifier));
                           },
                     child: Text(
-                      'পেমেন্ট পর্যালোচনা করুন',
+                      context.l10n!.payNow,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/payment/repository/payment_repo.dart';
@@ -33,7 +34,7 @@ class SubscriptionView extends ConsumerWidget with CommonWidgets {
     final isLoading = ref.watch(_loadingProvider);
 
     return Scaffold(
-        appBar: commonAppbar("সাবস্ক্রিপশন"),
+        appBar: commonAppbar(context.l10n!.subscription),
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: Container(
@@ -100,7 +101,7 @@ class SubscriptionView extends ConsumerWidget with CommonWidgets {
                               fixedSize:
                                   Size(SizeConfig.w(356), SizeConfig.h(54))),
                           child: Text(
-                            'পেমেন্ট পর্যালোচনা করুন',
+                            context.l10n!.payNow,
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium!
@@ -130,7 +131,7 @@ class SubscriptionView extends ConsumerWidget with CommonWidgets {
                         backgroundColor: const Color(0xffD1E0FF),
                         fixedSize: Size(SizeConfig.w(356), SizeConfig.h(54))),
                     child: Text(
-                      'টার্মস এন্ড কনডিশন',
+                      context.l10n!.termsAndConditions,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           color: const Color(0xff2970FF),
                           fontWeight: FontWeight.w900),

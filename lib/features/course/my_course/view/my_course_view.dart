@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/course/course_list/viewmodel/get_course_by_id.dart';
 import 'package:prostuti/features/course/my_course/viewmodel/course_progress.dart';
 import 'package:prostuti/features/course/my_course/viewmodel/my_course_viewmodel.dart';
@@ -28,13 +29,13 @@ class MyCourseViewState extends ConsumerState<MyCourseView> with CommonWidgets {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: commonAppbar("আমার কোর্স"),
+      appBar: commonAppbar(context.l10n!.myCourses),
       body: enrolledListAsync.when(
         data: (course) {
           if (course.isEmpty) {
             return Center(
               child: Text(
-                "No Course Available",
+                context.l10n!.noCourseAvailable,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             );
@@ -76,10 +77,14 @@ class MyCourseViewState extends ConsumerState<MyCourseView> with CommonWidgets {
                                   }
                                 });
                               },
-                              child: MyCourseCard(
-                                progress: combinedCourseList[i]['progress'],
-                                name: course[i].courseId!.name!,
-                                img: course[i].courseId!.image!.path!,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: MyCourseCard(
+                                  progress: combinedCourseList[i]['progress'],
+                                  name: course[i].courseId!.name!,
+                                  img: course[i].courseId!.image!.path!,
+                                ),
                               )),
                         const Gap(16),
                         const ExploreCourseBtn(),
@@ -91,14 +96,14 @@ class MyCourseViewState extends ConsumerState<MyCourseView> with CommonWidgets {
             },
             error: (error, stackTrace) {
               return Center(
-                child: Text("$error"),
+                child: Text("${context.l10n!.error}: $error"),
               );
             },
             loading: () => const MyCourseListSkeleton(),
           );
         },
         error: (err, stack) => Center(
-          child: Text('$err'),
+          child: Text('${context.l10n!.error}: $err'),
         ),
         loading: () => const MyCourseListSkeleton(),
       ),

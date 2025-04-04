@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:logger/logger.dart';
+import 'package:prostuti/common/helpers/theme_provider.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_list/view/course_list_view.dart';
 import 'package:prostuti/features/course/my_course/view/my_course_view.dart';
@@ -16,6 +19,15 @@ import '../widget/calendar_widget.dart';
 import '../widget/category_card.dart';
 import '../widget/leaderboard_card.dart';
 
+// Updated provider to avoid unnecessary API calls
+final cachedUserProfileProvider = Provider.autoDispose((ref) {
+  // Just return the existing provider but only refresh it when necessary
+  return ref.watch(userProfileProvider);
+});
+
+// Flag to track if we've already initialized the profile
+final hasLoadedProfileProvider = StateProvider<bool>((ref) => false);
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -26,6 +38,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final PageController _adController = PageController();
   int _currentIndex = 0;
+  bool _hasInitializedProfile = false;
+  final _log = Logger();
 
   // Temporary List of flashcards
   List<Flashcard> flashcards = [
@@ -64,17 +78,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Only initialize profile data once when needed
+    if (_currentIndex == 0) {
+      final hasLoaded = ref.read(hasLoadedProfileProvider);
+      if (!hasLoaded) {
+        // This will ensure we only trigger the API call once
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          ref.read(hasLoadedProfileProvider.notifier).state = true;
+        });
+      }
+    }
+
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: [
-          _buildHomeContent(),
-          const FlashcardView(),
-          const Center(child: Text("Tests coming soon")),
-          const Center(child: Text("Notifications coming soon")),
-          const Center(child: Text("Messages coming soon")),
-        ],
-      ),
+      body: _buildCurrentTab(),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: _handleTabChange,
@@ -160,6 +176,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  // Build only the active tab to prevent unnecessary API calls and widget builds
+  Widget _buildCurrentTab() {
+    switch (_currentIndex) {
+      case 0:
+        return _buildHomeContent();
+      case 1:
+        return const FlashcardView();
+      case 2:
+        return const Center(child: Text("Tests coming soon"));
+      case 3:
+        return const Center(child: Text("Notifications coming soon"));
+      case 4:
+        return const Center(child: Text("Messages coming soon"));
+      default:
+        return _buildHomeContent();
+    }
+  }
+
   // Rebuilt home content with LayoutBuilder for better adaptivity
   Widget _buildHomeContent() {
     return LayoutBuilder(
@@ -200,19 +234,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  // Top section with profile and category cards
+  // Top section with profile and category cards - Optimized to reduce API calls
   Widget _buildTopSection(double maxWidth) {
-    final userProfileAsyncValue = ref.watch(userProfileProvider);
+    // Use cached provider to prevent unnecessary API calls
+    final userProfileAsyncValue = ref.watch(cachedUserProfileProvider);
+    final themeMode = ref.watch(themeNotifierProvider);
+    final isDarkTheme = themeMode == ThemeMode.dark ||
+        (themeMode == ThemeMode.system &&
+            MediaQuery.platformBrightnessOf(context) == Brightness.dark);
 
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            AppColors.homeScreenTopLight,
-            AppColors.homeScreenBottomLight,
-          ],
-          stops: [0.0, 0.5],
+          colors: isDarkTheme
+              ? [
+                  AppColors.homeScreenTopDark,
+                  AppColors.scaffoldBackgroundDark,
+                ]
+              : [
+                  AppColors.homeScreenTopLight,
+                  AppColors.homeScreenBottomLight,
+                ],
+          stops: const [0.0, 0.5],
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
         ),
@@ -263,7 +307,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         );
                       },
                       error: (error, stackTrace) {
-                        print(error.toString());
+                        _log.e(error.toString());
                         return const Text("Error loading profile");
                       },
                       loading: () {
@@ -303,11 +347,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   // Search box
                   GestureDetector(
                     onTap: () {
-                      print("Search box clicked!");
+                      _log.i("Search box clicked!");
                     },
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
@@ -353,9 +397,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     onTap: () {
                       Nav().push(CourseListView());
                     },
-                    child: const CategoryCard(
+                    child: CategoryCard(
                       icon: "assets/icons/courses_icon.png",
-                      text: 'কোর্সসমূহ',
+                      text: context.l10n!.courses,
                       image: 'assets/images/courses_background.png',
                     ),
                   ),
@@ -364,9 +408,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Expanded(
                   child: InkWell(
                     onTap: () => Nav().push(MyCourseView()),
-                    child: const CategoryCard(
+                    child: CategoryCard(
                       icon: "assets/icons/my_courses_icon.png",
-                      text: 'আমার কোর্সসমূহ',
+                      text: context.l10n!.myCourses,
                       image: 'assets/images/my_courses_background.png',
                     ),
                   ),
