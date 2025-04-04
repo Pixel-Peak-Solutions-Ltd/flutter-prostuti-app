@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:logger/logger.dart';
 import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_list/view/course_list_view.dart';
@@ -37,6 +38,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final PageController _adController = PageController();
   int _currentIndex = 0;
   bool _hasInitializedProfile = false;
+  final _log = Logger();
 
   // Temporary List of flashcards
   List<Flashcard> flashcards = [
@@ -304,7 +306,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         );
                       },
                       error: (error, stackTrace) {
-                        print(error.toString());
+                        _log.e(error.toString());
                         return const Text("Error loading profile");
                       },
                       loading: () {
@@ -344,11 +346,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   // Search box
                   GestureDetector(
                     onTap: () {
-                      print("Search box clicked!");
+                      _log.i("Search box clicked!");
                     },
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
