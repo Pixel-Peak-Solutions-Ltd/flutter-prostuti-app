@@ -481,4 +481,22 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get payNow => 'পেমেন্ট পর্যালোচনা করুন';
+
+  @override
+  String get notices => 'নোটিশ';
+
+  @override
+  String get todaysNotices => 'আজকের নোটিশ';
+
+  @override
+  String get yesterdaysNotices => 'গতকালের নোটিশ';
+
+  @override
+  String get olderNotices => 'পুরানো নোটিশ';
+
+  @override
+  String get noNotices => 'কোন নোটিশ নেই';
+
+  @override
+  String get examReminder => 'পরীক্ষার রিমাইন্ডার';
 }

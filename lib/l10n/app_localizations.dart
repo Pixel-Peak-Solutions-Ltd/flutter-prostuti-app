@@ -1042,6 +1042,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pay Now'**
   String get payNow;
+
+  /// No description provided for @notices.
+  ///
+  /// In en, this message translates to:
+  /// **'Notices'**
+  String get notices;
+
+  /// No description provided for @todaysNotices.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Notices'**
+  String get todaysNotices;
+
+  /// No description provided for @yesterdaysNotices.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday\'s Notices'**
+  String get yesterdaysNotices;
+
+  /// No description provided for @olderNotices.
+  ///
+  /// In en, this message translates to:
+  /// **'Older Notices'**
+  String get olderNotices;
+
+  /// No description provided for @noNotices.
+  ///
+  /// In en, this message translates to:
+  /// **'No notices available'**
+  String get noNotices;
+
+  /// No description provided for @examReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Exam Reminder'**
+  String get examReminder;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

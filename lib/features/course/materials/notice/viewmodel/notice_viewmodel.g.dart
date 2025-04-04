@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'get_material_completion.dart';
+part of 'notice_viewmodel.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$completedIdHash() => r'0456bf666494d4dd80c2d4f8bd6503d375d190a7';
+String _$courseNoticesHash() => r'c8931fac1d54a5773f2c4d8c134b18cf58b74ebe';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,35 +29,36 @@ class _SystemHash {
   }
 }
 
-abstract class _$CompletedId extends BuildlessAutoDisposeAsyncNotifier<List> {
+abstract class _$CourseNotices
+    extends BuildlessAutoDisposeAsyncNotifier<List<NoticeData>> {
   late final String courseId;
 
-  FutureOr<List> build(
+  FutureOr<List<NoticeData>> build(
     String courseId,
   );
 }
 
-/// See also [CompletedId].
-@ProviderFor(CompletedId)
-const completedIdProvider = CompletedIdFamily();
+/// See also [CourseNotices].
+@ProviderFor(CourseNotices)
+const courseNoticesProvider = CourseNoticesFamily();
 
-/// See also [CompletedId].
-class CompletedIdFamily extends Family<AsyncValue<List>> {
-  /// See also [CompletedId].
-  const CompletedIdFamily();
+/// See also [CourseNotices].
+class CourseNoticesFamily extends Family<AsyncValue<List<NoticeData>>> {
+  /// See also [CourseNotices].
+  const CourseNoticesFamily();
 
-  /// See also [CompletedId].
-  CompletedIdProvider call(
+  /// See also [CourseNotices].
+  CourseNoticesProvider call(
     String courseId,
   ) {
-    return CompletedIdProvider(
+    return CourseNoticesProvider(
       courseId,
     );
   }
 
   @override
-  CompletedIdProvider getProviderOverride(
-    covariant CompletedIdProvider provider,
+  CourseNoticesProvider getProviderOverride(
+    covariant CourseNoticesProvider provider,
   ) {
     return call(
       provider.courseId,
@@ -76,30 +77,30 @@ class CompletedIdFamily extends Family<AsyncValue<List>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'completedIdProvider';
+  String? get name => r'courseNoticesProvider';
 }
 
-/// See also [CompletedId].
-class CompletedIdProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<CompletedId, List> {
-  /// See also [CompletedId].
-  CompletedIdProvider(
+/// See also [CourseNotices].
+class CourseNoticesProvider extends AutoDisposeAsyncNotifierProviderImpl<
+    CourseNotices, List<NoticeData>> {
+  /// See also [CourseNotices].
+  CourseNoticesProvider(
     String courseId,
   ) : this._internal(
-          () => CompletedId()..courseId = courseId,
-          from: completedIdProvider,
-          name: r'completedIdProvider',
+          () => CourseNotices()..courseId = courseId,
+          from: courseNoticesProvider,
+          name: r'courseNoticesProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$completedIdHash,
-          dependencies: CompletedIdFamily._dependencies,
+                  : _$courseNoticesHash,
+          dependencies: CourseNoticesFamily._dependencies,
           allTransitiveDependencies:
-              CompletedIdFamily._allTransitiveDependencies,
+              CourseNoticesFamily._allTransitiveDependencies,
           courseId: courseId,
         );
 
-  CompletedIdProvider._internal(
+  CourseNoticesProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
@@ -112,8 +113,8 @@ class CompletedIdProvider
   final String courseId;
 
   @override
-  FutureOr<List> runNotifierBuild(
-    covariant CompletedId notifier,
+  FutureOr<List<NoticeData>> runNotifierBuild(
+    covariant CourseNotices notifier,
   ) {
     return notifier.build(
       courseId,
@@ -121,10 +122,10 @@ class CompletedIdProvider
   }
 
   @override
-  Override overrideWith(CompletedId Function() create) {
+  Override overrideWith(CourseNotices Function() create) {
     return ProviderOverride(
       origin: this,
-      override: CompletedIdProvider._internal(
+      override: CourseNoticesProvider._internal(
         () => create()..courseId = courseId,
         from: from,
         name: null,
@@ -137,13 +138,14 @@ class CompletedIdProvider
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<CompletedId, List> createElement() {
-    return _CompletedIdProviderElement(this);
+  AutoDisposeAsyncNotifierProviderElement<CourseNotices, List<NoticeData>>
+      createElement() {
+    return _CourseNoticesProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is CompletedIdProvider && other.courseId == courseId;
+    return other is CourseNoticesProvider && other.courseId == courseId;
   }
 
   @override
@@ -157,18 +159,19 @@ class CompletedIdProvider
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin CompletedIdRef on AutoDisposeAsyncNotifierProviderRef<List> {
+mixin CourseNoticesRef
+    on AutoDisposeAsyncNotifierProviderRef<List<NoticeData>> {
   /// The parameter `courseId` of this provider.
   String get courseId;
 }
 
-class _CompletedIdProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<CompletedId, List>
-    with CompletedIdRef {
-  _CompletedIdProviderElement(super.provider);
+class _CourseNoticesProviderElement
+    extends AutoDisposeAsyncNotifierProviderElement<CourseNotices,
+        List<NoticeData>> with CourseNoticesRef {
+  _CourseNoticesProviderElement(super.provider);
 
   @override
-  String get courseId => (origin as CompletedIdProvider).courseId;
+  String get courseId => (origin as CourseNoticesProvider).courseId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

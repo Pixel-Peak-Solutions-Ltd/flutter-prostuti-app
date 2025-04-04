@@ -157,5 +157,11 @@
   "resourceItem": "রিসোর্স: ",
   "assignmentItem": "এসাইনমেন্ট: ",
   "testItem": "টেস্ট: ",
-  "payNow": "পেমেন্ট পর্যালোচনা করুন"
+  "payNow": "পেমেন্ট পর্যালোচনা করুন",
+  "notices": "নোটিশ",
+  "todaysNotices": "আজকের নোটিশ",
+  "yesterdaysNotices": "গতকালের নোটিশ",
+  "olderNotices": "পুরানো নোটিশ",
+  "noNotices": "কোন নোটিশ নেই",
+  "examReminder": "পরীক্ষার রিমাইন্ডার"
 }

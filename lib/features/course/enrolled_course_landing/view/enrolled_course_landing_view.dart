@@ -9,6 +9,7 @@ import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course/course_details/widgets/course_details_skeleton.dart';
 import 'package:prostuti/features/course/enrolled_course_landing/viewmodel/enrolled_course_landing_viewmodel.dart';
 import 'package:prostuti/features/course/materials/assignment/view/assignment_view.dart';
+import 'package:prostuti/features/course/materials/notice/view/notice_view.dart';
 import 'package:prostuti/features/course/materials/record_class/view/record_class_view.dart';
 import 'package:prostuti/features/course/materials/resources/view/resources_view.dart';
 import 'package:prostuti/features/course/materials/shared/widgets/trailing_icon.dart';
@@ -209,7 +210,8 @@ class EnrolledCourseLandingViewState
                                     case GridItem.leaderboard:
                                     // TODO: Handle this case.
                                     case GridItem.notice:
-                                    // TODO: Handle this case.
+                                      Nav().push(NoticeView(
+                                          courseId: courseDetails.data!.sId!));
                                   }
                                 },
                                 child: Container(

@@ -157,5 +157,11 @@
   "resourceItem": "Resource: ",
   "assignmentItem": "Assignment: ",
   "testItem": "Test: ",
-  "payNow": "Pay Now"
+  "payNow": "Pay Now",
+  "notices": "Notices",
+  "todaysNotices": "Today's Notices",
+  "yesterdaysNotices": "Yesterday's Notices",
+  "olderNotices": "Older Notices",
+  "noNotices": "No notices available",
+  "examReminder": "Exam Reminder"
 }

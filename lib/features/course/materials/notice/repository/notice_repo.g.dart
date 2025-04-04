@@ -1,24 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'phone_number_viewmodel.dart';
+part of 'notice_repo.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$phoneNumberHash() => r'6599680c293cc4ac6ad82eb357a6a7573b135f59';
+String _$noticeRepoHash() => r'11655a065cb8306baa6bb5578b46b278a464c8d4';
 
-/// See also [PhoneNumber].
-@ProviderFor(PhoneNumber)
-final phoneNumberProvider = NotifierProvider<PhoneNumber, String>.internal(
-  PhoneNumber.new,
-  name: r'phoneNumberProvider',
+/// See also [noticeRepo].
+@ProviderFor(noticeRepo)
+final noticeRepoProvider = AutoDisposeProvider<NoticeRepo>.internal(
+  noticeRepo,
+  name: r'noticeRepoProvider',
   debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$phoneNumberHash,
+      const bool.fromEnvironment('dart.vm.product') ? null : _$noticeRepoHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$PhoneNumber = Notifier<String>;
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef NoticeRepoRef = AutoDisposeProviderRef<NoticeRepo>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -481,4 +481,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get payNow => 'Pay Now';
+
+  @override
+  String get notices => 'Notices';
+
+  @override
+  String get todaysNotices => 'Today\'s Notices';
+
+  @override
+  String get yesterdaysNotices => 'Yesterday\'s Notices';
+
+  @override
+  String get olderNotices => 'Older Notices';
+
+  @override
+  String get noNotices => 'No notices available';
+
+  @override
+  String get examReminder => 'Exam Reminder';
 }
