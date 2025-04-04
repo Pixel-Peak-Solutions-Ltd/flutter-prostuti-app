@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/debouncer.dart';
@@ -54,8 +55,8 @@ class LoginViewState extends ConsumerState<LoginView> {
   Widget build(BuildContext context) {
     bool rememberMe = ref.watch(rememberMeProvider);
     final isLoading = ref.watch(_loadingProvider);
-    bool isDarkMode =
-        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final isDarkMode = ref.watch(
+        themeNotifierProvider.select((value) => value == ThemeMode.dark));
 
     return Scaffold(
       body: Padding(

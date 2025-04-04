@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
+import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/auth/signup/view/register_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -33,8 +34,8 @@ class OtpViewState extends ConsumerState<OtpView> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(_loadingProvider);
-    bool isDarkMode =
-        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final isDarkMode = ref.watch(
+        themeNotifierProvider.select((value) => value == ThemeMode.dark));
 
     return Scaffold(
       appBar: AppBar(

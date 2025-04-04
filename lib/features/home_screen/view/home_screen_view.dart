@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_list/view/course_list_view.dart';
 import 'package:prostuti/features/course/my_course/view/my_course_view.dart';
@@ -201,10 +202,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   // Top section with profile and category cards
+
   Widget _buildTopSection(double maxWidth) {
     final userProfileAsyncValue = ref.watch(userProfileProvider);
-    bool isDarkMode =
-        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final isDarkMode = ref.watch(
+        themeNotifierProvider.select((value) => value == ThemeMode.dark));
 
     return Container(
       width: double.infinity,

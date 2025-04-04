@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/services/error_handler.dart';
 import 'package:prostuti/core/services/localization_service.dart';
@@ -35,8 +36,8 @@ class PhoneViewState extends ConsumerState<PhoneView> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(_loadingProvider);
-    bool isDarkMode =
-        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final isDarkMode = ref.watch(
+        themeNotifierProvider.select((value) => value == ThemeMode.dark));
 
     return Scaffold(
       appBar: AppBar(
