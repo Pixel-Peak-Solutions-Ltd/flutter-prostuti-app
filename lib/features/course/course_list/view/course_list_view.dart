@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/core/services/currency_converter.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_list/viewmodel/get_course_by_id.dart';
@@ -113,7 +114,7 @@ class CourseListViewState extends ConsumerState<CourseListView>
                           child: CourseCard(
                             priceType: course.priceType,
                             title: course.name,
-                            price: course.price.toString(),
+                            price: currencyFormatter.format(course.price),
                             imgPath: course.image?.path ??
                                 "assets/images/course_thumbnail.png",
                           ),

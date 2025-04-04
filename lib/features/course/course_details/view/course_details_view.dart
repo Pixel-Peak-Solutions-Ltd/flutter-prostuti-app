@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
+import 'package:prostuti/core/services/currency_converter.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
@@ -103,7 +104,8 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                       courseDetails.data!.priceType ==
                                           "Subscription"
                                   ? "${courseDetails.data!.priceType}"
-                                  : '৳ ${courseDetails.data!.price}',
+                                  : currencyFormatter
+                                      .format(courseDetails.data!.price),
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge!
@@ -441,8 +443,8 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                             id: data.data!.sId!,
                                             name: data.data!.name!,
                                             imgPath: data.data!.image!.path!,
-                                            price:
-                                                data.data!.price!.toString()));
+                                            price: currencyFormatter
+                                                .format(data.data!.price)));
                                       } else if (data.data!.priceType ==
                                           "Subscription") {
                                         if (subscriptionAsyncValue.value ==
@@ -502,7 +504,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                         isEnrolled.isLoading,
                     child: courseEnrollRow(
                       priceType: data.data!.priceType,
-                      price: '${data.data!.price ?? "Free"}',
+                      price: currencyFormatter.format(data.data!.price),
                       theme: Theme.of(context),
                       title: isEnrolled.value == true
                           ? context.l10n!.visitCourse
