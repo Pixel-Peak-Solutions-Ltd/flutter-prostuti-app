@@ -187,5 +187,13 @@
   "visibilityDescription": "Choose who can see your flashcards",
   "everyoneDescription": "Your flashcard will be visible to all users",
   "onlyMeDescription": "Your flashcard will be visible only to you",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "activity": "Activity",
+  "upcomingActivity": "Upcoming Activity",
+  "noActivitiesForDay": "No activities for this day",
+  "noUpcomingActivities": "No upcoming activities",
+  "classs": "Class",
+  "exam": "Exam",
+  "dueTill": "Due till",
+  "at": "at"
 }

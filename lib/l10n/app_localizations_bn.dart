@@ -571,4 +571,28 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get confirm => 'নিশ্চিত করুন';
+
+  @override
+  String get activity => 'কার্যক্রম';
+
+  @override
+  String get upcomingActivity => 'আসন্ন কার্যক্রম';
+
+  @override
+  String get noActivitiesForDay => 'এই দিনের জন্য কোন কার্যক্রম নেই';
+
+  @override
+  String get noUpcomingActivities => 'কোন আসন্ন কার্যক্রম নেই';
+
+  @override
+  String get classs => 'ক্লাস';
+
+  @override
+  String get exam => 'পরীক্ষা';
+
+  @override
+  String get dueTill => 'এর মধ্যে';
+
+  @override
+  String get at => 'এ';
 }

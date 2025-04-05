@@ -571,4 +571,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get confirm => 'Confirm';
+
+  @override
+  String get activity => 'Activity';
+
+  @override
+  String get upcomingActivity => 'Upcoming Activity';
+
+  @override
+  String get noActivitiesForDay => 'No activities for this day';
+
+  @override
+  String get noUpcomingActivities => 'No upcoming activities';
+
+  @override
+  String get classs => 'Class';
+
+  @override
+  String get exam => 'Exam';
+
+  @override
+  String get dueTill => 'Due till';
+
+  @override
+  String get at => 'at';
 }

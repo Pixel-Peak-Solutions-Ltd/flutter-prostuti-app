@@ -1222,6 +1222,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Confirm'**
   String get confirm;
+
+  /// No description provided for @activity.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get activity;
+
+  /// No description provided for @upcomingActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming Activity'**
+  String get upcomingActivity;
+
+  /// No description provided for @noActivitiesForDay.
+  ///
+  /// In en, this message translates to:
+  /// **'No activities for this day'**
+  String get noActivitiesForDay;
+
+  /// No description provided for @noUpcomingActivities.
+  ///
+  /// In en, this message translates to:
+  /// **'No upcoming activities'**
+  String get noUpcomingActivities;
+
+  /// No description provided for @classs.
+  ///
+  /// In en, this message translates to:
+  /// **'Class'**
+  String get classs;
+
+  /// No description provided for @exam.
+  ///
+  /// In en, this message translates to:
+  /// **'Exam'**
+  String get exam;
+
+  /// No description provided for @dueTill.
+  ///
+  /// In en, this message translates to:
+  /// **'Due till'**
+  String get dueTill;
+
+  /// No description provided for @at.
+  ///
+  /// In en, this message translates to:
+  /// **'at'**
+  String get at;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

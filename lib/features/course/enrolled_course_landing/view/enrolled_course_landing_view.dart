@@ -18,6 +18,7 @@ import 'package:prostuti/features/course/materials/test/view/test_view.dart';
 
 import '../../course_details/widgets/expandable_text.dart';
 import '../../materials/get_material_completion.dart';
+import '../../materials/routine/view/course_routineView.dart';
 
 // Constants
 const double kBorderRadius = 16.0;
@@ -119,6 +120,8 @@ enum GridItem {
       case GridItem.notice:
         Nav().push(NoticeView(courseId: courseId));
         break;
+      case GridItem.routine:
+        Nav().push(CourseRoutineView());
       default:
         // TODO: Implement navigation for other grid items
         break;

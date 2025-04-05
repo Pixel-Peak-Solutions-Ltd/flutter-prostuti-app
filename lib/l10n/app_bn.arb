@@ -187,5 +187,13 @@
   "visibilityDescription": "কে আপনার ফ্ল্যাশকার্ড দেখতে পারবে তা চয়ন করুন",
   "everyoneDescription": "আপনার ফ্ল্যাশকার্ড সব ব্যবহারকারীদের কাছে দৃশ্যমান হবে",
   "onlyMeDescription": "আপনার ফ্ল্যাশকার্ড শুধুমাত্র আপনার কাছে দৃশ্যমান হবে",
-  "confirm": "নিশ্চিত করুন"
+  "confirm": "নিশ্চিত করুন",
+  "activity": "কার্যক্রম",
+  "upcomingActivity": "আসন্ন কার্যক্রম",
+  "noActivitiesForDay": "এই দিনের জন্য কোন কার্যক্রম নেই",
+  "noUpcomingActivities": "কোন আসন্ন কার্যক্রম নেই",
+  "classs": "ক্লাস",
+  "exam": "পরীক্ষা",
+  "dueTill": "এর মধ্যে",
+  "at": "এ"
 }
