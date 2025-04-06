@@ -8,7 +8,9 @@ import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:swipable_stack/swipable_stack.dart';
 
+import '../../../core/services/nav.dart';
 import '../../../core/services/size_config.dart';
+import '../../home_screen/view/home_screen_view.dart';
 import '../model/flashcard_details_model.dart';
 import '../services/flashcard_tracker.dart';
 import '../viewmodel/flashcard_details_viewmodel.dart';
@@ -212,9 +214,11 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Navigate to card list view
-                  },
+                  onPressed: () => Nav().push(
+                    const HomeScreen(
+                      initialIndex: 1,
+                    ),
+                  ),
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           side: const BorderSide(

@@ -5,8 +5,10 @@ import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
+import 'package:prostuti/features/home_screen/view/home_screen_view.dart';
 
 import '../model/flashcard_details_model.dart';
+import 'flashcard_study_view.dart';
 
 class FlashcardCompletionView extends StatefulWidget {
   final String flashcardId;
@@ -49,7 +51,11 @@ class _FlashcardCompletionViewState extends State<FlashcardCompletionView>
         leading: IconButton(
           icon:
               Icon(Icons.close, color: Theme.of(context).unselectedWidgetColor),
-          onPressed: () => Nav().pop(),
+          onPressed: () => Nav().push(
+            const HomeScreen(
+              initialIndex: 1,
+            ),
+          ),
         ),
         elevation: 10,
       ),
@@ -167,14 +173,9 @@ class _FlashcardCompletionViewState extends State<FlashcardCompletionView>
             // Review button
             ElevatedButton(
               onPressed: () {
-                // Navigation logic commented out in original
-                // Nav().pop();
-                // Nav().push(
-                //   FlashcardStudyView(
-                //     flashcardId: widget.flashcardId,
-                //     flashcardTitle: widget.flashcardTitle,
-                //   ),
-                // );
+                Nav().push(FlashcardStudyView(
+                    flashcardId: widget.flashcardId,
+                    flashcardTitle: widget.flashcardTitle));
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF3B82F6),

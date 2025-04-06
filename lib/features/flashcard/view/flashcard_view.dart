@@ -140,6 +140,7 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
       appBar: AppBar(
         title: Text(context.l10n!.flashcards),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Skeletonizer(
         enabled: isLoading,

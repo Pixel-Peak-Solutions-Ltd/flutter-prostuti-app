@@ -33,7 +33,9 @@ final cachedUserProfileProvider = Provider.autoDispose((ref) {
 final hasLoadedProfileProvider = StateProvider<bool>((ref) => false);
 
 class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+  final int? initialIndex;
+
+  const HomeScreen({super.key, this.initialIndex});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -57,6 +59,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.initialIndex != null) {
+      _currentIndex = widget.initialIndex!;
+    }
   }
 
   // Proper tab change handler method
