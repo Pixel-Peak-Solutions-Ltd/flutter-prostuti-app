@@ -600,7 +600,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       },
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: flashcards.length + (isLoadingMore ? 1 : 0),
+        itemCount: 3,
         itemBuilder: (context, index) {
           if (index == flashcards.length) {
             // Loading indicator at the end
