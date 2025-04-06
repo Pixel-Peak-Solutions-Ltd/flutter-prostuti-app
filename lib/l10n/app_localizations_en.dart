@@ -595,4 +595,106 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get at => 'at';
+
+  @override
+  String get classes => 'Classes';
+
+  @override
+  String get messages => 'Messages';
+
+  @override
+  String get startChat => 'Start Chat';
+
+  @override
+  String get noConversationsFound => 'No conversations found';
+
+  @override
+  String get startConversation => 'Start a conversation';
+
+  @override
+  String get typing => 'Typing...';
+
+  @override
+  String get sendMessage => 'Send message';
+
+  @override
+  String get attachPhoto => 'Attach photo';
+
+  @override
+  String get attachFile => 'Attach file';
+
+  @override
+  String get typeYourMessage => 'Type your message...';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get yesterday => 'Yesterday';
+
+  @override
+  String get noMessagesYet => 'No messages yet';
+
+  @override
+  String get sendFirstMessage => 'Send a message to start the conversation';
+
+  @override
+  String get featureComingSoon => 'Feature coming soon';
+
+  @override
+  String get errorOccurred => 'An error occurred';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get sendMessageTo => 'Send a message to';
+
+  @override
+  String get send => 'Send';
+
+  @override
+  String get searchForUser => 'Search for a user to start a conversation';
+
+  @override
+  String get noUsersFound => 'No users found';
+
+  @override
+  String get requests => 'Requests';
+
+  @override
+  String get noMessageRequests => 'No message requests';
+
+  @override
+  String get messageRequestDesc => 'When someone sends you a message for the first time, it will appear here for your approval.';
+
+  @override
+  String get askAQuestion => 'Ask a Question';
+
+  @override
+  String get yourQuestion => 'Your Question';
+
+  @override
+  String get typeYourQuestion => 'Type your question here...';
+
+  @override
+  String get sendQuestion => 'Send Question';
+
+  @override
+  String get messageSent => 'Your message has been sent! Teachers will respond soon.';
+
+  @override
+  String get howItWorks => 'How it works';
+
+  @override
+  String get pendingQuestions => 'Pending Questions';
+
+  @override
+  String get activeConversations => 'Active Conversations';
+
+  @override
+  String get waitingForTeacher => 'Waiting for Teacher';
+
+  @override
+  String get noMessagesYetDesc => 'Your conversation will appear here once a teacher responds to your question.';
 }

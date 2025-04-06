@@ -9,10 +9,14 @@ import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_list/view/course_list_view.dart';
 import 'package:prostuti/features/course/my_course/view/my_course_view.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../core/configs/app_colors.dart';
+import '../../flashcard/model/flashcard_model.dart';
+import '../../flashcard/view/flashcard_study_view.dart';
 import '../../flashcard/view/flashcard_view.dart';
+import '../../flashcard/viewmodel/flashcard_viewmodel.dart';
 import '../../profile/view/profile_view.dart';
 import '../../profile/viewmodel/profile_viewmodel.dart';
 import '../widget/calendar_widget.dart';
@@ -38,21 +42,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final PageController _adController = PageController();
   int _currentIndex = 0;
-  bool _hasInitializedProfile = false;
-  final _log = Logger();
 
-  // Temporary List of flashcards
-  List<Flashcard> flashcards = [
-    Flashcard(
-        question: 'How many Americans died in WWII?', answer: 'Around 418,500'),
-    Flashcard(question: 'What is the capital of France?', answer: 'Paris'),
-    Flashcard(
-        question: 'What is Flutter?',
-        answer: 'A UI toolkit for building apps.'),
-    Flashcard(
-        question: 'What is Dart?',
-        answer: 'A programming language for Flutter.'),
-  ];
+  final _log = Logger();
 
   List<Color> flashCardColors = [
     AppColors.leaderboardSecondLight,
@@ -66,7 +57,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    isShowingQuestionList = List.generate(flashcards.length, (index) => true);
   }
 
   // Proper tab change handler method
@@ -460,63 +450,296 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   // Flashcard section
   Widget _buildFlashcardSection(double maxWidth) {
+    final flashcardsAsync = ref.watch(exploreFlashcardsProvider);
+
     return SizedBox(
-      height: 220,
+      height: 220, // Fixed height for horizontal scroll
+      child: flashcardsAsync.when(
+        data: (flashcards) {
+          if (flashcards.isEmpty) {
+            return Center(
+              child: Text(
+                context.l10n!.emptyFlashcardMessage,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            );
+          }
+
+          return _buildHorizontalFlashcardList(flashcards, maxWidth);
+        },
+        loading: () => _buildHorizontalFlashcardListLoading(maxWidth),
+        error: (error, stack) => Center(
+          child: Text('${context.l10n!.error}: ${error.toString()}'),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHorizontalFlashcardListLoading(double maxWidth) {
+    // Generate fake flashcard data for skeleton loading
+    final fakeFlashcards = List<Flashcard>.generate(
+      3, // Number of skeleton items to show
+      (index) => Flashcard(
+        title: 'Loading flashcard title',
+        studentId: Student(name: 'Loading author'),
+      ),
+    );
+
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: fakeFlashcards.length,
+      itemBuilder: (context, index) {
+        return Container(
+          width: maxWidth * 0.8, // 80% of screen width
+          padding: EdgeInsets.only(
+            left: index == 0 ? 16 : 8,
+            right: index == fakeFlashcards.length - 1 ? 16 : 8,
+          ),
+          child: Skeletonizer(
+            enabled: true,
+            child: Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey[200], // Light grey background for skeleton
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Sound button skeleton
+                        Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        // Favorite button skeleton
+                        Container(
+                          width: 24,
+                          height: 24,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    // Title skeleton
+                    Container(
+                      width: double.infinity,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      width: maxWidth * 0.5,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    const Spacer(),
+                    // Author skeleton
+                    Container(
+                      width: 100,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildHorizontalFlashcardList(
+      List<Flashcard> flashcards, double maxWidth) {
+    final flashcardNotifier = ref.read(exploreFlashcardsProvider.notifier);
+    final isLoadingMore = flashcardNotifier.isLoadingMore;
+
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollNotification) {
+        if (scrollNotification.metrics.pixels >=
+            scrollNotification.metrics.maxScrollExtent * 0.8) {
+          // Load more when 80% scrolled
+          flashcardNotifier.loadMoreData();
+        }
+        return false;
+      },
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: flashcards.length,
+        itemCount: flashcards.length + (isLoadingMore ? 1 : 0),
         itemBuilder: (context, index) {
-          return Container(
-            padding: EdgeInsets.only(
-              left: index == 0 ? 16 : 8,
-              right: index == flashcards.length - 1 ? 16 : 8,
-            ),
-            width: maxWidth * 0.8, // 80% of screen width
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  isShowingQuestionList[index] = !isShowingQuestionList[index];
-                });
-              },
+          if (index == flashcards.length) {
+            // Loading indicator at the end
+            return const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 80),
+              child: Center(child: CircularProgressIndicator()),
+            );
+          }
+
+          final flashcard = flashcards[index];
+          final baseColor = _getFlashcardColor(index);
+
+          return InkWell(
+            onTap: () {
+              Nav().push(FlashcardStudyView(
+                  flashcardId: flashcards[index].sId!,
+                  flashcardTitle: flashcards[index].title!));
+            },
+            child: Container(
+              width: maxWidth * 0.8, // 80% of screen width
+              padding: EdgeInsets.only(
+                left: index == 0 ? 16 : 8,
+                right: index == flashcards.length - 1 ? 16 : 8,
+                top: 12,
+                bottom: 12,
+              ),
               child: Card(
-                elevation: 4,
+                elevation: 8,
+                shadowColor: baseColor.withOpacity(0.5),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                child: Container(
-                  padding: const EdgeInsets.all(24),
-                  color: flashCardColors[index],
-                  child: Column(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Stack(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SvgPicture.asset(
-                            "assets/icons/sound_icon.svg",
-                            color: Colors.black,
+                      // Custom painter for wavy background
+                      Positioned.fill(
+                        child: CustomPaint(
+                          painter: WavyBackgroundPainter(
+                            baseColor: Theme.of(context).unselectedWidgetColor,
                           ),
-                          SvgPicture.asset("assets/icons/favourite.svg"),
-                        ],
-                      ),
-                      const Spacer(),
-                      Text(
-                        isShowingQuestionList[index]
-                            ? flashcards[index].question
-                            : flashcards[index].answer,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyLarge!
-                            .copyWith(fontWeight: FontWeight.w600),
-                        textAlign: TextAlign.center,
-                      ),
-                      const Spacer(),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: SvgPicture.asset(
-                          "assets/icons/flash_card_share_icon.svg",
-                          color: Colors.black,
                         ),
-                      )
+                      ),
+                      // Content
+                      Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (flashcard.studentId != null)
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.3),
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onError,
+                                        blurRadius: 1,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Text(
+                                    'By ${flashcard.studentId!.name}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            const Spacer(),
+                            Center(
+                              child: Text(
+                                flashcard.title!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall!
+                                    .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 4.0,
+                                      color: Colors.black.withOpacity(0.3),
+                                      offset: const Offset(1.0, 1.0),
+                                    ),
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const Spacer(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                    borderRadius: BorderRadius.circular(30),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.1),
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 2),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'View',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      Icon(
+                                        Icons.arrow_forward,
+                                        color: Colors.white,
+                                        size: 18,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -526,6 +749,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         },
       ),
     );
+  }
+
+  Color _getFlashcardColor(int index) {
+    final colors = [
+      AppColors.leaderboardSecondLight,
+      AppColors.leaderboardFirstLight,
+      AppColors.leaderboardThirdLight,
+      AppColors.leaderboardSecondLight,
+    ];
+    return colors[index % colors.length];
   }
 
   // Section header
@@ -561,9 +794,119 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 }
 
-class Flashcard {
-  final String question;
-  final String answer;
+// ---------
 
-  Flashcard({required this.question, required this.answer});
+class WavyBackgroundPainter extends CustomPainter {
+  final Color baseColor;
+
+  WavyBackgroundPainter({
+    required this.baseColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Create gradient colors based on the baseColor
+    final Rect rect = Offset.zero & size;
+
+    // Create lighter and darker shades of the base color
+    final Color lighterColor = _lightenColor(baseColor, 0.15);
+    final Color darkerColor = _darkenColor(baseColor, 0.15);
+
+    final gradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        lighterColor,
+        baseColor,
+        darkerColor,
+      ],
+    );
+
+    final paint = Paint()
+      ..shader = gradient.createShader(rect)
+      ..style = PaintingStyle.fill;
+
+    // Fill background
+    canvas.drawRect(rect, paint);
+
+    // Paint the waves
+    _paintWaves(canvas, size);
+  }
+
+  Color _lightenColor(Color color, double amount) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl
+        .withLightness((hsl.lightness + amount).clamp(0.0, 1.0))
+        .toColor();
+  }
+
+  Color _darkenColor(Color color, double amount) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl
+        .withLightness((hsl.lightness - amount).clamp(0.0, 1.0))
+        .toColor();
+  }
+
+  void _paintWaves(Canvas canvas, Size size) {
+    // First wave
+    final wavePaint = Paint()
+      ..color = Colors.white.withOpacity(0.15)
+      ..style = PaintingStyle.fill;
+
+    final path1 = Path();
+    path1.moveTo(0, size.height * 0.3);
+
+    path1.quadraticBezierTo(
+      size.width * 0.25,
+      size.height * 0.2,
+      size.width * 0.5,
+      size.height * 0.3,
+    );
+
+    path1.quadraticBezierTo(
+      size.width * 0.75,
+      size.height * 0.4,
+      size.width,
+      size.height * 0.3,
+    );
+
+    path1.lineTo(size.width, size.height);
+    path1.lineTo(0, size.height);
+    path1.close();
+
+    canvas.drawPath(path1, wavePaint);
+
+    // Second wave (slightly darker)
+    final wavePaint2 = Paint()
+      ..color = Colors.white.withOpacity(0.1)
+      ..style = PaintingStyle.fill;
+
+    final path2 = Path();
+    path2.moveTo(0, size.height * 0.5);
+
+    path2.quadraticBezierTo(
+      size.width * 0.25,
+      size.height * 0.6,
+      size.width * 0.5,
+      size.height * 0.5,
+    );
+
+    path2.quadraticBezierTo(
+      size.width * 0.75,
+      size.height * 0.4,
+      size.width,
+      size.height * 0.5,
+    );
+
+    path2.lineTo(size.width, size.height);
+    path2.lineTo(0, size.height);
+    path2.close();
+
+    canvas.drawPath(path2, wavePaint2);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
+  }
 }

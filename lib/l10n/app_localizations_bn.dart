@@ -595,4 +595,106 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get at => 'এ';
+
+  @override
+  String get classes => 'ক্লাস';
+
+  @override
+  String get messages => 'ম্যাসেজ';
+
+  @override
+  String get startChat => 'চ্যাট শুরু করুন';
+
+  @override
+  String get noConversationsFound => 'কোন কথোপকথন পাওয়া যায়নি';
+
+  @override
+  String get startConversation => 'একটি কথোপকথন শুরু করুন';
+
+  @override
+  String get typing => 'টাইপিং...';
+
+  @override
+  String get sendMessage => 'মেসেজ পাঠান';
+
+  @override
+  String get attachPhoto => 'ছবি সংযুক্ত করুন';
+
+  @override
+  String get attachFile => 'ফাইল সংযুক্ত করুন';
+
+  @override
+  String get typeYourMessage => 'আপনার প্রশ্ন টাইপ করুন';
+
+  @override
+  String get today => 'আজ';
+
+  @override
+  String get yesterday => 'গতকাল';
+
+  @override
+  String get noMessagesYet => 'এখনও কোন বার্তা নেই';
+
+  @override
+  String get sendFirstMessage => 'কথোপকথন শুরু করতে একটি বার্তা পাঠান';
+
+  @override
+  String get featureComingSoon => 'ফিচারটি শীঘ্রই আসছে';
+
+  @override
+  String get errorOccurred => 'একটি ত্রুটি ঘটেছে';
+
+  @override
+  String get retry => 'আবার চেষ্টা করুন';
+
+  @override
+  String get sendMessageTo => 'মেসেজ পাঠান';
+
+  @override
+  String get send => 'পাঠান';
+
+  @override
+  String get searchForUser => 'কথোপকথন শুরু করতে ব্যবহারকারী অনুসন্ধান করুন';
+
+  @override
+  String get noUsersFound => 'কোন ব্যবহারকারী পাওয়া যায়নি';
+
+  @override
+  String get requests => 'অনুরোধ';
+
+  @override
+  String get noMessageRequests => 'কোন মেসেজ অনুরোধ নেই';
+
+  @override
+  String get messageRequestDesc => 'আপনার প্রশ্ন আমাদের শিক্ষকদের কাছে পাঠানো হবে। একজন শিক্ষক উত্তর দিলে, আপনি তাদের সাথে কথোপকথন চালিয়ে যেতে পারবেন।';
+
+  @override
+  String get askAQuestion => 'একটি প্রশ্ন করুন';
+
+  @override
+  String get yourQuestion => 'আপনার প্রশ্ন';
+
+  @override
+  String get typeYourQuestion => 'আপনার প্রশ্ন এখানে টাইপ করুন...';
+
+  @override
+  String get sendQuestion => 'প্রশ্ন পাঠান';
+
+  @override
+  String get messageSent => 'আপনার প্রশ্ন পাঠানো হয়েছে! শিক্ষকরা শীঘ্রই উত্তর দেবেন।';
+
+  @override
+  String get howItWorks => 'এটি কিভাবে কাজ করে';
+
+  @override
+  String get pendingQuestions => 'অপেক্ষারত প্রশ্ন';
+
+  @override
+  String get activeConversations => 'সক্রিয় কথোপকথন';
+
+  @override
+  String get waitingForTeacher => 'শিক্ষকের জন্য অপেক্ষা করছে';
+
+  @override
+  String get noMessagesYetDesc => 'শিক্ষক আপনার প্রশ্নের উত্তর দেওয়ার পরে আপনার কথোপকথন এখানে দেখা যাবে।';
 }

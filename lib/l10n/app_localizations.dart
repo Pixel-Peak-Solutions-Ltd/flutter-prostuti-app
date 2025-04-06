@@ -1270,6 +1270,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'at'**
   String get at;
+
+  /// No description provided for @classes.
+  ///
+  /// In en, this message translates to:
+  /// **'Classes'**
+  String get classes;
+
+  /// No description provided for @messages.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get messages;
+
+  /// No description provided for @startChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Chat'**
+  String get startChat;
+
+  /// No description provided for @noConversationsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations found'**
+  String get noConversationsFound;
+
+  /// No description provided for @startConversation.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a conversation'**
+  String get startConversation;
+
+  /// No description provided for @typing.
+  ///
+  /// In en, this message translates to:
+  /// **'Typing...'**
+  String get typing;
+
+  /// No description provided for @sendMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Send message'**
+  String get sendMessage;
+
+  /// No description provided for @attachPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach photo'**
+  String get attachPhoto;
+
+  /// No description provided for @attachFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach file'**
+  String get attachFile;
+
+  /// No description provided for @typeYourMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your message...'**
+  String get typeYourMessage;
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get yesterday;
+
+  /// No description provided for @noMessagesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get noMessagesYet;
+
+  /// No description provided for @sendFirstMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a message to start the conversation'**
+  String get sendFirstMessage;
+
+  /// No description provided for @featureComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Feature coming soon'**
+  String get featureComingSoon;
+
+  /// No description provided for @errorOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred'**
+  String get errorOccurred;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @sendMessageTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Send a message to'**
+  String get sendMessageTo;
+
+  /// No description provided for @send.
+  ///
+  /// In en, this message translates to:
+  /// **'Send'**
+  String get send;
+
+  /// No description provided for @searchForUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for a user to start a conversation'**
+  String get searchForUser;
+
+  /// No description provided for @noUsersFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No users found'**
+  String get noUsersFound;
+
+  /// No description provided for @requests.
+  ///
+  /// In en, this message translates to:
+  /// **'Requests'**
+  String get requests;
+
+  /// No description provided for @noMessageRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'No message requests'**
+  String get noMessageRequests;
+
+  /// No description provided for @messageRequestDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'When someone sends you a message for the first time, it will appear here for your approval.'**
+  String get messageRequestDesc;
+
+  /// No description provided for @askAQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a Question'**
+  String get askAQuestion;
+
+  /// No description provided for @yourQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Question'**
+  String get yourQuestion;
+
+  /// No description provided for @typeYourQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your question here...'**
+  String get typeYourQuestion;
+
+  /// No description provided for @sendQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Question'**
+  String get sendQuestion;
+
+  /// No description provided for @messageSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your message has been sent! Teachers will respond soon.'**
+  String get messageSent;
+
+  /// No description provided for @howItWorks.
+  ///
+  /// In en, this message translates to:
+  /// **'How it works'**
+  String get howItWorks;
+
+  /// No description provided for @pendingQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Questions'**
+  String get pendingQuestions;
+
+  /// No description provided for @activeConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Conversations'**
+  String get activeConversations;
+
+  /// No description provided for @waitingForTeacher.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for Teacher'**
+  String get waitingForTeacher;
+
+  /// No description provided for @noMessagesYetDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your conversation will appear here once a teacher responds to your question.'**
+  String get noMessagesYetDesc;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

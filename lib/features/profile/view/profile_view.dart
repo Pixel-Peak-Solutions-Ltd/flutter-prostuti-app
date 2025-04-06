@@ -86,23 +86,18 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                               children: [
                                 SvgPicture.asset(
                                     "assets/icons/premium_upgrade.svg"),
-                                const Gap(10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      data
-                                          ? context.l10n!.youAreOnPremiumPlan
-                                          : context.l10n!.upgradeToPremium,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge!
-                                          .copyWith(
-                                              fontWeight: FontWeight.w600,
-                                              color: AppColors
-                                                  .textActionPrimaryLight),
-                                    ),
-                                  ],
+                                const Gap(24),
+                                Text(
+                                  data
+                                      ? context.l10n!.youAreOnPremiumPlan
+                                      : context.l10n!.upgradeToPremium,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color:
+                                              AppColors.textActionPrimaryLight),
                                 ),
                               ],
                             ),
@@ -262,41 +257,6 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
           return const ProfileSkeleton();
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          showUnselectedLabels: true,
-          showSelectedLabels: true,
-          selectedLabelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-              fontWeight: FontWeight.w600, color: AppColors.textTertiaryLight),
-          unselectedLabelStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
-              fontWeight: FontWeight.w600, color: AppColors.textTertiaryLight),
-          items: [
-            BottomNavigationBarItem(
-              icon:
-                  SvgPicture.asset("assets/icons/bottom_nav_home_unselect.svg"),
-              label: context.l10n!.home,
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                  "assets/icons/bottom_nav_flash_card_unselect.svg"),
-              label: context.l10n!.flashCard,
-            ),
-            BottomNavigationBarItem(
-              icon:
-                  SvgPicture.asset("assets/icons/bottom_nav_test_unselect.svg"),
-              label: context.l10n!.test,
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                  "assets/icons/bottom_nav_notification_unselect.svg"),
-              label: context.l10n!.notification,
-            ),
-            BottomNavigationBarItem(
-              icon:
-                  SvgPicture.asset("assets/icons/bottom_nav_chat_unselect.svg"),
-              label: context.l10n!.message,
-            ),
-          ]),
     );
   }
 
