@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
-
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingView extends ConsumerStatefulWidget {
@@ -64,14 +65,14 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                 // Add your images to assets folder
                 const Gap(50),
                 Text(
-                  'মকটেষ্ট',
+                  context.l10n!.mockTest,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Gap(16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
+                    context.l10n!.onboardingDesc,
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
@@ -96,14 +97,14 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                 // Add your images to assets folder
                 const Gap(50),
                 Text(
-                  'ক্লিয়ার ইউর ডাউটস',
+                  context.l10n!.clearYourDoubts,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Gap(16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    'It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.',
+                    context.l10n!.onboardingDesc,
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
@@ -144,7 +145,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                     builder: (context) => const LoginView(),
                   ));
                 },
-                text: 'শুরু করুন'),
+                text: context.l10n!.getStarted),
           ),
         ),
       ]),

@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:pinput/pinput.dart';
+import 'package:prostuti/common/helpers/theme_provider.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/auth/signup/view/register_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -32,8 +34,8 @@ class OtpViewState extends ConsumerState<OtpView> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(_loadingProvider);
-    bool isDarkMode =
-        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final isDarkMode = ref.watch(
+        themeNotifierProvider.select((value) => value == ThemeMode.dark));
 
     return Scaffold(
       appBar: AppBar(
@@ -57,12 +59,12 @@ class OtpViewState extends ConsumerState<OtpView> {
                 ),
                 const Gap(76),
                 Text(
-                  'অটিপি যাচাই করুন',
+                  context.l10n!.verifyOtp,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Gap(8),
                 Text(
-                  'আপনার নাম্বরে পাঠানো ৪ সংখ্যার কোডটি লিখুন',
+                  context.l10n!.enterOtpCode,
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge!
@@ -85,7 +87,7 @@ class OtpViewState extends ConsumerState<OtpView> {
                             : "PASSWORD_RESET");
                   },
                   child: Text(
-                    'আবার কোড পাঠান',
+                    context.l10n!.resendCode,
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           color: AppColors.textActionTertiaryLight,
                           fontWeight: FontWeight.w900,
@@ -96,7 +98,7 @@ class OtpViewState extends ConsumerState<OtpView> {
                 Skeletonizer(
                   enabled: isLoading,
                   child: LongButton(
-                    text: 'এগিয়ে যাই',
+                    text: context.l10n!.continueText,
                     onPressed: () async {
                       _debouncer.run(
                           action: () async {

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/services/debouncer.dart';
 import 'package:prostuti/core/services/error_handler.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/auth/forget_password/repository/forget_password_repo.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/otp_viewmodel.dart';
@@ -34,12 +36,12 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
 
   String? _validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'পাসওয়ার্ড প্রয়োজন';
+      return context.l10n!.passwordRequired;
     }
     // Password must contain at least one uppercase, one special character, and be at least 8 characters long
     final passwordRegex = RegExp(r'^(?=.*?[A-Z])(?=.*?[!@#\$&*~]).{8,}$');
     if (!passwordRegex.hasMatch(value)) {
-      return 'পাসওয়ার্ডে ৮ অক্ষর, বড় হাতের অক্ষর ও বিশেষ চিহ্ন দরকার।';
+      return context.l10n!.passwordValidationMessage;
     }
     return null;
   }
@@ -47,8 +49,8 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(_loadingProvider);
-    bool isDarkMode =
-        MediaQuery.of(context).platformBrightness == Brightness.dark;
+    final isDarkMode = ref.watch(
+        themeNotifierProvider.select((value) => value == ThemeMode.dark));
 
     return Scaffold(
       appBar: AppBar(
@@ -71,7 +73,7 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
               ),
               const Gap(118),
               Text(
-                'পাসওয়ার্ড ভুলে গেছেন',
+                context.l10n!.forgotPassword,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const Gap(32),
@@ -82,7 +84,7 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'পাসওয়ার্ড',
+                      context.l10n!.password,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const Gap(6),
@@ -91,11 +93,11 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
                       keyboardType: TextInputType.text,
                       obscureText: true,
                       controller: _passwordController,
-                      decoration: const InputDecoration(
-                          hintText: "আপনার পাসওয়ার্ড লিখুন"),
+                      decoration: InputDecoration(
+                          hintText: context.l10n!.enterYourPassword),
                     ),
                     Text(
-                      'কনফার্ম পাসওয়ার্ড',
+                      context.l10n!.confirmPassword,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const Gap(6),
@@ -103,8 +105,8 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
                       keyboardType: TextInputType.text,
                       obscureText: true,
                       controller: _confirmPasswordController,
-                      decoration: const InputDecoration(
-                          hintText: "আপনার পাসওয়ার্ড কনফার্ম করুন"),
+                      decoration: InputDecoration(
+                          hintText: context.l10n!.confirmYourPassword),
                     ),
                   ],
                 ),
@@ -113,15 +115,16 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
               Skeletonizer(
                 enabled: isLoading,
                 child: LongButton(
-                  text: 'এগিয়ে যাই',
+                  text: context.l10n!.continueText,
                   onPressed: () {
                     _debouncer.run(
                         action: () async {
                           if (_passwordController.text !=
                               _confirmPasswordController.text) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Your Password Doesn't match")),
+                              SnackBar(
+                                  content:
+                                      Text(context.l10n!.passwordsDoNotMatch)),
                             );
                             return;
                           }
@@ -156,8 +159,9 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
                             } catch (e) {
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('An error occurred')),
+                                  SnackBar(
+                                      content:
+                                          Text(context.l10n!.anErrorOccurred)),
                                 );
                               }
                             }

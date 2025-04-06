@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 
 import '../viewmodel/course_details_viewmodel.dart';
 
@@ -33,8 +34,11 @@ class ExpandableText extends ConsumerWidget {
               ref.read(isExpandedProvider.notifier).state = !isExpanded;
             },
             child: Text(
-              isExpanded ? 'See less' : 'See more',
-              style: Theme.of(context).textTheme.bodyMedium,
+              isExpanded ? context.l10n!.showLess : context.l10n!.showMore,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: Theme.of(context).colorScheme.secondary),
             ),
           ),
       ],

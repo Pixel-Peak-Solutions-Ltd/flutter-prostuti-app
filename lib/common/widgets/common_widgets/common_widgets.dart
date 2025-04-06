@@ -42,7 +42,7 @@ mixin CommonWidgets {
         Text(
           priceType == "Free" || priceType == "Subscription"
               ? "$priceType"
-              : "৳ $price",
+              : "$price",
           style: theme.textTheme.titleLarge!
               .copyWith(color: AppColors.textActionSecondaryLight),
         ),

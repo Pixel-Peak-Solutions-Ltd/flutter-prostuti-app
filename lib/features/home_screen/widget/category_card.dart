@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-
 class CategoryCard extends StatefulWidget {
   final String icon;
   final String image;
   final String text;
 
-  const CategoryCard({super.key, required this.icon, required this.text, required this.image});
+  const CategoryCard(
+      {super.key, required this.icon, required this.text, required this.image});
 
   @override
   State<CategoryCard> createState() => _CategoryCardState();
@@ -20,7 +20,7 @@ class _CategoryCardState extends State<CategoryCard> {
     return Container(
       width: 170,
       height: 170,
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage(widget.image.toString()),
@@ -32,10 +32,10 @@ class _CategoryCardState extends State<CategoryCard> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image.asset(widget.icon.toString(), height: 60, width: 60),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             widget.text,
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            style: const TextStyle(color: Colors.white, fontSize: 16),
           ),
         ],
       ),
