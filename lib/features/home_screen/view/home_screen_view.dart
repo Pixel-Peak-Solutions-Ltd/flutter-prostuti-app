@@ -19,8 +19,8 @@ import '../../flashcard/view/flashcard_view.dart';
 import '../../flashcard/viewmodel/flashcard_viewmodel.dart';
 import '../../profile/view/profile_view.dart';
 import '../../profile/viewmodel/profile_viewmodel.dart';
-import '../widget/calendar_widget.dart';
 import '../widget/category_card.dart';
+import '../widget/home_routine.dart';
 import '../widget/leaderboard_card.dart';
 
 // Updated provider to avoid unnecessary API calls
@@ -204,12 +204,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const Gap(16),
               _buildAdSection(maxWidth),
               const Gap(16),
-              _buildSectionHeader(context, "আমার ক্যালেন্ডার"),
-              const Gap(8),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: CalendarWidget(),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: Text(
+                  context.l10n!.myCalendar,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(fontWeight: FontWeight.w600),
+                ),
               ),
+              const HomeRoutineWidget(),
               const Gap(16),
               _buildSectionHeader(context, "আমার ফ্ল্যাশকার্ড"),
               const Gap(8),
@@ -635,7 +641,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Positioned.fill(
                         child: CustomPaint(
                           painter: WavyBackgroundPainter(
-                            baseColor: Theme.of(context).unselectedWidgetColor,
+                            baseColor: _getFlashcardColor(index),
                           ),
                         ),
                       ),
@@ -668,7 +674,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     ],
                                   ),
                                   child: Text(
-                                    'By ${flashcard.studentId!.name}',
+                                    'Flashcard By ${flashcard.studentId!.name}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
@@ -758,10 +764,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Color _getFlashcardColor(int index) {
     final colors = [
-      AppColors.leaderboardSecondLight,
-      AppColors.leaderboardFirstLight,
-      AppColors.leaderboardThirdLight,
-      AppColors.leaderboardSecondLight,
+      Theme.of(context).colorScheme.secondary,
+      Theme.of(context).unselectedWidgetColor,
+      Theme.of(context).colorScheme.error,
+      Colors.orange,
+      Colors.green,
     ];
     return colors[index % colors.length];
   }

@@ -697,4 +697,28 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get noMessagesYetDesc => 'শিক্ষক আপনার প্রশ্নের উত্তর দেওয়ার পরে আপনার কথোপকথন এখানে দেখা যাবে।';
+
+  @override
+  String get todaysRoutine => 'আজকের ক্লাসকলাপ';
+
+  @override
+  String get seeMore => 'আরো দেখুন';
+
+  @override
+  String get myCalendar => 'আমার ক্যালেন্ডার';
+
+  @override
+  String get routineLoadError => 'কার্যক্রম লোড করতে ত্রুটি';
+
+  @override
+  String get tryAgainLater => 'দয়া করে পরে আবার চেষ্টা করুন';
+
+  @override
+  String get tryAgain => 'আবার চেষ্টা করুন';
+
+  @override
+  String get noActivitiesToday => 'আজ কোন কার্যক্রম নেই';
+
+  @override
+  String get enjoyyourFreeTime => 'আপনার ফ্রি সময় উপভোগ করুন!';
 }

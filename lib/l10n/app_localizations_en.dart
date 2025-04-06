@@ -697,4 +697,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noMessagesYetDesc => 'Your conversation will appear here once a teacher responds to your question.';
+
+  @override
+  String get todaysRoutine => 'Today\'s Activities';
+
+  @override
+  String get seeMore => 'See More';
+
+  @override
+  String get myCalendar => 'My Calender';
+
+  @override
+  String get routineLoadError => 'Failed to Load Activities';
+
+  @override
+  String get tryAgainLater => 'Please try again later';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
+  String get noActivitiesToday => 'No Activities Today';
+
+  @override
+  String get enjoyyourFreeTime => 'Enjoy your free time!';
 }

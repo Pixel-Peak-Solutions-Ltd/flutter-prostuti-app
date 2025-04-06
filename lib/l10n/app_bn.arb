@@ -229,5 +229,13 @@
   "pendingQuestions": "অপেক্ষারত প্রশ্ন",
   "activeConversations": "সক্রিয় কথোপকথন",
   "waitingForTeacher": "শিক্ষকের জন্য অপেক্ষা করছে",
-  "noMessagesYetDesc": "শিক্ষক আপনার প্রশ্নের উত্তর দেওয়ার পরে আপনার কথোপকথন এখানে দেখা যাবে।"
+  "noMessagesYetDesc": "শিক্ষক আপনার প্রশ্নের উত্তর দেওয়ার পরে আপনার কথোপকথন এখানে দেখা যাবে।",
+  "todaysRoutine": "আজকের ক্লাসকলাপ",
+  "seeMore": "আরো দেখুন",
+  "myCalendar": "আমার ক্যালেন্ডার",
+  "routineLoadError": "কার্যক্রম লোড করতে ত্রুটি",
+  "tryAgainLater": "দয়া করে পরে আবার চেষ্টা করুন",
+  "tryAgain": "আবার চেষ্টা করুন",
+  "noActivitiesToday": "আজ কোন কার্যক্রম নেই",
+  "enjoyyourFreeTime": "আপনার ফ্রি সময় উপভোগ করুন!"
 }

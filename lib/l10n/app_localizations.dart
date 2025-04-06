@@ -1474,6 +1474,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your conversation will appear here once a teacher responds to your question.'**
   String get noMessagesYetDesc;
+
+  /// No description provided for @todaysRoutine.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s Activities'**
+  String get todaysRoutine;
+
+  /// No description provided for @seeMore.
+  ///
+  /// In en, this message translates to:
+  /// **'See More'**
+  String get seeMore;
+
+  /// No description provided for @myCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'My Calender'**
+  String get myCalendar;
+
+  /// No description provided for @routineLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to Load Activities'**
+  String get routineLoadError;
+
+  /// No description provided for @tryAgainLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Please try again later'**
+  String get tryAgainLater;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// No description provided for @noActivitiesToday.
+  ///
+  /// In en, this message translates to:
+  /// **'No Activities Today'**
+  String get noActivitiesToday;
+
+  /// No description provided for @enjoyyourFreeTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Enjoy your free time!'**
+  String get enjoyyourFreeTime;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

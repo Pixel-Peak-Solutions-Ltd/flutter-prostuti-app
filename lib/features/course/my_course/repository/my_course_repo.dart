@@ -6,6 +6,7 @@ import 'package:prostuti/features/course/my_course/model/my_course_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/services/error_handler.dart';
+import '../../course_details/model/course_details_model.dart';
 import '../model/course_progress_model.dart';
 
 part 'my_course_repo.g.dart';
@@ -48,6 +49,19 @@ class MyCourseRepo {
     } else {
       throw Exception(
           "Failed to load course progress: ${response.data['message']}");
+    }
+  }
+
+  // Add this method to the MyCourseRepo class
+
+  Future<CourseDetails> getCourseDetails(String courseId) async {
+    final response = await _dioService.getRequest("/courses/$courseId");
+
+    if (response.statusCode == 200) {
+      return CourseDetails.fromJson(response.data);
+    } else {
+      throw Exception(
+          "Failed to load course details: ${response.data['message']}");
     }
   }
 }

@@ -229,5 +229,13 @@
   "pendingQuestions": "Pending Questions",
   "activeConversations": "Active Conversations",
   "waitingForTeacher": "Waiting for Teacher",
-  "noMessagesYetDesc": "Your conversation will appear here once a teacher responds to your question."
+  "noMessagesYetDesc": "Your conversation will appear here once a teacher responds to your question.",
+  "todaysRoutine": "Today's Activities",
+  "seeMore": "See More",
+  "myCalendar": "My Calender",
+  "routineLoadError": "Failed to Load Activities",
+  "tryAgainLater": "Please try again later",
+  "tryAgain": "Try Again",
+  "noActivitiesToday": "No Activities Today",
+  "enjoyyourFreeTime": "Enjoy your free time!"
 }
