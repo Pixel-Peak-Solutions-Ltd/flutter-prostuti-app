@@ -8,6 +8,8 @@ import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/chat/viewmodel/broadcast_viewmodel.dart';
 import 'package:prostuti/features/flashcard/viewmodel/flashcard_filter_viewmodel.dart';
 
+import '../widgets/broadcast_skeleton.dart';
+
 // State provider for broadcast form loading state
 final broadcastLoadingProvider = StateProvider<bool>((ref) => false);
 
@@ -218,8 +220,7 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
                       },
                     );
                   },
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
+                  loading: () => const BroadcastSkeletonLoader(),
                   error: (_, __) => const Text('Failed to load subjects'),
                 ),
               ),

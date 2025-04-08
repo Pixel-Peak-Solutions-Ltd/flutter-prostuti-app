@@ -723,7 +723,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get enjoyyourFreeTime => 'আপনার ফ্রি সময় উপভোগ করুন!';
 
   @override
-  String get chatTitle => 'চ্যাট';
+  String get chatTitle => 'ম্যাসেজ';
 
   @override
   String get broadcast => 'শিক্ষককে জিজ্ঞাসা করুন';
@@ -813,10 +813,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get course => 'কোর্স*';
 
   @override
-  String get selectCourse => 'সাধারণ বিজ্ঞান';
+  String get selectCourse => 'ক্যাটেগরি নির্বাচন করুন';
 
   @override
-  String get yourName => 'নাজমুল ইসলাম সিফাত';
+  String get yourName => 'আপনার নাম';
 
   @override
   String get problem => 'সমস্যা*';

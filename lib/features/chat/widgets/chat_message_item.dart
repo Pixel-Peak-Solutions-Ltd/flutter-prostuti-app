@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 
 import '../model/chat_model.dart';
@@ -64,10 +63,8 @@ class ChatMessageItem extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
                 color: isMe
-                    ? AppColors.backgroundActionPrimaryLight
-                    : Theme.of(context).brightness == Brightness.dark
-                        ? AppColors.backgroundTertiaryDark
-                        : AppColors.backgroundTertiaryLight,
+                    ? Theme.of(context).colorScheme.secondary
+                    : Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(16),
                   topRight: const Radius.circular(16),

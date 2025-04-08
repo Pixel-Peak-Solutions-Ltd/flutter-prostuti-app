@@ -6,6 +6,8 @@ import 'package:prostuti/features/chat/viewmodel/chat_viewmodel.dart';
 import 'package:prostuti/features/chat/widgets/chat_input_field.dart';
 import 'package:prostuti/features/chat/widgets/chat_message_item.dart';
 
+import '../widgets/chat_skeleton.dart';
+
 class ChatMessageView extends ConsumerStatefulWidget {
   final String conversationId;
   final String recipientId;
@@ -91,6 +93,9 @@ class _ChatMessageViewState extends ConsumerState<ChatMessageView>
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        toolbarHeight: 40,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Row(
           children: [
             const CircleAvatar(
@@ -103,28 +108,17 @@ class _ChatMessageViewState extends ConsumerState<ChatMessageView>
               children: [
                 Text(
                   widget.recipientName,
-                  style: const TextStyle(fontSize: 16),
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 if (isTyping)
                   Text(
                     context.l10n?.typing ?? 'typing...',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontStyle: FontStyle.italic,
-                    ),
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
               ],
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            onPressed: () {
-              // Show conversation info
-            },
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -151,7 +145,8 @@ class _ChatMessageViewState extends ConsumerState<ChatMessageView>
 
                 return ListView.builder(
                   controller: _scrollController,
-                  reverse: true, // Display newest messages at the bottom
+                  reverse: true,
+                  // Display newest messages at the bottom
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 8,
@@ -239,9 +234,7 @@ class _ChatMessageViewState extends ConsumerState<ChatMessageView>
                   },
                 );
               },
-              loading: () => const Center(
-                child: CircularProgressIndicator(),
-              ),
+              loading: () => const SkeletonizedChatScreen(),
               error: (error, stack) => Center(
                 child: Text('${context.l10n?.error ?? 'Error'}: $error'),
               ),

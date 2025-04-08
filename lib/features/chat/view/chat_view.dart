@@ -9,6 +9,8 @@ import 'package:prostuti/features/chat/widgets/broadcast_item.dart';
 import 'package:prostuti/features/chat/widgets/chat_connection_status.dart'; // New import
 import 'package:prostuti/features/chat/widgets/conversation_item.dart';
 
+import '../../../core/services/size_config.dart';
+import '../../course/materials/shared/widgets/material_list_skeleton.dart';
 import 'broadcast_view.dart';
 import 'chat_message_view.dart';
 
@@ -21,29 +23,12 @@ class ChatView extends ConsumerStatefulWidget {
 
 class _ChatViewState extends ConsumerState<ChatView>
     with SingleTickerProviderStateMixin, CommonWidgets {
-  late TabController _tabController;
-  bool _isSearching = false;
+  int _selectedTabIndex = 0;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
   @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-    _tabController.addListener(() {
-      if (_tabController.indexIsChanging) {
-        setState(() {
-          _isSearching = false;
-          _searchController.clear();
-          _searchQuery = '';
-        });
-      }
-    });
-  }
-
-  @override
   void dispose() {
-    _tabController.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -52,54 +37,139 @@ class _ChatViewState extends ConsumerState<ChatView>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: _isSearching
-            ? TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: context.l10n?.searchHint ?? 'Search...',
-                  border: InputBorder.none,
-                  hintStyle: const TextStyle(color: Colors.grey),
-                ),
-                style: Theme.of(context).textTheme.bodyLarge,
-                onChanged: (value) {
-                  setState(() {
-                    _searchQuery = value.toLowerCase();
-                  });
-                },
-                autofocus: true,
-              )
-            : Text(context.l10n?.chatTitle ?? 'Chat'),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: [
-            Tab(text: context.l10n?.activeBroadcasts ?? 'Active Conversations'),
-            Tab(text: context.l10n?.pendingBroadcasts ?? 'Pending Questions'),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(_isSearching ? Icons.close : Icons.search),
-            onPressed: () {
-              setState(() {
-                _isSearching = !_isSearching;
-                if (!_isSearching) {
-                  _searchController.clear();
-                  _searchQuery = '';
-                }
-              });
-            },
-          ),
-        ],
+        toolbarHeight: 40,
+        centerTitle: true,
+        title: Text(context.l10n!.chatTitle),
       ),
       body: Column(
         children: [
-          // Add connection status indicator at the top
           const ChatConnectionStatus(),
+
+          // Custom Tab Bar
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Container(
+              height: 50,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey.shade300),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedTabIndex = 0;
+                          _searchController.clear();
+                          _searchQuery = '';
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _selectedTabIndex == 0
+                              ? Theme.of(context).colorScheme.secondary
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          context.l10n?.activeBroadcasts ?? 'All Messages',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: _selectedTabIndex == 0
+                                ? Colors.white
+                                : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedTabIndex = 1;
+                          _searchController.clear();
+                          _searchQuery = '';
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: _selectedTabIndex == 1
+                              ? Colors.blue
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          context.l10n?.pendingBroadcasts ?? 'Request Messages',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: _selectedTabIndex == 1
+                                ? Colors.white
+                                : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ElevatedButton(
+              onPressed: () {
+                Nav().push(const CreateBroadcastView());
+              },
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4)),
+                  backgroundColor: const Color(0xff2970FF),
+                  fixedSize: Size(SizeConfig.w(356), SizeConfig.h(10))),
+              child: Text(
+                context.l10n!.startConversation,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: Colors.white, fontWeight: FontWeight.w800),
+              ),
+            ),
+          ),
+
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: context.l10n?.searchHint ??
+                          'Search people or message',
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(color: Colors.grey.shade500),
+                    ),
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    onChanged: (value) {
+                      setState(() {
+                        _searchQuery = value.toLowerCase();
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
 
           // Main content
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
+            child: IndexedStack(
+              index: _selectedTabIndex,
               children: [
                 // Active Conversations Tab
                 ConversationsTab(searchQuery: _searchQuery),
@@ -110,13 +180,6 @@ class _ChatViewState extends ConsumerState<ChatView>
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Nav().push(const CreateBroadcastView());
-        },
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        child: const Icon(Icons.message, color: Colors.white),
       ),
     );
   }
@@ -140,6 +203,7 @@ class ConversationsTab extends ConsumerWidget {
             : conversations.where((conversation) {
                 final participantName =
                     conversation.participant?.name?.toLowerCase() ?? '';
+
                 final lastMessage =
                     conversation.lastMessage?.message?.toLowerCase() ?? '';
                 final subject = conversation.subject?.toLowerCase() ?? '';
@@ -216,7 +280,7 @@ class ConversationsTab extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => Center(child: MaterialListSkeleton()),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -339,7 +403,7 @@ class BroadcastsTab extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => Center(child: MaterialListSkeleton()),
       error: (error, stack) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

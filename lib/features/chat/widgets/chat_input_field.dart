@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:prostuti/core/configs/app_colors.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/chat/viewmodel/chat_viewmodel.dart';
 
@@ -86,63 +86,41 @@ class _ChatInputFieldState extends ConsumerState<ChatInputField> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, -2),
-            blurRadius: 4,
-            color: Colors.black12,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? AppColors.backgroundSecondaryDark
-                    : AppColors.backgroundPrimaryLight,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(
-                  color: AppColors.borderNormalLight,
-                  width: 1,
-                ),
-              ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 4),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+        ),
+        child: Row(
+          children: [
+            Expanded(
               child: TextField(
                 controller: _messageController,
                 decoration: InputDecoration(
-                  hintText: context.l10n?.typeMessage ?? 'Type a message...',
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                  hintText: context.l10n!.typeMessage,
+                  contentPadding: const EdgeInsets.all(16),
                 ),
-                maxLines: null,
                 textCapitalization: TextCapitalization.sentences,
               ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Material(
-            color: AppColors.backgroundActionPrimaryLight,
-            shape: const CircleBorder(),
-            child: InkWell(
-              onTap: _handleSendMessage,
-              customBorder: const CircleBorder(),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                child: const Icon(
-                  Icons.send,
-                  color: Colors.white,
-                  size: 24,
-                ),
+            const SizedBox(width: 8),
+            Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: InkWell(
+                onTap: _handleSendMessage,
+                customBorder: const RoundedRectangleBorder(),
+                child: Container(
+                    padding: const EdgeInsets.all(12),
+                    child: SvgPicture.asset("assets/icons/send_button.svg")),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1526,7 +1526,7 @@ abstract class AppLocalizations {
   /// No description provided for @chatTitle.
   ///
   /// In en, this message translates to:
-  /// **'Chat'**
+  /// **'Message'**
   String get chatTitle;
 
   /// No description provided for @broadcast.

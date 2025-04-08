@@ -99,7 +99,7 @@ class BroadcastItem extends StatelessWidget {
                     ),
                     child: Text(
                       broadcast.subject ?? context.l10n?.subject ?? 'Subject',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: AppColors.textActionSecondaryLight,
                         fontWeight: FontWeight.bold,
                       ),

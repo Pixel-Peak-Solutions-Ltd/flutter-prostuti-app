@@ -19,7 +19,7 @@ class ChatConnectionStatus extends ConsumerWidget {
             backgroundColor: Colors.green.withOpacity(0.8),
             message: 'Connected',
             icon: Icons.check_circle,
-            duration: const Duration(seconds: 3),
+            duration: const Duration(seconds: 1),
           );
         }
 
@@ -158,7 +158,6 @@ class ChatConnectionStatus extends ConsumerWidget {
   }
 }
 
-// A widget that fades out after a duration
 class FadeOutConnectionStatus extends StatefulWidget {
   final Color backgroundColor;
   final String message;
@@ -181,7 +180,8 @@ class FadeOutConnectionStatus extends StatefulWidget {
 class _FadeOutConnectionStatusState extends State<FadeOutConnectionStatus>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _animation;
+  late Animation<double> _opacityAnimation;
+  late Animation<double> _heightAnimation;
 
   @override
   void initState() {
@@ -190,13 +190,21 @@ class _FadeOutConnectionStatusState extends State<FadeOutConnectionStatus>
       duration: widget.duration,
       vsync: this,
     );
-    _animation = CurvedAnimation(
+
+    // Create opacity animation
+    _opacityAnimation = CurvedAnimation(
       parent: _controller,
       curve: Curves.easeInOut,
     );
 
-    // Delay the animation to show the success message briefly
-    Future.delayed(const Duration(milliseconds: 500), () {
+    // Create height animation
+    _heightAnimation = CurvedAnimation(
+      parent: _controller,
+      // Use a slightly different curve for height to create a nice visual effect
+      curve: Curves.easeInOut,
+    );
+
+    Future.delayed(const Duration(milliseconds: 150), () {
       if (mounted) {
         _controller.forward();
       }
@@ -211,27 +219,43 @@ class _FadeOutConnectionStatusState extends State<FadeOutConnectionStatus>
 
   @override
   Widget build(BuildContext context) {
-    return FadeTransition(
-      opacity: Tween<double>(begin: 1.0, end: 0.0).animate(_animation),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
-        color: widget.backgroundColor,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(widget.icon, size: 16, color: Colors.white),
-            const SizedBox(width: 8),
-            Text(
-              widget.message,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        // When animation completes, return an empty SizedBox to remove from layout
+        if (_controller.status == AnimationStatus.completed) {
+          return const SizedBox.shrink();
+        }
+
+        return FadeTransition(
+          opacity:
+              Tween<double>(begin: 1.0, end: 0.0).animate(_opacityAnimation),
+          child: SizeTransition(
+            sizeFactor:
+                Tween<double>(begin: 1.0, end: 0.0).animate(_heightAnimation),
+            axisAlignment: -1.0, // Top alignment
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+              color: widget.backgroundColor,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(widget.icon, size: 16, color: Colors.white),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.message,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

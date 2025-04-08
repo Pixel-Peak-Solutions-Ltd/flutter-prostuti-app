@@ -238,7 +238,7 @@
   "tryAgain": "আবার চেষ্টা করুন",
   "noActivitiesToday": "আজ কোন কার্যক্রম নেই",
   "enjoyyourFreeTime": "আপনার ফ্রি সময় উপভোগ করুন!",
-  "chatTitle": "চ্যাট",
+  "chatTitle": "ম্যাসেজ",
   "broadcast": "শিক্ষককে জিজ্ঞাসা করুন",
   "askQuestion": "আপনার প্রশ্ন জিজ্ঞাসা করুন",
   "questionHint": "আপনার প্রশ্ন এখানে লিখুন...",
@@ -268,8 +268,8 @@
   "noSearchResults": "কোন মিল পাওয়া যায়নি",
   "openChat": "চ্যাট খুলুন",
   "course": "কোর্স*",
-  "selectCourse": "সাধারণ বিজ্ঞান",
-  "yourName": "নাজমুল ইসলাম সিফাত",
+  "selectCourse": "ক্যাটেগরি নির্বাচন করুন",
+  "yourName": "আপনার নাম",
   "problem": "সমস্যা*",
   "problemHint": "সমস্যা ২৪.২"
 }

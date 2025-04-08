@@ -723,7 +723,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enjoyyourFreeTime => 'Enjoy your free time!';
 
   @override
-  String get chatTitle => 'Chat';
+  String get chatTitle => 'Message';
 
   @override
   String get broadcast => 'Ask a Teacher';
