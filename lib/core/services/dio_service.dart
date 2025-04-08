@@ -139,6 +139,23 @@ class DioService {
     }
   }
 
+  Future<Response> postMultipartRequest(String path, FormData formData) async {
+    try {
+      final response = await _dio.post(
+        path,
+        data: formData,
+        options: Options(
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        ),
+      );
+      return response;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Response _handleError(DioException error) {
     return Response(
       requestOptions: error.requestOptions,

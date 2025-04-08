@@ -17,6 +17,7 @@ import 'package:prostuti/features/course/materials/assignment/widgets/assignment
 import '../../../../../core/services/debouncer.dart';
 import '../../../enrolled_course_landing/repository/enrolled_course_landing_repo.dart';
 import '../../record_class/viewmodel/change_btn_state.dart';
+import '../repository/assignment_repo.dart';
 import '../widgets/assignment_skeleton.dart';
 
 class AssignmentDetailsView extends ConsumerStatefulWidget {
@@ -115,8 +116,11 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
                         ? fileBox(theme, fileName)
                         : InkWell(
                             onTap: () async {
-                              final result = await FilePicker.platform
-                                  .pickFiles(type: FileType.any);
+                              final result =
+                                  await FilePicker.platform.pickFiles(
+                                type: FileType.custom,
+                                allowedExtensions: ['pdf'],
+                              );
 
                               if (result != null) {
                                 File file = File(result.files.single.path!);
@@ -152,23 +156,76 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
                                             return;
                                           }
 
-                                          final response = await ref
+                                          ref
+                                              .read(_loadingProvider.notifier)
+                                              .state = true;
+
+                                          // Get assignment details
+                                          final assignmentDetails = ref
                                               .read(
-                                                  enrolledCourseLandingRepoProvider)
-                                              .markAsComplete({
-                                            "materialType": "assignment",
-                                            "material_id": ref
-                                                .read(getAssignmentByIdProvider)
-                                          });
-
-                                          if (response) {
+                                                  assignmentDetailsViewmodelProvider)
+                                              .value;
+                                          if (assignmentDetails == null) {
+                                            Fluttertoast.showToast(
+                                                msg:
+                                                    "Error: Could not get assignment details");
                                             ref
-                                                .watch(changeBtnStateProvider
-                                                    .notifier)
-                                                .setBtnState();
-
-                                            Navigator.pop(context, true);
+                                                .read(_loadingProvider.notifier)
+                                                .state = false;
+                                            return;
                                           }
+
+                                          // Get assignment ID and course ID
+                                          final assignmentId = ref
+                                              .read(getAssignmentByIdProvider);
+                                          final courseId = assignmentDetails
+                                              .data!
+                                              .courseId; // Adjust based on your model structure
+
+                                          // Submit the assignment
+                                          final result = await ref
+                                              .read(assignmentRepoProvider)
+                                              .submitAssignment(
+                                                courseId: courseId!,
+                                                assignmentId: assignmentId,
+                                                filePath: filePath,
+                                              );
+
+                                          result.fold((error) {
+                                            Fluttertoast.showToast(
+                                                msg: "Error: ${error.message}");
+                                            ref
+                                                .read(_loadingProvider.notifier)
+                                                .state = false;
+                                          }, (data) async {
+                                            // If submission is successful, mark as complete
+                                            final markCompleteResponse = await ref
+                                                .read(
+                                                    enrolledCourseLandingRepoProvider)
+                                                .markAsComplete({
+                                              "materialType": "assignment",
+                                              "material_id": assignmentId
+                                            });
+
+                                            if (markCompleteResponse) {
+                                              ref
+                                                  .read(changeBtnStateProvider
+                                                      .notifier)
+                                                  .setBtnState();
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Assignment submitted successfully");
+                                              Navigator.pop(context, true);
+                                            } else {
+                                              Fluttertoast.showToast(
+                                                  msg:
+                                                      "Failed to mark assignment as complete");
+                                            }
+
+                                            ref
+                                                .read(_loadingProvider.notifier)
+                                                .state = false;
+                                          });
                                         },
                                         loadingController: ref
                                             .read(_loadingProvider.notifier));
