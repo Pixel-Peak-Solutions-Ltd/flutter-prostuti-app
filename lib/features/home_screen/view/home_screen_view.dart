@@ -7,6 +7,7 @@ import 'package:logger/logger.dart';
 import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
+import 'package:prostuti/features/chat/view/chat_view.dart';
 import 'package:prostuti/features/course/course_list/view/course_list_view.dart';
 import 'package:prostuti/features/course/my_course/view/my_course_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -183,7 +184,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       case 3:
         return const Center(child: Text("Notifications coming soon"));
       case 4:
-        return const Center(child: Text("Messages coming soon"));
+        return const ChatView();
       default:
         return _buildHomeContent();
     }

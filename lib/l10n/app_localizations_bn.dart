@@ -721,4 +721,106 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get enjoyyourFreeTime => 'আপনার ফ্রি সময় উপভোগ করুন!';
+
+  @override
+  String get chatTitle => 'চ্যাট';
+
+  @override
+  String get broadcast => 'শিক্ষককে জিজ্ঞাসা করুন';
+
+  @override
+  String get askQuestion => 'আপনার প্রশ্ন জিজ্ঞাসা করুন';
+
+  @override
+  String get questionHint => 'আপনার প্রশ্ন এখানে লিখুন...';
+
+  @override
+  String get pendingBroadcasts => 'অপেক্ষমান প্রশ্ন';
+
+  @override
+  String get activeBroadcasts => 'সক্রিয় কথোপকথন';
+
+  @override
+  String get noBroadcasts => 'কোন সক্রিয় অনুরোধ নেই';
+
+  @override
+  String get noConversations => 'এখনও কোনও কথোপকথন নেই';
+
+  @override
+  String get typeMessage => 'একটি বার্তা টাইপ করুন...';
+
+  @override
+  String get justNow => 'এইমাত্র';
+
+  @override
+  String get messageRead => 'পড়া হয়েছে';
+
+  @override
+  String get newQuestion => 'নতুন প্রশ্ন';
+
+  @override
+  String get questionSent => 'আপনার প্রশ্ন পাঠানো হয়েছে। একজন শিক্ষক শীঘ্রই উত্তর দেবেন।';
+
+  @override
+  String get broadcastExpired => 'আপনার প্রশ্নের অনুরোধ মেয়াদ শেষ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।';
+
+  @override
+  String get onlineStatus => 'অনলাইন';
+
+  @override
+  String get offlineStatus => 'অফলাইন';
+
+  @override
+  String get lastSeen => 'সর্বশেষ দেখা';
+
+  @override
+  String get accept => 'গ্রহণ করুন';
+
+  @override
+  String get decline => 'প্রত্যাখ্যান করুন';
+
+  @override
+  String get markAsRead => 'পঠিত হিসাবে চিহ্নিত করুন';
+
+  @override
+  String get allMessages => 'সব বার্তা';
+
+  @override
+  String get chatError => 'চ্যাট সার্ভারের সাথে সংযোগ করা যায়নি';
+
+  @override
+  String get connecting => 'সংযোগ করা হচ্ছে...';
+
+  @override
+  String get connectionError => 'সংযোগ ত্রুটি। পুনরায় চেষ্টা করা হচ্ছে...';
+
+  @override
+  String get authError => 'প্রমাণীকরণ ত্রুটি';
+
+  @override
+  String get disconnected => 'সংযোগ বিচ্ছিন্ন';
+
+  @override
+  String get createBroadcast => 'সাহায্য পেতে নতুন প্রশ্ন তৈরি করুন';
+
+  @override
+  String get noSearchResults => 'কোন মিল পাওয়া যায়নি';
+
+  @override
+  String get openChat => 'চ্যাট খুলুন';
+
+  @override
+  String get course => 'কোর্স*';
+
+  @override
+  String get selectCourse => 'সাধারণ বিজ্ঞান';
+
+  @override
+  String get yourName => 'নাজমুল ইসলাম সিফাত';
+
+  @override
+  String get problem => 'সমস্যা*';
+
+  @override
+  String get problemHint => 'সমস্যা ২৪.২';
 }

@@ -1522,6 +1522,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enjoy your free time!'**
   String get enjoyyourFreeTime;
+
+  /// No description provided for @chatTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get chatTitle;
+
+  /// No description provided for @broadcast.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask a Teacher'**
+  String get broadcast;
+
+  /// No description provided for @askQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Ask Your Question'**
+  String get askQuestion;
+
+  /// No description provided for @questionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Type your question here...'**
+  String get questionHint;
+
+  /// No description provided for @pendingBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Questions'**
+  String get pendingBroadcasts;
+
+  /// No description provided for @activeBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Conversations'**
+  String get activeBroadcasts;
+
+  /// No description provided for @noBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'No active requests'**
+  String get noBroadcasts;
+
+  /// No description provided for @noConversations.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations yet'**
+  String get noConversations;
+
+  /// No description provided for @typeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Type a message...'**
+  String get typeMessage;
+
+  /// No description provided for @justNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get justNow;
+
+  /// No description provided for @messageRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get messageRead;
+
+  /// No description provided for @newQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'New Question'**
+  String get newQuestion;
+
+  /// No description provided for @questionSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your question has been sent. A teacher will respond soon.'**
+  String get questionSent;
+
+  /// No description provided for @broadcastExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Your question request has expired. Please try again.'**
+  String get broadcastExpired;
+
+  /// No description provided for @onlineStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get onlineStatus;
+
+  /// No description provided for @offlineStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get offlineStatus;
+
+  /// No description provided for @lastSeen.
+  ///
+  /// In en, this message translates to:
+  /// **'Last seen'**
+  String get lastSeen;
+
+  /// No description provided for @accept.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept'**
+  String get accept;
+
+  /// No description provided for @decline.
+  ///
+  /// In en, this message translates to:
+  /// **'Decline'**
+  String get decline;
+
+  /// No description provided for @markAsRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as read'**
+  String get markAsRead;
+
+  /// No description provided for @allMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'All Messages'**
+  String get allMessages;
+
+  /// No description provided for @chatError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect to chat server'**
+  String get chatError;
+
+  /// No description provided for @connecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting...'**
+  String get connecting;
+
+  /// No description provided for @connectionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection error. Retrying...'**
+  String get connectionError;
+
+  /// No description provided for @authError.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentication error'**
+  String get authError;
+
+  /// No description provided for @disconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnected'**
+  String get disconnected;
+
+  /// No description provided for @createBroadcast.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new question to get help'**
+  String get createBroadcast;
+
+  /// No description provided for @noSearchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No matching results'**
+  String get noSearchResults;
+
+  /// No description provided for @openChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Open chat'**
+  String get openChat;
+
+  /// No description provided for @course.
+  ///
+  /// In en, this message translates to:
+  /// **'Course*'**
+  String get course;
+
+  /// No description provided for @selectCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Course'**
+  String get selectCourse;
+
+  /// No description provided for @yourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Name'**
+  String get yourName;
+
+  /// No description provided for @problem.
+  ///
+  /// In en, this message translates to:
+  /// **'Problem*'**
+  String get problem;
+
+  /// No description provided for @problemHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Problem Number'**
+  String get problemHint;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

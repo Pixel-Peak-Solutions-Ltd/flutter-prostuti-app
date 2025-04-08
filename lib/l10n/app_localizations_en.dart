@@ -721,4 +721,106 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get enjoyyourFreeTime => 'Enjoy your free time!';
+
+  @override
+  String get chatTitle => 'Chat';
+
+  @override
+  String get broadcast => 'Ask a Teacher';
+
+  @override
+  String get askQuestion => 'Ask Your Question';
+
+  @override
+  String get questionHint => 'Type your question here...';
+
+  @override
+  String get pendingBroadcasts => 'Pending Questions';
+
+  @override
+  String get activeBroadcasts => 'Active Conversations';
+
+  @override
+  String get noBroadcasts => 'No active requests';
+
+  @override
+  String get noConversations => 'No conversations yet';
+
+  @override
+  String get typeMessage => 'Type a message...';
+
+  @override
+  String get justNow => 'Just now';
+
+  @override
+  String get messageRead => 'Read';
+
+  @override
+  String get newQuestion => 'New Question';
+
+  @override
+  String get questionSent => 'Your question has been sent. A teacher will respond soon.';
+
+  @override
+  String get broadcastExpired => 'Your question request has expired. Please try again.';
+
+  @override
+  String get onlineStatus => 'Online';
+
+  @override
+  String get offlineStatus => 'Offline';
+
+  @override
+  String get lastSeen => 'Last seen';
+
+  @override
+  String get accept => 'Accept';
+
+  @override
+  String get decline => 'Decline';
+
+  @override
+  String get markAsRead => 'Mark as read';
+
+  @override
+  String get allMessages => 'All Messages';
+
+  @override
+  String get chatError => 'Could not connect to chat server';
+
+  @override
+  String get connecting => 'Connecting...';
+
+  @override
+  String get connectionError => 'Connection error. Retrying...';
+
+  @override
+  String get authError => 'Authentication error';
+
+  @override
+  String get disconnected => 'Disconnected';
+
+  @override
+  String get createBroadcast => 'Create a new question to get help';
+
+  @override
+  String get noSearchResults => 'No matching results';
+
+  @override
+  String get openChat => 'Open chat';
+
+  @override
+  String get course => 'Course*';
+
+  @override
+  String get selectCourse => 'Select Course';
+
+  @override
+  String get yourName => 'Your Name';
+
+  @override
+  String get problem => 'Problem*';
+
+  @override
+  String get problemHint => 'Problem Number';
 }
