@@ -823,4 +823,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get problemHint => 'Problem Number';
+
+  @override
+  String get favoriteItems => 'Favourites';
 }

@@ -271,5 +271,6 @@
   "selectCourse": "Select Course",
   "yourName": "Your Name",
   "problem": "Problem*",
-  "problemHint": "Problem Number"
+  "problemHint": "Problem Number",
+  "favoriteItems": "Favourites"
 }

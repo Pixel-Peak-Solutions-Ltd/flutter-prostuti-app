@@ -154,8 +154,19 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
         ref.watch(flashcardDetailNotifierProvider(widget.flashcardId));
 
     return Scaffold(
-      appBar: commonAppbar(
-        widget.flashcardTitle,
+      appBar: AppBar(
+        title: Text(
+          widget.flashcardTitle,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            onPressed: () {
+              Nav().push(const HomeScreen(
+                initialIndex: 1,
+              ));
+            },
+            icon: const Icon(Icons.arrow_back)),
       ),
       body: flashcardDetailAsync.when(
         data: (flashcardDetail) {

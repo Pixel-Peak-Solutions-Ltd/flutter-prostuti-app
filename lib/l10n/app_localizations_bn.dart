@@ -823,4 +823,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get problemHint => 'সমস্যা ২৪.২';
+
+  @override
+  String get favoriteItems => 'ফেভারিট';
 }

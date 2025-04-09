@@ -11,6 +11,8 @@ import 'package:prostuti/features/auth/login/view/login_view.dart';
 import '../../../common/view_model/auth_notifier.dart';
 import '../../../core/configs/app_colors.dart';
 import '../../../core/services/localization_service.dart';
+import '../../course/my_course/view/my_course_view.dart';
+import '../../flashcard/view/favourite_flashcards.dart';
 import '../../payment/view/subscription_view.dart';
 import '../../payment/viewmodel/check_subscription.dart';
 import '../viewmodel/profile_viewmodel.dart';
@@ -166,11 +168,15 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               CustomListTile(
                   icon: "assets/icons/courses.svg",
                   title: context.l10n!.myCourses,
-                  onTap: () {}),
+                  onTap: () {
+                    Nav().push(MyCourseView());
+                  }),
               CustomListTile(
                   icon: "assets/icons/favourites_profile.svg",
                   title: context.l10n!.favorites,
-                  onTap: () {}),
+                  onTap: () {
+                    Nav().push(FavoriteItemsView());
+                  }),
               CustomListTile(
                   icon: "assets/icons/progress_history.svg",
                   title: context.l10n!.testHistory,
@@ -219,10 +225,10 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                     ),
               ),
               const Gap(10),
-              CustomListTile(
-                  icon: "assets/icons/subscription.svg",
-                  title: context.l10n!.subscription,
-                  onTap: () {}),
+              // CustomListTile(
+              //     icon: "assets/icons/subscription.svg",
+              //     title: context.l10n!.subscription,
+              //     onTap: () {}),
               CustomListTile(
                   icon: "assets/icons/customer-support.svg",
                   title: context.l10n!.support,

@@ -1726,6 +1726,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Problem Number'**
   String get problemHint;
+
+  /// No description provided for @favoriteItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Favourites'**
+  String get favoriteItems;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
