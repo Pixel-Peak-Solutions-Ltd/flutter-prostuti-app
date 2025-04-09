@@ -10,6 +10,7 @@ import 'common/view_model/auth_notifier.dart';
 import 'core/configs/app_themes.dart';
 import 'core/services/localization_service.dart';
 import 'core/services/size_config.dart';
+import 'features/splash_screen.dart';
 import 'l10n/app_localizations.dart';
 
 void main() {
@@ -23,7 +24,6 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final themeMode = ref.watch(themeNotifierProvider);
-    final authNotifier = ref.watch(authNotifierProvider);
     final currentLocale = ref.watch(localeProvider);
 
     return MaterialApp(
@@ -44,23 +44,34 @@ class MyApp extends ConsumerWidget {
         Locale('en'),
         Locale('bn'),
       ],
-      home: Builder(
-        builder: (context) {
-          SizeConfig.init(context);
-          return authNotifier.when(
-            data: (token) {
-              if (token != null) {
-                return const HomeScreen(); // User is logged in
-              } else {
-                return const LoginView(); // Redirect to login
-              }
-            },
-            loading: () => const CircularProgressIndicator(),
-            error: (error, stack) =>
-                const LoginView(), // Redirect to login on error
-          );
-        },
+      home: const SplashScreen(),
+    );
+  }
+}
+
+class MainAppContent extends ConsumerWidget {
+  const MainAppContent({super.key});
+
+  @override
+  Widget build(BuildContext context, ref) {
+    final authNotifier = ref.watch(authNotifierProvider);
+
+    SizeConfig.init(context);
+
+    return authNotifier.when(
+      data: (token) {
+        if (token != null) {
+          return const HomeScreen(); // User is logged in
+        } else {
+          return const LoginView(); // Redirect to login
+        }
+      },
+      loading: () => const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
+      error: (error, stack) => const LoginView(), // Redirect to login on error
     );
   }
 }
