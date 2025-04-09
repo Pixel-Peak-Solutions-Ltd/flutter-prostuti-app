@@ -313,11 +313,7 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.black.withOpacity(0.8),
-          ),
+          style: Theme.of(context).textTheme.bodySmall,
         ),
         const Gap(8),
         child,
