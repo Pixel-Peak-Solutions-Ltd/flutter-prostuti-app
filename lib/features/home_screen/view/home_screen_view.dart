@@ -10,6 +10,7 @@ import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/chat/view/chat_view.dart';
 import 'package:prostuti/features/course/course_list/view/course_list_view.dart';
 import 'package:prostuti/features/course/my_course/view/my_course_view.dart';
+import 'package:prostuti/features/leaderboard/widgets/leaderboard_section.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -22,7 +23,6 @@ import '../../profile/view/profile_view.dart';
 import '../../profile/viewmodel/profile_viewmodel.dart';
 import '../widget/category_card.dart';
 import '../widget/home_routine.dart';
-import '../widget/leaderboard_card.dart';
 
 // Updated provider to avoid unnecessary API calls
 final cachedUserProfileProvider = Provider.autoDispose((ref) {
@@ -222,10 +222,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const Gap(8),
               _buildFlashcardSection(maxWidth),
               const Gap(16),
-              _buildSectionHeader(context, "স্টুডেন্ট লিডারবোর্ড"),
-              const Gap(8),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: LeaderboardSection(),
               ),
               const Gap(16), // Bottom padding for scrolling

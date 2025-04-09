@@ -15,6 +15,7 @@ import 'package:prostuti/features/course/materials/record_class/view/record_clas
 import 'package:prostuti/features/course/materials/resources/view/resources_view.dart';
 import 'package:prostuti/features/course/materials/shared/widgets/trailing_icon.dart';
 import 'package:prostuti/features/course/materials/test/view/test_view.dart';
+import 'package:prostuti/features/leaderboard/view/course_leaderboard_view.dart';
 
 import '../../course_details/widgets/expandable_text.dart';
 import '../../materials/get_material_completion.dart';
@@ -122,6 +123,10 @@ enum GridItem {
         break;
       case GridItem.routine:
         Nav().push(CourseRoutineView());
+      case GridItem.leaderboard:
+        Nav().push(CourseLeaderboardView(
+          courseId: courseId,
+        ));
       default:
         // TODO: Implement navigation for other grid items
         break;

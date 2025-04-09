@@ -190,3 +190,17 @@ class AppTheme {
     ),
   );
 }
+
+extension LeaderboardColors on ThemeData {
+  Color get leaderboardFirst => brightness == Brightness.light
+      ? AppColors.leaderboardFirstLight
+      : AppColors.leaderboardFirstDark;
+
+  Color get leaderboardSecond => brightness == Brightness.light
+      ? AppColors.leaderboardSecondLight
+      : AppColors.leaderboardSecondDark;
+
+  Color get leaderboardThird => brightness == Brightness.light
+      ? AppColors.leaderboardThirdLight
+      : AppColors.leaderboardThirdDark;
+}
