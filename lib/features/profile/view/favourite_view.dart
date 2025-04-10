@@ -1,7 +1,6 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
@@ -11,7 +10,7 @@ import 'package:prostuti/features/flashcard/viewmodel/flashcard_favourite_viewmo
 import 'package:prostuti/features/flashcard/widgets/flashcard_card.dart';
 import 'package:swipable_stack/swipable_stack.dart';
 
-import '../repository/flashcard_fav_repo.dart';
+import '../../flashcard/repository/flashcard_fav_repo.dart';
 
 // We'll use the enhanced provider from flashcard_favorite_repository.dart
 
@@ -127,7 +126,6 @@ class FavoriteItemsViewState extends ConsumerState<FavoriteItemsView>
       appBar: commonAppbar(context.l10n!.favoriteItems),
       body: Column(
         children: [
-          // Tab buttons
           Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -182,7 +180,7 @@ class FavoriteItemsViewState extends ConsumerState<FavoriteItemsView>
                       ),
                       child: Center(
                         child: Text(
-                          context.l10n!.questionHint,
+                          "Questions",
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall!
@@ -247,35 +245,6 @@ class FavoriteItemsViewState extends ConsumerState<FavoriteItemsView>
 
         return Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.arrow_back_ios_rounded,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 30,
-                    ),
-                    onPressed: _previousCard,
-                  ),
-                  Text(
-                    context.l10n!.swipe,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  InkWell(
-                    onTap: _nextCard,
-                    child: SvgPicture.asset(
-                      "assets/icons/flashcard_next.svg",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),

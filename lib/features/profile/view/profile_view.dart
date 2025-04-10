@@ -12,13 +12,13 @@ import '../../../common/view_model/auth_notifier.dart';
 import '../../../core/configs/app_colors.dart';
 import '../../../core/services/localization_service.dart';
 import '../../course/my_course/view/my_course_view.dart';
-import '../../flashcard/view/favourite_flashcards.dart';
 import '../../payment/view/subscription_view.dart';
 import '../../payment/viewmodel/check_subscription.dart';
 import '../viewmodel/profile_viewmodel.dart';
 import '../widgets/ProfileSkeleton.dart';
 import '../widgets/custom_list_tile.dart';
 import '../widgets/logout_button.dart';
+import 'favourite_view.dart';
 
 class UserProfileView extends ConsumerWidget with CommonWidgets {
   UserProfileView({super.key});
