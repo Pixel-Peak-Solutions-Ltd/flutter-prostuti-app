@@ -826,4 +826,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get favoriteItems => 'ফেভারিট';
+
+  @override
+  String get allActivities => 'সব এক্টিভিটিস';
 }

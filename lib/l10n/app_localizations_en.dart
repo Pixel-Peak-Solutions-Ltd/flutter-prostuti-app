@@ -826,4 +826,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get favoriteItems => 'Favourites';
+
+  @override
+  String get allActivities => 'All Activities';
 }

@@ -272,5 +272,6 @@
   "yourName": "Your Name",
   "problem": "Problem*",
   "problemHint": "Problem Number",
-  "favoriteItems": "Favourites"
+  "favoriteItems": "Favourites",
+  "allActivities": "All Activities"
 }

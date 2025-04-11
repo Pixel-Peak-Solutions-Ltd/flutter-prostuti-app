@@ -204,3 +204,38 @@ extension LeaderboardColors on ThemeData {
       ? AppColors.leaderboardThirdLight
       : AppColors.leaderboardThirdDark;
 }
+
+// Add this extension at the end of the AppTheme.dart file
+extension ActivityColors on ThemeData {
+  Color get classColor =>
+      brightness == Brightness.light ? Colors.green : Colors.green.shade700;
+
+  Color get assignmentColor =>
+      brightness == Brightness.light ? Colors.amber : Colors.amber.shade700;
+
+  Color get examColor =>
+      brightness == Brightness.light ? Colors.red : Colors.red.shade700;
+
+  Color get resourceColor =>
+      brightness == Brightness.light ? Colors.blue : Colors.blue.shade700;
+
+  Color get classBgColor => brightness == Brightness.light
+      ? Colors.green.shade100
+      : Colors.green.shade900;
+
+  Color get assignmentBgColor => brightness == Brightness.light
+      ? Colors.amber.shade100
+      : Colors.amber.shade900;
+
+  Color get examBgColor => brightness == Brightness.light
+      ? Colors.red.shade100
+      : Colors.red.shade900;
+
+  Color get resourceBgColor => brightness == Brightness.light
+      ? Colors.blue.shade100
+      : Colors.blue.shade900;
+
+  Color get timelineColor => brightness == Brightness.light
+      ? Colors.grey.shade300
+      : Colors.grey.shade700;
+}

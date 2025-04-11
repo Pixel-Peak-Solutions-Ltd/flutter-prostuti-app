@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/localization_service.dart';
@@ -19,25 +22,52 @@ class RoutineView extends ConsumerStatefulWidget {
 class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  CalendarFormat _calendarFormat = CalendarFormat.week;
 
-  final Map<String, Color> _activityColors = {
-    'Class': Colors.green,
-    'Assignment': Colors.amber,
-    'Exam': Colors.red,
-    'Resource': Colors.blue,
+  final Map<String, Color> _lightModeActivityColors = {
+    'Class': const Color(0xFF4CAF50),
+    'Assignment': const Color(0xFFFF9800),
+    'Exam': const Color(0xFFE53935),
+    'Resource': const Color(0xFF2196F3),
   };
+
+  final Map<String, Color> _darkModeActivityColors = {
+    'Class': const Color(0xFF81C784),
+    'Assignment': const Color(0xFFFFB74D),
+    'Exam': const Color(0xFFEF5350),
+    'Resource': const Color(0xFF64B5F6),
+  };
+
+  Map<String, Color> get _activityColors {
+    return Theme.of(context).brightness == Brightness.dark
+        ? _darkModeActivityColors
+        : _lightModeActivityColors;
+  }
 
   @override
   Widget build(BuildContext context) {
     final routineAsync = ref.watch(routineViewModelProvider);
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Text(
+          context.l10n?.routine ?? 'Routine',
+          style: GoogleFonts.outfit(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       body: routineAsync.when(
         data: (activities) => _buildRoutineContent(activities),
         loading: () => const CourseDetailsSkeleton(),
         error: (error, stack) => Center(
-          child: Text('${context.l10n?.error}: $error'),
+          child: Text(
+            '${context.l10n?.error}: $error',
+            style: GoogleFonts.outfit(),
+          ),
         ),
       ),
     );
@@ -46,24 +76,39 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
   Widget _buildRoutineContent(List<RoutineActivity> activities) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Calendar section
-            _buildCalendar(),
-            const Gap(20),
+            _buildCalendar().animate().fadeIn(duration: 400.ms),
+            const Gap(28),
 
             // Selected day section with activity buttons
-            _buildSelectedDaySection(),
-            const Gap(16),
+            _buildSelectedDaySection().animate().slideX(
+                  begin: -0.1,
+                  end: 0,
+                  delay: 100.ms,
+                  duration: 400.ms,
+                ),
+            const Gap(24),
 
             // Daily activities timeline
-            _buildDailyActivitiesTimeline(),
-            const Gap(25),
+            _buildDailyActivitiesTimeline().animate().slideX(
+                  begin: -0.1,
+                  end: 0,
+                  delay: 200.ms,
+                  duration: 500.ms,
+                ),
+            const Gap(32),
 
             // Upcoming activity section
-            _buildUpcomingActivitySection(),
+            _buildUpcomingActivitySection().animate().slideX(
+                  begin: -0.1,
+                  end: 0,
+                  delay: 300.ms,
+                  duration: 500.ms,
+                ),
           ],
         ),
       ),
@@ -71,51 +116,127 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
   }
 
   Widget _buildCalendar() {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isDarkMode ? const Color(0xFF2A2D37) : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: isDarkMode
+                ? Colors.black.withOpacity(0.15)
+                : Colors.black.withOpacity(0.05),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: TableCalendar(
-          firstDay: DateTime.utc(2020, 1, 1),
-          lastDay: DateTime.utc(2030, 12, 31),
-          focusedDay: _focusedDay,
-          calendarFormat: _calendarFormat,
-          selectedDayPredicate: (day) {
-            return isSameDay(_selectedDay, day);
-          },
-          onDaySelected: (selectedDay, focusedDay) {
-            setState(() {
-              _selectedDay = selectedDay;
-              _focusedDay = focusedDay;
-            });
-          },
-          onFormatChanged: (format) {
-            setState(() {
-              _calendarFormat = format;
-            });
-          },
-          onPageChanged: (focusedDay) {
-            _focusedDay = focusedDay;
-          },
-          calendarStyle: const CalendarStyle(
-            outsideDaysVisible: true,
-            weekendTextStyle: TextStyle(color: Colors.red),
-          ),
-          headerStyle: HeaderStyle(
-            titleCentered: true,
-            formatButtonVisible: false,
-            titleTextStyle: Theme.of(context).textTheme.titleMedium!,
-          ),
-          calendarBuilders: CalendarBuilders(
-            markerBuilder: (context, date, events) {
-              final eventTypes = ref
-                  .read(routineViewModelProvider.notifier)
-                  .getEventTypesForDay(date);
-              return _buildEventMarkers(eventTypes);
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: TableCalendar(
+            firstDay: DateTime.utc(2020, 1, 1),
+            lastDay: DateTime.utc(2030, 12, 31),
+            focusedDay: _focusedDay,
+            calendarFormat: _calendarFormat,
+            selectedDayPredicate: (day) {
+              return isSameDay(_selectedDay, day);
             },
+            onDaySelected: (selectedDay, focusedDay) {
+              setState(() {
+                _selectedDay = selectedDay;
+                _focusedDay = focusedDay;
+              });
+            },
+            onFormatChanged: (format) {
+              setState(() {
+                _calendarFormat = format;
+              });
+            },
+            onPageChanged: (focusedDay) {
+              _focusedDay = focusedDay;
+            },
+            calendarStyle: CalendarStyle(
+              outsideDaysVisible: true,
+              weekendTextStyle: TextStyle(
+                color: isDarkMode ? Colors.red.shade300 : Colors.red.shade700,
+              ),
+              todayDecoration: BoxDecoration(
+                color: isDarkMode
+                    ? const Color(0xFF3D5AFE).withOpacity(0.25)
+                    : const Color(0xFF3D5AFE).withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              todayTextStyle: TextStyle(
+                color: isDarkMode ? Colors.white : const Color(0xFF3D5AFE),
+                fontWeight: FontWeight.bold,
+              ),
+              selectedDecoration: BoxDecoration(
+                color: isDarkMode
+                    ? const Color(0xFF3D5AFE)
+                    : const Color(0xFF3D5AFE),
+                shape: BoxShape.circle,
+              ),
+              selectedTextStyle: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+              defaultTextStyle: TextStyle(
+                color: isDarkMode ? Colors.white70 : Colors.black87,
+              ),
+              weekNumberTextStyle: TextStyle(
+                color: isDarkMode ? Colors.white38 : Colors.black38,
+              ),
+            ),
+            headerStyle: HeaderStyle(
+              titleCentered: true,
+              formatButtonVisible: true,
+              formatButtonDecoration: BoxDecoration(
+                color: isDarkMode
+                    ? const Color(0xFF3D5AFE).withOpacity(0.2)
+                    : const Color(0xFF3D5AFE).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              formatButtonTextStyle: TextStyle(
+                color: isDarkMode ? Colors.white70 : const Color(0xFF3D5AFE),
+                fontWeight: FontWeight.w500,
+              ),
+              titleTextStyle: GoogleFonts.outfit(
+                color: isDarkMode ? Colors.white : Colors.black87,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+              leftChevronIcon: Icon(
+                Icons.chevron_left_rounded,
+                color: isDarkMode ? Colors.white70 : Colors.black54,
+                size: 28,
+              ),
+              rightChevronIcon: Icon(
+                Icons.chevron_right_rounded,
+                color: isDarkMode ? Colors.white70 : Colors.black54,
+                size: 28,
+              ),
+            ),
+            daysOfWeekStyle: DaysOfWeekStyle(
+              weekdayStyle: GoogleFonts.outfit(
+                color: isDarkMode ? Colors.white60 : Colors.black54,
+                fontWeight: FontWeight.w500,
+              ),
+              weekendStyle: GoogleFonts.outfit(
+                color: isDarkMode ? Colors.red.shade300 : Colors.red.shade700,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            calendarBuilders: CalendarBuilders(
+              markerBuilder: (context, date, events) {
+                final eventTypes = ref
+                    .read(routineViewModelProvider.notifier)
+                    .getEventTypesForDay(date);
+                return _buildEventMarkers(eventTypes);
+              },
+            ),
           ),
         ),
       ),
@@ -154,30 +275,51 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
 
   Widget _buildSelectedDaySection() {
     final formattedDate = DateFormat('EEEE, MMMM d, yyyy').format(_selectedDay);
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          formattedDate,
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isDarkMode
+                    ? const Color(0xFF3D5AFE).withOpacity(0.2)
+                    : const Color(0xFF3D5AFE).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
               ),
+              child: Icon(
+                Icons.event_rounded,
+                color: isDarkMode ? Colors.white70 : const Color(0xFF3D5AFE),
+                size: 20,
+              ),
+            ),
+            const Gap(12),
+            Text(
+              formattedDate,
+              style: GoogleFonts.outfit(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: isDarkMode ? Colors.white : Colors.black87,
+              ),
+            ),
+          ],
         ),
-        const Gap(12),
+        const Gap(16),
         Row(
           children: [
             Expanded(
-              child: _buildCategoryButton('Class', Colors.green.shade100),
+              child: _buildCategoryButton('Class'),
             ),
-            const Gap(8),
+            const Gap(12),
             Expanded(
-              child: _buildCategoryButton('Assignment', Colors.amber.shade100),
+              child: _buildCategoryButton('Assignment'),
             ),
-            const Gap(8),
+            const Gap(12),
             Expanded(
-              child: _buildCategoryButton('Exam', Colors.red.shade100),
+              child: _buildCategoryButton('Exam'),
             ),
           ],
         ),
@@ -185,7 +327,7 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
     );
   }
 
-  Widget _buildCategoryButton(String title, Color color) {
+  Widget _buildCategoryButton(String title) {
     String translatedTitle;
     switch (title) {
       case 'Class':
@@ -204,22 +346,58 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
         translatedTitle = title;
     }
 
-    return Container(
-      height: 40,
+    final color = _activityColors[title] ?? Colors.grey;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      height: 50,
       decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(8),
+        color: isDarkMode ? color.withOpacity(0.2) : color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: color.withOpacity(isDarkMode ? 0.3 : 0.3),
+          width: 1.5,
+        ),
       ),
       child: Center(
-        child: Text(
-          translatedTitle,
-          style: TextStyle(
-            color: _activityColors[title] ?? Colors.black,
-            fontWeight: FontWeight.w500,
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              _getIconForActivityType(title),
+              color: color,
+              height: 18,
+              width: 18,
+            ),
+            const Gap(8),
+            Text(
+              translatedTitle,
+              style: GoogleFonts.outfit(
+                color: color,
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  String _getIconForActivityType(String type) {
+    switch (type) {
+      case 'Class':
+        return "assets/icons/record_class.svg";
+      case 'Assignment':
+        return "assets/icons/assignment.svg";
+      case 'Exam':
+        return "assets/icons/test.svg";
+      case 'Resource':
+        return "assets/icons/resource.svg";
+      default:
+        return "assets/icons/record_class.svg";
+    }
   }
 
   Widget _buildDailyActivitiesTimeline() {
@@ -227,42 +405,107 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
         .read(routineViewModelProvider.notifier)
         .getActivitiesForDay(_selectedDay);
 
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          context.l10n?.activity ?? 'Activity',
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isDarkMode
+                    ? const Color(0xFF3D5AFE).withOpacity(0.2)
+                    : const Color(0xFF3D5AFE).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
               ),
+              child: Icon(
+                Icons.schedule_rounded,
+                color: isDarkMode ? Colors.white70 : const Color(0xFF3D5AFE),
+                size: 20,
+              ),
+            ),
+            const Gap(12),
+            Text(
+              context.l10n?.activity ?? 'Activity',
+              style: GoogleFonts.outfit(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: isDarkMode ? Colors.white : Colors.black87,
+              ),
+            ),
+          ],
         ),
-        const Gap(16),
+        const Gap(20),
         if (activitiesForDay.isEmpty)
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0),
-              child: Text(
-                context.l10n?.noActivitiesForDay ??
-                    'No activities for this day',
-                style: Theme.of(context).textTheme.bodyMedium,
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: isDarkMode
+                  ? const Color(0xFF2A2D37)
+                  : const Color(0xFFF5F5F7),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isDarkMode
+                    ? Colors.white.withOpacity(0.05)
+                    : Colors.black.withOpacity(0.05),
+              ),
+            ),
+            child: Center(
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.event_busy_rounded,
+                    size: 48,
+                    color: isDarkMode ? Colors.white30 : Colors.black26,
+                  ),
+                  const Gap(16),
+                  Text(
+                    context.l10n?.noActivitiesForDay ??
+                        'No activities for this day',
+                    style: GoogleFonts.outfit(
+                      color: isDarkMode ? Colors.white54 : Colors.black54,
+                      fontSize: 15,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
           )
         else
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: activitiesForDay.length,
-            itemBuilder: (context, index) {
-              final activity = activitiesForDay[index];
-              final bool isLastItem = index == activitiesForDay.length - 1;
+          Container(
+            decoration: BoxDecoration(
+              color: isDarkMode ? const Color(0xFF2A2D37) : Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: isDarkMode
+                      ? Colors.black.withOpacity(0.15)
+                      : Colors.black.withOpacity(0.05),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: activitiesForDay.length,
+                itemBuilder: (context, index) {
+                  final activity = activitiesForDay[index];
+                  final bool isLastItem = index == activitiesForDay.length - 1;
 
-              return _buildActivityTimelineItem(
-                activity: activity,
-                isLastItem: isLastItem,
-              );
-            },
+                  return _buildActivityTimelineItem(
+                    activity: activity,
+                    isLastItem: isLastItem,
+                  );
+                },
+              ),
+            ),
           ),
       ],
     );
@@ -273,6 +516,7 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
     required bool isLastItem,
   }) {
     final color = _activityColors[activity.type] ?? Colors.grey;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     // Translate the activity type
     String translatedType;
@@ -311,38 +555,89 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
                 decoration: BoxDecoration(
                   color: color,
                   shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: color.withOpacity(0.3),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
               ),
               if (!isLastItem)
                 Container(
                   width: 2,
-                  height: 50,
-                  color: Colors.grey.shade300,
+                  height: 60,
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        color,
+                        color.withOpacity(0.3),
+                      ],
+                    ),
+                  ),
                 ),
             ],
           ),
         ),
-        const Gap(12),
+        const Gap(16),
         // Activity content
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '$translatedType $timeText',
-                style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                      fontWeight: FontWeight.bold,
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(isDarkMode ? 0.2 : 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SvgPicture.asset(
+                      _getIconForActivityType(activity.type),
+                      color: color,
+                      height: 16,
+                      width: 16,
                     ),
+                    const Gap(6),
+                    Text(
+                      translatedType,
+                      style: GoogleFonts.outfit(
+                        color: color,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Gap(8),
+              Text(
+                timeText,
+                style: GoogleFonts.outfit(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15,
+                  color: isDarkMode ? Colors.white70 : Colors.black87,
+                ),
               ),
               if (activity.details != null && activity.details!.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
+                  padding: const EdgeInsets.only(top: 6.0),
                   child: Text(
                     activity.details!,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: GoogleFonts.outfit(
+                      fontSize: 14,
+                      color: isDarkMode ? Colors.white54 : Colors.black54,
+                    ),
                   ),
                 ),
-              const Gap(16),
+              const Gap(24),
             ],
           ),
         ),
@@ -355,52 +650,101 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
         .read(routineViewModelProvider.notifier)
         .getGroupedUpcomingActivities();
 
-    if (groupedUpcomingActivities.isEmpty) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            context.l10n?.upcomingActivity ?? 'Upcoming Activity',
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-          ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 24.0),
-              child: Text(
-                context.l10n?.noUpcomingActivities ?? 'No upcoming activities',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ),
-          ),
-        ],
-      );
-    }
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          context.l10n?.upcomingActivity ?? 'Upcoming Activity',
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: isDarkMode
+                    ? const Color(0xFF3D5AFE).withOpacity(0.2)
+                    : const Color(0xFF3D5AFE).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
               ),
+              child: Icon(
+                Icons.upcoming_rounded,
+                color: isDarkMode ? Colors.white70 : const Color(0xFF3D5AFE),
+                size: 20,
+              ),
+            ),
+            const Gap(12),
+            Text(
+              context.l10n?.upcomingActivity ?? 'Upcoming Activity',
+              style: GoogleFonts.outfit(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: isDarkMode ? Colors.white : Colors.black87,
+              ),
+            ),
+          ],
         ),
-        const Gap(16),
-        ...groupedUpcomingActivities.entries.map((entry) {
-          final dateString = entry.key;
-          final activities = entry.value;
+        const Gap(20),
+        if (groupedUpcomingActivities.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: isDarkMode
+                  ? const Color(0xFF2A2D37)
+                  : const Color(0xFFF5F5F7),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isDarkMode
+                    ? Colors.white.withOpacity(0.05)
+                    : Colors.black.withOpacity(0.05),
+              ),
+            ),
+            child: Center(
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.calendar_today_rounded,
+                    size: 48,
+                    color: isDarkMode ? Colors.white30 : Colors.black26,
+                  ),
+                  const Gap(16),
+                  Text(
+                    context.l10n?.noUpcomingActivities ??
+                        'No upcoming activities',
+                    style: GoogleFonts.outfit(
+                      color: isDarkMode ? Colors.white54 : Colors.black54,
+                      fontSize: 15,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          )
+        else
+          ...groupedUpcomingActivities.entries.map((entry) {
+            final dateString = entry.key;
+            final activities = entry.value;
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: activities.map((activity) {
-              return _buildUpcomingActivityCard(activity, dateString);
-            }).toList(),
-          );
-        }).toList(),
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 12, bottom: 12),
+                  child: Text(
+                    dateString,
+                    style: GoogleFonts.outfit(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                      color: isDarkMode ? Colors.white70 : Colors.black87,
+                    ),
+                  ),
+                ),
+                ...activities.map((activity) {
+                  return _buildUpcomingActivityCard(activity, dateString);
+                }).toList(),
+                const Gap(24),
+              ],
+            );
+          }).toList(),
       ],
     );
   }
@@ -408,6 +752,7 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
   Widget _buildUpcomingActivityCard(
       RoutineActivity activity, String dateString) {
     final color = _activityColors[activity.type] ?? Colors.grey;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     // Translate the activity type
     String translatedType;
@@ -432,49 +777,84 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade200),
-          borderRadius: BorderRadius.circular(8),
+          color: isDarkMode ? const Color(0xFF2A2D37) : Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: isDarkMode
+                  ? Colors.black.withOpacity(0.15)
+                  : Colors.black.withOpacity(0.05),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Activity type badge
             Container(
-              width: 120,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.2),
+                color: color.withOpacity(isDarkMode ? 0.2 : 0.1),
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  bottomRight: Radius.circular(8),
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
+                ),
+                border: Border(
+                  bottom: BorderSide(
+                    color: color.withOpacity(0.2),
+                    width: 1,
+                  ),
                 ),
               ),
-              child: Text(
-                translatedType,
-                style: TextStyle(
-                  color: color,
-                  fontWeight: FontWeight.bold,
-                ),
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    _getIconForActivityType(activity.type),
+                    color: color,
+                    height: 20,
+                    width: 20,
+                  ),
+                  const Gap(10),
+                  Text(
+                    translatedType,
+                    style: GoogleFonts.outfit(
+                      color: color,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 15,
+                    ),
+                  ),
+                ],
               ),
             ),
             // Activity details
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Text(
-                    dateString,
-                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                          fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          activity.details ?? activity.type,
+                          style: GoogleFonts.outfit(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 15,
+                            color: isDarkMode ? Colors.white : Colors.black87,
+                          ),
                         ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '${context.l10n?.dueTill ?? 'Due till'} ${activity.timeString}',
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Colors.grey.shade700,
+                        const Gap(6),
+                        Text(
+                          '${context.l10n?.dueTill ?? 'Due till'} ${activity.timeString}',
+                          style: GoogleFonts.outfit(
+                            fontSize: 14,
+                            color: isDarkMode ? Colors.white54 : Colors.black54,
+                          ),
                         ),
+                      ],
+                    ),
                   ),
                 ],
               ),

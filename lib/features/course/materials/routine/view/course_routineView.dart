@@ -15,7 +15,6 @@ class CourseRoutineView extends ConsumerWidget with CommonWidgets {
     final courseDetailsAsync = ref.watch(courseDetailsViewmodelProvider);
 
     return Scaffold(
-      appBar: commonAppbar(context.l10n?.routine ?? 'Routine'),
       body: courseDetailsAsync.when(
         data: (_) => const RoutineView(),
         loading: () => const CourseDetailsSkeleton(),

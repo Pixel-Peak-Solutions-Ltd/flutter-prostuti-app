@@ -272,5 +272,6 @@
   "yourName": "আপনার নাম",
   "problem": "সমস্যা*",
   "problemHint": "সমস্যা ২৪.২",
-  "favoriteItems": "ফেভারিট"
+  "favoriteItems": "ফেভারিট",
+  "allActivities": "সব এক্টিভিটিস"
 }
