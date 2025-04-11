@@ -523,7 +523,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
       id: data.data!.sId!,
       name: data.data!.name!,
       imgPath: data.data!.image!.path!,
-      price: currencyFormatter.format(data.data!.price),
+      price: data.data!.price.toString(),
     ));
   }
 
