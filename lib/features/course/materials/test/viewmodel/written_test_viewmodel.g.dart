@@ -7,7 +7,7 @@ part of 'written_test_viewmodel.dart';
 // **************************************************************************
 
 String _$writtenTestListViewmodelHash() =>
-    r'6644bbd547787075c467b5fb5db47195157298a3';
+    r'557d114cc5ffa1f9e4c78c2286708904aed97a0f';
 
 /// See also [WrittenTestListViewmodel].
 @ProviderFor(WrittenTestListViewmodel)

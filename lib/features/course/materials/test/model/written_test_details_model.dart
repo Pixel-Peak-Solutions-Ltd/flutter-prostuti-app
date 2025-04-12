@@ -32,6 +32,7 @@ class Data {
   String? publishDate;
   List<QuestionList>? questionList;
   String? createdBy;
+  bool? isCompleted;
   String? updatedBy;
   String? createdAt;
   String? updatedAt;
@@ -47,6 +48,7 @@ class Data {
         this.publishDate,
         this.questionList,
         this.createdBy,
+        this.isCompleted,
         this.updatedBy,
         this.createdAt,
         this.updatedAt,
@@ -69,6 +71,7 @@ class Data {
       });
     }
     createdBy = json['createdBy'];
+    isCompleted = json['isCompleted'];
     updatedBy = json['updatedBy'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
@@ -90,6 +93,7 @@ class Data {
       data['questionList'] = this.questionList!.map((v) => v.toJson()).toList();
     }
     data['createdBy'] = this.createdBy;
+    data['isCompleted'] = this.isCompleted;
     data['updatedBy'] = this.updatedBy;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
@@ -141,11 +145,13 @@ class QuestionList {
   String? categoryId;
   String? title;
   String? description;
+  bool? hasImage;
   String? createdBy;
   String? updatedBy;
   String? createdAt;
   String? updatedAt;
   int? iV;
+  ImageDetails? image;
 
   QuestionList(
       {this.sId,
@@ -153,11 +159,13 @@ class QuestionList {
         this.categoryId,
         this.title,
         this.description,
+        this.hasImage,
         this.createdBy,
         this.updatedBy,
         this.createdAt,
         this.updatedAt,
-        this.iV});
+        this.iV,
+        this.image});
 
   QuestionList.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -165,11 +173,13 @@ class QuestionList {
     categoryId = json['category_id'];
     title = json['title'];
     description = json['description'];
+    hasImage = json['hasImage'];
     createdBy = json['createdBy'];
     updatedBy = json['updatedBy'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
+    image = json['image'] != null ? new ImageDetails.fromJson(json['image']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -179,11 +189,48 @@ class QuestionList {
     data['category_id'] = this.categoryId;
     data['title'] = this.title;
     data['description'] = this.description;
+    data['hasImage'] = this.hasImage;
     data['createdBy'] = this.createdBy;
     data['updatedBy'] = this.updatedBy;
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     data['__v'] = this.iV;
+    if (this.image != null) {
+      data['image'] = this.image!.toJson();
+    }
+    return data;
+  }
+}
+
+class ImageDetails {
+  String? diskType;
+  String? path;
+  String? originalName;
+  String? modifiedName;
+  String? fileId;
+
+  ImageDetails(
+      {this.diskType,
+        this.path,
+        this.originalName,
+        this.modifiedName,
+        this.fileId});
+
+  ImageDetails.fromJson(Map<String, dynamic> json) {
+    diskType = json['diskType'];
+    path = json['path'];
+    originalName = json['originalName'];
+    modifiedName = json['modifiedName'];
+    fileId = json['fileId'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['diskType'] = this.diskType;
+    data['path'] = this.path;
+    data['originalName'] = this.originalName;
+    data['modifiedName'] = this.modifiedName;
+    data['fileId'] = this.fileId;
     return data;
   }
 }

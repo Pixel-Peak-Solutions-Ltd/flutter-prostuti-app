@@ -116,4 +116,18 @@ class TestRepo {
       return Left(errorResponse);
     }
   }
+
+  Future<Either<ErrorResponse, MCQResult>> submitWrittenTest(
+      {required Map<String, dynamic> payload}) async {
+    final response = await _dioService.postRequest("/test-history/submit-written-test",payload);
+
+    if (response.statusCode == 200) {
+      return Right(MCQResult.fromJson(response.data));
+    } else {
+      print(response);
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      ErrorHandler().setErrorMessage(errorResponse.message);
+      return Left(errorResponse);
+    }
+  }
 }

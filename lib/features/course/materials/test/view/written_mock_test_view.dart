@@ -4,10 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
+import 'package:prostuti/features/course/materials/test/view/test_view.dart';
 
 import '../../../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../../../../core/configs/app_colors.dart';
+import '../../../../../core/services/debouncer.dart';
+import '../../../../../core/services/nav.dart';
 import '../../../../../core/services/timer.dart';
+import '../repository/test_repo.dart';
+import '../view/test_result_view.dart';
 import '../viewmodel/written_test_details_viewmodel.dart';
 import '../widgets/build_written_question_item.dart';
 import '../widgets/countdown_timer.dart';
@@ -22,7 +27,9 @@ class WrittenMockTestScreen extends ConsumerStatefulWidget {
 
 class MockTestScreenState extends ConsumerState<WrittenMockTestScreen>
     with CommonWidgets {
-  final Map<int, int?> selectedAnswers = {};
+  final List<Map<String, dynamic>> answerList = [];
+  final _debouncer = Debouncer(milliseconds: 120);
+  final _loadingProvider = StateProvider<bool>((ref) => false);
 
   @override
   void initState() {
@@ -30,6 +37,13 @@ class MockTestScreenState extends ConsumerState<WrittenMockTestScreen>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final testDetails = ref.read(writtenTestDetailsViewmodelProvider);
       testDetails.whenData((test) {
+        for (var question in test.data!.questionList!) {
+          answerList.add({
+            "question_id": question.sId.toString(),
+            "selectedOption": "null",
+          });
+        }
+
         final duration = Duration(minutes: test.data!.time!.toInt());
         ref.read(countdownProvider.notifier).initialize(duration);
         ref.read(countdownProvider.notifier).startTimer();
@@ -37,11 +51,20 @@ class MockTestScreenState extends ConsumerState<WrittenMockTestScreen>
     });
   }
 
+  void updateAnswer(String questionId, String answer) {
+    final index = answerList.indexWhere((item) => item["question_id"] == questionId);
+    if (index != -1) {
+      setState(() {
+        answerList[index]["selectedOption"] = answer;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    final writtenTestDetailsAsync =
-        ref.watch(writtenTestDetailsViewmodelProvider);
+    final writtenTestDetailsAsync = ref.watch(writtenTestDetailsViewmodelProvider);
+    final isLoading = ref.watch(_loadingProvider);
 
     return Scaffold(
       appBar: commonAppbar("মক টেস্ট"),
@@ -58,7 +81,7 @@ class MockTestScreenState extends ConsumerState<WrittenMockTestScreen>
                       borderRadius: BorderRadius.circular(8),
                       color: AppColors.shadeSecondaryLight,
                       border:
-                          Border.all(color: AppColors.borderFocusPrimaryLight),
+                      Border.all(color: AppColors.borderFocusPrimaryLight),
                     ),
                     child: Column(
                       children: [
@@ -66,7 +89,7 @@ class MockTestScreenState extends ConsumerState<WrittenMockTestScreen>
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "বিষয় :",
+                              "বিষয় :",
                               style: theme.textTheme.bodyLarge!.copyWith(
                                   fontWeight: FontWeight.w600,
                                   color: AppColors.borderFocusPrimaryLight),
@@ -117,28 +140,70 @@ class MockTestScreenState extends ConsumerState<WrittenMockTestScreen>
                           questionNumber: index + 1,
                           theme: theme,
                           questionList: test.data!.questionList![index],
+                          onAnswerChange: updateAnswer,
                         );
                       },
                     ),
                   ),
-                  LongButton(
+                  isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : LongButton(
                       onPressed: () {
-                       /* print("Selected Answers: $selectedAnswers");
-                        checkCorrectAns();*/
-                        Fluttertoast.showToast(msg: "Coming soon");
+                        if (answerList.any((answer) => answer['selectedOption'].isNotEmpty)) {
+                          _submitTest(test);
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: "You need to submit at least 1 answer.",
+                          );
+                        }
                       },
-                      text: "সাবমিট করুন")
+                      text: "সাবমিট করুন"
+                  )
                 ],
               );
             },
             error: (error, stackTrace) {
               print(error);
               print(stackTrace);
+              return Text("Error: ${error.toString()}");
             },
             loading: () => const MockQuestionSkeleton(),
           )),
     );
   }
 
-  void checkCorrectAns() {}
+  Future<void> _submitTest(dynamic test) async {
+    _debouncer.run(
+      action: () async {
+        print("Submitting answers: $answerList");
+        ref.read(countdownProvider.notifier).stopTimer();
+
+        final remainingTime = ref.read(countdownProvider).remainingTime.inSeconds;
+        final totalTime = test.data!.time!.toInt() * 60;
+        final timeTaken = totalTime - remainingTime;
+
+        final payload = {
+          "course_id": test.data!.courseId,
+          "lesson_id": test.data!.lessonId?.sId,
+          "test_id": test.data!.sId,
+          "answers": answerList,
+          "timeTaken": timeTaken,
+        };
+
+        print("payload : $payload");
+        final response = await ref.read(testRepoProvider).submitWrittenTest(payload: payload);
+
+        response.fold(
+              (l) => Fluttertoast.showToast(msg: l.message),
+              (testResult) => _navigateToCourse(),
+        );
+      },
+      loadingController: ref.read(_loadingProvider.notifier),
+    );
+  }
+
+  void _navigateToCourse() {
+    Fluttertoast.showToast(msg: "Test submitted successfully");
+    Nav().pushReplacement(const TestListView());
+  }
 }

@@ -3,6 +3,7 @@ import 'package:prostuti/features/course/materials/test/model/test_model.dart';
 import 'package:prostuti/features/course/materials/test/repository/test_repo.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../course_list/viewmodel/get_course_by_id.dart';
 import '../model/written_test_model.dart';
 
 part 'written_test_viewmodel.g.dart';
@@ -15,10 +16,10 @@ class WrittenTestListViewmodel extends _$WrittenTestListViewmodel {
   }
 
   Future<List<WrittenTestDataList>> getCourseDetails() async {
-    // final String id = ref.watch(getCourseByIdProvider);
+    final String id = ref.watch(getCourseByIdProvider);
     final response = await ref
         .read(testRepoProvider)
-        .getTestWrittenList("676260b2be7381234b0bbe2c");
+        .getTestWrittenList(id);
 
     return response.fold(
           (l) {

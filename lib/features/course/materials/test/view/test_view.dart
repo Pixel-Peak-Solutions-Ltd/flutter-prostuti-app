@@ -113,13 +113,13 @@ class TestListViewState extends ConsumerState<TestListView>
                                 if (isCompleted) {
                                   Nav().push(const MCQMockTestHistoryScreen());
                                 } else {
-                                  if (canAccessTest) {
+                                  // if (canAccessTest) {
                                     Nav().push(const MCQTestDetailsView());
-                                  } else {
+                                  /*} else {
                                     Nav().push(TestMissedView(
                                       testName: test[index].name!,
                                     ));
-                                  }
+                                  }*/
                                 }
                               }
                             : () {},
@@ -143,7 +143,12 @@ class TestListViewState extends ConsumerState<TestListView>
                 loading: () => MaterialListSkeleton(),
               );
             },
-            error: (error, stackTrace) => Text("$error"),
+            error: (error, stackTrace)  {
+              print("Error : $error");
+              print("stackTrace : $stackTrace");
+              return Text("$error");
+
+            } ,
             loading: () => MaterialListSkeleton(),
           ),
           // Written ListView
@@ -188,7 +193,12 @@ class TestListViewState extends ConsumerState<TestListView>
                 loading: () => MaterialListSkeleton(),
               );
             },
-            error: (error, stackTrace) => Text("$error"),
+            error: (error, stackTrace) {
+              print("Error : $error");
+              print("stackTrace : $stackTrace");
+              return Text("$error");
+
+    } ,
             loading: () => MaterialListSkeleton(),
           ),
         ],

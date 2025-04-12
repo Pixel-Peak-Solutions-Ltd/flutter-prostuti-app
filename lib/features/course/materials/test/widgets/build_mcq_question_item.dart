@@ -8,8 +8,8 @@ class MCQQuestionWidget extends StatefulWidget {
   final int questionNumber;
   final ThemeData theme;
   final QuestionList questionList;
-  final Map<int, int?> selectedAnswers; // Tracks selected answers for each question.
-  final List<Map<String, dynamic>> answerList; // List to store answers.
+  final Map<int, int?> selectedAnswers;
+  final List<Map<String, dynamic>> answerList;
 
   const MCQQuestionWidget({
     super.key,
@@ -84,7 +84,7 @@ class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
                     onTap: () {
                       setState(() {
                         widget.selectedAnswers[widget.questionNumber] = index;
-                        updateAnswerList(index); // Update the answer list.
+                        updateAnswerList(index);
                       });
                     },
                     child: Container(
