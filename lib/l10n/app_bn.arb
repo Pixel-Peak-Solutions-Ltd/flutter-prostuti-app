@@ -273,5 +273,18 @@
   "problem": "সমস্যা*",
   "problemHint": "সমস্যা ২৪.২",
   "favoriteItems": "ফেভারিট",
-  "allActivities": "সব এক্টিভিটিস"
+  "allActivities": "সব এক্টিভিটিস",
+  "writeReview": "একটি পর্যালোচনা লিখুন",
+  "noReviewsYet": "এখনও কোন পর্যালোচনা নেই",
+  "beTheFirstToReview": "আপনার অভিজ্ঞতা শেয়ার করতে প্রথম হোন!",
+  "shareYourExperience": "আপনার অভিজ্ঞতা শেয়ার করুন",
+  "reviewTooShort": "পর্যালোচনা খুব ছোট (ন্যূনতম ৫ অক্ষর)",
+  "reviewTooLong": "পর্যালোচনা খুব বড় (সর্বাধিক ১০০০ অক্ষর)",
+  "reviewSubmitted": "পর্যালোচনা সফলভাবে জমা দেওয়া হয়েছে",
+  "errorSubmittingReview": "পর্যালোচনা জমা দেওয়ার সময় ত্রুটি",
+  "reviews": "পর্যালোচনা",
+  "loadingReviews": "পর্যালোচনা লোড হচ্ছে...",
+  "rateYourExperience": "আপনার অভিজ্ঞতা রেট করুন",
+  "submittingReview": "পর্যালোচনা জমা দেওয়া হচ্ছে...",
+  "dismiss": "বাতিল করুন"
 }

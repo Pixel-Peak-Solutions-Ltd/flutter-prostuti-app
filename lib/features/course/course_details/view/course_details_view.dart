@@ -1,16 +1,15 @@
+// course_details_view.dart - Updated with optimized review section
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
-import 'package:prostuti/core/configs/app_colors.dart';
 import 'package:prostuti/core/services/currency_converter.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/core/services/size_config.dart';
 import 'package:prostuti/features/course/course_details/viewmodel/course_details_vm.dart';
-import 'package:prostuti/features/course/course_details/viewmodel/review_see_more_viewModel.dart';
 import 'package:prostuti/features/course/course_details/widgets/course_details_skeleton.dart';
 import 'package:prostuti/features/course/course_enrollment_status.dart';
 import 'package:prostuti/features/payment/repository/payment_repo.dart';
@@ -26,7 +25,7 @@ import '../../enrolled_course_landing/view/enrolled_course_landing_view.dart';
 import '../../my_course/view/my_course_view.dart';
 import '../viewmodel/lesson_see_more_viewmodel.dart';
 import '../widgets/course_details_pills.dart';
-import '../widgets/course_details_review_card.dart';
+import '../widgets/course_review_section.dart';
 import '../widgets/expandable_text.dart';
 
 // Constants for consistent styling
@@ -90,7 +89,12 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
     final isEnrolled = ref.watch(courseEnrollmentStatusProvider);
 
     return Scaffold(
-      appBar: commonAppbar(context.l10n!.coursePreview),
+      appBar: AppBar(
+        title: Text(
+          context.l10n!.coursePreview,
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
       body: courseDetailsAsync.when(
         data: (courseDetails) {
           return _buildMainContent(courseDetails, context);
@@ -113,35 +117,46 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
   }
 
   Widget _buildMainContent(dynamic courseDetails, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: kPadding,
-        vertical: kVerticalPadding,
-      ),
-      child: SingleChildScrollView(
-        child: Container(
+    return CustomScrollView(
+      slivers: [
+        SliverPadding(
           padding: const EdgeInsets.symmetric(
-            vertical: kVerticalPadding,
             horizontal: kPadding,
+            vertical: kVerticalPadding,
           ),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(kBorderRadius),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildCourseHeader(courseDetails, context),
-              const Gap(kGapLarge),
-              _buildAboutSection(courseDetails, context),
-              const Gap(kGapLarge),
-              _buildCurriculumSection(courseDetails, context),
-              const Gap(kGapLarge),
-              _buildReviewsSection(context),
-            ],
+          sliver: SliverToBoxAdapter(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: kVerticalPadding,
+                horizontal: kPadding,
+              ),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(kBorderRadius),
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildCourseHeader(courseDetails, context),
+                  const Gap(kGapLarge),
+                  _buildAboutSection(courseDetails, context),
+                  const Gap(kGapLarge),
+                  _buildCurriculumSection(courseDetails, context),
+                  const Gap(kGapLarge),
+                  // Use the new review section widget
+                  CourseReviewsSection(courseId: courseDetails.data!.sId),
+                ],
+              ),
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -152,13 +167,36 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Image.network(
-            courseDetails.data!.image!.path ??
-                "https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png",
-            fit: BoxFit.cover,
-            width: MediaQuery.sizeOf(context).width,
-            filterQuality: FilterQuality.high,
+          borderRadius: BorderRadius.circular(16.0),
+          child: Stack(
+            children: [
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Image.network(
+                  courseDetails.data!.image!.path ??
+                      "https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png",
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  filterQuality: FilterQuality.high,
+                ),
+              ),
+              // Optional: Add a gradient overlay for better text visibility if needed
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.3),
+                      ],
+                      stops: const [0.7, 1.0],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         const Gap(kGapMedium),
@@ -168,44 +206,53 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
             fontWeight: FontWeight.w800,
           ),
           maxLines: 2,
+          overflow: TextOverflow.ellipsis,
         ),
         const Gap(kGapSmall),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const CourseDetailsPills(
-              value: '4.5 rating',
-              icon: Icons.star_border_outlined,
-            ),
-            Text(
-              courseDetails.data!.priceType == "Free" ||
-                      courseDetails.data!.priceType == "Subscription"
-                  ? "${courseDetails.data!.priceType}"
-                  : currencyFormatter.format(courseDetails.data!.price),
-              style: theme.textTheme.titleLarge!.copyWith(
-                color: AppColors.textActionSecondaryLight,
+            // const CourseDetailsPills(
+            //   value: '4.5 rating',
+            //   icon: "assets/icons/star.svg",
+            // ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 6),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.secondary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                courseDetails.data!.priceType == "Free" ||
+                        courseDetails.data!.priceType == "Subscription"
+                    ? "${courseDetails.data!.priceType}"
+                    : currencyFormatter.format(courseDetails.data!.price),
+                style: theme.textTheme.titleMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
         ),
-        const Gap(21),
+        const Gap(24),
         SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
           child: Row(
             children: [
               CourseDetailsPills(
                 value:
                     '${courseDetails.data!.totalTests} ${context.l10n!.tests}',
-                icon: Icons.menu_book,
+                icon: "assets/icons/test.svg",
               ),
               CourseDetailsPills(
                 value:
                     '${courseDetails.data!.totalRecodedClasses} ${context.l10n!.recordedClasses}',
-                icon: Icons.video_collection_outlined,
+                icon: "assets/icons/record_class.svg",
               ),
               CourseDetailsPills(
                 value:
-                    '${courseDetails.data!.totalLessons} ${context.l10n!.lessons}',
-                icon: Icons.view_module_outlined,
+                    '${courseDetails.data!.totalAssignments} ${context.l10n!.assignment}',
+                icon: "assets/icons/assignment.svg",
               ),
             ],
           ),
@@ -236,28 +283,50 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
         const Gap(kGapMedium),
 
         // Lessons and materials
-        for (int i = 0;
-            i < (lessonMoreBtn ? courseDetails.data!.lessons!.length : 1);
-            i++)
-          if (courseDetails.data!.lessons!.isNotEmpty)
-            _buildLessonExpansionTile(
-                courseDetails.data!.lessons![i], i, theme, context),
+        if (courseDetails.data!.lessons!.isNotEmpty)
+          Container(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.primary.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: theme.colorScheme.onSurface.withOpacity(0.05),
+              ),
+            ),
+            child: Column(
+              children: [
+                for (int i = 0;
+                    i <
+                        (lessonMoreBtn
+                            ? courseDetails.data!.lessons!.length
+                            : 2);
+                    i++)
+                  _buildLessonExpansionTile(
+                      courseDetails.data!.lessons![i], i, theme, context),
+              ],
+            ),
+          ),
 
-        const Gap(kGapSmall),
+        const Gap(16),
 
         // Show more/less button
         Center(
-          child: ElevatedButton(
+          child: ElevatedButton.icon(
+            icon: Icon(
+              lessonMoreBtn ? Icons.expand_less : Icons.expand_more,
+              size: 18,
+            ),
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
+              backgroundColor: theme.colorScheme.primary.withOpacity(0.6),
               elevation: 0,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             ),
             onPressed: () {
-              ref.watch(lessonSeeMoreViewmodelProvider.notifier).toggleBtn();
+              ref.read(lessonSeeMoreViewmodelProvider.notifier).toggleBtn();
             },
-            child: Text(
+            label: Text(
               lessonMoreBtn ? context.l10n!.showLess : context.l10n!.showMore,
               style: theme.textTheme.bodySmall!
                   .copyWith(color: theme.colorScheme.secondary),
@@ -270,13 +339,39 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
 
   Widget _buildLessonExpansionTile(
       dynamic lesson, int index, ThemeData theme, BuildContext context) {
-    return ListTileTheme(
-      contentPadding: const EdgeInsets.all(0),
-      dense: true,
-      horizontalTitleGap: 0.0,
-      minLeadingWidth: 0,
+    return Theme(
+      data: Theme.of(context).copyWith(
+        dividerColor: Colors.transparent,
+      ),
       child: ExpansionTile(
-        title: lessonName(theme, '${lesson.name} ${index + 1} '),
+        collapsedBackgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        leading: Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.secondary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(
+            child: Text(
+              '${index + 1}',
+              style: theme.textTheme.titleMedium!.copyWith(
+                color: theme.colorScheme.secondary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
+        title: Text(
+          lesson.name ?? 'Lesson ${index + 1}',
+          style: theme.textTheme.titleMedium!.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         children: [
           // Recorded Classes
           ...buildMaterialItems(
@@ -342,9 +437,16 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
     required ThemeData theme,
     required BuildContext context,
   }) {
-    return Padding(
-      padding:
-          const EdgeInsets.symmetric(vertical: kGapMedium).copyWith(top: 0),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.primary.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: theme.colorScheme.onSurface.withOpacity(0.05),
+        ),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -359,70 +461,61 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
               ),
               const Gap(kGapSmall),
               SizedBox(
-                width: MediaQuery.sizeOf(context).width * 0.7,
+                width: MediaQuery.sizeOf(context).width * 0.5,
                 child: Text(
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   name,
-                  style: theme.textTheme.bodySmall!.copyWith(
-                    fontWeight: FontWeight.w700,
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
             ],
           ),
-          Icon(
-            Icons.lock_outline_rounded,
-            size: 18,
-            color: Colors.grey.shade600,
+          Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Icon(
+              Icons.lock_outline_rounded,
+              size: 16,
+              color: Colors.grey.shade600,
+            ),
           )
         ],
       ),
     );
   }
 
-  Widget _buildReviewsSection(BuildContext context) {
-    final reviewMoreBtn = ref.watch(reviewSeeMoreViewmodelProvider);
-    final theme = Theme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CourseListHeader(text: context.l10n!.testReviews),
-        const Gap(kGapMedium),
-
-        // Review cards
-        for (int i = 0; i < (reviewMoreBtn ? 10 : 3); i++)
-          const CourseDetailsReviewCard(),
-
-        const Gap(kGapSmall),
-
-        // Show more/less button
-        Center(
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              elevation: 0,
-            ),
-            onPressed: () {
-              ref.watch(reviewSeeMoreViewmodelProvider.notifier).toggleBtn();
-            },
-            child: Text(
-              reviewMoreBtn ? context.l10n!.showLess : context.l10n!.showMore,
-              style: theme.textTheme.bodySmall!
-                  .copyWith(color: theme.colorScheme.secondary),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildErrorWidget(dynamic error, BuildContext context) {
     return Center(
-      child: Text("${context.l10n!.error}: $error"),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.error_outline,
+            size: 64,
+            color: Colors.red,
+          ),
+          const Gap(16),
+          Text(
+            "${context.l10n!.error}: $error",
+            style: Theme.of(context).textTheme.titleMedium,
+            textAlign: TextAlign.center,
+          ),
+          const Gap(24),
+          ElevatedButton.icon(
+            onPressed: () {
+              ref.invalidate(courseDetailsViewmodelProvider);
+            },
+            icon: const Icon(Icons.refresh),
+            label: Text(context.l10n!.tryAgain ?? 'Try Again'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -438,7 +531,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
       height: SizeConfig.h(60),
       padding: const EdgeInsets.symmetric(
         horizontal: kPadding,
-        vertical: kVerticalPadding,
+        vertical: kVerticalPadding / 2,
       ),
       child: courseDetailsAsync.when(
         data: (data) => _buildEnrollButton(
@@ -448,7 +541,13 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
           isEnrolled,
           context,
         ),
-        error: (error, stackTrace) => Text("${context.l10n!.error}: $error"),
+        error: (error, stackTrace) => Center(
+          child: Text(
+            "${context.l10n!.error}: $error",
+            style: Theme.of(context).textTheme.bodyMedium,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
         loading: () => _buildLoadingEnrollButton(context),
       ),
     );
@@ -464,6 +563,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
     final isButtonEnabled = !isLoading &&
         !subscriptionAsyncValue.isLoading &&
         !isEnrolled.isLoading;
+    final theme = Theme.of(context);
 
     return Skeletonizer(
       enabled: isLoading,
@@ -473,13 +573,55 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
             : null,
         child: Skeletonizer(
           enabled: subscriptionAsyncValue.isLoading || isEnrolled.isLoading,
-          child: courseEnrollRow(
-            priceType: data.data!.priceType,
-            price: currencyFormatter.format(data.data!.price),
-            theme: Theme.of(context),
-            title: isEnrolled.value == true
-                ? context.l10n!.visitCourse
-                : context.l10n!.enrollInCourse,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.secondary,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: theme.colorScheme.secondary.withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  data.data!.priceType == "Free"
+                      ? context.l10n!.free ?? 'Free'
+                      : data.data!.priceType == "Subscription"
+                          ? context.l10n!.subscription ?? 'Subscription'
+                          : currencyFormatter.format(data.data!.price),
+                  style: theme.textTheme.titleLarge!.copyWith(
+                    color: theme.colorScheme.onSecondary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Text(
+                      isEnrolled.value == true
+                          ? context.l10n!.visitCourse ?? 'Visit Course'
+                          : context.l10n!.enrollInCourse ?? 'Enroll Now',
+                      style: theme.textTheme.titleMedium!.copyWith(
+                        color: theme.colorScheme.onSecondary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const Gap(8),
+                    Icon(
+                      isEnrolled.value == true
+                          ? Icons.login_rounded
+                          : Icons.arrow_forward_rounded,
+                      color: theme.colorScheme.onSecondary,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -565,11 +707,29 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
   Widget _buildLoadingEnrollButton(BuildContext context) {
     return Skeletonizer(
       enabled: true,
-      child: courseEnrollRow(
-        priceType: "",
-        price: "Free",
-        theme: Theme.of(context),
-        title: "",
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.secondary,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Price",
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
+            ),
+            Text(
+              "Enroll Now",
+              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    color: Theme.of(context).colorScheme.onSecondary,
+                  ),
+            ),
+          ],
+        ),
       ),
     );
   }

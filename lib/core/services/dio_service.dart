@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
 import 'package:prostuti/secrets/secrets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -20,14 +19,14 @@ Dio dio(DioRef ref) {
     connectTimeout: const Duration(seconds: 20),
     receiveTimeout: const Duration(seconds: 60),
   ))
-    ..interceptors.add(
-      PrettyDioLogger(
-        responseBody: true,
-        error: true,
-        compact: true,
-        maxWidth: 90,
-      ),
-    )
+    // ..interceptors.add(
+    //   PrettyDioLogger(
+    //     responseBody: true,
+    //     error: true,
+    //     compact: true,
+    //     maxWidth: 90,
+    //   ),
+    // )
     ..interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
         final prefs = await SharedPreferences.getInstance();

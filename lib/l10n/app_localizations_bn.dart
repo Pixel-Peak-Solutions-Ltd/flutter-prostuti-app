@@ -829,4 +829,43 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get allActivities => 'সব এক্টিভিটিস';
+
+  @override
+  String get writeReview => 'একটি পর্যালোচনা লিখুন';
+
+  @override
+  String get noReviewsYet => 'এখনও কোন পর্যালোচনা নেই';
+
+  @override
+  String get beTheFirstToReview => 'আপনার অভিজ্ঞতা শেয়ার করতে প্রথম হোন!';
+
+  @override
+  String get shareYourExperience => 'আপনার অভিজ্ঞতা শেয়ার করুন';
+
+  @override
+  String get reviewTooShort => 'পর্যালোচনা খুব ছোট (ন্যূনতম ৫ অক্ষর)';
+
+  @override
+  String get reviewTooLong => 'পর্যালোচনা খুব বড় (সর্বাধিক ১০০০ অক্ষর)';
+
+  @override
+  String get reviewSubmitted => 'পর্যালোচনা সফলভাবে জমা দেওয়া হয়েছে';
+
+  @override
+  String get errorSubmittingReview => 'পর্যালোচনা জমা দেওয়ার সময় ত্রুটি';
+
+  @override
+  String get reviews => 'পর্যালোচনা';
+
+  @override
+  String get loadingReviews => 'পর্যালোচনা লোড হচ্ছে...';
+
+  @override
+  String get rateYourExperience => 'আপনার অভিজ্ঞতা রেট করুন';
+
+  @override
+  String get submittingReview => 'পর্যালোচনা জমা দেওয়া হচ্ছে...';
+
+  @override
+  String get dismiss => 'বাতিল করুন';
 }

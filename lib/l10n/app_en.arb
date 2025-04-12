@@ -273,5 +273,18 @@
   "problem": "Problem*",
   "problemHint": "Problem Number",
   "favoriteItems": "Favourites",
-  "allActivities": "All Activities"
+  "allActivities": "All Activities",
+  "writeReview": "Write a Review",
+  "noReviewsYet": "No Reviews Yet",
+  "beTheFirstToReview": "Be the first to share your experience!",
+  "shareYourExperience": "Share your experience",
+  "reviewTooShort": "Review is too short (min 5 characters)",
+  "reviewTooLong": "Review is too long (max 1000 characters)",
+  "reviewSubmitted": "Review submitted successfully",
+  "errorSubmittingReview": "Error submitting review",
+  "reviews": "Reviews",
+  "loadingReviews": "Loading reviews...",
+  "rateYourExperience": "Rate your experience",
+  "submittingReview": "Submitting review...",
+  "dismiss": "Dismiss"
 }

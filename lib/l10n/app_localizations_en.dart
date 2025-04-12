@@ -829,4 +829,43 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get allActivities => 'All Activities';
+
+  @override
+  String get writeReview => 'Write a Review';
+
+  @override
+  String get noReviewsYet => 'No Reviews Yet';
+
+  @override
+  String get beTheFirstToReview => 'Be the first to share your experience!';
+
+  @override
+  String get shareYourExperience => 'Share your experience';
+
+  @override
+  String get reviewTooShort => 'Review is too short (min 5 characters)';
+
+  @override
+  String get reviewTooLong => 'Review is too long (max 1000 characters)';
+
+  @override
+  String get reviewSubmitted => 'Review submitted successfully';
+
+  @override
+  String get errorSubmittingReview => 'Error submitting review';
+
+  @override
+  String get reviews => 'Reviews';
+
+  @override
+  String get loadingReviews => 'Loading reviews...';
+
+  @override
+  String get rateYourExperience => 'Rate your experience';
+
+  @override
+  String get submittingReview => 'Submitting review...';
+
+  @override
+  String get dismiss => 'Dismiss';
 }

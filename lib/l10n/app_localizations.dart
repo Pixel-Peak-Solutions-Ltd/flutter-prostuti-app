@@ -1738,6 +1738,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All Activities'**
   String get allActivities;
+
+  /// No description provided for @writeReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a Review'**
+  String get writeReview;
+
+  /// No description provided for @noReviewsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No Reviews Yet'**
+  String get noReviewsYet;
+
+  /// No description provided for @beTheFirstToReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Be the first to share your experience!'**
+  String get beTheFirstToReview;
+
+  /// No description provided for @shareYourExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your experience'**
+  String get shareYourExperience;
+
+  /// No description provided for @reviewTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Review is too short (min 5 characters)'**
+  String get reviewTooShort;
+
+  /// No description provided for @reviewTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Review is too long (max 1000 characters)'**
+  String get reviewTooLong;
+
+  /// No description provided for @reviewSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Review submitted successfully'**
+  String get reviewSubmitted;
+
+  /// No description provided for @errorSubmittingReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Error submitting review'**
+  String get errorSubmittingReview;
+
+  /// No description provided for @reviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get reviews;
+
+  /// No description provided for @loadingReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading reviews...'**
+  String get loadingReviews;
+
+  /// No description provided for @rateYourExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate your experience'**
+  String get rateYourExperience;
+
+  /// No description provided for @submittingReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitting review...'**
+  String get submittingReview;
+
+  /// No description provided for @dismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get dismiss;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
