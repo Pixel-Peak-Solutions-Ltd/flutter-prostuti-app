@@ -97,7 +97,12 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
       ),
       body: courseDetailsAsync.when(
         data: (courseDetails) {
-          return _buildMainContent(courseDetails, context);
+          return _buildMainContent(
+            courseDetails,
+            context,
+            isEnrolled:
+                ref.watch(courseEnrollmentStatusProvider).value ?? false,
+          );
         },
         error: (error, stackTrace) {
           return _buildErrorWidget(error, context);
@@ -116,7 +121,8 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
     );
   }
 
-  Widget _buildMainContent(dynamic courseDetails, BuildContext context) {
+  Widget _buildMainContent(dynamic courseDetails, BuildContext context,
+      {bool isEnrolled = false}) {
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -148,9 +154,13 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                   _buildAboutSection(courseDetails, context),
                   const Gap(kGapLarge),
                   _buildCurriculumSection(courseDetails, context),
+
                   const Gap(kGapLarge),
                   // Use the new review section widget
-                  CourseReviewsSection(courseId: courseDetails.data!.sId),
+                  CourseReviewsSection(
+                    courseId: courseDetails.data!.sId,
+                    isEnrolled: isEnrolled,
+                  ),
                 ],
               ),
             ),

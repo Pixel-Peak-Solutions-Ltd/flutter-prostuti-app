@@ -13,10 +13,12 @@ import 'course_details_review_card.dart';
 
 class CourseReviewsSection extends ConsumerWidget {
   final String courseId;
+  final bool isEnrolled;
 
   const CourseReviewsSection({
     Key? key,
     required this.courseId,
+    required this.isEnrolled,
   }) : super(key: key);
 
   @override
@@ -121,53 +123,56 @@ class CourseReviewsSection extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         CourseListHeader(text: context.l10n!.testReviews),
-        MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: InkWell(
-            onTap: () => _showReviewBottomSheet(context, ref),
-            borderRadius: BorderRadius.circular(24),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    theme.colorScheme.secondary.withOpacity(0.8),
-                    theme.colorScheme.secondary,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: theme.colorScheme.secondary.withOpacity(0.25),
-                    offset: const Offset(0, 2),
-                    blurRadius: 6,
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.rate_review_outlined,
-                    size: 16,
-                    color: theme.colorScheme.onSecondary,
-                  ),
-                  const Gap(8),
-                  Text(
-                    context.l10n!.writeReview ?? 'Write a Review',
-                    style: theme.textTheme.labelMedium?.copyWith(
-                      color: theme.colorScheme.onSecondary,
-                      fontWeight: FontWeight.w600,
+        isEnrolled
+            ? MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: InkWell(
+                  onTap: () => _showReviewBottomSheet(context, ref),
+                  borderRadius: BorderRadius.circular(24),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          theme.colorScheme.secondary.withOpacity(0.8),
+                          theme.colorScheme.secondary,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(24),
+                      boxShadow: [
+                        BoxShadow(
+                          color: theme.colorScheme.secondary.withOpacity(0.25),
+                          offset: const Offset(0, 2),
+                          blurRadius: 6,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.rate_review_outlined,
+                          size: 16,
+                          color: theme.colorScheme.onSecondary,
+                        ),
+                        const Gap(8),
+                        Text(
+                          context.l10n!.writeReview ?? 'Write a Review',
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: theme.colorScheme.onSecondary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ).animate().fadeIn(duration: 300.ms).slideX(
-            begin: 0.2, end: 0, duration: 400.ms, curve: Curves.easeOutQuad),
+                ),
+              ).animate().fadeIn(duration: 300.ms).slideX(
+                begin: 0.2, end: 0, duration: 400.ms, curve: Curves.easeOutQuad)
+            : Container()
       ],
     );
   }
@@ -231,21 +236,24 @@ class CourseReviewsSection extends ConsumerWidget {
                   ),
                 ),
                 const Gap(20),
-                ElevatedButton.icon(
-                  onPressed: () => _showReviewBottomSheet(context, ref),
-                  icon: const Icon(Icons.add_comment_outlined),
-                  label: Text(context.l10n!.writeReview ?? 'Write a Review'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.secondary,
-                    foregroundColor: theme.colorScheme.onSecondary,
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                  ),
-                ),
+                isEnrolled
+                    ? ElevatedButton.icon(
+                        onPressed: () => _showReviewBottomSheet(context, ref),
+                        icon: const Icon(Icons.add_comment_outlined),
+                        label:
+                            Text(context.l10n!.writeReview ?? 'Write a Review'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.colorScheme.secondary,
+                          foregroundColor: theme.colorScheme.onSecondary,
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                        ),
+                      )
+                    : Container()
               ],
             ).animate().fadeIn(duration: 500.ms).scale(
                 begin: const Offset(0.95, 0.95),
