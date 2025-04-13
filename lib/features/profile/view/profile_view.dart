@@ -117,11 +117,11 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                 ),
               ),
               const Gap(24),
-              CustomListTile(
-                icon: "assets/icons/your_point.svg",
-                title: context.l10n!.yourPoints,
-                onTap: () {},
-              ),
+              // CustomListTile(
+              //   icon: "assets/icons/your_point.svg",
+              //   title: context.l10n!.yourPoints,
+              //   onTap: () {},
+              // ),
               CustomListTile(
                 icon: "assets/icons/category.svg",
                 title: context.l10n!.category,
