@@ -868,4 +868,76 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get dismiss => 'বাতিল করুন';
+
+  @override
+  String get voucher => 'ভাউচার';
+
+  @override
+  String get enterVoucherCode => 'ভাউচার কোড লিখুন';
+
+  @override
+  String get apply => 'প্রয়োগ করুন';
+
+  @override
+  String get remove => 'সরান';
+
+  @override
+  String get voucherApplied => 'ভাউচার সফলভাবে প্রয়োগ করা হয়েছে!';
+
+  @override
+  String get enterValidVoucher => 'অনুগ্রহ করে একটি বৈধ ভাউচার কোড লিখুন';
+
+  @override
+  String get discount => 'ছাড়';
+
+  @override
+  String get total => 'মোট';
+
+  @override
+  String get voucherError => 'ভাউচার ত্রুটি';
+
+  @override
+  String get voucherNotFound => 'ভাউচার পাওয়া যায়নি';
+
+  @override
+  String get voucherExpired => 'এই ভাউচারের মেয়াদ শেষ হয়ে গেছে';
+
+  @override
+  String get voucherNotApplicable => 'এই ভাউচারটি এই ক্রয়ের জন্য প্রযোজ্য নয়';
+
+  @override
+  String get availableVouchers => 'উপলব্ধ ভাউচার';
+
+  @override
+  String get searchVouchers => 'ভাউচার খুঁজুন';
+
+  @override
+  String get noVouchersAvailable => 'কোন ভাউচার উপলব্ধ নেই';
+
+  @override
+  String get expiresOn => 'মেয়াদ শেষ হবে';
+
+  @override
+  String get specialForYou => 'আপনার জন্য বিশেষ!';
+
+  @override
+  String get courseSpecific => 'কোর্স নির্দিষ্ট';
+
+  @override
+  String get generalVoucher => 'সাধারণ ভাউচার';
+
+  @override
+  String get youSave => 'আপনি সাশ্রয় করেন';
+
+  @override
+  String get tapToApply => 'প্রয়োগ করতে ট্যাপ করুন';
+
+  @override
+  String get selectVoucher => 'ভাউচার নির্বাচন করুন';
+
+  @override
+  String get discountApplied => 'ছাড় প্রয়োগ করা হয়েছে';
+
+  @override
+  String get vouchers => 'ভাউচারসমূহ';
 }

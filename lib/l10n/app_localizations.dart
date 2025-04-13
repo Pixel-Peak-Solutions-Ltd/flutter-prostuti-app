@@ -1816,6 +1816,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dismiss'**
   String get dismiss;
+
+  /// No description provided for @voucher.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher'**
+  String get voucher;
+
+  /// No description provided for @enterVoucherCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter voucher code'**
+  String get enterVoucherCode;
+
+  /// No description provided for @apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
+  /// No description provided for @remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// No description provided for @voucherApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher applied successfully!'**
+  String get voucherApplied;
+
+  /// No description provided for @enterValidVoucher.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid voucher code'**
+  String get enterValidVoucher;
+
+  /// No description provided for @discount.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get discount;
+
+  /// No description provided for @total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get total;
+
+  /// No description provided for @voucherError.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher Error'**
+  String get voucherError;
+
+  /// No description provided for @voucherNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher not found'**
+  String get voucherNotFound;
+
+  /// No description provided for @voucherExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This voucher has expired'**
+  String get voucherExpired;
+
+  /// No description provided for @voucherNotApplicable.
+  ///
+  /// In en, this message translates to:
+  /// **'This voucher is not applicable for this purchase'**
+  String get voucherNotApplicable;
+
+  /// No description provided for @availableVouchers.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Vouchers'**
+  String get availableVouchers;
+
+  /// No description provided for @searchVouchers.
+  ///
+  /// In en, this message translates to:
+  /// **'Search vouchers'**
+  String get searchVouchers;
+
+  /// No description provided for @noVouchersAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No vouchers available'**
+  String get noVouchersAvailable;
+
+  /// No description provided for @expiresOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires on'**
+  String get expiresOn;
+
+  /// No description provided for @specialForYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Special for you!'**
+  String get specialForYou;
+
+  /// No description provided for @courseSpecific.
+  ///
+  /// In en, this message translates to:
+  /// **'Course specific'**
+  String get courseSpecific;
+
+  /// No description provided for @generalVoucher.
+  ///
+  /// In en, this message translates to:
+  /// **'General voucher'**
+  String get generalVoucher;
+
+  /// No description provided for @youSave.
+  ///
+  /// In en, this message translates to:
+  /// **'You save'**
+  String get youSave;
+
+  /// No description provided for @tapToApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to apply'**
+  String get tapToApply;
+
+  /// No description provided for @selectVoucher.
+  ///
+  /// In en, this message translates to:
+  /// **'Select voucher'**
+  String get selectVoucher;
+
+  /// No description provided for @discountApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount applied'**
+  String get discountApplied;
+
+  /// No description provided for @vouchers.
+  ///
+  /// In en, this message translates to:
+  /// **'Vouchers'**
+  String get vouchers;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

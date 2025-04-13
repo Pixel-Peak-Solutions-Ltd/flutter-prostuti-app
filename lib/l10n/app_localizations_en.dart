@@ -868,4 +868,76 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dismiss => 'Dismiss';
+
+  @override
+  String get voucher => 'Voucher';
+
+  @override
+  String get enterVoucherCode => 'Enter voucher code';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String get voucherApplied => 'Voucher applied successfully!';
+
+  @override
+  String get enterValidVoucher => 'Please enter a valid voucher code';
+
+  @override
+  String get discount => 'Discount';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String get voucherError => 'Voucher Error';
+
+  @override
+  String get voucherNotFound => 'Voucher not found';
+
+  @override
+  String get voucherExpired => 'This voucher has expired';
+
+  @override
+  String get voucherNotApplicable => 'This voucher is not applicable for this purchase';
+
+  @override
+  String get availableVouchers => 'Available Vouchers';
+
+  @override
+  String get searchVouchers => 'Search vouchers';
+
+  @override
+  String get noVouchersAvailable => 'No vouchers available';
+
+  @override
+  String get expiresOn => 'Expires on';
+
+  @override
+  String get specialForYou => 'Special for you!';
+
+  @override
+  String get courseSpecific => 'Course specific';
+
+  @override
+  String get generalVoucher => 'General voucher';
+
+  @override
+  String get youSave => 'You save';
+
+  @override
+  String get tapToApply => 'Tap to apply';
+
+  @override
+  String get selectVoucher => 'Select voucher';
+
+  @override
+  String get discountApplied => 'Discount applied';
+
+  @override
+  String get vouchers => 'Vouchers';
 }
