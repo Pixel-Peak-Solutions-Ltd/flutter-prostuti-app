@@ -940,4 +940,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vouchers => 'Vouchers';
+
+  @override
+  String get pleaseSelectYourCategory => 'Please select your preferred category';
+
+  @override
+  String get subcategory => 'Subcategory';
+
+  @override
+  String get pleaseSelectYourSubcategory => 'Please select your preferred subcategory';
+
+  @override
+  String get noSubcategoriesFound => 'No subcategories found';
+
+  @override
+  String get goBack => 'Go Back';
+
+  @override
+  String get categoryUpdatedSuccessfully => 'Category updated successfully';
+
+  @override
+  String get studentIdNotFound => 'Student ID not found';
+
+  @override
+  String get academic => 'Academic';
+
+  @override
+  String get admission => 'Admission';
+
+  @override
+  String get job => 'Job';
+
+  @override
+  String get science => 'Science';
+
+  @override
+  String get commerce => 'Commerce';
+
+  @override
+  String get arts => 'Arts';
+
+  @override
+  String get engineering => 'Engineering';
+
+  @override
+  String get medical => 'Medical';
+
+  @override
+  String get university => 'University';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get currentPassword => 'Current Password';
+
+  @override
+  String get enterCurrentPassword => 'Enter your current password';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get enterNewPassword => 'Enter your new password';
+
+  @override
+  String get confirmNewPassword => 'Confirm New Password';
+
+  @override
+  String get confirmYourNewPassword => 'Confirm your new password';
+
+  @override
+  String get updatePassword => 'Update Password';
+
+  @override
+  String get passwordChangedSuccessfully => 'Password changed successfully';
+
+  @override
+  String get confirmPasswordRequired => 'Confirm password is required';
+
+  @override
+  String get updateCategory => 'Update Category';
+
+  @override
+  String get currentCategory => 'Current Category';
+
+  @override
+  String get selectNewCategory => 'Select New Category';
 }

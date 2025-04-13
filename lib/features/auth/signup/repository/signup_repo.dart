@@ -1,9 +1,8 @@
+import 'package:prostuti/core/services/api_response.dart';
 import 'package:prostuti/core/services/dio_service.dart';
-
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:prostuti/core/services/error_handler.dart';
 import 'package:prostuti/core/services/error_response.dart';
-import 'package:prostuti/core/services/api_response.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/otp_model.dart';
 
@@ -60,11 +59,15 @@ class SignupRepo {
   }
 
   Future<ApiResponse> registerStudent(Map<String, String> payload) async {
-    final response =
-        await _dioService.postRequest("/auth/register-student", payload);
+    // Filter out categoryType if present (for backward compatibility)
+    final filteredPayload = Map<String, String>.from(payload)
+      ..remove('categoryType');
+
+    final response = await _dioService.postRequest(
+        "/auth/register-student", filteredPayload);
 
     if (response.statusCode == 200) {
-      return ApiResponse.success(response.data["success"]);
+      return ApiResponse.success(response.data);
     } else {
       final errorResponse = ErrorResponse.fromJson(response.data);
       ErrorHandler().setErrorMessage(errorResponse.message);

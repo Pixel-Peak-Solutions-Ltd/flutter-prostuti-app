@@ -6,7 +6,6 @@ import 'package:prostuti/core/services/debouncer.dart';
 import 'package:prostuti/core/services/error_handler.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/auth/category/repository/category_repo.dart';
-import 'package:prostuti/features/auth/category/view/sub_category_view.dart';
 import 'package:prostuti/features/auth/category/viewmodel/category_viewmodel.dart';
 import 'package:prostuti/features/auth/signup/repository/signup_repo.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/name_viewmodel.dart';
@@ -18,38 +17,61 @@ import '../../../../core/services/nav.dart';
 import '../../login/view/login_view.dart';
 import '../../signup/viewmodel/email_viewmodel.dart';
 import '../../signup/viewmodel/phone_number_viewmodel.dart';
-import '../model/category_model.dart';
 import '../widgets/buildCategoryList.dart';
 
-class CategoryView extends ConsumerWidget with CommonWidgets {
-  CategoryView({super.key});
+class SubCategoryView extends ConsumerWidget with CommonWidgets {
+  final String mainCategory;
+
+  SubCategoryView({super.key, required this.mainCategory});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final categoryAsyncValue = ref.watch(categoryListProvider);
-    final icons = [
-      "assets/images/backpack_03.png",
-      "assets/images/mortarboard_01.png",
-      "assets/images/briefcase_01.png"
-    ];
+    // Get subcategories for the selected main category
+    // First try from the API provider
+    final subcategoryAsyncValue =
+        ref.watch(subcategoryListProvider(mainCategory));
 
     final _debouncer = Debouncer(milliseconds: 120);
     final _loadingProvider = StateProvider<bool>((ref) => false);
     final isLoading = ref.watch(_loadingProvider);
 
     return Scaffold(
-      appBar: commonAppbar(context.l10n!.category),
-      body: categoryAsyncValue.when(
-        loading: () => Skeletonizer(
-          enableSwitchAnimation: true,
-          child: buildCategoryList(
-              context, icons, List.filled(3, 'Item with Text'),
-              isSkeleton: true),
-        ),
-        error: (error, stack) =>
-            Center(child: Text('${context.l10n!.error}: $error')),
-        data: (category) {
-          final categories = category.data ?? [];
+      appBar:
+          commonAppbar('${context.l10n!.select} ${context.l10n!.subcategory}'),
+      body: subcategoryAsyncValue.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('${context.l10n!.error}: $error'),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(context.l10n!.goBack),
+            )
+          ],
+        )),
+        data: (subcategory) {
+          final subcategories = subcategory.data ?? [];
+
+          // If no subcategories (should never happen for Academic/Admission), show error
+          if (subcategories.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(context.l10n!.noSubcategoriesFound),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(context.l10n!.goBack),
+                  )
+                ],
+              ),
+            );
+          }
+
           return Skeletonizer(
             enabled: isLoading,
             child: Padding(
@@ -64,47 +86,38 @@ class CategoryView extends ConsumerWidget with CommonWidgets {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      context.l10n!.selectCategory,
+                      '${context.l10n!.select} ${mainCategory} ${context.l10n!.subcategory}',
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      context.l10n!.pleaseSelectYourCategory,
+                      context.l10n!.pleaseSelectYourSubcategory,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     const SizedBox(height: 16),
                     Expanded(
-                      child: buildCategoryList(
+                      child: buildSubCategoryList(
                         context,
-                        icons,
-                        categories,
+                        subcategories,
                         onTap: isLoading
                             ? null
                             : (index) {
-                                final selectedCategory = categories[index];
+                                final selectedSubcategory =
+                                    subcategories[index];
 
-                                // Set the selected main category
+                                // Set the selected subcategory
                                 ref
-                                    .read(selectedMainCategoryProvider.notifier)
-                                    .setMainCategory(selectedCategory);
+                                    .read(selectedSubCategoryProvider.notifier)
+                                    .setSubCategory(selectedSubcategory);
 
-                                // For Job category, no subcategory is needed
-                                if (selectedCategory == CategoryConstants.JOB) {
-                                  _registerOrUpdateCategory(
-                                      context,
-                                      ref,
-                                      selectedCategory,
-                                      null,
-                                      _debouncer,
-                                      _loadingProvider);
-                                } else {
-                                  // Navigate to subcategory selection
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => SubCategoryView(
-                                      mainCategory: selectedCategory,
-                                    ),
-                                  ));
-                                }
+                                // Register or update the category
+                                _registerOrUpdateCategory(
+                                    context,
+                                    ref,
+                                    mainCategory,
+                                    selectedSubcategory,
+                                    _debouncer,
+                                    _loadingProvider);
                               },
                       ),
                     ),
@@ -122,7 +135,7 @@ class CategoryView extends ConsumerWidget with CommonWidgets {
     BuildContext context,
     WidgetRef ref,
     String mainCategory,
-    String? subCategory,
+    String subCategory,
     Debouncer debouncer,
     StateProvider<bool> loadingProvider,
   ) {
@@ -144,7 +157,7 @@ class CategoryView extends ConsumerWidget with CommonWidgets {
     BuildContext context,
     WidgetRef ref,
     String mainCategory,
-    String? subCategory,
+    String subCategory,
     Debouncer debouncer,
     StateProvider<bool> loadingProvider,
   ) {
@@ -208,7 +221,7 @@ class CategoryView extends ConsumerWidget with CommonWidgets {
     BuildContext context,
     WidgetRef ref,
     String mainCategory,
-    String? subCategory,
+    String subCategory,
     Debouncer debouncer,
     StateProvider<bool> loadingProvider,
   ) {

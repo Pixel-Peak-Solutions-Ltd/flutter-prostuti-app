@@ -940,4 +940,91 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get vouchers => 'ভাউচারসমূহ';
+
+  @override
+  String get pleaseSelectYourCategory => 'আপনার পছন্দের বিভাগ নির্বাচন করুন';
+
+  @override
+  String get subcategory => 'উপবিভাগ';
+
+  @override
+  String get pleaseSelectYourSubcategory => 'আপনার পছন্দের উপবিভাগ নির্বাচন করুন';
+
+  @override
+  String get noSubcategoriesFound => 'কোন উপবিভাগ পাওয়া যায়নি';
+
+  @override
+  String get goBack => 'ফিরে যান';
+
+  @override
+  String get categoryUpdatedSuccessfully => 'বিভাগ সফলভাবে আপডেট করা হয়েছে';
+
+  @override
+  String get studentIdNotFound => 'শিক্ষার্থী আইডি পাওয়া যায়নি';
+
+  @override
+  String get academic => 'একাডেমিক';
+
+  @override
+  String get admission => 'ভর্তি';
+
+  @override
+  String get job => 'চাকরি';
+
+  @override
+  String get science => 'বিজ্ঞান';
+
+  @override
+  String get commerce => 'বাণিজ্য';
+
+  @override
+  String get arts => 'কলা';
+
+  @override
+  String get engineering => 'ইঞ্জিনিয়ারিং';
+
+  @override
+  String get medical => 'মেডিকেল';
+
+  @override
+  String get university => 'বিশ্ববিদ্যালয়';
+
+  @override
+  String get changePassword => 'পাসওয়ার্ড পরিবর্তন করুন';
+
+  @override
+  String get currentPassword => 'বর্তমান পাসওয়ার্ড';
+
+  @override
+  String get enterCurrentPassword => 'আপনার বর্তমান পাসওয়ার্ড লিখুন';
+
+  @override
+  String get newPassword => 'নতুন পাসওয়ার্ড';
+
+  @override
+  String get enterNewPassword => 'আপনার নতুন পাসওয়ার্ড লিখুন';
+
+  @override
+  String get confirmNewPassword => 'নতুন পাসওয়ার্ড নিশ্চিত করুন';
+
+  @override
+  String get confirmYourNewPassword => 'আপনার নতুন পাসওয়ার্ড নিশ্চিত করুন';
+
+  @override
+  String get updatePassword => 'পাসওয়ার্ড আপডেট করুন';
+
+  @override
+  String get passwordChangedSuccessfully => 'পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে';
+
+  @override
+  String get confirmPasswordRequired => 'পাসওয়ার্ড নিশ্চিত করা প্রয়োজন';
+
+  @override
+  String get updateCategory => 'বিভাগ আপডেট করুন';
+
+  @override
+  String get currentCategory => 'বর্তমান বিভাগ';
+
+  @override
+  String get selectNewCategory => 'নতুন বিভাগ নির্বাচন করুন';
 }

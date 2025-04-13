@@ -1960,6 +1960,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vouchers'**
   String get vouchers;
+
+  /// No description provided for @pleaseSelectYourCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your preferred category'**
+  String get pleaseSelectYourCategory;
+
+  /// No description provided for @subcategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Subcategory'**
+  String get subcategory;
+
+  /// No description provided for @pleaseSelectYourSubcategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your preferred subcategory'**
+  String get pleaseSelectYourSubcategory;
+
+  /// No description provided for @noSubcategoriesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No subcategories found'**
+  String get noSubcategoriesFound;
+
+  /// No description provided for @goBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Back'**
+  String get goBack;
+
+  /// No description provided for @categoryUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Category updated successfully'**
+  String get categoryUpdatedSuccessfully;
+
+  /// No description provided for @studentIdNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Student ID not found'**
+  String get studentIdNotFound;
+
+  /// No description provided for @academic.
+  ///
+  /// In en, this message translates to:
+  /// **'Academic'**
+  String get academic;
+
+  /// No description provided for @admission.
+  ///
+  /// In en, this message translates to:
+  /// **'Admission'**
+  String get admission;
+
+  /// No description provided for @job.
+  ///
+  /// In en, this message translates to:
+  /// **'Job'**
+  String get job;
+
+  /// No description provided for @science.
+  ///
+  /// In en, this message translates to:
+  /// **'Science'**
+  String get science;
+
+  /// No description provided for @commerce.
+  ///
+  /// In en, this message translates to:
+  /// **'Commerce'**
+  String get commerce;
+
+  /// No description provided for @arts.
+  ///
+  /// In en, this message translates to:
+  /// **'Arts'**
+  String get arts;
+
+  /// No description provided for @engineering.
+  ///
+  /// In en, this message translates to:
+  /// **'Engineering'**
+  String get engineering;
+
+  /// No description provided for @medical.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical'**
+  String get medical;
+
+  /// No description provided for @university.
+  ///
+  /// In en, this message translates to:
+  /// **'University'**
+  String get university;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Password'**
+  String get currentPassword;
+
+  /// No description provided for @enterCurrentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password'**
+  String get enterCurrentPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPassword;
+
+  /// No description provided for @enterNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your new password'**
+  String get enterNewPassword;
+
+  /// No description provided for @confirmNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm New Password'**
+  String get confirmNewPassword;
+
+  /// No description provided for @confirmYourNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your new password'**
+  String get confirmYourNewPassword;
+
+  /// No description provided for @updatePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Password'**
+  String get updatePassword;
+
+  /// No description provided for @passwordChangedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed successfully'**
+  String get passwordChangedSuccessfully;
+
+  /// No description provided for @confirmPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password is required'**
+  String get confirmPasswordRequired;
+
+  /// No description provided for @updateCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Category'**
+  String get updateCategory;
+
+  /// No description provided for @currentCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Category'**
+  String get currentCategory;
+
+  /// No description provided for @selectNewCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select New Category'**
+  String get selectNewCategory;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -11,6 +11,7 @@ import 'package:prostuti/features/auth/login/view/login_view.dart';
 import '../../../common/view_model/auth_notifier.dart';
 import '../../../core/configs/app_colors.dart';
 import '../../../core/services/localization_service.dart';
+import '../../auth/category/view/category_view.dart';
 import '../../course/my_course/view/my_course_view.dart';
 import '../../payment/view/subscription_view.dart';
 import '../../payment/viewmodel/check_subscription.dart';
@@ -18,6 +19,7 @@ import '../viewmodel/profile_viewmodel.dart';
 import '../widgets/ProfileSkeleton.dart';
 import '../widgets/custom_list_tile.dart';
 import '../widgets/logout_button.dart';
+import 'change_password_view.dart';
 import 'favourite_view.dart';
 
 class UserProfileView extends ConsumerWidget with CommonWidgets {
@@ -125,7 +127,7 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               CustomListTile(
                 icon: "assets/icons/category.svg",
                 title: context.l10n!.category,
-                onTap: () {},
+                onTap: () => Nav().push(CategoryView()),
               ),
               const Gap(24),
               Text(
@@ -138,7 +140,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               CustomListTile(
                   icon: "assets/icons/user.svg",
                   title: context.l10n!.profileInformation,
-                  onTap: () {}),
+                  onTap: () {
+                    Nav().push(const ChangePasswordView());
+                  }),
               CustomListTile(
                 icon: "assets/icons/language.svg",
                 title: context.l10n!.language,
