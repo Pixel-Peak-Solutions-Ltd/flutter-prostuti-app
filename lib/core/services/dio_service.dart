@@ -123,8 +123,18 @@ class DioService {
   Future<Response> patchRequest(String endpoint,
       {dynamic data, Map<String, dynamic>? queryParameters}) async {
     try {
-      return await _dio.patch(endpoint,
-          data: data, queryParameters: queryParameters);
+      return await _dio.patch(
+        endpoint,
+        data: data,
+        queryParameters: queryParameters,
+        options: Options(
+          contentType: Headers.jsonContentType,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+      );
     } on DioException catch (e) {
       return _handleError(e);
     }

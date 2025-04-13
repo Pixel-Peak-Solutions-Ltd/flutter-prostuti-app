@@ -57,7 +57,7 @@ class _CourseLeaderboardViewState extends ConsumerState<CourseLeaderboardView>
     // Get current user ID
     if (userProfileAsyncValue.hasValue &&
         userProfileAsyncValue.value?.data != null) {
-      _currentUserId = userProfileAsyncValue.value?.data?.sId;
+      _currentUserId = userProfileAsyncValue.value?.data?.studentId;
     }
 
     return Scaffold(

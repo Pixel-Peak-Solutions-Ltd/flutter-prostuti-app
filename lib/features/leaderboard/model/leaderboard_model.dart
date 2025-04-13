@@ -126,11 +126,11 @@ class LeaderboardData {
   String? sId;
   dynamic studentId; // Changed to dynamic to handle both string ID and object
   String? courseId;
-  int? totalTestScore;
-  int? totalAssignmentScore;
-  int? totalScore;
-  int? attemptedTests;
-  int? attemptedAssignments;
+  num? totalTestScore;
+  num? totalAssignmentScore; // Changed from int?
+  num? totalScore; // Changed from int?
+  num? attemptedTests; // Changed from int?
+  num? attemptedAssignments;
   String? updatedAt;
   String? createdAt;
 

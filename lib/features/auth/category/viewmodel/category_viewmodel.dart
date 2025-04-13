@@ -1,48 +1,39 @@
+// category_viewmodel.dart
 import 'package:prostuti/features/auth/category/model/category_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'category_viewmodel.g.dart';
 
-@Riverpod(keepAlive: true)
-class SelectedMainCategory extends _$SelectedMainCategory {
+@riverpod
+class CategoryViewModel extends _$CategoryViewModel {
   @override
-  String? build() {
+  StudentCategory? build() {
     return null;
   }
 
-  void setMainCategory(String category) {
-    state = category;
+  void setMainCategory(String mainCategory) {
+    state = StudentCategory(mainCategory: mainCategory);
   }
 
-  void clear() {
+  void setSubCategory(String? subCategory) {
+    if (state == null) return;
+    state = StudentCategory(
+        mainCategory: state!.mainCategory, subCategory: subCategory);
+  }
+
+  void clearCategory() {
     state = null;
   }
-}
 
-@Riverpod(keepAlive: true)
-class SelectedSubCategory extends _$SelectedSubCategory {
-  @override
-  String? build() {
-    return null;
-  }
+  bool isValidCategory() {
+    if (state == null) return false;
 
-  void setSubCategory(String? subcategory) {
-    state = subcategory;
-  }
+    // Job doesn't require a subcategory
+    if (state!.mainCategory == 'Job') {
+      return true;
+    }
 
-  void clear() {
-    state = null;
-  }
-}
-
-@Riverpod(keepAlive: true)
-class StudentId extends _$StudentId {
-  @override
-  String? build() {
-    return null;
-  }
-
-  void setStudentId(String id) {
-    state = id;
+    // Academic and Admission require a subcategory
+    return state!.subCategory != null && state!.subCategory!.isNotEmpty;
   }
 }

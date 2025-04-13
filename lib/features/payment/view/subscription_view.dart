@@ -13,7 +13,6 @@ import 'package:prostuti/features/payment/viewmodel/check_subscription.dart';
 import 'package:prostuti/features/payment/viewmodel/payment_viewmodel.dart';
 import 'package:prostuti/features/payment/viewmodel/voucher_viewmodel.dart';
 import 'package:prostuti/features/payment/widgets/subscription_card.dart';
-import 'package:prostuti/features/payment/widgets/voucher_selector.dart';
 
 import '../../../core/services/debouncer.dart';
 import '../viewmodel/selected_index.dart';
@@ -57,8 +56,9 @@ class SubscriptionView extends ConsumerWidget with CommonWidgets {
     final paymentNotifier = ref.watch(paymentNotifierProvider.notifier);
 
     // Get current plan and its original price
+
     final currentPlan = plans[selectedIndex];
-    final originalPrice = currentPlan['priceValue'] as double;
+    final originalPrice = (currentPlan['priceValue'] as num).toDouble();
 
     // Calculate final price with voucher if applied
     final finalPrice = voucherState.hasValue && voucherState.value != null
@@ -104,94 +104,7 @@ class SubscriptionView extends ConsumerWidget with CommonWidgets {
                       );
                     },
                   ),
-
                   const Gap(24),
-
-                  // Voucher selector with bottom sheet - no courseId for subscription
-                  VoucherSelector(
-                    originalPrice: originalPrice,
-                    onVoucherApplied: (applied) {
-                      ref.read(_voucherAppliedProvider.notifier).state =
-                          applied;
-                    },
-                  ),
-
-                  // Show discount summary if voucher applied
-                  if (voucherState.hasValue && voucherState.value != null)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Gap(16),
-                        Text(
-                          'হিসাবের বিস্তারিত',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const Gap(16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                                "${currentPlan['plan']} Plan (${currentPlan['duration']})",
-                                style: Theme.of(context).textTheme.bodyMedium),
-                            Text(
-                              "৳ ${originalPrice.toStringAsFixed(0)}",
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                          ],
-                        ),
-                        const Gap(8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "${context.l10n?.discount ?? 'Discount'} (${voucherState.value!.title})",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: Colors.green,
-                                  ),
-                            ),
-                            Text(
-                              "- ৳ ${ref.read(voucherNotifierProvider.notifier).getDiscountAmount(originalPrice).toStringAsFixed(0)}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: Colors.green,
-                                  ),
-                            ),
-                          ],
-                        ),
-                        const Gap(8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              context.l10n?.total ?? "Total",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                            Text(
-                              "৳ ${finalPrice.toStringAsFixed(0)}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
                 ],
               ),
             ),

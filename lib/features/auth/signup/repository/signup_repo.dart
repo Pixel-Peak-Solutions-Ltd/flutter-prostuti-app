@@ -58,20 +58,47 @@ class SignupRepo {
     }
   }
 
-  Future<ApiResponse> registerStudent(Map<String, String> payload) async {
-    // Filter out categoryType if present (for backward compatibility)
-    final filteredPayload = Map<String, String>.from(payload)
-      ..remove('categoryType');
+// Add this to your signup_repo.dart
+  Future<ApiResponse> registerStudent(Map<String, dynamic> payload) async {
+    try {
+      // Ensure categoryType is included and is a valid value
+      if (!payload.containsKey('categoryType') ||
+          payload['categoryType'] == null ||
+          payload['categoryType'].isEmpty) {
+        return ApiResponse.error(ErrorResponse(
+            message: "Category type is required", success: false));
+      }
 
-    final response = await _dioService.postRequest(
-        "/auth/register-student", filteredPayload);
+      // Validate that categoryType is one of the valid options
+      final validCategories = ['Academic', 'Admission', 'Job'];
+      if (!validCategories.contains(payload['categoryType'])) {
+        return ApiResponse.error(ErrorResponse(
+            message:
+                "Invalid category type. Must be one of: ${validCategories.join(', ')}",
+            success: false));
+      }
 
-    if (response.statusCode == 200) {
-      return ApiResponse.success(response.data);
-    } else {
-      final errorResponse = ErrorResponse.fromJson(response.data);
-      ErrorHandler().setErrorMessage(errorResponse.message);
-      return ApiResponse.error(errorResponse);
+      // Send the request
+      final response =
+          await _dioService.postRequest("/auth/register-student", payload);
+
+      if (response.statusCode == 200) {
+        return ApiResponse.success(response.data);
+      } else {
+        // Log the error for debugging
+        print("Registration error: ${response.data}");
+
+        final errorResponse = ErrorResponse.fromJson(response.data);
+        ErrorHandler().setErrorMessage(errorResponse.message);
+        return ApiResponse.error(errorResponse);
+      }
+    } catch (e) {
+      // Log the exception
+      print("Exception during registration: $e");
+
+      ErrorHandler().setErrorMessage(e.toString());
+      return ApiResponse.error(
+          ErrorResponse(message: e.toString(), success: false));
     }
   }
 }

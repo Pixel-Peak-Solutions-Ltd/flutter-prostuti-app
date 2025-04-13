@@ -1,3 +1,4 @@
+// Updated category_model.dart
 class Category {
   bool? success;
   String? message;
@@ -10,34 +11,7 @@ class Category {
     success = json['success'];
     message = json['message'];
     meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
-    data = json['data'] != null ? List<String>.from(json['data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['success'] = this.success;
-    data['message'] = this.message;
-    if (this.meta != null) {
-      data['meta'] = this.meta!.toJson();
-    }
-    data['data'] = this.data;
-    return data;
-  }
-}
-
-class SubCategory {
-  bool? success;
-  String? message;
-  Meta? meta;
-  List<String>? data;
-
-  SubCategory({this.success, this.message, this.meta, this.data});
-
-  SubCategory.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    message = json['message'];
-    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
-    data = json['data'] != null ? List<String>.from(json['data']) : null;
+    data = json['data'].cast<String>();
   }
 
   Map<String, dynamic> toJson() {
@@ -68,39 +42,44 @@ class Meta {
   }
 }
 
-class CategoryConstants {
-  static const String ACADEMIC = "Academic";
-  static const String ADMISSION = "Admission";
-  static const String JOB = "Job";
+// New models for structured categories
+class CategoryStructure {
+  List<String>? mainCategories;
+  Map<String, List<String>>? subCategories;
 
-  // Subcategories for Academic
-  static const String SCIENCE = "Science";
-  static const String COMMERCE = "Commerce";
-  static const String ARTS = "Arts";
+  CategoryStructure({this.mainCategories, this.subCategories});
 
-  // Subcategories for Admission
-  static const String ENGINEERING = "Engineering";
-  static const String MEDICAL = "Medical";
-  static const String UNIVERSITY = "University";
+  CategoryStructure.fromJson(Map<String, dynamic> json) {
+    mainCategories = json['mainCategories']?.cast<String>();
 
-  // Get valid subcategories for a main category
-  static List<String> getSubcategoriesFor(String mainCategory) {
-    switch (mainCategory) {
-      case ACADEMIC:
-        return [SCIENCE, COMMERCE, ARTS];
-      case ADMISSION:
-        return [ENGINEERING, MEDICAL, UNIVERSITY];
-      case JOB:
-      default:
-        return [];
+    subCategories = <String, List<String>>{};
+    if (json['subCategories'] != null) {
+      json['subCategories'].forEach((key, value) {
+        subCategories![key] = List<String>.from(value);
+      });
     }
   }
+}
 
-  // Check if a subcategory is valid for a main category
-  static bool isValidSubcategory(String mainCategory, String? subcategory) {
-    if (subcategory == null) {
-      return mainCategory == JOB;
+class StudentCategory {
+  String mainCategory;
+  String? subCategory;
+
+  StudentCategory({required this.mainCategory, this.subCategory});
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['mainCategory'] = mainCategory;
+    if (subCategory != null) {
+      data['subCategory'] = subCategory;
     }
-    return getSubcategoriesFor(mainCategory).contains(subcategory);
+    return data;
+  }
+
+  factory StudentCategory.fromJson(Map<String, dynamic> json) {
+    return StudentCategory(
+      mainCategory: json['mainCategory'],
+      subCategory: json['subCategory'],
+    );
   }
 }

@@ -74,7 +74,7 @@ class LeaderboardSection extends ConsumerWidget {
           },
           loading: () => _buildLoadingSkeleton(),
           error: (error, stack) {
-            print('🔴 Leaderboard Section Error: $error');
+            print('🔴 Leaderboard Section Error: $error, $stack');
             return Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(

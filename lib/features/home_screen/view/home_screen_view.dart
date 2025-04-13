@@ -207,9 +207,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const Gap(16),
 
               // Ad section slides in
-              _buildAdSection(maxWidth)
-                  .animate()
-                  .moveX(begin: 20, end: 0, duration: 500.ms),
+              // _buildAdSection(maxWidth)
+              //     .animate()
+              //     .moveX(begin: 20, end: 0, duration: 500.ms),
 
               const Gap(16),
 
@@ -227,7 +227,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ).animate().moveX(duration: 674.ms, curve: Curves.easeIn),
 
               // Routine widget fades in
-              const HomeRoutineWidget().animate().fadeIn(duration: 500.ms),
+              const HomeRoutineWidget()
+                  .animate()
+                  .moveX(begin: 20, end: 0, duration: 500.ms),
 
               const Gap(16),
 
@@ -250,10 +252,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: LeaderboardSection(),
-              ).animate().scale(
-                  begin: Offset.fromDirection(0.9),
-                  end: Offset.fromDirection(1.0),
-                  duration: 500.ms),
+              ).animate().scale(duration: 500.ms),
 
               const Gap(16),
             ],
