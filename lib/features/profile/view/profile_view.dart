@@ -157,7 +157,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               // ),
 
               CustomListTile(
-                icon: "assets/icons/category.svg",
+                icon: isDarkTheme
+                    ? "assets/icons/category_dark.svg"
+                    : "assets/icons/category.svg",
                 title: context.l10n!.category,
                 onTap: () {
                   // Navigate to CategoryView in update mode with the studentId
@@ -174,10 +176,7 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                         children: [
                           Text(
                             userData.data!.categoryType!,
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 14,
-                            ),
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           const Icon(Icons.chevron_right, size: 20),
                         ],
@@ -193,7 +192,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               ).animate().moveY(duration: const Duration(milliseconds: 600)),
               const Gap(10),
               CustomListTile(
-                      icon: "assets/icons/user.svg",
+                      icon: isDarkTheme
+                          ? "assets/icons/user_dark.svg"
+                          : "assets/icons/user.svg",
                       title: context.l10n!.profileInformation,
                       onTap: () {
                         Nav().push(const ChangePasswordView());
@@ -201,17 +202,16 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                   .animate()
                   .moveX(duration: const Duration(milliseconds: 600)),
               CustomListTile(
-                icon: "assets/icons/language.svg",
+                icon: isDarkTheme
+                    ? "assets/icons/language-square_dark.svg"
+                    : "assets/icons/language.svg",
                 title: context.l10n!.language,
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       currentLanguage.localName,
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                      ),
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     const Icon(Icons.chevron_right, size: 20),
                   ],
@@ -227,7 +227,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               ).animate().moveY(duration: const Duration(milliseconds: 600)),
               const Gap(10),
               CustomListTile(
-                      icon: "assets/icons/courses.svg",
+                      icon: isDarkTheme
+                          ? "assets/icons/books-01.svg"
+                          : "assets/icons/courses.svg",
                       title: context.l10n!.myCourses,
                       onTap: () {
                         Nav().push(MyCourseView());
@@ -235,7 +237,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                   .animate()
                   .moveX(duration: const Duration(milliseconds: 600)),
               CustomListTile(
-                      icon: "assets/icons/favourites_profile.svg",
+                      icon: isDarkTheme
+                          ? "assets/icons/favourite_dark.svg"
+                          : "assets/icons/favourites_profile.svg",
                       title: context.l10n!.favorites,
                       onTap: () {
                         Nav().push(const FavoriteItemsView());
@@ -243,7 +247,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                   .animate()
                   .moveX(duration: const Duration(milliseconds: 600)),
               CustomListTile(
-                      icon: "assets/icons/progress_history.svg",
+                      icon: isDarkTheme
+                          ? "assets/icons/catalogue_dark.svg"
+                          : "assets/icons/progress_history.svg",
                       title: context.l10n!.testHistory,
                       onTap: () {})
                   .animate()
@@ -265,7 +271,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                         width: 2, color: AppColors.shadeNeutralLight)),
                 child: ListTile(
                   leading: SvgPicture.asset(
-                    "assets/icons/dark_theme.svg",
+                    isDarkTheme
+                        ? "assets/icons/moon-eclipse_dark.svg"
+                        : "assets/icons/dark_theme.svg",
                     fit: BoxFit.cover,
                     colorFilter: const ColorFilter.linearToSrgbGamma(),
                   ),
@@ -297,19 +305,27 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               //     title: context.l10n!.subscription,
               //     onTap: () {}),
               CustomListTile(
-                  icon: "assets/icons/customer-support.svg",
+                  icon: isDarkTheme
+                      ? "assets/icons/customer-support_dark.svg"
+                      : "assets/icons/customer-support.svg",
                   title: context.l10n!.support,
                   onTap: () {}),
               CustomListTile(
-                  icon: "assets/icons/f_and_q.svg",
+                  icon: isDarkTheme
+                      ? "assets/icons/help-circle_dark.svg"
+                      : "assets/icons/f_and_q.svg",
                   title: context.l10n!.faq,
                   onTap: () {}),
               CustomListTile(
-                  icon: "assets/icons/terms.svg",
+                  icon: isDarkTheme
+                      ? "assets/icons/alert-circle_dark.svg"
+                      : "assets/icons/terms.svg",
                   title: context.l10n!.termsAndConditions,
                   onTap: () {}),
               CustomListTile(
-                  icon: "assets/icons/privacy.svg",
+                  icon: isDarkTheme
+                      ? "assets/icons/security_dark.svg"
+                      : "assets/icons/privacy.svg",
                   title: context.l10n!.privacyPolicy,
                   onTap: () {}),
               const Gap(24),
