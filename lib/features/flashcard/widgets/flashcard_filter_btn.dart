@@ -15,31 +15,54 @@ class FlashcardFilterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        height: 40,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        height: 44,
+        padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
           color: isFilterActive
               ? Theme.of(context).colorScheme.secondary
-              : Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(8),
+              : Theme.of(context).colorScheme.onSecondary.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isFilterActive
                 ? Theme.of(context).colorScheme.secondary
-                : Theme.of(context).colorScheme.error,
+                : Theme.of(context).colorScheme.onSecondary.withOpacity(0.3),
+            width: 1.5,
           ),
+          boxShadow: isFilterActive
+              ? [
+                  BoxShadow(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .secondary
+                        .withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ]
+              : null,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset('assets/icons/filter.svg'),
+            SvgPicture.asset(
+              'assets/icons/filter.svg',
+              colorFilter: ColorFilter.mode(
+                isFilterActive
+                    ? Colors.white
+                    : Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
+              ),
+              height: 18,
+            ),
             if (isFilterActive) ...[
-              const SizedBox(width: 4),
+              const SizedBox(width: 6),
               Container(
                 width: 8,
                 height: 8,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Colors.white,
                   shape: BoxShape.circle,
                 ),
               ),

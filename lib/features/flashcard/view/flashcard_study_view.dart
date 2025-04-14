@@ -224,11 +224,48 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: ElevatedButton(
-                  onPressed: () => Nav().push(
-                    const HomeScreen(
-                      initialIndex: 1,
-                    ),
-                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            'Warning',
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          content: Text(
+                            'All progress will be reset if you leave this screen.',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                              child: Text(
+                                'Cancel',
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                                Nav().push(
+                                  const HomeScreen(
+                                    initialIndex: 1,
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                'Continue',
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
                           side: const BorderSide(
