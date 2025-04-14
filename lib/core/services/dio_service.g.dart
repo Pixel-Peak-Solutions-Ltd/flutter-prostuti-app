@@ -6,7 +6,39 @@ part of 'dio_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dioHash() => r'e052c8405090e9a53aba5eb3a9951a9a26957ae8';
+String _$connectivityHash() => r'da8080dfc40288eff97ff9cb96e9d9577714a9a0';
+
+/// See also [connectivity].
+@ProviderFor(connectivity)
+final connectivityProvider = AutoDisposeProvider<Connectivity>.internal(
+  connectivity,
+  name: r'connectivityProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$connectivityHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef ConnectivityRef = AutoDisposeProviderRef<Connectivity>;
+String _$networkInfoHash() => r'beab523a04badc03212a1fa1eaa7814b1207b8ab';
+
+/// See also [networkInfo].
+@ProviderFor(networkInfo)
+final networkInfoProvider = AutoDisposeProvider<NetworkInfo>.internal(
+  networkInfo,
+  name: r'networkInfoProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$networkInfoHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+typedef NetworkInfoRef = AutoDisposeProviderRef<NetworkInfo>;
+String _$dioHash() => r'79fadc584096799c4666d938fa4e80d184fba802';
 
 /// See also [dio].
 @ProviderFor(dio)
@@ -22,7 +54,7 @@ final dioProvider = AutoDisposeProvider<Dio>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef DioRef = AutoDisposeProviderRef<Dio>;
-String _$dioServiceHash() => r'890f53feef237b6f7b01316cf1f7b50fb3a434d9';
+String _$dioServiceHash() => r'd90ea8402de78343b4fc905ff4bf9ec290ab1ae7';
 
 /// See also [dioService].
 @ProviderFor(dioService)
