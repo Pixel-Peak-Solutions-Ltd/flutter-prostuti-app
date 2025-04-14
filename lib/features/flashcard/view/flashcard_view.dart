@@ -18,6 +18,7 @@ import '../widgets/flashcard_filter_btn.dart';
 import '../widgets/flashcard_header.dart';
 import '../widgets/flashcard_item.dart';
 import '../widgets/flashcard_search_container.dart';
+import '../widgets/flashcard_session_provider.dart';
 
 class FlashcardView extends ConsumerStatefulWidget {
   const FlashcardView({super.key});
@@ -352,6 +353,11 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
                         Nav().push(FlashcardStudyView(
                             flashcardId: flashcards[index].sId!,
                             flashcardTitle: flashcards[index].title!));
+                        ref
+                            .read(flashcardStudySessionsProvider(
+                                    flashcards[index].sId! ?? '')
+                                .notifier)
+                            .recordStudySession();
                       },
                     );
                   },
