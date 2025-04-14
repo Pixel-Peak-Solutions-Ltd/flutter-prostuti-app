@@ -165,9 +165,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get enterYourPhoneNumber => 'আপনার ফোন নম্বর লিখুন';
 
   @override
-  String get password => 'পাসওয়ার্ড';
-
-  @override
   String get enterYourPassword => 'আপনার পাসওয়ার্ড লিখুন';
 
   @override
@@ -220,9 +217,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get name => 'নাম';
-
-  @override
-  String get enterYourName => 'আপনার নাম লিখুন';
 
   @override
   String get email => 'ইমেইল';
@@ -1027,4 +1021,25 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get selectNewCategory => 'নতুন বিভাগ নির্বাচন করুন';
+
+  @override
+  String get profile => 'প্রোফাইল';
+
+  @override
+  String get password => 'পাসওয়ার্ড';
+
+  @override
+  String get enterYourName => 'আপনার নাম লিখুন';
+
+  @override
+  String get updateProfile => 'প্রোফাইল আপডেট করুন';
+
+  @override
+  String get profileUpdatedSuccessfully => 'প্রোফাইল সফলভাবে আপডেট হয়েছে';
+
+  @override
+  String get noChangesDetected => 'কোন পরিবর্তন পাওয়া যায়নি';
+
+  @override
+  String get errorUpdatingProfile => 'প্রোফাইল আপডেট করার সময় ত্রুটি';
 }

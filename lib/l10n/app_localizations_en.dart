@@ -165,9 +165,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enterYourPhoneNumber => 'Enter your phone number';
 
   @override
-  String get password => 'Password';
-
-  @override
   String get enterYourPassword => 'Enter your password';
 
   @override
@@ -220,9 +217,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get name => 'Name';
-
-  @override
-  String get enterYourName => 'Enter your name';
 
   @override
   String get email => 'Email';
@@ -1027,4 +1021,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectNewCategory => 'Select New Category';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get enterYourName => 'Enter your name';
+
+  @override
+  String get updateProfile => 'Update Profile';
+
+  @override
+  String get profileUpdatedSuccessfully => 'Profile updated successfully';
+
+  @override
+  String get noChangesDetected => 'No changes detected';
+
+  @override
+  String get errorUpdatingProfile => 'Error updating profile';
 }

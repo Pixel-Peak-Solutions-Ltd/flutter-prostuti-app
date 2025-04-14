@@ -1,4 +1,3 @@
-import 'package:prostuti/common/helpers/functions.dart';
 import 'package:prostuti/features/payment/repository/payment_repo.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -17,10 +16,15 @@ class UserProfile extends _$UserProfile {
     final response = await ref.read(paymentRepoProvider).getStudentProfile();
 
     return response.fold(
-          (l) => throw Exception(l.message), // Handle error case
-          (profile) {
+      (l) => throw Exception(l.message), // Handle error case
+      (profile) {
         return profile;
       },
     );
+  }
+
+  Future<void> refresh() async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => _userProfile());
   }
 }

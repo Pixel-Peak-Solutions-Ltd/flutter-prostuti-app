@@ -52,7 +52,6 @@
   "welcomeBack": "Welcome back! Enter your details.",
   "phoneNumber": "Phone number",
   "enterYourPhoneNumber": "Enter your phone number",
-  "password": "Password",
   "enterYourPassword": "Enter your password",
   "showPassword": "Show password",
   "forgotPassword": "Forgot password",
@@ -71,7 +70,6 @@
   "resendCode": "Resend code",
   "registerYourAccount": "Register your account",
   "name": "Name",
-  "enterYourName": "Enter your name",
   "email": "Email",
   "enterYourEmail": "Enter your email",
   "emailRequired": "Email is required",
@@ -339,5 +337,12 @@
   "confirmPasswordRequired": "Confirm password is required",
   "updateCategory": "Update Category",
   "currentCategory": "Current Category",
-  "selectNewCategory": "Select New Category"
+  "selectNewCategory": "Select New Category",
+  "profile": "Profile",
+  "password": "Password",
+  "enterYourName": "Enter your name",
+  "updateProfile": "Update Profile",
+  "profileUpdatedSuccessfully": "Profile updated successfully",
+  "noChangesDetected": "No changes detected",
+  "errorUpdatingProfile": "Error updating profile"
 }

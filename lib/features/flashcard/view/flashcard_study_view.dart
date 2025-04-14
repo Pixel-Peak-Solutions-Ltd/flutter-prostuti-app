@@ -1,7 +1,6 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
@@ -186,35 +185,35 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
 
           return Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.arrow_back_ios_rounded,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 30,
-                      ),
-                      onPressed: _previousCard,
-                    ),
-                    Text(
-                      context.l10n!.swipe,
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    InkWell(
-                      onTap: _nextCard,
-                      child: SvgPicture.asset(
-                        "assets/icons/flashcard_next.svg",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 16),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //     children: [
+              //       IconButton(
+              //         icon: Icon(
+              //           Icons.arrow_back_ios_rounded,
+              //           color: Theme.of(context).colorScheme.primary,
+              //           size: 30,
+              //         ),
+              //         onPressed: _previousCard,
+              //       ),
+              //       Text(
+              //         context.l10n!.swipe,
+              //         style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              //               fontWeight: FontWeight.bold,
+              //             ),
+              //       ),
+              //       InkWell(
+              //         onTap: _nextCard,
+              //         child: SvgPicture.asset(
+              //           "assets/icons/flashcard_next.svg",
+              //           fit: BoxFit.cover,
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
