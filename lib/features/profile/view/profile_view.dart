@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -7,10 +8,12 @@ import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../common/view_model/auth_notifier.dart';
 import '../../../core/configs/app_colors.dart';
 import '../../../core/services/localization_service.dart';
+import '../../auth/category/view/category_view.dart';
 import '../../course/my_course/view/my_course_view.dart';
 import '../../payment/view/subscription_view.dart';
 import '../../payment/viewmodel/check_subscription.dart';
@@ -18,6 +21,7 @@ import '../viewmodel/profile_viewmodel.dart';
 import '../widgets/ProfileSkeleton.dart';
 import '../widgets/custom_list_tile.dart';
 import '../widgets/logout_button.dart';
+import 'change_password_view.dart';
 import 'favourite_view.dart';
 
 class UserProfileView extends ConsumerWidget with CommonWidgets {
@@ -110,77 +114,146 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                         return Text(error.toString());
                       },
                       loading: () {
-                        return Container();
+                        return Skeletonizer(
+                          enableSwitchAnimation: true,
+                          enabled: true,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height * .081,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.secondary,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                    "assets/icons/premium_upgrade.svg"),
+                                const Gap(24),
+                                Text(
+                                  context.l10n!.upgradeToPremium,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color:
+                                              AppColors.textActionPrimaryLight),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
                       },
                     )
                   ],
                 ),
               ),
               const Gap(24),
+              // CustomListTile(
+              //   icon: "assets/icons/your_point.svg",
+              //   title: context.l10n!.yourPoints,
+              //   onTap: () {},
+              // ),
+
               CustomListTile(
-                icon: "assets/icons/your_point.svg",
-                title: context.l10n!.yourPoints,
-                onTap: () {},
-              ),
-              CustomListTile(
-                icon: "assets/icons/category.svg",
+                icon: isDarkTheme
+                    ? "assets/icons/category_dark.svg"
+                    : "assets/icons/category.svg",
                 title: context.l10n!.category,
-                onTap: () {},
-              ),
+                onTap: () {
+                  // Navigate to CategoryView in update mode with the studentId
+                  final studentId = userData.data?.studentId;
+                  Nav().push(CategoryView(
+                    isRegistration: false,
+                    studentId: studentId,
+                  ));
+                },
+                // Show current category if available
+                trailing: userData.data?.categoryType != null
+                    ? Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            userData.data!.categoryType!,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                          const Icon(Icons.chevron_right, size: 20),
+                        ],
+                      )
+                    : null,
+              ).animate().moveX(duration: const Duration(milliseconds: 600)),
               const Gap(24),
               Text(
                 context.l10n!.account,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
-              ),
+              ).animate().moveY(duration: const Duration(milliseconds: 600)),
               const Gap(10),
               CustomListTile(
-                  icon: "assets/icons/user.svg",
-                  title: context.l10n!.profileInformation,
-                  onTap: () {}),
+                      icon: isDarkTheme
+                          ? "assets/icons/user_dark.svg"
+                          : "assets/icons/user.svg",
+                      title: context.l10n!.profileInformation,
+                      onTap: () {
+                        Nav().push(const ChangePasswordView());
+                      })
+                  .animate()
+                  .moveX(duration: const Duration(milliseconds: 600)),
               CustomListTile(
-                icon: "assets/icons/language.svg",
+                icon: isDarkTheme
+                    ? "assets/icons/language-square_dark.svg"
+                    : "assets/icons/language.svg",
                 title: context.l10n!.language,
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       currentLanguage.localName,
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                      ),
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                     const Icon(Icons.chevron_right, size: 20),
                   ],
                 ),
                 onTap: () => _showLanguageSelector(context, ref),
-              ),
+              ).animate().moveX(duration: const Duration(milliseconds: 600)),
               const Gap(24),
               Text(
                 context.l10n!.myItems,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       fontWeight: FontWeight.w500,
                     ),
-              ),
+              ).animate().moveY(duration: const Duration(milliseconds: 600)),
               const Gap(10),
               CustomListTile(
-                  icon: "assets/icons/courses.svg",
-                  title: context.l10n!.myCourses,
-                  onTap: () {
-                    Nav().push(MyCourseView());
-                  }),
+                      icon: isDarkTheme
+                          ? "assets/icons/books-01.svg"
+                          : "assets/icons/courses.svg",
+                      title: context.l10n!.myCourses,
+                      onTap: () {
+                        Nav().push(MyCourseView());
+                      })
+                  .animate()
+                  .moveX(duration: const Duration(milliseconds: 600)),
               CustomListTile(
-                  icon: "assets/icons/favourites_profile.svg",
-                  title: context.l10n!.favorites,
-                  onTap: () {
-                    Nav().push(FavoriteItemsView());
-                  }),
+                      icon: isDarkTheme
+                          ? "assets/icons/favourite_dark.svg"
+                          : "assets/icons/favourites_profile.svg",
+                      title: context.l10n!.favorites,
+                      onTap: () {
+                        Nav().push(const FavoriteItemsView());
+                      })
+                  .animate()
+                  .moveX(duration: const Duration(milliseconds: 600)),
               CustomListTile(
-                  icon: "assets/icons/progress_history.svg",
-                  title: context.l10n!.testHistory,
-                  onTap: () {}),
+                      icon: isDarkTheme
+                          ? "assets/icons/catalogue_dark.svg"
+                          : "assets/icons/progress_history.svg",
+                      title: context.l10n!.testHistory,
+                      onTap: () {})
+                  .animate()
+                  .moveX(duration: const Duration(milliseconds: 600)),
               const Gap(24),
               Text(
                 context.l10n!.settings,
@@ -198,7 +271,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                         width: 2, color: AppColors.shadeNeutralLight)),
                 child: ListTile(
                   leading: SvgPicture.asset(
-                    "assets/icons/dark_theme.svg",
+                    isDarkTheme
+                        ? "assets/icons/moon-eclipse_dark.svg"
+                        : "assets/icons/dark_theme.svg",
                     fit: BoxFit.cover,
                     colorFilter: const ColorFilter.linearToSrgbGamma(),
                   ),
@@ -230,19 +305,27 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
               //     title: context.l10n!.subscription,
               //     onTap: () {}),
               CustomListTile(
-                  icon: "assets/icons/customer-support.svg",
+                  icon: isDarkTheme
+                      ? "assets/icons/customer-support_dark.svg"
+                      : "assets/icons/customer-support.svg",
                   title: context.l10n!.support,
                   onTap: () {}),
               CustomListTile(
-                  icon: "assets/icons/f_and_q.svg",
+                  icon: isDarkTheme
+                      ? "assets/icons/help-circle_dark.svg"
+                      : "assets/icons/f_and_q.svg",
                   title: context.l10n!.faq,
                   onTap: () {}),
               CustomListTile(
-                  icon: "assets/icons/terms.svg",
+                  icon: isDarkTheme
+                      ? "assets/icons/alert-circle_dark.svg"
+                      : "assets/icons/terms.svg",
                   title: context.l10n!.termsAndConditions,
                   onTap: () {}),
               CustomListTile(
-                  icon: "assets/icons/privacy.svg",
+                  icon: isDarkTheme
+                      ? "assets/icons/security_dark.svg"
+                      : "assets/icons/privacy.svg",
                   title: context.l10n!.privacyPolicy,
                   onTap: () {}),
               const Gap(24),

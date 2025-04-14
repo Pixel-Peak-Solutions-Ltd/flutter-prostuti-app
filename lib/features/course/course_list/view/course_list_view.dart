@@ -10,7 +10,6 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../course_details/view/course_details_view.dart';
 import '../viewmodel/course_list_viewmodel.dart';
-import '../widgets/category_tile.dart';
 import '../widgets/course_card.dart';
 import '../widgets/course_list_header.dart';
 import '../widgets/search_container.dart';
@@ -69,22 +68,22 @@ class CourseListViewState extends ConsumerState<CourseListView>
                     ),
                   ),
                   const Gap(24),
-                  CourseListHeader(text: context.l10n!.testCategory),
-                  const Gap(10),
+                  // CourseListHeader(text: context.l10n!.testCategory),
+                  // const Gap(10),
                   // Category List
-                  SizedBox(
-                    height: 122,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: imgPath.length,
-                      itemBuilder: (context, index) {
-                        return CategoryTile(
-                          imgPath: imgPath,
-                          index: index,
-                        );
-                      },
-                    ),
-                  ),
+                  // SizedBox(
+                  //   height: 122,
+                  //   child: ListView.builder(
+                  //     scrollDirection: Axis.horizontal,
+                  //     itemCount: imgPath.length,
+                  //     itemBuilder: (context, index) {
+                  //       return CategoryTile(
+                  //         imgPath: imgPath,
+                  //         index: index,
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
                   const Gap(24),
                   CourseListHeader(text: context.l10n!.topCourseList),
                   const Gap(10),

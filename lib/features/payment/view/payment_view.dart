@@ -1,3 +1,4 @@
+// lib/features/payment/view/payment_view.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -5,11 +6,12 @@ import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
-import 'package:prostuti/features/course/course_list/view/course_list_view.dart';
-import 'package:prostuti/features/payment/repository/payment_repo.dart';
 import 'package:prostuti/features/payment/view/easy_checkout.dart';
+import 'package:prostuti/features/payment/viewmodel/payment_viewmodel.dart';
+import 'package:prostuti/features/payment/viewmodel/voucher_viewmodel.dart';
 import 'package:prostuti/features/payment/widgets/course_name_price.dart';
 import 'package:prostuti/features/payment/widgets/price_row.dart';
+import 'package:prostuti/features/payment/widgets/voucher_selector.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../core/services/debouncer.dart';
@@ -20,6 +22,7 @@ import '../../course/course_list/viewmodel/get_course_by_id.dart';
 import '../widgets/stepper.dart';
 
 final _loadingProvider = StateProvider<bool>((ref) => false);
+final _voucherAppliedProvider = StateProvider<bool>((ref) => false);
 
 class PaymentView extends ConsumerWidget with CommonWidgets {
   final String id, name, imgPath, price;
@@ -39,6 +42,17 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
     final publishedCourseNotifier = ref.watch(publishedCourseProvider.notifier);
     final publishedCourseAsync = ref.watch(publishedCourseProvider);
     final isLoading = ref.watch(_loadingProvider);
+    final voucherState = ref.watch(voucherNotifierProvider);
+    final isVoucherApplied = ref.watch(_voucherAppliedProvider);
+    final paymentNotifier = ref.watch(paymentNotifierProvider.notifier);
+
+    // Calculate the final price considering vouchers
+    final originalPrice = double.tryParse(price) ?? 0.0;
+    final finalPrice = voucherState.hasValue && voucherState.value != null
+        ? ref
+            .read(voucherNotifierProvider.notifier)
+            .getFinalPrice(originalPrice)
+        : originalPrice;
 
     return Scaffold(
       appBar: commonAppbar("Cart"),
@@ -60,8 +74,16 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                 CourseNamePrice(
                     name: name, imgPath: imgPath, price: "৳ $price"),
                 const Gap(24),
-                const Divider(),
-                const Gap(24),
+
+                // Voucher selector with bottom sheet
+                VoucherSelector(
+                  courseId: id,
+                  originalPrice: originalPrice,
+                  onVoucherApplied: (applied) {
+                    ref.read(_voucherAppliedProvider.notifier).state = applied;
+                  },
+                ),
+
                 Text(
                   'টপ কোর্সগুলো দেখুন',
                   style: Theme.of(context)
@@ -145,21 +167,21 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                   ),
                 ),
                 const Gap(16),
-                TextButton(
-                  style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      minimumSize: const Size(50, 30),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      alignment: Alignment.centerLeft),
-                  onPressed: () {
-                    Nav().pushReplacement(CourseListView());
-                  },
-                  child: Text(
-                    context.l10n!.topCourseList,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: Colors.blue, fontWeight: FontWeight.w600),
-                  ),
-                ),
+                // TextButton(
+                //   style: TextButton.styleFrom(
+                //       padding: EdgeInsets.zero,
+                //       minimumSize: const Size(50, 30),
+                //       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                //       alignment: Alignment.centerLeft),
+                //   onPressed: () {
+                //     Nav().pushReplacement(CourseListView());
+                //   },
+                //   child: Text(
+                //     context.l10n!.courses,
+                //     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                //         color: Colors.blue, fontWeight: FontWeight.w600),
+                //   ),
+                // ),
                 const Gap(24),
                 Text(
                   'হিসাবের বিস্তারিত',
@@ -169,21 +191,12 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                       .copyWith(fontWeight: FontWeight.bold),
                 ),
                 const Gap(16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("সর্বমোট",
-                        style: Theme.of(context).textTheme.titleSmall),
-                    Text(
-                      "৳ $price",
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ],
-                ),
-                const Gap(16),
+
+                // Use updated PriceRow with voucher support
                 PriceRow(
                   price: price,
                   name: name,
+                  id: id,
                 ),
               ],
             ),
@@ -205,33 +218,50 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                         backgroundColor: const Color(0xff2970FF),
                         fixedSize: Size(SizeConfig.w(356), SizeConfig.h(54))),
                     onPressed: isLoading
-                        ? () {}
+                        ? null
                         : () async {
                             _debouncer.run(
-                                action: () async {
-                                  final response = await ref
-                                      .watch(paymentRepoProvider)
-                                      .initiatePayment({
-                                    "totalPrice": int.parse(price),
-                                    "course_id": [id]
-                                  });
+                              action: () async {
+                                // Debug print for payload
+                                print(
+                                    "Initiating payment with amount: $finalPrice, course: $id, voucher: $isVoucherApplied");
 
-                                  if (response != null) {
-                                    if (response is bool) {
-                                      Fluttertoast.showToast(
-                                          msg: "Already enrolled");
-                                    } else {
-                                      Nav().pushReplacement(EasyCheckout(
-                                          url: response.toString()));
-                                    }
-                                  } else {
+                                final paymentUrl =
+                                    await paymentNotifier.initiatePayment(
+                                  courseId: id,
+                                  totalPrice: finalPrice,
+                                  applyVoucher: isVoucherApplied,
+                                );
+
+                                if (paymentUrl != null &&
+                                    paymentUrl.isNotEmpty) {
+                                  print("Payment URL received: $paymentUrl");
+                                  // Valid URL received, navigate to checkout
+                                  Nav().pushReplacement(
+                                    EasyCheckout(url: paymentUrl),
+                                  );
+                                } else {
+                                  // No URL received, check for error or already enrolled
+                                  final paymentState =
+                                      ref.read(paymentNotifierProvider);
+                                  if (paymentState.hasError) {
+                                    print(
+                                        "Payment error: ${paymentState.error}");
                                     Fluttertoast.showToast(
-                                        msg:
-                                            "Please try again after 10 seconds");
+                                      msg: paymentState.error.toString(),
+                                    );
+                                  } else {
+                                    // Could be already enrolled
+                                    Fluttertoast.showToast(
+                                      msg:
+                                          "You are already enrolled in this course",
+                                    );
                                   }
-                                },
-                                loadingController:
-                                    ref.read(_loadingProvider.notifier));
+                                }
+                              },
+                              loadingController:
+                                  ref.read(_loadingProvider.notifier),
+                            );
                           },
                     child: Text(
                       context.l10n!.payNow,

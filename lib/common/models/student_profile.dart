@@ -28,6 +28,7 @@ class Data {
   String? studentId;
   String? name;
   String? categoryType;
+
   String? phone;
   String? email;
   List<String>? enrolledCourses;
@@ -89,7 +90,6 @@ class Data {
   }
 }
 
-
 class Image {
   String? diskType;
   String? path;
@@ -99,10 +99,10 @@ class Image {
 
   Image(
       {this.diskType,
-        this.path,
-        this.originalName,
-        this.modifiedName,
-        this.fileId});
+      this.path,
+      this.originalName,
+      this.modifiedName,
+      this.fileId});
 
   Image.fromJson(Map<String, dynamic> json) {
     diskType = json['diskType'];

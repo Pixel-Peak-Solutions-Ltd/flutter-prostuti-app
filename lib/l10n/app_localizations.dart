@@ -407,12 +407,6 @@ abstract class AppLocalizations {
   /// **'Enter your phone number'**
   String get enterYourPhoneNumber;
 
-  /// No description provided for @password.
-  ///
-  /// In en, this message translates to:
-  /// **'Password'**
-  String get password;
-
   /// No description provided for @enterYourPassword.
   ///
   /// In en, this message translates to:
@@ -520,12 +514,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Name'**
   String get name;
-
-  /// No description provided for @enterYourName.
-  ///
-  /// In en, this message translates to:
-  /// **'Enter your name'**
-  String get enterYourName;
 
   /// No description provided for @email.
   ///
@@ -1738,6 +1726,444 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'All Activities'**
   String get allActivities;
+
+  /// No description provided for @writeReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a Review'**
+  String get writeReview;
+
+  /// No description provided for @noReviewsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No Reviews Yet'**
+  String get noReviewsYet;
+
+  /// No description provided for @beTheFirstToReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Be the first to share your experience!'**
+  String get beTheFirstToReview;
+
+  /// No description provided for @shareYourExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Share your experience'**
+  String get shareYourExperience;
+
+  /// No description provided for @reviewTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Review is too short (min 5 characters)'**
+  String get reviewTooShort;
+
+  /// No description provided for @reviewTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Review is too long (max 1000 characters)'**
+  String get reviewTooLong;
+
+  /// No description provided for @reviewSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Review submitted successfully'**
+  String get reviewSubmitted;
+
+  /// No description provided for @errorSubmittingReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Error submitting review'**
+  String get errorSubmittingReview;
+
+  /// No description provided for @reviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get reviews;
+
+  /// No description provided for @loadingReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading reviews...'**
+  String get loadingReviews;
+
+  /// No description provided for @rateYourExperience.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate your experience'**
+  String get rateYourExperience;
+
+  /// No description provided for @submittingReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitting review...'**
+  String get submittingReview;
+
+  /// No description provided for @dismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get dismiss;
+
+  /// No description provided for @voucher.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher'**
+  String get voucher;
+
+  /// No description provided for @enterVoucherCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter voucher code'**
+  String get enterVoucherCode;
+
+  /// No description provided for @apply.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get apply;
+
+  /// No description provided for @remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// No description provided for @voucherApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher applied successfully!'**
+  String get voucherApplied;
+
+  /// No description provided for @enterValidVoucher.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid voucher code'**
+  String get enterValidVoucher;
+
+  /// No description provided for @discount.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount'**
+  String get discount;
+
+  /// No description provided for @total.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get total;
+
+  /// No description provided for @voucherError.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher Error'**
+  String get voucherError;
+
+  /// No description provided for @voucherNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Voucher not found'**
+  String get voucherNotFound;
+
+  /// No description provided for @voucherExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This voucher has expired'**
+  String get voucherExpired;
+
+  /// No description provided for @voucherNotApplicable.
+  ///
+  /// In en, this message translates to:
+  /// **'This voucher is not applicable for this purchase'**
+  String get voucherNotApplicable;
+
+  /// No description provided for @availableVouchers.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Vouchers'**
+  String get availableVouchers;
+
+  /// No description provided for @searchVouchers.
+  ///
+  /// In en, this message translates to:
+  /// **'Search vouchers'**
+  String get searchVouchers;
+
+  /// No description provided for @noVouchersAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No vouchers available'**
+  String get noVouchersAvailable;
+
+  /// No description provided for @expiresOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Expires on'**
+  String get expiresOn;
+
+  /// No description provided for @specialForYou.
+  ///
+  /// In en, this message translates to:
+  /// **'Special for you!'**
+  String get specialForYou;
+
+  /// No description provided for @courseSpecific.
+  ///
+  /// In en, this message translates to:
+  /// **'Course specific'**
+  String get courseSpecific;
+
+  /// No description provided for @generalVoucher.
+  ///
+  /// In en, this message translates to:
+  /// **'General voucher'**
+  String get generalVoucher;
+
+  /// No description provided for @youSave.
+  ///
+  /// In en, this message translates to:
+  /// **'You save'**
+  String get youSave;
+
+  /// No description provided for @tapToApply.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to apply'**
+  String get tapToApply;
+
+  /// No description provided for @selectVoucher.
+  ///
+  /// In en, this message translates to:
+  /// **'Select voucher'**
+  String get selectVoucher;
+
+  /// No description provided for @discountApplied.
+  ///
+  /// In en, this message translates to:
+  /// **'Discount applied'**
+  String get discountApplied;
+
+  /// No description provided for @vouchers.
+  ///
+  /// In en, this message translates to:
+  /// **'Vouchers'**
+  String get vouchers;
+
+  /// No description provided for @pleaseSelectYourCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your preferred category'**
+  String get pleaseSelectYourCategory;
+
+  /// No description provided for @subcategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Subcategory'**
+  String get subcategory;
+
+  /// No description provided for @pleaseSelectYourSubcategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select your preferred subcategory'**
+  String get pleaseSelectYourSubcategory;
+
+  /// No description provided for @noSubcategoriesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No subcategories found'**
+  String get noSubcategoriesFound;
+
+  /// No description provided for @goBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Back'**
+  String get goBack;
+
+  /// No description provided for @categoryUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Category updated successfully'**
+  String get categoryUpdatedSuccessfully;
+
+  /// No description provided for @studentIdNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Student ID not found'**
+  String get studentIdNotFound;
+
+  /// No description provided for @academic.
+  ///
+  /// In en, this message translates to:
+  /// **'Academic'**
+  String get academic;
+
+  /// No description provided for @admission.
+  ///
+  /// In en, this message translates to:
+  /// **'Admission'**
+  String get admission;
+
+  /// No description provided for @job.
+  ///
+  /// In en, this message translates to:
+  /// **'Job'**
+  String get job;
+
+  /// No description provided for @science.
+  ///
+  /// In en, this message translates to:
+  /// **'Science'**
+  String get science;
+
+  /// No description provided for @commerce.
+  ///
+  /// In en, this message translates to:
+  /// **'Commerce'**
+  String get commerce;
+
+  /// No description provided for @arts.
+  ///
+  /// In en, this message translates to:
+  /// **'Arts'**
+  String get arts;
+
+  /// No description provided for @engineering.
+  ///
+  /// In en, this message translates to:
+  /// **'Engineering'**
+  String get engineering;
+
+  /// No description provided for @medical.
+  ///
+  /// In en, this message translates to:
+  /// **'Medical'**
+  String get medical;
+
+  /// No description provided for @university.
+  ///
+  /// In en, this message translates to:
+  /// **'University'**
+  String get university;
+
+  /// No description provided for @changePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Password'**
+  String get changePassword;
+
+  /// No description provided for @currentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Password'**
+  String get currentPassword;
+
+  /// No description provided for @enterCurrentPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your current password'**
+  String get enterCurrentPassword;
+
+  /// No description provided for @newPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get newPassword;
+
+  /// No description provided for @enterNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your new password'**
+  String get enterNewPassword;
+
+  /// No description provided for @confirmNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm New Password'**
+  String get confirmNewPassword;
+
+  /// No description provided for @confirmYourNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm your new password'**
+  String get confirmYourNewPassword;
+
+  /// No description provided for @updatePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Password'**
+  String get updatePassword;
+
+  /// No description provided for @passwordChangedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Password changed successfully'**
+  String get passwordChangedSuccessfully;
+
+  /// No description provided for @confirmPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm password is required'**
+  String get confirmPasswordRequired;
+
+  /// No description provided for @updateCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Category'**
+  String get updateCategory;
+
+  /// No description provided for @currentCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Category'**
+  String get currentCategory;
+
+  /// No description provided for @selectNewCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select New Category'**
+  String get selectNewCategory;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @enterYourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your name'**
+  String get enterYourName;
+
+  /// No description provided for @updateProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Profile'**
+  String get updateProfile;
+
+  /// No description provided for @profileUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully'**
+  String get profileUpdatedSuccessfully;
+
+  /// No description provided for @noChangesDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'No changes detected'**
+  String get noChangesDetected;
+
+  /// No description provided for @errorUpdatingProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Error updating profile'**
+  String get errorUpdatingProfile;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

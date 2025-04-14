@@ -165,9 +165,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get enterYourPhoneNumber => 'আপনার ফোন নম্বর লিখুন';
 
   @override
-  String get password => 'পাসওয়ার্ড';
-
-  @override
   String get enterYourPassword => 'আপনার পাসওয়ার্ড লিখুন';
 
   @override
@@ -220,9 +217,6 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get name => 'নাম';
-
-  @override
-  String get enterYourName => 'আপনার নাম লিখুন';
 
   @override
   String get email => 'ইমেইল';
@@ -829,4 +823,223 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get allActivities => 'সব এক্টিভিটিস';
+
+  @override
+  String get writeReview => 'একটি পর্যালোচনা লিখুন';
+
+  @override
+  String get noReviewsYet => 'এখনও কোন পর্যালোচনা নেই';
+
+  @override
+  String get beTheFirstToReview => 'আপনার অভিজ্ঞতা শেয়ার করতে প্রথম হোন!';
+
+  @override
+  String get shareYourExperience => 'আপনার অভিজ্ঞতা শেয়ার করুন';
+
+  @override
+  String get reviewTooShort => 'পর্যালোচনা খুব ছোট (ন্যূনতম ৫ অক্ষর)';
+
+  @override
+  String get reviewTooLong => 'পর্যালোচনা খুব বড় (সর্বাধিক ১০০০ অক্ষর)';
+
+  @override
+  String get reviewSubmitted => 'পর্যালোচনা সফলভাবে জমা দেওয়া হয়েছে';
+
+  @override
+  String get errorSubmittingReview => 'পর্যালোচনা জমা দেওয়ার সময় ত্রুটি';
+
+  @override
+  String get reviews => 'পর্যালোচনা';
+
+  @override
+  String get loadingReviews => 'পর্যালোচনা লোড হচ্ছে...';
+
+  @override
+  String get rateYourExperience => 'আপনার অভিজ্ঞতা রেট করুন';
+
+  @override
+  String get submittingReview => 'পর্যালোচনা জমা দেওয়া হচ্ছে...';
+
+  @override
+  String get dismiss => 'বাতিল করুন';
+
+  @override
+  String get voucher => 'ভাউচার';
+
+  @override
+  String get enterVoucherCode => 'ভাউচার কোড লিখুন';
+
+  @override
+  String get apply => 'প্রয়োগ করুন';
+
+  @override
+  String get remove => 'সরান';
+
+  @override
+  String get voucherApplied => 'ভাউচার সফলভাবে প্রয়োগ করা হয়েছে!';
+
+  @override
+  String get enterValidVoucher => 'অনুগ্রহ করে একটি বৈধ ভাউচার কোড লিখুন';
+
+  @override
+  String get discount => 'ছাড়';
+
+  @override
+  String get total => 'মোট';
+
+  @override
+  String get voucherError => 'ভাউচার ত্রুটি';
+
+  @override
+  String get voucherNotFound => 'ভাউচার পাওয়া যায়নি';
+
+  @override
+  String get voucherExpired => 'এই ভাউচারের মেয়াদ শেষ হয়ে গেছে';
+
+  @override
+  String get voucherNotApplicable => 'এই ভাউচারটি এই ক্রয়ের জন্য প্রযোজ্য নয়';
+
+  @override
+  String get availableVouchers => 'উপলব্ধ ভাউচার';
+
+  @override
+  String get searchVouchers => 'ভাউচার খুঁজুন';
+
+  @override
+  String get noVouchersAvailable => 'কোন ভাউচার উপলব্ধ নেই';
+
+  @override
+  String get expiresOn => 'মেয়াদ শেষ হবে';
+
+  @override
+  String get specialForYou => 'আপনার জন্য বিশেষ!';
+
+  @override
+  String get courseSpecific => 'কোর্স নির্দিষ্ট';
+
+  @override
+  String get generalVoucher => 'সাধারণ ভাউচার';
+
+  @override
+  String get youSave => 'আপনি সাশ্রয় করেন';
+
+  @override
+  String get tapToApply => 'প্রয়োগ করতে ট্যাপ করুন';
+
+  @override
+  String get selectVoucher => 'ভাউচার নির্বাচন করুন';
+
+  @override
+  String get discountApplied => 'ছাড় প্রয়োগ করা হয়েছে';
+
+  @override
+  String get vouchers => 'ভাউচারসমূহ';
+
+  @override
+  String get pleaseSelectYourCategory => 'আপনার পছন্দের বিভাগ নির্বাচন করুন';
+
+  @override
+  String get subcategory => 'উপবিভাগ';
+
+  @override
+  String get pleaseSelectYourSubcategory => 'আপনার পছন্দের উপবিভাগ নির্বাচন করুন';
+
+  @override
+  String get noSubcategoriesFound => 'কোন উপবিভাগ পাওয়া যায়নি';
+
+  @override
+  String get goBack => 'ফিরে যান';
+
+  @override
+  String get categoryUpdatedSuccessfully => 'বিভাগ সফলভাবে আপডেট করা হয়েছে';
+
+  @override
+  String get studentIdNotFound => 'শিক্ষার্থী আইডি পাওয়া যায়নি';
+
+  @override
+  String get academic => 'একাডেমিক';
+
+  @override
+  String get admission => 'ভর্তি';
+
+  @override
+  String get job => 'চাকরি';
+
+  @override
+  String get science => 'বিজ্ঞান';
+
+  @override
+  String get commerce => 'বাণিজ্য';
+
+  @override
+  String get arts => 'কলা';
+
+  @override
+  String get engineering => 'ইঞ্জিনিয়ারিং';
+
+  @override
+  String get medical => 'মেডিকেল';
+
+  @override
+  String get university => 'বিশ্ববিদ্যালয়';
+
+  @override
+  String get changePassword => 'পাসওয়ার্ড পরিবর্তন করুন';
+
+  @override
+  String get currentPassword => 'বর্তমান পাসওয়ার্ড';
+
+  @override
+  String get enterCurrentPassword => 'আপনার বর্তমান পাসওয়ার্ড লিখুন';
+
+  @override
+  String get newPassword => 'নতুন পাসওয়ার্ড';
+
+  @override
+  String get enterNewPassword => 'আপনার নতুন পাসওয়ার্ড লিখুন';
+
+  @override
+  String get confirmNewPassword => 'নতুন পাসওয়ার্ড নিশ্চিত করুন';
+
+  @override
+  String get confirmYourNewPassword => 'আপনার নতুন পাসওয়ার্ড নিশ্চিত করুন';
+
+  @override
+  String get updatePassword => 'পাসওয়ার্ড আপডেট করুন';
+
+  @override
+  String get passwordChangedSuccessfully => 'পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে';
+
+  @override
+  String get confirmPasswordRequired => 'পাসওয়ার্ড নিশ্চিত করা প্রয়োজন';
+
+  @override
+  String get updateCategory => 'বিভাগ আপডেট করুন';
+
+  @override
+  String get currentCategory => 'বর্তমান বিভাগ';
+
+  @override
+  String get selectNewCategory => 'নতুন বিভাগ নির্বাচন করুন';
+
+  @override
+  String get profile => 'প্রোফাইল';
+
+  @override
+  String get password => 'পাসওয়ার্ড';
+
+  @override
+  String get enterYourName => 'আপনার নাম লিখুন';
+
+  @override
+  String get updateProfile => 'প্রোফাইল আপডেট করুন';
+
+  @override
+  String get profileUpdatedSuccessfully => 'প্রোফাইল সফলভাবে আপডেট হয়েছে';
+
+  @override
+  String get noChangesDetected => 'কোন পরিবর্তন পাওয়া যায়নি';
+
+  @override
+  String get errorUpdatingProfile => 'প্রোফাইল আপডেট করার সময় ত্রুটি';
 }

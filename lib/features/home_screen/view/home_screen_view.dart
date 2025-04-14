@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
@@ -194,17 +195,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildHomeContent() {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Use constraints to make responsive calculations
         final maxWidth = constraints.maxWidth;
 
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTopSection(maxWidth),
+              // Top section fades in
+              _buildTopSection(maxWidth).animate().fadeIn(duration: 575.ms),
+
               const Gap(16),
-              _buildAdSection(maxWidth),
+
+              // Ad section slides in
+              // _buildAdSection(maxWidth)
+              //     .animate()
+              //     .moveX(begin: 20, end: 0, duration: 500.ms),
+
               const Gap(16),
+
+              // Calendar title bounces in
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -215,23 +224,90 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       .titleSmall!
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
-              ),
-              const HomeRoutineWidget(),
+              ).animate().moveX(duration: 674.ms, curve: Curves.easeIn),
+
+              // Routine widget fades in
+              const HomeRoutineWidget()
+                  .animate()
+                  .moveX(begin: 20, end: 0, duration: 500.ms),
+
               const Gap(16),
-              _buildSectionHeader(context, "আমার ফ্ল্যাশকার্ড"),
+
+              // Flashcard header slides in
+              _buildSectionHeader(context, "আমার ফ্ল্যাশকার্ড")
+                  .animate()
+                  .moveX(begin: -20, end: 0, duration: 400.ms),
+
               const Gap(8),
-              _buildFlashcardSection(maxWidth),
+
+              // Flashcard section shimmers in
+              _buildFlashcardSection(maxWidth)
+                  .animate()
+                  .fadeIn()
+                  .shimmer(duration: 1000.ms),
+
               const Gap(16),
+
+              // Leaderboard section zooms in
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: LeaderboardSection(),
-              ),
-              const Gap(16), // Bottom padding for scrolling
+              ).animate().scale(duration: 500.ms),
+
+              const Gap(16),
             ],
           ),
         );
       },
     );
+  }
+
+  Widget _buildProfileShimmer(BuildContext context) {
+    return Row(
+      children: [
+        // Avatar placeholder
+        Container(
+          width: 40,
+          height: 40,
+          decoration: const BoxDecoration(
+            color: Colors.grey,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const Gap(16),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Name placeholder
+            Container(
+              width: 120,
+              height: 16,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            const SizedBox(height: 4),
+            // "View profile" text placeholder
+            Container(
+              width: 80,
+              height: 14,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ).animate(onPlay: (controller) => controller.repeat()).shimmer(
+          duration: 1200.ms,
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white.withOpacity(0.7)
+              : Colors.white.withOpacity(0.9),
+          size: 0.8,
+          delay: 300.ms,
+        );
   }
 
   // Top section with profile and category cards - Optimized to reduce API calls
@@ -333,7 +409,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         return const Text("Error loading profile");
                       },
                       loading: () {
-                        return const Center(child: CircularProgressIndicator());
+                        return _buildProfileShimmer(context);
                       },
                     ),
                   ),

@@ -165,9 +165,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get enterYourPhoneNumber => 'Enter your phone number';
 
   @override
-  String get password => 'Password';
-
-  @override
   String get enterYourPassword => 'Enter your password';
 
   @override
@@ -220,9 +217,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get name => 'Name';
-
-  @override
-  String get enterYourName => 'Enter your name';
 
   @override
   String get email => 'Email';
@@ -829,4 +823,223 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get allActivities => 'All Activities';
+
+  @override
+  String get writeReview => 'Write a Review';
+
+  @override
+  String get noReviewsYet => 'No Reviews Yet';
+
+  @override
+  String get beTheFirstToReview => 'Be the first to share your experience!';
+
+  @override
+  String get shareYourExperience => 'Share your experience';
+
+  @override
+  String get reviewTooShort => 'Review is too short (min 5 characters)';
+
+  @override
+  String get reviewTooLong => 'Review is too long (max 1000 characters)';
+
+  @override
+  String get reviewSubmitted => 'Review submitted successfully';
+
+  @override
+  String get errorSubmittingReview => 'Error submitting review';
+
+  @override
+  String get reviews => 'Reviews';
+
+  @override
+  String get loadingReviews => 'Loading reviews...';
+
+  @override
+  String get rateYourExperience => 'Rate your experience';
+
+  @override
+  String get submittingReview => 'Submitting review...';
+
+  @override
+  String get dismiss => 'Dismiss';
+
+  @override
+  String get voucher => 'Voucher';
+
+  @override
+  String get enterVoucherCode => 'Enter voucher code';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String get voucherApplied => 'Voucher applied successfully!';
+
+  @override
+  String get enterValidVoucher => 'Please enter a valid voucher code';
+
+  @override
+  String get discount => 'Discount';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String get voucherError => 'Voucher Error';
+
+  @override
+  String get voucherNotFound => 'Voucher not found';
+
+  @override
+  String get voucherExpired => 'This voucher has expired';
+
+  @override
+  String get voucherNotApplicable => 'This voucher is not applicable for this purchase';
+
+  @override
+  String get availableVouchers => 'Available Vouchers';
+
+  @override
+  String get searchVouchers => 'Search vouchers';
+
+  @override
+  String get noVouchersAvailable => 'No vouchers available';
+
+  @override
+  String get expiresOn => 'Expires on';
+
+  @override
+  String get specialForYou => 'Special for you!';
+
+  @override
+  String get courseSpecific => 'Course specific';
+
+  @override
+  String get generalVoucher => 'General voucher';
+
+  @override
+  String get youSave => 'You save';
+
+  @override
+  String get tapToApply => 'Tap to apply';
+
+  @override
+  String get selectVoucher => 'Select voucher';
+
+  @override
+  String get discountApplied => 'Discount applied';
+
+  @override
+  String get vouchers => 'Vouchers';
+
+  @override
+  String get pleaseSelectYourCategory => 'Please select your preferred category';
+
+  @override
+  String get subcategory => 'Subcategory';
+
+  @override
+  String get pleaseSelectYourSubcategory => 'Please select your preferred subcategory';
+
+  @override
+  String get noSubcategoriesFound => 'No subcategories found';
+
+  @override
+  String get goBack => 'Go Back';
+
+  @override
+  String get categoryUpdatedSuccessfully => 'Category updated successfully';
+
+  @override
+  String get studentIdNotFound => 'Student ID not found';
+
+  @override
+  String get academic => 'Academic';
+
+  @override
+  String get admission => 'Admission';
+
+  @override
+  String get job => 'Job';
+
+  @override
+  String get science => 'Science';
+
+  @override
+  String get commerce => 'Commerce';
+
+  @override
+  String get arts => 'Arts';
+
+  @override
+  String get engineering => 'Engineering';
+
+  @override
+  String get medical => 'Medical';
+
+  @override
+  String get university => 'University';
+
+  @override
+  String get changePassword => 'Change Password';
+
+  @override
+  String get currentPassword => 'Current Password';
+
+  @override
+  String get enterCurrentPassword => 'Enter your current password';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get enterNewPassword => 'Enter your new password';
+
+  @override
+  String get confirmNewPassword => 'Confirm New Password';
+
+  @override
+  String get confirmYourNewPassword => 'Confirm your new password';
+
+  @override
+  String get updatePassword => 'Update Password';
+
+  @override
+  String get passwordChangedSuccessfully => 'Password changed successfully';
+
+  @override
+  String get confirmPasswordRequired => 'Confirm password is required';
+
+  @override
+  String get updateCategory => 'Update Category';
+
+  @override
+  String get currentCategory => 'Current Category';
+
+  @override
+  String get selectNewCategory => 'Select New Category';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get enterYourName => 'Enter your name';
+
+  @override
+  String get updateProfile => 'Update Profile';
+
+  @override
+  String get profileUpdatedSuccessfully => 'Profile updated successfully';
+
+  @override
+  String get noChangesDetected => 'No changes detected';
+
+  @override
+  String get errorUpdatingProfile => 'Error updating profile';
 }

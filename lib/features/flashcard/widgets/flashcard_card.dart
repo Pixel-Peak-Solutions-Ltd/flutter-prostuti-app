@@ -40,7 +40,7 @@ class _FlashCardState extends State<FlashCard> {
 
   Widget _buildCardSide(String text, bool isFront) {
     return Card(
-      margin: const EdgeInsets.only(top: 24),
+      margin: const EdgeInsets.only(top: 8),
       elevation: 8,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
