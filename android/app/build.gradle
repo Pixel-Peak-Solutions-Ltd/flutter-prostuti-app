@@ -58,6 +58,26 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flavorDimensions "default"
+    productFlavors {
+        development {
+            dimension "default"
+            applicationIdSuffix ".dev"
+            versionNameSuffix "-dev"
+            resValue "string", "app_name", "Prostuti Dev"
+        }
+        staging {
+            dimension "default"
+            applicationIdSuffix ".staging"
+            versionNameSuffix "-staging"
+            resValue "string", "app_name", "Prostuti Staging"
+        }
+        production {
+            dimension "default"
+            resValue "string", "app_name", "Prostuti"
+        }
+    }
 }
 
 flutter {

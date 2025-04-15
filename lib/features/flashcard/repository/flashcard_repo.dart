@@ -33,6 +33,7 @@ class FlashcardRepo {
       "page": page,
       "limit": limit,
       "visibility": visibility,
+      "isApproved": true,
     };
 
     // Add filter parameters if they're provided

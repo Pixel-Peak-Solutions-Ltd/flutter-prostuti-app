@@ -26,15 +26,23 @@ mason make pros
 ## To give build for Android
 
 ```
-fvm flutter build appbundle --release --obfuscate --split-debug-info=./debug_info
-fvm flutter build apk --release --obfuscate --split-debug-info=./debug_info
+# Development APK (Android)
+flutter build apk --flavor development --release -t lib/main_development.dart
+   
+# Staging APK (Android)
+flutter build apk --flavor staging --release -t lib/main_staging.dart
+   
+# Production APK (Android)
+flutter build apk --flavor production --release -t lib/main_production.dart
+
+
 ```
 
 ## for IOS build
 
 ```
-fvm flutter build ios --release --obfuscate --split-debug-info=./debug_info
-fvm flutter build ipa --release --obfuscate --split-debug-info=./debug_info
+# For iOS apps
+flutter build ipa --flavor production -t lib/main_production.dart
 ```
 
 ## for IOS upload-symbols

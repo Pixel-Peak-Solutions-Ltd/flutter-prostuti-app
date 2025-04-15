@@ -1,0 +1,5 @@
+#include "Generated.xcconfig"
+FLUTTER_TARGET=lib/main_development.dart
+FLUTTER_FLAVOR=development
+PRODUCT_BUNDLE_IDENTIFIER=com.example.prostuti.dev
+DISPLAY_NAME=Prostuti Dev

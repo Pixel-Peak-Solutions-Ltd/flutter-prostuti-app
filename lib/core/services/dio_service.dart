@@ -4,11 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
-import 'package:prostuti/secrets/secrets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/view_model/auth_notifier.dart';
+import '../../flutter_config.dart';
 import 'nav.dart';
 import 'no_internet_view.dart';
 
@@ -56,8 +56,11 @@ Dio dio(DioRef ref) {
   final authNotifier = ref.read(authNotifierProvider.notifier);
   final networkInfo = ref.watch(networkInfoProvider);
 
+  // Use the base URL from FlavorConfig instead of hard-coded BASE_URL
+  final baseUrl = FlavorConfig.instance.baseUrl;
+
   return Dio(BaseOptions(
-    baseUrl: BASE_URL,
+    baseUrl: baseUrl, // Use flavor-specific URL
     connectTimeout: const Duration(seconds: 20),
     receiveTimeout: const Duration(seconds: 60),
   ))
@@ -165,6 +168,9 @@ class DioService {
   final NetworkInfo _networkInfo;
 
   DioService(this._dio, this._networkInfo);
+
+  // Add a getter to access the current baseUrl
+  String get baseUrl => _dio.options.baseUrl;
 
   Future<Response> getRequest(String endpoint,
       {Map<String, dynamic>? queryParameters}) async {

@@ -38,7 +38,7 @@ final networkInfoProvider = AutoDisposeProvider<NetworkInfo>.internal(
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
 typedef NetworkInfoRef = AutoDisposeProviderRef<NetworkInfo>;
-String _$dioHash() => r'79fadc584096799c4666d938fa4e80d184fba802';
+String _$dioHash() => r'f604ede5bc8d1ebb7de7b03f691a1fa810a2a8f2';
 
 /// See also [dio].
 @ProviderFor(dio)
