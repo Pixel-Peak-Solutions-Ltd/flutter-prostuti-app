@@ -26,6 +26,7 @@ class LeaderboardRepo {
     final queryParameters = {
       'page': page.toString(),
       'limit': limit.toString(),
+      'sortBy': 'totalScore'
     };
 
     final response = await _dioService.getRequest(
@@ -50,6 +51,7 @@ class LeaderboardRepo {
     final queryParameters = {
       'page': page.toString(),
       'limit': limit.toString(),
+      'sortBy': 'totalScore',
     };
 
     final response = await _dioService.getRequest(

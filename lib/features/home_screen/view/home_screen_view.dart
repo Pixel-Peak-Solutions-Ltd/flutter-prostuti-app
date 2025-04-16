@@ -557,11 +557,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   // Flashcard section
+// Redesigned Flashcard Section - directly based on existing implementation
+
+// Flashcard section
   Widget _buildFlashcardSection(double maxWidth) {
     final flashcardsAsync = ref.watch(exploreFlashcardsProvider);
 
     return SizedBox(
-      height: 220, // Fixed height for horizontal scroll
+      height: 220, // Same height as original
       child: flashcardsAsync.when(
         data: (flashcards) {
           if (flashcards.isEmpty) {
@@ -606,50 +609,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Skeletonizer(
             enabled: true,
             child: Card(
-              elevation: 4,
+              elevation: 8,
+              shadowColor: Colors.grey.withOpacity(0.2),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey[200], // Light grey background for skeleton
-                ),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Sound button skeleton
-                        Container(
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        // Favorite button skeleton
-                        Container(
-                          width: 24,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
                     // Title skeleton
                     Container(
                       width: double.infinity,
-                      height: 16,
+                      height: 24,
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -658,17 +635,40 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       height: 16,
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     const Spacer(),
                     // Author skeleton
+                    Row(
+                      children: [
+                        Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Container(
+                          width: 100,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    // Button skeleton
                     Container(
-                      width: 100,
-                      height: 12,
+                      height: 40,
+                      width: 120,
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                   ],
@@ -697,7 +697,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       },
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 3,
+        itemCount: 5,
         itemBuilder: (context, index) {
           if (index == flashcards.length) {
             // Loading indicator at the end
@@ -708,7 +708,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           }
 
           final flashcard = flashcards[index];
-          final baseColor = _getFlashcardColor(index);
+          final cardColor = _getFlashcardColor(index, context);
 
           return InkWell(
             onTap: () {
@@ -725,26 +725,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 bottom: 12,
               ),
               child: Card(
-                elevation: 8,
-                shadowColor: baseColor.withOpacity(0.5),
+                elevation: 12,
+                shadowColor: cardColor.withOpacity(0.3),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(16),
                   child: Stack(
                     children: [
-                      // Custom painter for wavy background
+                      // Background pattern
                       Positioned.fill(
-                        child: CustomPaint(
-                          painter: WavyBackgroundPainter(
-                            baseColor: _getFlashcardColor(index),
-                          ),
-                        ),
+                        child: _buildModernBackground(cardColor),
                       ),
+
                       // Content
                       Padding(
-                        padding: const EdgeInsets.all(24),
+                        padding: const EdgeInsets.all(20),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -752,98 +749,103 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             if (flashcard.studentId != null)
                               Align(
                                 alignment: Alignment.topRight,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 12,
-                                    vertical: 6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.3),
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onError,
-                                        blurRadius: 1,
-                                        offset: const Offset(0, 2),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 14,
+                                      backgroundColor:
+                                          cardColor.withOpacity(0.2),
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 16,
+                                        color: cardColor,
                                       ),
-                                    ],
-                                  ),
-                                  child: Text(
-                                    'Flashcard By ${flashcard.studentId!.name}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            const Spacer(),
-                            Center(
-                              child: Text(
-                                flashcard.title!,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall!
-                                    .copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  shadows: [
-                                    Shadow(
-                                      blurRadius: 4.0,
-                                      color: Colors.black.withOpacity(0.3),
-                                      offset: const Offset(1.0, 1.0),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'By ${flashcard.studentId!.name}',
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black87,
+                                      ),
                                     ),
                                   ],
                                 ),
-                                textAlign: TextAlign.center,
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
                               ),
-                            ),
+
                             const Spacer(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
+
+                            // Title with decoration element
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 8,
-                                  ),
+                                  width: 40,
+                                  height: 5,
                                   decoration: BoxDecoration(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                    borderRadius: BorderRadius.circular(30),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        blurRadius: 4,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ],
-                                  ),
-                                  child: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        'View',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Icon(
-                                        Icons.arrow_forward,
-                                        color: Colors.white,
-                                        size: 18,
-                                      ),
-                                    ],
+                                    color: cardColor,
+                                    borderRadius: BorderRadius.circular(3),
                                   ),
                                 ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  flashcard.title!,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall!
+                                      .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        height: 1.2,
+                                      ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ],
+                            ),
+
+                            const Spacer(),
+
+                            // Action button
+                            Align(
+                              alignment: Alignment.bottomLeft,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: cardColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: cardColor.withOpacity(0.4),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'View',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Icon(
+                                      Icons.arrow_forward,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -859,15 +861,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Color _getFlashcardColor(int index) {
-    final colors = [
-      Theme.of(context).colorScheme.secondary,
-      Theme.of(context).unselectedWidgetColor,
-      Theme.of(context).colorScheme.error,
-      Colors.orange,
-      Colors.green,
-    ];
-    return colors[index % colors.length];
+// Modern background pattern
+  Widget _buildModernBackground(Color baseColor) {
+    return CustomPaint(
+      painter: ModernFlashcardBackgroundPainter(
+        baseColor: baseColor,
+      ),
+    );
   }
 
   // Section header
@@ -905,10 +905,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
 // ---------
 
-class WavyBackgroundPainter extends CustomPainter {
+class ModernFlashcardBackgroundPainter extends CustomPainter {
   final Color baseColor;
 
-  WavyBackgroundPainter({
+  ModernFlashcardBackgroundPainter({
     required this.baseColor,
   });
 
@@ -917,18 +917,27 @@ class WavyBackgroundPainter extends CustomPainter {
     // Create gradient colors based on the baseColor
     final Rect rect = Offset.zero & size;
 
-    // Create lighter and darker shades of the base color
-    final Color lighterColor = _lightenColor(baseColor, 0.15);
-    final Color darkerColor = _darkenColor(baseColor, 0.15);
+    // Create lighter variations of the base color
+    final Color lighterColor1 = HSLColor.fromColor(baseColor)
+        .withLightness(
+            (HSLColor.fromColor(baseColor).lightness + 0.45).clamp(0.0, 1.0))
+        .toColor();
 
+    final Color lighterColor2 = HSLColor.fromColor(baseColor)
+        .withLightness(
+            (HSLColor.fromColor(baseColor).lightness + 0.3).clamp(0.0, 1.0))
+        .toColor();
+
+    // Background gradient
     final gradient = LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
       colors: [
-        lighterColor,
-        baseColor,
-        darkerColor,
+        lighterColor1,
+        lighterColor1,
+        lighterColor2,
       ],
+      stops: const [0.0, 0.5, 1.0],
     );
 
     final paint = Paint()
@@ -938,84 +947,64 @@ class WavyBackgroundPainter extends CustomPainter {
     // Fill background
     canvas.drawRect(rect, paint);
 
-    // Paint the waves
-    _paintWaves(canvas, size);
+    // Add decorative elements
+    _paintDecorativeElements(canvas, size, baseColor);
   }
 
-  Color _lightenColor(Color color, double amount) {
-    final hsl = HSLColor.fromColor(color);
-    return hsl
-        .withLightness((hsl.lightness + amount).clamp(0.0, 1.0))
-        .toColor();
-  }
-
-  Color _darkenColor(Color color, double amount) {
-    final hsl = HSLColor.fromColor(color);
-    return hsl
-        .withLightness((hsl.lightness - amount).clamp(0.0, 1.0))
-        .toColor();
-  }
-
-  void _paintWaves(Canvas canvas, Size size) {
-    // First wave
-    final wavePaint = Paint()
-      ..color = Colors.white.withOpacity(0.15)
+  void _paintDecorativeElements(Canvas canvas, Size size, Color color) {
+    // Large circle in top right
+    final circlePaint = Paint()
+      ..color = color.withOpacity(0.1)
       ..style = PaintingStyle.fill;
 
-    final path1 = Path();
-    path1.moveTo(0, size.height * 0.3);
+    canvas.drawCircle(
+      Offset(size.width - 40, 30),
+      80,
+      circlePaint,
+    );
 
-    path1.quadraticBezierTo(
-      size.width * 0.25,
+    // Small circle in bottom left
+    final smallCirclePaint = Paint()
+      ..color = color.withOpacity(0.15)
+      ..style = PaintingStyle.fill;
+
+    canvas.drawCircle(
+      Offset(40, size.height - 30),
+      25,
+      smallCirclePaint,
+    );
+
+    // Abstract curved path
+    final pathPaint = Paint()
+      ..color = color.withOpacity(0.15)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 15;
+
+    final path = Path();
+    path.moveTo(0, size.height * 0.6);
+    path.quadraticBezierTo(
+      size.width * 0.3,
       size.height * 0.2,
-      size.width * 0.5,
-      size.height * 0.3,
-    );
-
-    path1.quadraticBezierTo(
-      size.width * 0.75,
-      size.height * 0.4,
-      size.width,
-      size.height * 0.3,
-    );
-
-    path1.lineTo(size.width, size.height);
-    path1.lineTo(0, size.height);
-    path1.close();
-
-    canvas.drawPath(path1, wavePaint);
-
-    // Second wave (slightly darker)
-    final wavePaint2 = Paint()
-      ..color = Colors.white.withOpacity(0.1)
-      ..style = PaintingStyle.fill;
-
-    final path2 = Path();
-    path2.moveTo(0, size.height * 0.5);
-
-    path2.quadraticBezierTo(
-      size.width * 0.25,
-      size.height * 0.6,
-      size.width * 0.5,
+      size.width * 0.9,
       size.height * 0.5,
     );
 
-    path2.quadraticBezierTo(
-      size.width * 0.75,
-      size.height * 0.4,
-      size.width,
-      size.height * 0.5,
-    );
-
-    path2.lineTo(size.width, size.height);
-    path2.lineTo(0, size.height);
-    path2.close();
-
-    canvas.drawPath(path2, wavePaint2);
+    canvas.drawPath(path, pathPaint);
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
+}
+
+Color _getFlashcardColor(int index, BuildContext context) {
+  final colors = [
+    Theme.of(context).colorScheme.secondary,
+    Theme.of(context).unselectedWidgetColor,
+    Theme.of(context).colorScheme.error,
+    Colors.orange,
+    Colors.green,
+  ];
+  return colors[index % colors.length];
 }

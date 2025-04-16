@@ -1,0 +1,5 @@
+#include "Generated.xcconfig"
+FLUTTER_TARGET=lib/main_production.dart
+FLUTTER_FLAVOR=production
+PRODUCT_BUNDLE_IDENTIFIER=com.example.prostuti
+DISPLAY_NAME=Prostuti

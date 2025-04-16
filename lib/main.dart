@@ -12,11 +12,25 @@ import 'core/configs/app_themes.dart';
 import 'core/services/localization_service.dart';
 import 'core/services/size_config.dart';
 import 'features/splash_screen.dart';
+import 'flutter_config.dart';
 import 'l10n/app_localizations.dart';
 
-void main() {
+// New method for the entry point from flavor-specific main files
+void runMain() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const ProviderScope(child: MyApp()));
+}
+
+// Keep the original entry point for backward compatibility
+void main() {
+  // Default to development if running without specific flavor
+  FlavorConfig(
+    flavor: Flavor.development,
+    name: "Development",
+    baseUrl: "https://resilient-heart-dev.up.railway.app/api/v1",
+  );
+
+  runMain();
 }
 
 class MyApp extends ConsumerWidget {
@@ -29,7 +43,8 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: kDebugMode ? true : false,
-      title: 'Prostuti',
+      title: 'Prostuti - ${FlavorConfig.instance.name}',
+      // Add flavor name to title
       navigatorKey: Nav().navigatorKey,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

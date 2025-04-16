@@ -83,6 +83,7 @@ class CreateFlashcardViewState extends ConsumerState<CreateFlashcardView>
       // Check if category is selected
       if (_categoryId.isEmpty) {
         Fluttertoast.showToast(msg: context.l10n!.noSelectedCategory);
+        _openSettingsModal();
         return;
       }
 
