@@ -74,10 +74,30 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/
     - assets/icons/
-    - lib/l10n/app_en.arb
+    - assets/icons/alert-circle_dark.svg
+    - assets/icons/award-01_dark.svg
+    - assets/icons/books-01.svg
+    - assets/icons/catalogue.svg
+    - assets/icons/catalogue_dark.svg
+    - assets/icons/category_dark.svg
+    - assets/icons/crown.svg
+    - assets/icons/crown_dark.svg
+    - assets/icons/customer-support_dark.svg
+    - assets/icons/favourite_dark.svg
+    - assets/icons/help-circle.svg
+    - assets/icons/help-circle_dark.svg
+    - assets/icons/language-square.svg
+    - assets/icons/language-square_dark.svg
+    - assets/icons/moon-eclipse.svg
+    - assets/icons/moon-eclipse_dark.svg
+    - assets/icons/security.svg
+    - assets/icons/security_dark.svg
+    - assets/icons/star.svg
+    - assets/icons/user_dark.svg
+    - assets/images/
     - lib/l10n/app_bn.arb
+    - lib/l10n/app_en.arb
 
 flutter_gen:
   output: lib/gen/
