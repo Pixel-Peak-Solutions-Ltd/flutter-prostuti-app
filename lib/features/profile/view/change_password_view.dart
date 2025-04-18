@@ -97,12 +97,25 @@ class ChangePasswordViewState extends ConsumerState<ChangePasswordView>
       final XFile? image =
           await _imagePicker.pickImage(source: ImageSource.gallery);
       if (image != null) {
+        debugPrint("Image selected: ${image.path}");
+
         setState(() {
           _selectedImage = image;
         });
+
+        // Set the image in the provider AND verify it worked
         ref.read(profileImageProvider.notifier).setImage(image);
+
+        // Force a rebuild to ensure state is updated
+        setState(() {});
+
+        // Show feedback to user
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Image selected: ${image.name}')),
+        );
       }
     } catch (e) {
+      debugPrint("Error picking image: ${e.toString()}");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error picking image: ${e.toString()}')),
       );
@@ -186,7 +199,7 @@ class ChangePasswordViewState extends ConsumerState<ChangePasswordView>
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: currentTabIndex == 0
-                                ? Theme.of(context).colorScheme.primary
+                                ? Theme.of(context).colorScheme.secondary
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -215,7 +228,7 @@ class ChangePasswordViewState extends ConsumerState<ChangePasswordView>
                           padding: const EdgeInsets.symmetric(vertical: 12),
                           decoration: BoxDecoration(
                             color: currentTabIndex == 1
-                                ? Theme.of(context).colorScheme.primary
+                                ? Theme.of(context).colorScheme.secondary
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -488,65 +501,79 @@ class ChangePasswordViewState extends ConsumerState<ChangePasswordView>
     final userProfileAsync = ref.read(userProfileProvider);
 
     userProfileAsync.whenData((profile) {
-      final studentId = profile.data?.studentId;
-      if (studentId == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n!.errorUpdatingProfile)),
-        );
-        return;
-      }
+      final userProfileAsync = ref.read(userProfileProvider);
 
-      final name = _nameController.text.trim();
-      final image = ref.read(profileImageProvider);
+      userProfileAsync.whenData((profile) {
+        final studentId = profile.data?.studentId;
+        if (studentId == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(context.l10n!.errorUpdatingProfile)),
+          );
+          return;
+        }
 
-      // Debug print to check values
-      debugPrint("Current name: '${profile.data?.name}'");
-      debugPrint("New name: '$name'");
+        final name = _nameController.text.trim();
 
-      // Check if anything changed
-      bool hasNameChanged =
-          name.isNotEmpty && name != (profile.data?.name ?? "");
-      bool hasImageChanged = image != null;
+        // IMPORTANT CHANGE: Use _selectedImage directly
+        final hasSelectedNewImage = _selectedImage != null;
 
-      debugPrint("Name changed: $hasNameChanged");
-      debugPrint("Image changed: $hasImageChanged");
+        // Debug print to check values
+        debugPrint("Current name: '${profile.data?.name}'");
+        debugPrint("New name: '$name'");
+        debugPrint("Selected image: ${_selectedImage?.path}");
 
-      if (!hasNameChanged && !hasImageChanged) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.l10n!.noChangesDetected)),
-        );
-        return;
-      }
+        // IMPROVED CHANGE DETECTION
+        final currentName = (profile.data?.name ?? "").trim();
+        bool hasNameChanged = name.isNotEmpty && name != currentName;
 
-      _debouncer.run(
-        action: () async {
-          await ref.read(profileUpdateStateProvider.notifier).updateProfile(
-                name: hasNameChanged ? _nameController.text.trim() : null,
-                image: hasImageChanged ? image : null,
-                studentId: studentId,
-              );
+        // Use the _selectedImage variable directly for detection
+        bool hasImageChanged = hasSelectedNewImage;
 
-          // Show error if any
-          if (context.mounted) {
-            final state = ref.read(profileUpdateStateProvider);
-            state.value?.fold(
-              (error) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(ErrorHandler().getErrorMessage())),
+        debugPrint("Name changed: $hasNameChanged");
+        debugPrint("Image changed: $hasImageChanged");
+
+        if (!hasNameChanged && !hasImageChanged) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(context.l10n!.noChangesDetected)),
+          );
+          return;
+        }
+
+        _debouncer.run(
+          action: () async {
+            await ref.read(profileUpdateStateProvider.notifier).updateProfile(
+                  name: hasNameChanged ? name : null,
+                  // IMPORTANT CHANGE: Pass _selectedImage directly
+                  image: hasImageChanged ? _selectedImage : null,
+                  studentId: studentId,
                 );
-                ErrorHandler().clearErrorMessage();
-              },
-              (success) {
-                // Success handled by listener
-                if (success) {
-                  // We'll navigate back in the listener to ensure data refreshes
-                }
-              },
-            );
-          }
-        },
-        loadingController: ref.read(_loadingProvider.notifier),
-      );
+
+            // Show error if any
+            if (context.mounted) {
+              final state = ref.read(profileUpdateStateProvider);
+              state.value?.fold(
+                (error) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(ErrorHandler().getErrorMessage())),
+                  );
+                  ErrorHandler().clearErrorMessage();
+                },
+                (success) {
+                  // Success handled by listener
+                  if (success) {
+                    // We'll navigate back in the listener to ensure data refreshes
+                    debugPrint("Profile update successful!");
+                  } else {
+                    debugPrint(
+                        "Profile update returned false - no changes applied on server side");
+                  }
+                },
+              );
+            }
+          },
+          loadingController: ref.read(_loadingProvider.notifier),
+        );
+      });
     });
   }
 
