@@ -11,6 +11,7 @@ import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/chat/view/chat_view.dart';
 import 'package:prostuti/features/course/course_list/view/course_list_view.dart';
 import 'package:prostuti/features/course/my_course/view/my_course_view.dart';
+import 'package:prostuti/features/home_screen/view/search_view.dart';
 import 'package:prostuti/features/leaderboard/widgets/leaderboard_section.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -443,9 +444,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const Gap(16),
 
                   // Search box
+
                   GestureDetector(
                     onTap: () {
-                      _log.i("Search box clicked!");
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  const SearchView(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            const begin = Offset(0.0, 1.0);
+                            const end = Offset.zero;
+                            const curve = Curves.easeOut;
+
+                            final tween = Tween(begin: begin, end: end)
+                                .chain(CurveTween(curve: curve));
+                            final offsetAnimation = animation.drive(tween);
+
+                            return SlideTransition(
+                              position: offsetAnimation,
+                              child: FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              ),
+                            );
+                          },
+                          transitionDuration: const Duration(milliseconds: 300),
+                        ),
+                      );
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
