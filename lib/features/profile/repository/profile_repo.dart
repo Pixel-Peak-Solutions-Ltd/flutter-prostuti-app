@@ -4,11 +4,14 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prostuti/core/services/dio_service.dart';
 import 'package:prostuti/core/services/error_handler.dart';
 import 'package:prostuti/core/services/error_response.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../common/models/student_profile.dart';
 
 part 'profile_repo.g.dart';
 
@@ -61,7 +64,6 @@ class ProfileRepo {
     required String studentId,
   }) async {
     try {
-      // Debug values
       debugPrint("Updating profile for student ID: $studentId");
       debugPrint("Name to update: $name");
       debugPrint("Image to update: ${image?.name}");
@@ -69,49 +71,66 @@ class ProfileRepo {
       // Create form data
       FormData formData = FormData();
 
-      // Add profile data as JSON string
+      // IMPORTANT FIX: Always include name in profileData
+      // Get the current user profile to include current name if not changing
+      final userProfile = await _getCurrentUserProfile(studentId);
+
       final Map<String, dynamic> profileData = {};
+
+      // If name is provided, use it, otherwise use current name from profile
       if (name != null) {
         profileData['name'] = name;
+      } else if (userProfile != null && image != null) {
+        // Only if we're updating the image but not the name
+        profileData['name'] = userProfile.data?.name ?? '';
       }
 
-      // Debug the profile data
-      debugPrint("Profile data to send: $profileData");
+      // Convert to JSON string and add to form
+      final jsonString = jsonEncode(profileData);
+      debugPrint("Profile data JSON: $jsonString");
 
-      // Only add profileData if we have something to update
-      if (profileData.isNotEmpty) {
-        // Note: The API expects 'profileData' as a JSON string
-        final jsonString = jsonEncode(profileData);
-        debugPrint("JSON string to send: $jsonString");
-
-        formData.fields.add(
-          MapEntry('profileData', jsonString),
-        );
-      }
+      // Always include profileData
+      formData.fields.add(
+        MapEntry('profileData', jsonString),
+      );
 
       // Add image if provided
       if (image != null) {
-        final bytes = await image.readAsBytes();
-        final multipartFile = MultipartFile.fromBytes(
-          bytes,
-          filename: image.name,
-        );
-        formData.files.add(MapEntry('avatar', multipartFile));
-        debugPrint("Added image to form data: ${image.name}");
+        try {
+          final bytes = await image.readAsBytes();
+
+          // Get file extension for mime type
+          final fileExt = image.path.split('.').last.toLowerCase();
+          String mimeType = 'image/jpeg';
+          if (fileExt == 'png') {
+            mimeType = 'image/png';
+          } else if (fileExt == 'jpg' || fileExt == 'jpeg') {
+            mimeType = 'image/jpeg';
+          }
+
+          debugPrint("Creating MultipartFile with mime type: $mimeType");
+
+          final multipartFile = MultipartFile.fromBytes(
+            bytes,
+            filename: image.name,
+            contentType: MediaType.parse(mimeType),
+          );
+
+          formData.files.add(MapEntry('avatar', multipartFile));
+          debugPrint("Added image to form data: ${image.name}");
+        } catch (e) {
+          debugPrint("Error preparing image: ${e.toString()}");
+        }
       }
 
-      // Return early if nothing to update
-      if (profileData.isEmpty && image == null) {
-        debugPrint("No changes to update");
-        return const Right(false);
-      }
-
-      // Make the request - Note that the API expects a PATCH request according to your route
+      // Make the request
       debugPrint("Sending PATCH request to /student/profile/$studentId");
       final response = await _dioService.patchRequest(
         "/student/profile/$studentId",
         data: formData,
       );
+
+      debugPrint("Response status: ${response.statusCode}");
 
       if (response.statusCode == 200) {
         return const Right(true);
@@ -121,12 +140,26 @@ class ProfileRepo {
         return Left(errorResponse);
       }
     } catch (e) {
+      debugPrint("Error in updateProfile: ${e.toString()}");
       final errorResponse = ErrorResponse(
         message: e.toString(),
-        success: e.toString() == 'true',
+        success: false,
       );
       ErrorHandler().setErrorMessage(errorResponse.message);
       return Left(errorResponse);
     }
+  }
+
+// Helper method to get current user profile
+  Future<StudentProfile?> _getCurrentUserProfile(String studentId) async {
+    try {
+      final response = await _dioService.getRequest("/user/profile");
+      if (response.statusCode == 200) {
+        return StudentProfile.fromJson(response.data);
+      }
+    } catch (e) {
+      debugPrint("Error fetching current profile: ${e.toString()}");
+    }
+    return null;
   }
 }

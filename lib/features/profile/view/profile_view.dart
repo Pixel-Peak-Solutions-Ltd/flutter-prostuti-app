@@ -8,6 +8,7 @@ import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
+import 'package:prostuti/features/profile/view/test_history_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../common/view_model/auth_notifier.dart';
@@ -251,7 +252,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                           ? "assets/icons/catalogue_dark.svg"
                           : "assets/icons/progress_history.svg",
                       title: context.l10n!.testHistory,
-                      onTap: () {})
+                      onTap: () {
+                        Nav().push(TestHistoryScreen(studentId: "${userData.data!.sId}",));
+                      })
                   .animate()
                   .moveX(duration: const Duration(milliseconds: 600)),
               const Gap(24),
@@ -340,6 +343,8 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
           );
         },
         error: (error, stackTrace) {
+          print("Error : $error");
+          print("stackTrace : $stackTrace");
           return Text("${context.l10n!.error}: $error");
         },
         loading: () {

@@ -1,0 +1,28 @@
+{
+  "buildFiles": [
+    "/Users/abijit/development/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/abijit/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/abijit/Documents/Flutter Projects/Pixelpeak/flutter-prostuti-app/android/app/.cxx/RelWithDebInfo/6b1t5p6u/x86_64",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/abijit/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/abijit/Documents/Flutter Projects/Pixelpeak/flutter-prostuti-app/android/app/.cxx/RelWithDebInfo/6b1t5p6u/x86_64",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {},
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/Users/abijit/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang.lld",
+      "cppCompilerExecutable": "/Users/abijit/Library/Android/sdk/ndk/26.1.10909125/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++.lld"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": []
+}
