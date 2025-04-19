@@ -11,8 +11,10 @@ import '../../../../../core/configs/app_colors.dart';
 import '../../../../../core/services/debouncer.dart';
 import '../../../../../core/services/nav.dart';
 import '../../../../../core/services/timer.dart';
+import '../../../enrolled_course_landing/repository/enrolled_course_landing_repo.dart';
 import '../repository/test_repo.dart';
 import '../view/test_result_view.dart';
+import '../viewmodel/get_test_by_id.dart';
 import '../viewmodel/written_test_details_viewmodel.dart';
 import '../widgets/build_written_question_item.dart';
 import '../widgets/countdown_timer.dart';
@@ -202,8 +204,19 @@ class MockTestScreenState extends ConsumerState<WrittenMockTestScreen>
     );
   }
 
-  void _navigateToCourse() {
-    Fluttertoast.showToast(msg: "Test submitted successfully");
-    Nav().pushReplacement(const TestListView());
+  void _navigateToCourse() async {
+    final markAsComplete = await ref
+        .read(enrolledCourseLandingRepoProvider)
+        .markAsComplete({
+      "materialType": "test",
+      "material_id": ref.read(getTestByIdProvider)
+    });
+
+    if(markAsComplete){
+      Fluttertoast.showToast(msg: "Test submitted successfully");
+
+      Nav().pushReplacement(const TestListView());
+    }
+
   }
 }

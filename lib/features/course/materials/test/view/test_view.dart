@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/features/course/materials/test/view/mcq_test_details_view.dart';
 import 'package:prostuti/features/course/materials/test/view/opps_view.dart';
+import 'package:prostuti/features/course/materials/test/view/written_mock_test_history_view.dart';
 import 'package:prostuti/features/course/materials/test/view/written_test_details_view.dart';
 import 'package:prostuti/features/course/materials/test/viewmodel/get_test_by_id.dart';
 import 'package:prostuti/features/course/materials/test/viewmodel/test_viewmodel.dart';
@@ -168,7 +169,21 @@ class TestListViewState extends ConsumerState<TestListView>
                                 ref
                                     .watch(getTestByIdProvider.notifier)
                                     .setTestId(test[index].sId!);
-                                Nav().push(const WrittenTestDetailsView());
+
+                                final bool canAccessTest =
+                                isToday(test[index].publishDate!);
+
+                                if (isCompleted) {
+                                  Nav().push(const WrittenMockTestHistoryScreen());
+                                } else {
+                                  // if (canAccessTest) {
+                                  Nav().push(const WrittenTestDetailsView());
+                                  /*} else {
+                                    Nav().push(TestMissedView(
+                                      testName: test[index].name!,
+                                    ));
+                                  }*/
+                                }
                               }
                             : () {},
                         child: lessonItem(

@@ -1,6 +1,7 @@
 // __brick__/repository/test_repo.dart
 import 'package:dartz/dartz.dart';
 import 'package:prostuti/core/services/dio_service.dart';
+import 'package:prostuti/features/course/materials/test/model/written_result_model.dart';
 import 'package:prostuti/features/course/materials/test/model/written_test_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:prostuti/common/view_model/auth_notifier.dart';
@@ -125,6 +126,20 @@ class TestRepo {
       return Right(MCQResult.fromJson(response.data));
     } else {
       print(response);
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      ErrorHandler().setErrorMessage(errorResponse.message);
+      return Left(errorResponse);
+    }
+  }
+
+  Future<Either<ErrorResponse, WrittenResultModel>> getWrittenTestHistoryById(
+      String id) async {
+    final response = await _dioService.getRequest("/test-history/$id");
+
+    if (response.statusCode == 200) {
+      print("${response.data["meta"]}");
+      return Right(WrittenResultModel.fromJson(response.data));
+    } else {
       final errorResponse = ErrorResponse.fromJson(response.data);
       ErrorHandler().setErrorMessage(errorResponse.message);
       return Left(errorResponse);
