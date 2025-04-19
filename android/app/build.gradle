@@ -27,6 +27,18 @@ android {
     compileSdk flutter.compileSdkVersion
     ndkVersion "26.1.10909125"
 
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def flavor = variant.flavorName
+            def buildType = variant.buildType.name
+            def version = variant.versionName
+            def versionCode = variant.versionCode
+
+            // Create custom APK name: app-flavor-buildType-versionName-versionCode.apk
+            outputFileName = "prostuti-${flavor}-${buildType}-v${version}-${versionCode}.apk"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
