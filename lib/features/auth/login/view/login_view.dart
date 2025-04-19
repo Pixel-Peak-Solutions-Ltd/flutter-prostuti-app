@@ -55,8 +55,10 @@ class LoginViewState extends ConsumerState<LoginView> {
   Widget build(BuildContext context) {
     bool rememberMe = ref.watch(rememberMeProvider);
     final isLoading = ref.watch(_loadingProvider);
-    final isDarkMode = ref.watch(
-        themeNotifierProvider.select((value) => value == ThemeMode.dark));
+    final themeMode = ref.watch(themeNotifierProvider);
+    final isDarkMode = themeMode == ThemeMode.dark ||
+        (themeMode == ThemeMode.system &&
+            MediaQuery.platformBrightnessOf(context) == Brightness.dark);
 
     return Scaffold(
       body: Padding(
