@@ -1,5 +1,4 @@
 // lib/features/payment/viewmodel/voucher_viewmodel.dart
-import 'package:prostuti/features/payment/repository/payment_repo.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../model/voucher_model.dart';
@@ -13,39 +12,33 @@ class VoucherNotifier extends _$VoucherNotifier {
     return const AsyncValue.data(null);
   }
 
-  Future<void> validateVoucher(String code,
-      {String? courseId, required double originalPrice}) async {
-    state = const AsyncValue.loading();
+  // Client-side validation of a voucher
+  void selectVoucher(VoucherModel voucher,
+      {String? courseId, required double originalPrice}) {
+    // Verify the voucher is valid
+    if (!voucher.isActive || voucher.isExpired) {
+      state = AsyncValue.error(
+          "This voucher is not active or has expired", StackTrace.current);
+      return;
+    }
 
-    final result = await ref
-        .read(paymentRepoProvider)
-        .validateVoucher(code, courseId: courseId);
+    // For course-specific vouchers, verify they match the current course
+    if (voucher.voucherType == 'Specific_Course' &&
+        voucher.courseId != courseId) {
+      state = AsyncValue.error(
+          "This voucher is not applicable for this course", StackTrace.current);
+      return;
+    }
 
-    state = await result.fold(
-      (error) => AsyncValue.error(error.message, StackTrace.current),
-      (response) {
-        if (response.success && response.data != null) {
-          // Check if voucher is valid for this context
-          if (!response.data!.isActive || response.data!.isExpired) {
-            return AsyncValue.error("This voucher is not active or has expired",
-                StackTrace.current);
-          }
+    // Ensure the discount makes sense (not negative, not more than 100% for percentage)
+    if (voucher.discountValue < 0 ||
+        (voucher.discountType == 'Percentage' && voucher.discountValue > 100)) {
+      state = AsyncValue.error("Invalid discount value", StackTrace.current);
+      return;
+    }
 
-          // Verify voucher is applicable (e.g., for specific course or student)
-          if (response.data!.voucherType == 'Specific_Course' &&
-              response.data!.courseId != courseId) {
-            return AsyncValue.error(
-                "This voucher is not applicable for this course",
-                StackTrace.current);
-          }
-
-          // Everything is valid, return the voucher
-          return AsyncValue.data(response.data);
-        } else {
-          return AsyncValue.error(response.message, StackTrace.current);
-        }
-      },
-    );
+    // All validation passed, set the voucher
+    state = AsyncValue.data(voucher);
   }
 
   void clearVoucher() {

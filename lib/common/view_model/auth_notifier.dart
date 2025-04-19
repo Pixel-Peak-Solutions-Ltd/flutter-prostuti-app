@@ -3,12 +3,13 @@ import 'package:prostuti/features/auth/login/model/login_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../secrets/secrets.dart';
+import '../../flutter_config.dart';
 
 part 'auth_notifier.g.dart';
 
 @riverpod
 class AuthNotifier extends _$AuthNotifier {
+  final baseUrl = FlavorConfig.instance.baseUrl;
   @override
   Future<String?> build() async {
     return await _loadAccessToken();
@@ -46,7 +47,7 @@ class AuthNotifier extends _$AuthNotifier {
       if (refreshExpiryTime > now) {
         try {
           final response = await Dio().post(
-            '$BASE_URL/auth/student/refresh-token',
+            '$baseUrl/auth/student/refresh-token',
             data: {'refreshToken': refreshToken},
           );
 

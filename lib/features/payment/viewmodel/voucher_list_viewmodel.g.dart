@@ -7,7 +7,7 @@ part of 'voucher_list_viewmodel.dart';
 // **************************************************************************
 
 String _$voucherListNotifierHash() =>
-    r'a6667ea4ef22f90c67b6e06b8e1117495838dd5e';
+    r'b0342c1e96231e98db4c59a03d2129d7b71d3d34';
 
 /// Copied from Dart SDK
 class _SystemHash {

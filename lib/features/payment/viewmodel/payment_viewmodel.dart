@@ -20,22 +20,22 @@ class PaymentNotifier extends _$PaymentNotifier {
     state = const AsyncValue.loading();
 
     try {
-      // Note: We're only sending courseId since it seems the price fields are rejected
+      // Create simple payment payload with course_id in array format
       Map<String, dynamic> payload = {
         "course_id": [courseId]
       };
 
-      // Debug what we're sending
+      // Debug log
       print("Payment payload with courseId $courseId");
-      print("Full payload: $payload");
 
-      // Add voucher if applicable
+      // Add voucher_id if applicable
       final voucherState = ref.read(voucherNotifierProvider);
       if (applyVoucher && voucherState.hasValue && voucherState.value != null) {
-        payload["isVoucherAdded"] = true;
         payload["voucher_id"] = voucherState.value!.id;
         print("Adding voucher: ${voucherState.value!.id}");
       }
+
+      print("Full payload: $payload");
 
       final result =
           await ref.read(paymentRepoProvider).initiatePayment(payload);
@@ -61,20 +61,20 @@ class PaymentNotifier extends _$PaymentNotifier {
     state = const AsyncValue.loading();
 
     try {
-      // Create subscription payload with the correct field names
+      // Create subscription payload
       Map<String, dynamic> payload = {"requestedPlan": requestedPlan};
 
-      // Debug what we're sending
+      // Debug log
       print("Subscription payload with plan $requestedPlan");
-      print("Full payload: $payload");
 
-      // Add voucher if applicable
+      // Add voucher_id if applicable
       final voucherState = ref.read(voucherNotifierProvider);
       if (applyVoucher && voucherState.hasValue && voucherState.value != null) {
-        payload["isVoucherAdded"] = true;
         payload["voucher_id"] = voucherState.value!.id;
         print("Adding voucher: ${voucherState.value!.id}");
       }
+
+      print("Full payload: $payload");
 
       final result = await ref.read(paymentRepoProvider).subscribe(payload);
 

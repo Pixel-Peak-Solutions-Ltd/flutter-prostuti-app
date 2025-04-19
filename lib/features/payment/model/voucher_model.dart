@@ -29,20 +29,56 @@ class VoucherModel {
     required this.createdBy,
   });
 
+// Fixed VoucherModel.fromJson method to handle nested objects
+
   factory VoucherModel.fromJson(Map<String, dynamic> json) {
+    // Handle potential nested objects for courseId and studentId
+    String? courseId;
+    String? studentId;
+
+    // Extract courseId - could be a string or a nested object with _id
+    if (json['course_id'] != null) {
+      if (json['course_id'] is String) {
+        courseId = json['course_id'];
+      } else if (json['course_id'] is Map && json['course_id']['_id'] != null) {
+        courseId = json['course_id']['_id'];
+      }
+    }
+
+    // Extract studentId - could be a string or a nested object with _id
+    if (json['student_id'] != null) {
+      if (json['student_id'] is String) {
+        studentId = json['student_id'];
+      } else if (json['student_id'] is Map &&
+          json['student_id']['_id'] != null) {
+        studentId = json['student_id']['_id'];
+      }
+    }
+
+    // Extract createdBy - could be a string or a nested object with _id
+    String createdBy;
+    if (json['createdBy'] is String) {
+      createdBy = json['createdBy'];
+    } else if (json['createdBy'] is Map && json['createdBy']['_id'] != null) {
+      createdBy = json['createdBy']['_id'];
+    } else {
+      createdBy = 'unknown'; // Default value
+    }
+
     return VoucherModel(
       id: json['_id'] ?? json['sId'],
       title: json['title'],
-      voucherType: json['voucherType'],
+      voucherType: json['voucherType'] ?? 'All_Course',
+      // Default to All_Course if not specified
       discountType: json['discountType'],
       discountValue: json['discountValue']?.toDouble() ?? 0.0,
       isActive: json['isActive'] ?? false,
       isExpired: json['isExpired'] ?? false,
       startDate: DateTime.parse(json['startDate']),
       endDate: DateTime.parse(json['endDate']),
-      studentId: json['student_id'],
-      courseId: json['course_id'],
-      createdBy: json['createdBy'],
+      studentId: studentId,
+      courseId: courseId,
+      createdBy: createdBy,
     );
   }
 

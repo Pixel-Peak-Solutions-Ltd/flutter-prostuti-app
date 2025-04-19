@@ -10,6 +10,24 @@ import 'package:prostuti/features/payment/viewmodel/voucher_list_viewmodel.dart'
 
 import '../model/voucher_model.dart';
 
+// Helper class for voucher card colors
+class VoucherColors {
+  final Color startColor;
+  final Color endColor;
+  final Color badgeColor;
+  final Color labelColor;
+
+  VoucherColors({
+    required this.startColor,
+    required this.endColor,
+    required this.badgeColor,
+    required this.labelColor,
+  });
+}
+
+// State provider for search query
+final _searchQueryProvider = StateProvider<String>((ref) => '');
+
 class VoucherBottomSheet extends ConsumerWidget {
   final String? courseId;
   final double originalPrice;
@@ -26,6 +44,7 @@ class VoucherBottomSheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final vouchersAsync =
         ref.watch(voucherListNotifierProvider(courseId: courseId));
+    final searchQuery = ref.watch(_searchQueryProvider);
 
     return Container(
       height: SizeConfig.screenHeight * 0.7,
@@ -42,11 +61,23 @@ class VoucherBottomSheet extends ConsumerWidget {
         children: [
           _buildHeader(context),
           const Gap(16),
-          _buildSearchInput(context),
+          _buildSearchInput(context, ref),
           const Gap(16),
           Expanded(
             child: vouchersAsync.when(
-              data: (vouchers) => _buildVoucherList(context, vouchers, ref),
+              data: (vouchers) {
+                // Filter vouchers by search query if one exists
+                if (searchQuery.isNotEmpty) {
+                  vouchers = vouchers
+                      .where((v) =>
+                          v.title
+                              ?.toLowerCase()
+                              .contains(searchQuery.toLowerCase()) ??
+                          false)
+                      .toList();
+                }
+                return _buildVoucherList(context, vouchers, ref);
+              },
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stackTrace) => Center(
                 child: Text(
@@ -79,7 +110,7 @@ class VoucherBottomSheet extends ConsumerWidget {
     );
   }
 
-  Widget _buildSearchInput(BuildContext context) {
+  Widget _buildSearchInput(BuildContext context, WidgetRef ref) {
     return TextField(
       decoration: InputDecoration(
         hintText: context.l10n?.searchVouchers ?? 'Search vouchers',
@@ -90,6 +121,9 @@ class VoucherBottomSheet extends ConsumerWidget {
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
+      onChanged: (value) {
+        ref.read(_searchQueryProvider.notifier).state = value;
+      },
     );
   }
 
@@ -135,16 +169,17 @@ class VoucherBottomSheet extends ConsumerWidget {
   Widget _buildVoucherCard(BuildContext context, VoucherModel voucher) {
     // Calculate the discount amount for this voucher based on the original price
     final discountAmount = voucher.calculateDiscount(originalPrice);
-    final discountValue = voucher.discountType == 'Percentage'
+
+    // Format display values
+    final discountText = voucher.discountType == 'Percentage'
         ? '${voucher.discountValue.toStringAsFixed(0)}%'
         : '৳${voucher.discountValue.toStringAsFixed(0)}';
 
-    // Format the expiry date
     final expiryDate = DateFormat('dd MMM yyyy').format(voucher.endDate);
 
-    // Determine if this is a special voucher
-    final isStudentSpecific = voucher.voucherType == 'Specific_Student';
-    final isCourseSpecific = voucher.voucherType == 'Specific_Course';
+    // Determine voucher type for display
+    final voucherTypeText = _getVoucherTypeText(voucher, context);
+    final colors = _getVoucherColors(voucher);
 
     return InkWell(
       onTap: () {
@@ -159,11 +194,7 @@ class VoucherBottomSheet extends ConsumerWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: isStudentSpecific
-                ? [Colors.purple.shade50, Colors.purple.shade100]
-                : isCourseSpecific
-                    ? [Colors.blue.shade50, Colors.blue.shade100]
-                    : [Colors.green.shade50, Colors.green.shade100],
+            colors: [colors.startColor, colors.endColor],
           ),
         ),
         child: Column(
@@ -176,6 +207,7 @@ class VoucherBottomSheet extends ConsumerWidget {
                   child: Text(
                     voucher.title ?? 'Discount Voucher',
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
                     maxLines: 1,
@@ -186,15 +218,11 @@ class VoucherBottomSheet extends ConsumerWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: isStudentSpecific
-                        ? Colors.purple
-                        : isCourseSpecific
-                            ? Colors.blue
-                            : Colors.green,
+                    color: colors.badgeColor,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
-                    discountValue,
+                    discountText,
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -225,17 +253,9 @@ class VoucherBottomSheet extends ConsumerWidget {
                   ],
                 ),
                 Text(
-                  isStudentSpecific
-                      ? (context.l10n?.specialForYou ?? 'Special for you!')
-                      : isCourseSpecific
-                          ? (context.l10n?.courseSpecific ?? 'Course specific')
-                          : (context.l10n?.generalVoucher ?? 'General voucher'),
+                  voucherTypeText,
                   style: TextStyle(
-                    color: isStudentSpecific
-                        ? Colors.purple.shade700
-                        : isCourseSpecific
-                            ? Colors.blue.shade700
-                            : Colors.green.shade700,
+                    color: colors.labelColor,
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
@@ -257,6 +277,7 @@ class VoucherBottomSheet extends ConsumerWidget {
                   context.l10n?.tapToApply ?? 'Tap to apply',
                   style: const TextStyle(
                     fontStyle: FontStyle.italic,
+                    color: Colors.black,
                     fontSize: 12,
                   ),
                 ),
@@ -266,5 +287,47 @@ class VoucherBottomSheet extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  // Helper method to get voucher type text based on voucher type
+  String _getVoucherTypeText(VoucherModel voucher, BuildContext context) {
+    if (voucher.voucherType == 'Specific_Student') {
+      return context.l10n?.specialForYou ?? 'Special for you!';
+    } else if (voucher.voucherType == 'Specific_Course') {
+      return context.l10n?.courseSpecific ?? 'Course specific';
+    } else {
+      return context.l10n?.generalVoucher ?? 'For all courses';
+    }
+  }
+
+// Updated color scheme for voucher cards in voucher_bottom_sheet.dart
+
+  // Helper method to get colors based on voucher type
+  VoucherColors _getVoucherColors(VoucherModel voucher) {
+    if (voucher.voucherType == 'Specific_Student') {
+      // Warmer, more premium colors for student-specific vouchers
+      return VoucherColors(
+        startColor: const Color(0xFFFFF3E0), // Light orange
+        endColor: const Color(0xFFFFE0B2), // Deeper orange
+        badgeColor: const Color(0xFFFF9800), // Orange
+        labelColor: const Color(0xFFE65100), // Deep orange
+      );
+    } else if (voucher.voucherType == 'Specific_Course') {
+      // Cooler blue-teal gradient for course-specific vouchers
+      return VoucherColors(
+        startColor: const Color(0xFFE0F7FA), // Light teal
+        endColor: const Color(0xFFB2EBF2), // Deeper teal
+        badgeColor: const Color(0xFF00BCD4), // Teal
+        labelColor: const Color(0xFF006064), // Deep teal
+      );
+    } else {
+      // Fresh green gradient for general vouchers
+      return VoucherColors(
+        startColor: const Color(0xFFF1F8E9), // Light green
+        endColor: const Color(0xFFDCEDC8), // Deeper green
+        badgeColor: const Color(0xFF8BC34A), // Green
+        labelColor: const Color(0xFF33691E), // Deep green
+      );
+    }
   }
 }

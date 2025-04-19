@@ -606,7 +606,6 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                           ? context.l10n!.subscription ?? 'Subscription'
                           : currencyFormatter.format(data.data!.price),
                   style: theme.textTheme.titleLarge!.copyWith(
-                    color: theme.colorScheme.onSecondary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -617,7 +616,6 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                           ? context.l10n!.visitCourse ?? 'Visit Course'
                           : context.l10n!.enrollInCourse ?? 'Enroll Now',
                       style: theme.textTheme.titleMedium!.copyWith(
-                        color: theme.colorScheme.onSecondary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

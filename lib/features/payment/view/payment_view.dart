@@ -222,10 +222,25 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                         : () async {
                             _debouncer.run(
                               action: () async {
+                                // Get voucher state to determine if one is applied
+                                final voucherState =
+                                    ref.read(voucherNotifierProvider);
+                                final isVoucherApplied =
+                                    voucherState.hasValue &&
+                                        voucherState.value != null;
+
+                                // Calculate final price with voucher if applied
+                                final finalPrice = isVoucherApplied
+                                    ? ref
+                                        .read(voucherNotifierProvider.notifier)
+                                        .getFinalPrice(originalPrice)
+                                    : originalPrice;
+
                                 // Debug print for payload
                                 print(
-                                    "Initiating payment with amount: $finalPrice, course: $id, voucher: $isVoucherApplied");
+                                    "Initiating payment with amount: $finalPrice, course: $id, voucher applied: $isVoucherApplied");
 
+                                // Call payment initiation with simplified params
                                 final paymentUrl =
                                     await paymentNotifier.initiatePayment(
                                   courseId: id,
