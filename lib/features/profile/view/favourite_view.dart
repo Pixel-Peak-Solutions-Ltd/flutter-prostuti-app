@@ -11,6 +11,7 @@ import 'package:prostuti/features/flashcard/widgets/flashcard_card.dart';
 import 'package:swipable_stack/swipable_stack.dart';
 
 import '../../flashcard/repository/flashcard_fav_repo.dart';
+import 'favorite_question_view.dart';
 
 // We'll use the enhanced provider from flashcard_favorite_repository.dart
 
@@ -215,7 +216,7 @@ class FavoriteItemsViewState extends ConsumerState<FavoriteItemsView>
                 _buildFavoriteFlashcardsTab(),
 
                 // Questions Tab (placeholder)
-                Center(child: Text(context.l10n!.noActivitiesForDay)),
+                const FavoriteQuestionsView(),
               ],
             ),
           ),

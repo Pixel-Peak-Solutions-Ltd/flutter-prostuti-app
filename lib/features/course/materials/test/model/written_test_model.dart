@@ -157,7 +157,7 @@ class CourseId {
   String? teacherId;
   String? name;
   String? categoryId;
-  Image? image;
+  QuizImage? image;
   String? details;
   bool? isPending;
   bool? isPublished;
@@ -181,7 +181,7 @@ class CourseId {
     teacherId = json['teacher_id'];
     name = json['name'];
     categoryId = json['category_id'];
-    image = json['image'] != null ? new Image.fromJson(json['image']) : null;
+    image = json['image'] != null ? new QuizImage.fromJson(json['image']) : null;
     details = json['details'];
     isPending = json['isPending'];
     isPublished = json['isPublished'];
@@ -207,21 +207,21 @@ class CourseId {
   }
 }
 
-class Image {
+class QuizImage {
   String? diskType;
   String? path;
   String? originalName;
   String? modifiedName;
   String? fileId;
 
-  Image(
+  QuizImage(
       {this.diskType,
         this.path,
         this.originalName,
         this.modifiedName,
         this.fileId});
 
-  Image.fromJson(Map<String, dynamic> json) {
+  QuizImage.fromJson(Map<String, dynamic> json) {
     diskType = json['diskType'];
     path = json['path'];
     originalName = json['originalName'];
