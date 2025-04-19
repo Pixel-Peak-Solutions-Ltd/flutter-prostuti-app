@@ -1,6 +1,6 @@
-import '../model/all_test_history_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../model/all_test_history_model.dart';
 import '../repository/test_history_repo.dart';
 
 part 'test_history_view_model.g.dart';
@@ -12,6 +12,7 @@ class TestHistoryViewModel extends _$TestHistoryViewModel {
     _studentId = studentId;
     _currentPage = 1;
     _hasMore = true;
+    _isLoadingMore = false;
     return fetchTestHistory();
   }
 
@@ -19,6 +20,7 @@ class TestHistoryViewModel extends _$TestHistoryViewModel {
   int _currentPage = 1;
   int _limit = 10;
   bool _hasMore = true;
+  bool _isLoadingMore = false;
   List<Data> _allTests = [];
 
   Future<List<Data>> fetchTestHistory({bool refresh = false}) async {
@@ -28,7 +30,7 @@ class TestHistoryViewModel extends _$TestHistoryViewModel {
       _allTests = [];
     }
 
-    if (!_hasMore) return _allTests;
+    if (!_hasMore && !refresh) return _allTests;
 
     final repo = ref.read(testHistoryRepoProvider);
     final result = await repo.getAllTestHistory(
@@ -38,8 +40,8 @@ class TestHistoryViewModel extends _$TestHistoryViewModel {
     );
 
     return result.fold(
-          (error) => _allTests,
-          (testHistoryModel) {
+      (error) => _allTests,
+      (testHistoryModel) {
         if (testHistoryModel.data?.data != null) {
           final meta = testHistoryModel.data?.meta;
           final newTests = testHistoryModel.data?.data;
@@ -68,10 +70,30 @@ class TestHistoryViewModel extends _$TestHistoryViewModel {
   }
 
   Future<void> loadMore() async {
-    if (!_hasMore || state is AsyncLoading) return;
+    if (!_hasMore || state is AsyncLoading || _isLoadingMore) return;
 
-    state = const AsyncLoading();
-    state = AsyncData(await fetchTestHistory());
+    _isLoadingMore = true;
+
+    // Use state.whenData to preserve the current data while loading more
+    state.whenData((currentData) {
+      // This optional update signals in the UI that more data is loading
+      // without showing the full loading state
+      state = AsyncData(currentData);
+    });
+
+    try {
+      final updatedData = await fetchTestHistory();
+      state = AsyncData(updatedData);
+    } catch (e, stackTrace) {
+      // If an error occurs, keep the current data
+      state.whenData((currentData) {
+        state = AsyncData(currentData);
+      });
+      // You might want to log the error or notify the user
+      print('Error loading more tests: $e\n$stackTrace');
+    } finally {
+      _isLoadingMore = false;
+    }
   }
 
   Future<void> refreshTests() async {
@@ -80,4 +102,5 @@ class TestHistoryViewModel extends _$TestHistoryViewModel {
   }
 
   bool get hasMore => _hasMore;
+  bool get isLoadingMore => _isLoadingMore;
 }

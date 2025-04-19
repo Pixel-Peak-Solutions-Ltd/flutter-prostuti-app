@@ -8,7 +8,8 @@ class AllTestHistoryModel {
   AllTestHistoryModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
-    data = json['data'] != null ? AllTestHistoryData.fromJson(json['data']) : null;
+    data =
+        json['data'] != null ? AllTestHistoryData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -93,33 +94,30 @@ class Data {
 
   Data(
       {this.sId,
-        this.courseId,
-        this.lessonId,
-        this.testId,
-        this.studentId,
-        this.score,
-        this.totalScore,
-        this.wrongScore,
-        this.rightScore,
-        this.answers,
-        this.isPassed,
-        this.isChecked,
-        this.timeTaken,
-        this.attemptedAt,
-        this.createdAt,
-        this.updatedAt,
-        this.iV});
+      this.courseId,
+      this.lessonId,
+      this.testId,
+      this.studentId,
+      this.score,
+      this.totalScore,
+      this.wrongScore,
+      this.rightScore,
+      this.answers,
+      this.isPassed,
+      this.isChecked,
+      this.timeTaken,
+      this.attemptedAt,
+      this.createdAt,
+      this.updatedAt,
+      this.iV});
 
   Data.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    courseId = json['course_id'] != null
-        ? CourseId.fromJson(json['course_id'])
-        : null;
-    lessonId = json['lesson_id'] != null
-        ? LessonId.fromJson(json['lesson_id'])
-        : null;
-    testId =
-    json['test_id'] != null ? TestId.fromJson(json['test_id']) : null;
+    courseId =
+        json['course_id'] != null ? CourseId.fromJson(json['course_id']) : null;
+    lessonId =
+        json['lesson_id'] != null ? LessonId.fromJson(json['lesson_id']) : null;
+    testId = json['test_id'] != null ? TestId.fromJson(json['test_id']) : null;
     studentId = json['student_id'] != null
         ? StudentId.fromJson(json['student_id'])
         : null;
@@ -192,18 +190,18 @@ class CourseId {
 
   CourseId(
       {this.sId,
-        this.teacherId,
-        this.name,
-        this.categoryId,
-        this.image,
-        this.details,
-        this.isPending,
-        this.isPublished,
-        this.createdAt,
-        this.updatedAt,
-        this.price,
-        this.priceType,
-        this.approvedBy});
+      this.teacherId,
+      this.name,
+      this.categoryId,
+      this.image,
+      this.details,
+      this.isPending,
+      this.isPublished,
+      this.createdAt,
+      this.updatedAt,
+      this.price,
+      this.priceType,
+      this.approvedBy});
 
   CourseId.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -251,10 +249,10 @@ class Image {
 
   Image(
       {this.diskType,
-        this.path,
-        this.originalName,
-        this.modifiedName,
-        this.fileId});
+      this.path,
+      this.originalName,
+      this.modifiedName,
+      this.fileId});
 
   Image.fromJson(Map<String, dynamic> json) {
     diskType = json['diskType'];
@@ -285,11 +283,11 @@ class LessonId {
 
   LessonId(
       {this.sId,
-        this.number,
-        this.name,
-        this.courseId,
-        this.createdAt,
-        this.updatedAt});
+      this.number,
+      this.name,
+      this.courseId,
+      this.createdAt,
+      this.updatedAt});
 
   LessonId.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -330,19 +328,19 @@ class TestId {
 
   TestId(
       {this.sId,
-        this.courseId,
-        this.lessonId,
-        this.name,
-        this.type,
-        this.time,
-        this.publishDate,
-        this.questionList,
-        this.createdBy,
-        this.isCompleted,
-        this.updatedBy,
-        this.createdAt,
-        this.updatedAt,
-        this.iV});
+      this.courseId,
+      this.lessonId,
+      this.name,
+      this.type,
+      this.time,
+      this.publishDate,
+      this.questionList,
+      this.createdBy,
+      this.isCompleted,
+      this.updatedBy,
+      this.createdAt,
+      this.updatedAt,
+      this.iV});
 
   TestId.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -398,18 +396,18 @@ class StudentId {
 
   StudentId(
       {this.sId,
-        this.userId,
-        this.studentId,
-        this.name,
-        this.categoryType,
-        this.phone,
-        this.email,
-        this.enrolledCourses,
-        this.subscriptionStartDate,
-        this.subscriptionEndDate,
-        this.createdAt,
-        this.updatedAt,
-        this.category});
+      this.userId,
+      this.studentId,
+      this.name,
+      this.categoryType,
+      this.phone,
+      this.email,
+      this.enrolledCourses,
+      this.subscriptionStartDate,
+      this.subscriptionEndDate,
+      this.createdAt,
+      this.updatedAt,
+      this.category});
 
   StudentId.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -424,9 +422,8 @@ class StudentId {
     subscriptionEndDate = json['subscriptionEndDate'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    category = json['category'] != null
-        ? Category.fromJson(json['category'])
-        : null;
+    category =
+        json['category'] != null ? Category.fromJson(json['category']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -510,19 +507,19 @@ class QuestionId {
 
   QuestionId(
       {this.sId,
-        this.type,
-        this.categoryId,
-        this.title,
-        this.description,
-        this.hasImage,
-        this.options,
-        this.correctOption,
-        this.createdBy,
-        this.updatedBy,
-        this.createdAt,
-        this.updatedAt,
-        this.iV,
-        this.image});
+      this.type,
+      this.categoryId,
+      this.title,
+      this.description,
+      this.hasImage,
+      this.options,
+      this.correctOption,
+      this.createdBy,
+      this.updatedBy,
+      this.createdAt,
+      this.updatedAt,
+      this.iV,
+      this.image});
 
   QuestionId.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
