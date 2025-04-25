@@ -21,6 +21,7 @@ import '../../flashcard/model/flashcard_model.dart';
 import '../../flashcard/view/flashcard_study_view.dart';
 import '../../flashcard/view/flashcard_view.dart';
 import '../../flashcard/viewmodel/flashcard_viewmodel.dart';
+import '../../notification/view/notification_view.dart';
 import '../../profile/view/profile_view.dart';
 import '../../profile/viewmodel/profile_viewmodel.dart';
 import '../widget/category_card.dart';
@@ -184,7 +185,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       case 2:
         return const Center(child: Text("Tests coming soon"));
       case 3:
-        return const Center(child: Text("Notifications coming soon"));
+        return const NotificationScreen();
       case 4:
         return const ChatView();
       default:

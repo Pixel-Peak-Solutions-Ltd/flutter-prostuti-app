@@ -11,6 +11,7 @@ class AssetsRes {
   static const String ALERT_CIRCLE_DARK = 'assets/icons/alert-circle_dark.svg';
   static const String AWARD_01_DARK = 'assets/icons/award-01_dark.svg';
   static const String BOOKS_01 = 'assets/icons/books-01.svg';
+  static const String BOTTOM_NAV_NOTIFICATION_SELECT = 'assets/icons/bottom_nav_notification_select.svg';
   static const String CATALOGUE = 'assets/icons/catalogue.svg';
   static const String CATALOGUE_DARK = 'assets/icons/catalogue_dark.svg';
   static const String CATEGORY_DARK = 'assets/icons/category_dark.svg';

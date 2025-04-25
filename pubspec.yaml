@@ -79,6 +79,7 @@ flutter:
     - assets/icons/alert-circle_dark.svg
     - assets/icons/award-01_dark.svg
     - assets/icons/books-01.svg
+    - assets/icons/bottom_nav_notification_select.svg
     - assets/icons/catalogue.svg
     - assets/icons/catalogue_dark.svg
     - assets/icons/category_dark.svg
