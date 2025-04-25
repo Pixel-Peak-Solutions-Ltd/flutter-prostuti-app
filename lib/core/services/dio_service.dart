@@ -70,6 +70,7 @@ Dio dio(DioRef ref) {
         error: true,
         compact: true,
         maxWidth: 90,
+
       ),
     )
     ..interceptors.add(
