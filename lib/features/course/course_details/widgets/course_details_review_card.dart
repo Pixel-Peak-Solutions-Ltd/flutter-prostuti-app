@@ -39,7 +39,7 @@ class CourseDetailsReviewCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Profile image
-                _buildProfileImage(review.studentInfo.image),
+                _buildProfileImage(review.studentInfo.image!.path),
                 const Gap(12),
 
                 // Review content

@@ -57,6 +57,32 @@ class CourseReview {
   }
 }
 
+class StudentImage {
+  final String diskType;
+  final String path;
+  final String originalName;
+  final String modifiedName;
+  final String fileId;
+
+  StudentImage({
+    required this.diskType,
+    required this.path,
+    required this.originalName,
+    required this.modifiedName,
+    required this.fileId,
+  });
+
+  factory StudentImage.fromJson(Map<String, dynamic> json) {
+    return StudentImage(
+      diskType: json['diskType'] ?? '',
+      path: json['path'] ?? '',
+      originalName: json['originalName'] ?? '',
+      modifiedName: json['modifiedName'] ?? '',
+      fileId: json['fileId'] ?? '',
+    );
+  }
+}
+
 class StudentInfo {
   final String id;
   final String userId;
@@ -64,7 +90,7 @@ class StudentInfo {
   final String name;
   final String email;
   final String? phone;
-  final String? image;
+  final StudentImage? image;
 
   StudentInfo({
     required this.id,
@@ -83,8 +109,9 @@ class StudentInfo {
       studentId: json['studentId'] ?? '',
       name: json['name'] ?? '',
       email: json['email'] ?? '',
-      phone: json['phone'],
-      image: json['image'],
+      phone: json['phone'] as String?,
+      image:
+          json['image'] != null ? StudentImage.fromJson(json['image']) : null,
     );
   }
 }

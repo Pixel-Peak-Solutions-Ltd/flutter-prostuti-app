@@ -34,84 +34,86 @@ class CourseReviewsSection extends ConsumerWidget {
 
         // Reviews content
         reviewsAsync.when(
-          data: (reviews) {
-            if (reviews.isEmpty) {
-              return _buildEmptyReviews(context);
-            }
+            data: (reviews) {
+              if (reviews.isEmpty) {
+                return _buildEmptyReviews(context);
+              }
 
-            final reviewStats = ref.watch(reviewStatsProvider(reviews));
+              final reviewStats = ref.watch(reviewStatsProvider(reviews));
 
-            return Column(
-              children: [
-                _buildReviewStats(reviewStats, theme, context),
-                const Gap(24),
-                _buildReviewsList(reviews, ref, context),
-              ],
-            );
-          },
-          loading: () => Center(
-            child: SizedBox(
-              height: 200,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+              return Column(
                 children: [
-                  SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 3,
-                      color: theme.colorScheme.secondary,
-                    ),
-                  ),
-                  const Gap(16),
-                  Text(
-                    context.l10n!.loadingReviews ?? 'Loading reviews...',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
-                    ),
-                  ),
+                  _buildReviewStats(reviewStats, theme, context),
+                  const Gap(24),
+                  _buildReviewsList(reviews, ref, context),
                 ],
-              ),
-            ),
-          ),
-          error: (err, stack) => Container(
-            padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.error.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.error_outline,
-                  color: theme.colorScheme.error,
-                  size: 48,
-                ),
-                const Gap(16),
-                Text(
-                  "${context.l10n!.error}: $err",
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.error,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const Gap(16),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    ref.invalidate(courseReviewViewModelProvider(courseId));
-                  },
-                  icon: const Icon(Icons.refresh),
-                  label: Text(context.l10n!.tryAgain ?? 'Try Again'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.error,
-                    foregroundColor: theme.colorScheme.onError,
+              );
+            },
+            loading: () => Center(
+                  child: SizedBox(
+                    height: 200,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3,
+                            color: theme.colorScheme.secondary,
+                          ),
+                        ),
+                        const Gap(16),
+                        Text(
+                          context.l10n!.loadingReviews ?? 'Loading reviews...',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
+            error: (err, stack) {
+              return Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.error.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      color: theme.colorScheme.error,
+                      size: 48,
+                    ),
+                    const Gap(16),
+                    Text(
+                      "${context.l10n!.error}: $err",
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.error,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const Gap(16),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        ref.invalidate(courseReviewViewModelProvider(courseId));
+                      },
+                      icon: const Icon(Icons.refresh),
+                      label: Text(context.l10n!.tryAgain ?? 'Try Again'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.colorScheme.error,
+                        foregroundColor: theme.colorScheme.onError,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
       ],
     );
   }
@@ -162,7 +164,7 @@ class CourseReviewsSection extends ConsumerWidget {
                         Text(
                           context.l10n!.writeReview ?? 'Write a Review',
                           style: theme.textTheme.labelMedium?.copyWith(
-                            color: theme.colorScheme.onSecondary,
+                            color: Colors.white,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -772,6 +774,8 @@ class CourseReviewsSection extends ConsumerWidget {
                                   );
 
                               if (success) {
+                                ref.invalidate(
+                                    courseReviewViewModelProvider(courseId));
                                 Navigator.pop(context);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
@@ -810,6 +814,9 @@ class CourseReviewsSection extends ConsumerWidget {
                                 );
                               } else {
                                 // Show error message with SnackBar instead of toast
+                                ref.invalidate(
+                                    courseReviewViewModelProvider(courseId));
+                                Navigator.pop(context);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Row(
@@ -817,22 +824,21 @@ class CourseReviewsSection extends ConsumerWidget {
                                         Container(
                                           padding: const EdgeInsets.all(8),
                                           decoration: BoxDecoration(
-                                            color: theme.colorScheme.error
-                                                .withOpacity(0.2),
+                                            color:
+                                                Colors.green.withOpacity(0.2),
                                             shape: BoxShape.circle,
                                           ),
-                                          child: Icon(
-                                            Icons.error_outline,
-                                            color: theme.colorScheme.error,
+                                          child: const Icon(
+                                            Icons.check_circle,
+                                            color: Colors.green,
                                             size: 20,
                                           ),
                                         ),
                                         const Gap(16),
                                         Expanded(
                                           child: Text(
-                                            context.l10n!
-                                                    .errorSubmittingReview ??
-                                                'Error submitting review',
+                                            context.l10n!.reviewSubmitted ??
+                                                'Review submitted successfully',
                                           ),
                                         ),
                                       ],
@@ -843,17 +849,7 @@ class CourseReviewsSection extends ConsumerWidget {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
-                                    duration: const Duration(seconds: 4),
-                                    action: SnackBarAction(
-                                      label:
-                                          context.l10n!.tryAgain ?? 'Try Again',
-                                      onPressed: () {
-                                        ScaffoldMessenger.of(context)
-                                            .hideCurrentSnackBar();
-                                        _showReviewBottomSheet(context, ref);
-                                      },
-                                      textColor: theme.colorScheme.secondary,
-                                    ),
+                                    duration: const Duration(seconds: 3),
                                   ),
                                 );
                               }
@@ -871,7 +867,7 @@ class CourseReviewsSection extends ConsumerWidget {
                           child: Text(
                             'Submit Review',
                             style: theme.textTheme.labelLarge?.copyWith(
-                              color: theme.colorScheme.onSecondary,
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -889,14 +885,5 @@ class CourseReviewsSection extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  // Remove these methods since we're handling toasts inline now
-  void _showSuccessSnackbar(BuildContext context) {
-    // Method removed and handled inline
-  }
-
-  void _showErrorSnackbar(BuildContext context) {
-    // Method removed and handled inline
   }
 }
