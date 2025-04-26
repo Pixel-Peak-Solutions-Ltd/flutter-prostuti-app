@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
+import 'package:prostuti/core/services/localization_service.dart';
+
 import '../model/notification_model.dart';
 import '../viewmodel/notification_viewmodel.dart';
 
 class NotificationScreen extends ConsumerStatefulWidget {
-  const NotificationScreen({Key? key}) : super(key: key);
+  const NotificationScreen({super.key});
 
   @override
   ConsumerState<NotificationScreen> createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends ConsumerState<NotificationScreen> {
-
+class _NotificationScreenState extends ConsumerState<NotificationScreen>
+    with CommonWidgets {
   @override
   void initState() {
     super.initState();
@@ -20,19 +23,12 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade50,
-      appBar: AppBar(
-        title: Text(
-          'নোটিফিকেশন',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-        ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.blue.shade100,
-      ),
+      appBar: commonAppbar(context.l10n!.notification),
       body: RefreshIndicator(
         onRefresh: () async {
-          await ref.read(notificationViewModelProvider.notifier).refreshNotifications();
+          await ref
+              .read(notificationViewModelProvider.notifier)
+              .refreshNotifications();
         },
         child: Consumer(
           builder: (context, ref, child) {
@@ -40,9 +36,12 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
 
             return notificationsAsync.when(
               data: (notifications) {
-                final notificationViewModel = ref.read(notificationViewModelProvider.notifier);
-                final todayNotifications = notificationViewModel.todayNotifications;
-                final previousNotifications = notificationViewModel.previousNotifications;
+                final notificationViewModel =
+                    ref.read(notificationViewModelProvider.notifier);
+                final todayNotifications =
+                    notificationViewModel.todayNotifications;
+                final previousNotifications =
+                    notificationViewModel.previousNotifications;
 
                 if (notifications.isEmpty) {
                   return const Center(
@@ -51,49 +50,51 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen> {
                 }
 
                 return SingleChildScrollView(
-                  padding: EdgeInsets.all(16),
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Today's Notifications
                       if (todayNotifications.isNotEmpty) ...[
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
                           child: Text(
-                            'আজকের নোটিশ',
-                            style: TextStyle(
+                            context.l10n!.todaysNotices,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        ...todayNotifications.map((notification) =>
-                            NotificationCard(notification: notification),
+                        ...todayNotifications.map(
+                          (notification) =>
+                              NotificationCard(notification: notification),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                       ],
 
                       // Previous Notifications
                       if (previousNotifications.isNotEmpty) ...[
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
                           child: Text(
-                            'পূর্বের নোটিশ',
-                            style: TextStyle(
+                            context.l10n!.olderNotices,
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        ...previousNotifications.map((notification) =>
-                            NotificationCard(notification: notification),
+                        ...previousNotifications.map(
+                          (notification) =>
+                              NotificationCard(notification: notification),
                         ),
                       ],
                     ],
                   ),
                 );
               },
-              loading: () => Center(child: CircularProgressIndicator()),
+              loading: () => const Center(child: CircularProgressIndicator()),
               error: (error, stackTrace) => Center(
                 child: Text('Error loading notifications: $error'),
               ),
@@ -109,9 +110,9 @@ class NotificationCard extends StatelessWidget {
   final Data notification;
 
   const NotificationCard({
-    Key? key,
+    super.key,
     required this.notification,
-  }) : super(key: key);
+  });
 
   String _getTimeAgo(String dateTimeStr) {
     try {
@@ -134,7 +135,7 @@ class NotificationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -146,16 +147,16 @@ class NotificationCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.notifications_active,
                   color: Colors.amber,
                   size: 24,
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     notification.title ?? 'Exam Reminder',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -163,17 +164,18 @@ class NotificationCard extends StatelessWidget {
                 ),
                 Text(
                   _getTimeAgo(notification.createdAt ?? ''),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     color: Colors.grey,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
-              notification.message ?? "I've finished adding my notes. Happy for us to review whenever you're ready!",
-              style: TextStyle(
+              notification.message ??
+                  "I've finished adding my notes. Happy for us to review whenever you're ready!",
+              style: const TextStyle(
                 fontSize: 14,
               ),
             ),
