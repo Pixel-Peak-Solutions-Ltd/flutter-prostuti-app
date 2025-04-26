@@ -22,7 +22,7 @@ class NotificationRepo {
   Future<Either<ErrorResponse, NotificationModel>> getNotifications() async {
     try {
       final response = await _dioService.getRequest(
-        "//student-notification",
+        "/student-notification",
       );
 
       if (response.statusCode == 200) {
