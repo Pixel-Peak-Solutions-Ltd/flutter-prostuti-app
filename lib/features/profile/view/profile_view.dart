@@ -8,7 +8,11 @@ import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
+import 'package:prostuti/features/faq.dart';
+import 'package:prostuti/features/privacy_policy_screen.dart';
 import 'package:prostuti/features/profile/view/test_history_view.dart';
+import 'package:prostuti/features/support_screen.dart';
+import 'package:prostuti/features/term_condition.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../common/view_model/auth_notifier.dart';
@@ -253,7 +257,9 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                           : "assets/icons/progress_history.svg",
                       title: context.l10n!.testHistory,
                       onTap: () {
-                        Nav().push(TestHistoryScreen(studentId: "${userData.data!.sId}",));
+                        Nav().push(TestHistoryScreen(
+                          studentId: "${userData.data!.sId}",
+                        ));
                       })
                   .animate()
                   .moveX(duration: const Duration(milliseconds: 600)),
@@ -312,25 +318,33 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                       ? "assets/icons/customer-support_dark.svg"
                       : "assets/icons/customer-support.svg",
                   title: context.l10n!.support,
-                  onTap: () {}),
+                  onTap: () {
+                    Nav().push(const SupportScreen());
+                  }),
               CustomListTile(
                   icon: isDarkTheme
                       ? "assets/icons/help-circle_dark.svg"
                       : "assets/icons/f_and_q.svg",
                   title: context.l10n!.faq,
-                  onTap: () {}),
+                  onTap: () {
+                    Nav().push(const FAQScreen());
+                  }),
               CustomListTile(
                   icon: isDarkTheme
                       ? "assets/icons/alert-circle_dark.svg"
                       : "assets/icons/terms.svg",
                   title: context.l10n!.termsAndConditions,
-                  onTap: () {}),
+                  onTap: () {
+                    Nav().push(const TermsConditionsScreen());
+                  }),
               CustomListTile(
                   icon: isDarkTheme
                       ? "assets/icons/security_dark.svg"
                       : "assets/icons/privacy.svg",
                   title: context.l10n!.privacyPolicy,
-                  onTap: () {}),
+                  onTap: () {
+                    Nav().push(const PrivacyPolicyScreen());
+                  }),
               const Gap(24),
               LogoutButton(
                 onPressed: () async {

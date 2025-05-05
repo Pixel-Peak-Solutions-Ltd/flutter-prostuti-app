@@ -344,5 +344,12 @@
   "updateProfile": "Update Profile",
   "profileUpdatedSuccessfully": "Profile updated successfully",
   "noChangesDetected": "No changes detected",
-  "errorUpdatingProfile": "Error updating profile"
+  "errorUpdatingProfile": "Error updating profile",
+  "howToCreateFlashcard": "How to create flashcards?",
+  "howToPurchaseTestCourse": "How to purchase test courses?",
+  "helpAndSupport": "Help & Support",
+  "contactUsForAnyQuestions": "Contact us for any questions",
+  "supportDescription": "Our support team is available to help you with any questions or issues you might have with the app.",
+  "helplineCall": "Call Helpline",
+  "messageToSupport": "Message Support"
 }

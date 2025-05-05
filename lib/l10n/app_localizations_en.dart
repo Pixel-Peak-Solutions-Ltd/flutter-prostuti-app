@@ -1042,4 +1042,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorUpdatingProfile => 'Error updating profile';
+
+  @override
+  String get howToCreateFlashcard => 'How to create flashcards?';
+
+  @override
+  String get howToPurchaseTestCourse => 'How to purchase test courses?';
+
+  @override
+  String get helpAndSupport => 'Help & Support';
+
+  @override
+  String get contactUsForAnyQuestions => 'Contact us for any questions';
+
+  @override
+  String get supportDescription => 'Our support team is available to help you with any questions or issues you might have with the app.';
+
+  @override
+  String get helplineCall => 'Call Helpline';
+
+  @override
+  String get messageToSupport => 'Message Support';
 }

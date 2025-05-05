@@ -2164,6 +2164,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error updating profile'**
   String get errorUpdatingProfile;
+
+  /// No description provided for @howToCreateFlashcard.
+  ///
+  /// In en, this message translates to:
+  /// **'How to create flashcards?'**
+  String get howToCreateFlashcard;
+
+  /// No description provided for @howToPurchaseTestCourse.
+  ///
+  /// In en, this message translates to:
+  /// **'How to purchase test courses?'**
+  String get howToPurchaseTestCourse;
+
+  /// No description provided for @helpAndSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & Support'**
+  String get helpAndSupport;
+
+  /// No description provided for @contactUsForAnyQuestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact us for any questions'**
+  String get contactUsForAnyQuestions;
+
+  /// No description provided for @supportDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Our support team is available to help you with any questions or issues you might have with the app.'**
+  String get supportDescription;
+
+  /// No description provided for @helplineCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Call Helpline'**
+  String get helplineCall;
+
+  /// No description provided for @messageToSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Message Support'**
+  String get messageToSupport;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

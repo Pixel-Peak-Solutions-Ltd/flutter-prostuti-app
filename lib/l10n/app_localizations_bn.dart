@@ -1042,4 +1042,25 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get errorUpdatingProfile => 'প্রোফাইল আপডেট করার সময় ত্রুটি';
+
+  @override
+  String get howToCreateFlashcard => 'ফ্লাশ কার্ড কীভাবে তৈরি করবো?';
+
+  @override
+  String get howToPurchaseTestCourse => 'টেস্ট কোর্স কিভাবে কিনবো?';
+
+  @override
+  String get helpAndSupport => 'হেল্প & সাপোর্ট';
+
+  @override
+  String get contactUsForAnyQuestions => 'যে কোনো প্রয়োজনে এখনি যোগাযোগ করুন';
+
+  @override
+  String get supportDescription => 'আমাদের সাপোর্ট টীম আপনার যেকোনো প্রশ্ন বা সমস্যায় সাহায্য করার জন্য উপস্থিত আছে।';
+
+  @override
+  String get helplineCall => 'হেল্প লাইনে কল করুন';
+
+  @override
+  String get messageToSupport => 'ম্যাসেজে সাপোর্ট কথা বলুন';
 }
