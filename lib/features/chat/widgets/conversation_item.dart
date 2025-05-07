@@ -32,7 +32,7 @@ class ConversationItem extends ConsumerWidget {
 
     // Check if user is typing in this conversation
     final isTyping = ref
-        .watch(typingUsersProvider)
+        .watch(typingIndicatorNotifierProvider)
         .containsKey(conversation.conversationId ?? '');
 
     // Format last message timestamp

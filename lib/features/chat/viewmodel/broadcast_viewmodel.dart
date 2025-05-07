@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:prostuti/features/chat/model/broadcast_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,18 +12,17 @@ part 'broadcast_viewmodel.g.dart';
 @riverpod
 class BroadcastNotifier extends _$BroadcastNotifier {
   late final ChatSocketService _socketService;
+  StreamSubscription? _broadcastSubscription;
 
   @override
   Future<List<BroadcastRequest>> build() async {
     _socketService = ChatSocketService();
     await _socketService.initSocket();
-    _setupSocketListeners();
+    _setupStreamListeners();
 
     // Cleanup when this provider is disposed
     ref.onDispose(() {
-      _socketService.off('broadcast_accepted');
-      _socketService.off('broadcast_expired');
-      _socketService.off('broadcast_request');
+      _broadcastSubscription?.cancel();
     });
 
     return _fetchActiveBroadcasts();
@@ -41,25 +42,11 @@ class BroadcastNotifier extends _$BroadcastNotifier {
     );
   }
 
-  void _setupSocketListeners() {
-    // Listen for broadcast accepted events
-    _socketService.on('broadcast_accepted', (data) {
-      debugPrint('Broadcast accepted: $data');
+  void _setupStreamListeners() {
+    // Listen to the broadcast stream for any broadcast-related events
+    _broadcastSubscription = _socketService.broadcastStream.listen((broadcast) {
+      debugPrint('Broadcast event received: ${broadcast.status}');
       refreshBroadcasts();
-    });
-
-    // Listen for broadcast expired events
-    _socketService.on('broadcast_expired', (data) {
-      debugPrint('Broadcast expired: $data');
-      refreshBroadcasts();
-    });
-
-    // Listen for broadcast created confirmation
-    _socketService.on('broadcast_request', (data) {
-      debugPrint('Broadcast request confirmation: $data');
-      if (data['success'] == true) {
-        refreshBroadcasts();
-      }
     });
   }
 
@@ -100,6 +87,7 @@ class BroadcastNotifier extends _$BroadcastNotifier {
   }
 
   // Method to send a broadcast request via socket
+  // Method to send a broadcast request via socket
   Future<bool> sendBroadcastViaSocket({
     required String message,
     required String subject,
@@ -110,18 +98,32 @@ class BroadcastNotifier extends _$BroadcastNotifier {
         'subject': subject,
       };
 
-      bool success = false;
+      // We can create a Completer to handle the async response
+      final completer = Completer<bool>();
 
-      _socketService.emitWithAck('broadcast_request', requestData, (data) {
-        debugPrint('Broadcast response: $data');
-        success = data['success'] == true;
-
-        if (success) {
-          refreshBroadcasts();
+      // Create the subscription before referencing it
+      late StreamSubscription subscription;
+      subscription = _socketService.broadcastStream.listen((broadcast) {
+        // This is a simple check - you might need more sophisticated logic
+        // to match the response to the request
+        if (!completer.isCompleted) {
+          completer.complete(true);
+          subscription.cancel();
         }
       });
 
-      return success;
+      // Send the broadcast request
+      _socketService.sendBroadcastRequest(requestData);
+
+      // Set a timeout
+      Future.delayed(const Duration(seconds: 5), () {
+        if (!completer.isCompleted) {
+          completer.complete(false);
+          subscription.cancel();
+        }
+      });
+
+      return completer.future;
     } catch (e) {
       debugPrint('Exception sending broadcast via socket: $e');
       return false;

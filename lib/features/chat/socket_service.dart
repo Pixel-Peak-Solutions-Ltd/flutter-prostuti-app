@@ -3,18 +3,26 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/common/helpers/persist_util.dart';
+import 'package:prostuti/features/chat/model/broadcast_model.dart';
+import 'package:prostuti/features/chat/model/chat_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-// FIXED: Use the base URL without /api/v1 for Socket.IO connection
-// The Socket.IO server is initialized at the root level in your backend
-// const SOCKET_URL = BASE_URL; // This was pointing to your API endpoint (with /api/v1)
-const SOCKET_URL =
-    'https://resilient-heart-dev.up.railway.app'; // Root URL where Socket.IO server is listening
+const SOCKET_URL = 'https://resilient-heart-dev.up.railway.app';
 
-// Provider to track socket connection status
-final socketConnectionStatusProvider = StreamProvider<ConnectionStatus>((ref) {
-  return ChatSocketService().connectionStatusStream;
-});
+// Event classes for better type safety
+class TypingEvent {
+  final String conversationId;
+  final String userId;
+
+  TypingEvent({required this.conversationId, required this.userId});
+
+  factory TypingEvent.fromJson(Map<String, dynamic> json) {
+    return TypingEvent(
+      conversationId: json['conversation_id'] ?? '',
+      userId: json['user_id'] ?? '',
+    );
+  }
+}
 
 // Connection status enum
 enum ConnectionStatus {
@@ -25,15 +33,57 @@ enum ConnectionStatus {
   authError
 }
 
+// Providers
+final socketConnectionStatusProvider = StreamProvider<ConnectionStatus>((ref) {
+  return ChatSocketService().connectionStatus;
+});
+
+final chatMessagesStreamProvider =
+    StreamProvider.family<ChatMessage, String>((ref, conversationId) {
+  return ChatSocketService()
+      .messageStream
+      .where((message) => message.conversationId == conversationId);
+});
+
+final typingEventsStreamProvider =
+    StreamProvider.family<TypingEvent, String>((ref, conversationId) {
+  return ChatSocketService()
+      .typingStream
+      .where((event) => event.conversationId == conversationId);
+});
+
+final broadcastsStreamProvider = StreamProvider<BroadcastRequest>((ref) {
+  return ChatSocketService().broadcastStream;
+});
+
 class ChatSocketService {
   static final ChatSocketService _instance = ChatSocketService._internal();
+
   factory ChatSocketService() => _instance;
 
+  // Stream controllers for different event types
   final StreamController<ConnectionStatus> _connectionStatusController =
       StreamController<ConnectionStatus>.broadcast();
+  final StreamController<ChatMessage> _messageController =
+      StreamController<ChatMessage>.broadcast();
+  final StreamController<TypingEvent> _typingController =
+      StreamController<TypingEvent>.broadcast();
+  final StreamController<TypingEvent> _stopTypingController =
+      StreamController<TypingEvent>.broadcast();
+  final StreamController<BroadcastRequest> _broadcastController =
+      StreamController<BroadcastRequest>.broadcast();
 
-  Stream<ConnectionStatus> get connectionStatusStream =>
+  // Expose streams
+  Stream<ConnectionStatus> get connectionStatus =>
       _connectionStatusController.stream;
+
+  Stream<ChatMessage> get messageStream => _messageController.stream;
+
+  Stream<TypingEvent> get typingStream => _typingController.stream;
+
+  Stream<TypingEvent> get stopTypingStream => _stopTypingController.stream;
+
+  Stream<BroadcastRequest> get broadcastStream => _broadcastController.stream;
 
   IO.Socket? _socket;
   bool _isConnected = false;
@@ -94,17 +144,12 @@ class ChatSocketService {
       _socket = IO.io(
         SOCKET_URL,
         IO.OptionBuilder()
-            // Try both transports for more reliable connections
             .setTransports(['websocket', 'polling'])
             .disableAutoConnect()
-            // Auth is correctly used in your backend middleware
             .setAuth({'token': token})
-            // Optionally add token to headers too for flexibility
             .setExtraHeaders({'Authorization': 'Bearer $token'})
             .setTimeout(10000) // 10 seconds connection timeout
-            .setReconnectionAttempts(
-                0) // Disable built-in reconnection to use our custom logic
-            // These options help ensure a fresh connection
+            .setReconnectionAttempts(0) // Custom reconnection logic
             .enableForceNew()
             .enableReconnection()
             .build(),
@@ -181,8 +226,8 @@ class ChatSocketService {
       _attemptReconnect();
     });
 
-    _socket?.onConnectError((_) {
-      debugPrint('Socket connection timeout');
+    _socket?.onError((_) {
+      debugPrint('Socket error');
       _isConnected = false;
       _connectionStatusController.add(ConnectionStatus.connectionError);
 
@@ -214,8 +259,67 @@ class ChatSocketService {
       }
     });
 
-    _socket?.on('error', (data) {
-      debugPrint('Socket error: $data');
+    // Message events
+    _socket?.on('receive_message', (data) {
+      debugPrint('Received message: $data');
+      final message = ChatMessage.fromJson(data);
+      _messageController.add(message);
+    });
+
+    // Typing events
+    _socket?.on('typing', (data) {
+      debugPrint('Typing event: $data');
+      if (data['conversation_id'] != null && data['user_id'] != null) {
+        final typingEvent = TypingEvent.fromJson(data);
+        _typingController.add(typingEvent);
+      }
+    });
+
+    _socket?.on('stop_typing', (data) {
+      debugPrint('Stop typing event: $data');
+      if (data['conversation_id'] != null && data['user_id'] != null) {
+        final typingEvent = TypingEvent.fromJson(data);
+        _stopTypingController.add(typingEvent);
+      }
+    });
+
+    // Broadcast events
+    _socket?.on('broadcast_accepted', (data) {
+      debugPrint('Broadcast accepted: $data');
+      if (data is Map<String, dynamic>) {
+        try {
+          final broadcast = BroadcastRequest.fromJson(data);
+          _broadcastController.add(broadcast);
+        } catch (e) {
+          debugPrint('Error parsing broadcast data: $e');
+        }
+      }
+    });
+
+    _socket?.on('broadcast_expired', (data) {
+      debugPrint('Broadcast expired: $data');
+      if (data is Map<String, dynamic>) {
+        try {
+          final broadcast = BroadcastRequest.fromJson(data);
+          _broadcastController.add(broadcast);
+        } catch (e) {
+          debugPrint('Error parsing broadcast data: $e');
+        }
+      }
+    });
+
+    _socket?.on('broadcast_request', (data) {
+      debugPrint('Broadcast request confirmation: $data');
+      if (data is Map<String, dynamic> &&
+          data['success'] == true &&
+          data['data'] is Map<String, dynamic>) {
+        try {
+          final broadcast = BroadcastRequest.fromJson(data['data']);
+          _broadcastController.add(broadcast);
+        } catch (e) {
+          debugPrint('Error parsing broadcast data: $e');
+        }
+      }
     });
   }
 
@@ -262,16 +366,6 @@ class ChatSocketService {
     if (_initCompleter != null && !_initCompleter!.isCompleted) {
       _initCompleter!.complete(false);
     }
-  }
-
-  // Listen to a specific event
-  void on(String event, Function(dynamic) callback) {
-    _socket?.on(event, callback);
-  }
-
-  // Stop listening to a specific event
-  void off(String event) {
-    _socket?.off(event);
   }
 
   // Emit an event
@@ -327,5 +421,9 @@ class ChatSocketService {
     _reconnectTimer?.cancel();
     disconnect();
     _connectionStatusController.close();
+    _messageController.close();
+    _typingController.close();
+    _stopTypingController.close();
+    _broadcastController.close();
   }
 }

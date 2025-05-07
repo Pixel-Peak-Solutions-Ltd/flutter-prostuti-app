@@ -24,7 +24,7 @@ final socketInitializerProvider = AutoDisposeFutureProvider<bool>.internal(
 // ignore: unused_element
 typedef SocketInitializerRef = AutoDisposeFutureProviderRef<bool>;
 String _$conversationsNotifierHash() =>
-    r'9846fca4c1b0e753921b313446fb9891f260d284';
+    r'7191df4a7d81ca944141495010f4889f0541a222';
 
 /// See also [ConversationsNotifier].
 @ProviderFor(ConversationsNotifier)
@@ -41,7 +41,7 @@ final conversationsNotifierProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$ConversationsNotifier = AutoDisposeAsyncNotifier<List<Conversation>>;
 String _$unreadMessagesNotifierHash() =>
-    r'328d0f098a5352f8b8f4871566cfdbfd2d1f8e78';
+    r'6a979835e280a31c3aac12fe9e8b7b610b56052b';
 
 /// See also [UnreadMessagesNotifier].
 @ProviderFor(UnreadMessagesNotifier)
@@ -58,7 +58,7 @@ final unreadMessagesNotifierProvider = AutoDisposeAsyncNotifierProvider<
 
 typedef _$UnreadMessagesNotifier = AutoDisposeAsyncNotifier<UnreadCountData?>;
 String _$chatMessagesNotifierHash() =>
-    r'c262cbbdd9ca4dba94a25b4fb5fe687dd59d7fce';
+    r'36135a4fa3e25675cf509426a0fbfb69c4b1319d';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -228,20 +228,22 @@ class _ChatMessagesNotifierProviderElement
       (origin as ChatMessagesNotifierProvider).conversationId;
 }
 
-String _$typingUsersHash() => r'7fd9972249c3f8a66edbdf150417ed63f2c97599';
+String _$typingIndicatorNotifierHash() =>
+    r'f2617bd757d5d34b98eb0ba1d1b1052e34224fc5';
 
-/// See also [TypingUsers].
-@ProviderFor(TypingUsers)
-final typingUsersProvider =
-    AutoDisposeNotifierProvider<TypingUsers, Map<String, String>>.internal(
-  TypingUsers.new,
-  name: r'typingUsersProvider',
-  debugGetCreateSourceHash:
-      const bool.fromEnvironment('dart.vm.product') ? null : _$typingUsersHash,
+/// See also [TypingIndicatorNotifier].
+@ProviderFor(TypingIndicatorNotifier)
+final typingIndicatorNotifierProvider = AutoDisposeNotifierProvider<
+    TypingIndicatorNotifier, Map<String, String>>.internal(
+  TypingIndicatorNotifier.new,
+  name: r'typingIndicatorNotifierProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$typingIndicatorNotifierHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$TypingUsers = AutoDisposeNotifier<Map<String, String>>;
+typedef _$TypingIndicatorNotifier = AutoDisposeNotifier<Map<String, String>>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -6,6 +6,7 @@ void main() {
     flavor: Flavor.staging,
     name: "Staging",
     baseUrl: "https://resilient-heart-staging.up.railway.app/api/v1",
+    socketBaseUrl: 'https://resilient-heart-staging.up.railway.app',
   );
 
   runMain();

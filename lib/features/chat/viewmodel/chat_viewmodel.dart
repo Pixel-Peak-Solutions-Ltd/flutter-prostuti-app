@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:prostuti/features/chat/model/conversation_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,26 +20,21 @@ Future<bool> socketInitializer(SocketInitializerRef ref) async {
 // Provider for active conversations
 @riverpod
 class ConversationsNotifier extends _$ConversationsNotifier {
-  late final ChatSocketService _socketService;
-
   @override
   Future<List<Conversation>> build() async {
-    _socketService = ChatSocketService();
-
-    // Wait for socket initialization to complete or timeout after 5 seconds
+    // Initialize socket through the shared initializer
     try {
-      // Use the shared socket initializer provider
-      final initialized = await ref
+      await ref
           .watch(socketInitializerProvider.future)
           .timeout(const Duration(seconds: 5));
-
-      if (!initialized) {
-        debugPrint(
-            'Socket initialization failed, but still fetching conversations');
-      }
     } catch (e) {
       debugPrint('Socket initialization timeout: $e');
     }
+
+    // Listen to broadcast events to refresh conversations when needed
+    ref.listen(broadcastsStreamProvider, (_, __) {
+      refreshConversations();
+    });
 
     return _fetchConversations();
   }
@@ -67,7 +64,21 @@ class ConversationsNotifier extends _$ConversationsNotifier {
 @riverpod
 class UnreadMessagesNotifier extends _$UnreadMessagesNotifier {
   @override
-  Future<UnreadCountData?> build() async {
+  Future<UnreadCountData?> build() {
+    // Listen to new messages to refresh unread count automatically
+    ref.listen(socketConnectionStatusProvider, (previous, next) {
+      next.whenData((status) {
+        if (status == ConnectionStatus.connected) {
+          refreshUnreadCount();
+        }
+      });
+    });
+
+    // Also listen to chat message streams to refresh
+    ref.listen(chatMessagesStreamProvider('all'), (previous, next) {
+      refreshUnreadCount();
+    });
+
     return _fetchUnreadCount();
   }
 
@@ -92,7 +103,7 @@ class UnreadMessagesNotifier extends _$UnreadMessagesNotifier {
   }
 }
 
-// Provider for chat messages in a specific conversation
+// Improved chat messages provider that leverages streams
 @riverpod
 class ChatMessagesNotifier extends _$ChatMessagesNotifier {
   late final ChatSocketService _socketService;
@@ -101,32 +112,51 @@ class ChatMessagesNotifier extends _$ChatMessagesNotifier {
   bool _hasMoreMessages = true;
   static const int _messagesPerPage = 20;
 
+  // Subscription cancellation
+  StreamSubscription? _messageSubscription;
+
   @override
   Future<List<ChatMessage>> build(String conversationId) async {
     _socketService = ChatSocketService();
 
-    // Wait for socket initialization to complete or timeout after 5 seconds
+    // Wait for socket initialization
     try {
-      // Use the shared socket initializer provider
-      final initialized = await ref
+      await ref
           .watch(socketInitializerProvider.future)
           .timeout(const Duration(seconds: 5));
-
-      if (!initialized) {
-        debugPrint(
-            'Socket initialization failed, but still trying to fetch messages');
-      }
     } catch (e) {
       debugPrint('Socket initialization timeout in chat messages: $e');
     }
 
-    _setupSocketListeners(conversationId);
+    // Join the conversation room
+    if (_socketService.isConnected) {
+      _socketService.joinConversation(conversationId);
+    }
+
+    // Mark conversation as read
     _markConversationAsRead(conversationId);
 
+    // Listen to new messages through the stream
+    _messageSubscription = _socketService.messageStream
+        .where((message) => message.conversationId == conversationId)
+        .listen((newMessage) {
+      // Add new message to state
+      state = AsyncValue.data([
+        newMessage,
+        ...state.value ?? [],
+      ]);
+
+      // Mark as read since we're in this conversation
+      _markConversationAsRead(conversationId);
+
+      // Refresh unread count
+      ref.read(unreadMessagesNotifierProvider.notifier).refreshUnreadCount();
+    });
+
+    // Clean up when provider is disposed
     ref.onDispose(() {
-      _socketService.off('receive_message');
-      _socketService.off('typing');
-      _socketService.off('stop_typing');
+      _messageSubscription?.cancel();
+      _socketService.leaveConversation(conversationId);
     });
 
     return _fetchMessages(conversationId);
@@ -163,57 +193,6 @@ class ChatMessagesNotifier extends _$ChatMessagesNotifier {
         }
       },
     );
-  }
-
-  void _setupSocketListeners(String conversationId) {
-    // Only join if socket is connected
-    if (_socketService.isConnected) {
-      // Join the conversation room
-      _socketService.joinConversation(conversationId);
-    }
-
-    // Listen for new messages
-    _socketService.on('receive_message', (data) {
-      debugPrint('Received message: $data');
-
-      if (data['conversation_id'] == conversationId) {
-        final newMessage = ChatMessage.fromJson(data);
-
-        state = AsyncValue.data([
-          newMessage,
-          ...state.value ?? [],
-        ]);
-
-        // Mark message as read if in this conversation
-        _markConversationAsRead(conversationId);
-
-        // Also refresh unread count since we received a new message
-        ref.read(unreadMessagesNotifierProvider.notifier).refreshUnreadCount();
-      }
-    });
-
-    // Listen for typing indicators
-    _socketService.on('typing', (data) {
-      if (data['conversation_id'] == conversationId &&
-          data['user_id'] != null) {
-        // Update typing indicator provider
-        ref.read(typingUsersProvider.notifier).setUserTyping(
-              conversationId,
-              data['user_id'],
-            );
-        debugPrint('User ${data['user_id']} is typing...');
-      }
-    });
-
-    // Listen for stop typing indicators
-    _socketService.on('stop_typing', (data) {
-      if (data['conversation_id'] == conversationId &&
-          data['user_id'] != null) {
-        // Update typing indicator provider
-        ref.read(typingUsersProvider.notifier).clearUserTyping(conversationId);
-        debugPrint('User ${data['user_id']} stopped typing');
-      }
-    });
   }
 
   Future<void> loadMoreMessages(String conversationId) async {
@@ -258,28 +237,39 @@ class ChatMessagesNotifier extends _$ChatMessagesNotifier {
 
   Future<void> _markConversationAsRead(String conversationId) async {
     await ref.read(chatRepositoryProvider).markMessagesAsRead(conversationId);
-
-    // Refresh unread count
     ref.read(unreadMessagesNotifierProvider.notifier).refreshUnreadCount();
   }
 }
 
-// Simple provider to track typing state in a conversation
+// Simplified typing indicator provider using streams
 @riverpod
-class TypingUsers extends _$TypingUsers {
+class TypingIndicatorNotifier extends _$TypingIndicatorNotifier {
+  StreamSubscription? _typingSubscription;
+  StreamSubscription? _stopTypingSubscription;
+
   @override
   Map<String, String> build() {
+    final socketService = ChatSocketService();
+
+    // Listen to typing events
+    _typingSubscription = socketService.typingStream.listen((event) {
+      state = {...state, event.conversationId: event.userId};
+    });
+
+    // Listen to stop typing events
+    _stopTypingSubscription = socketService.stopTypingStream.listen((event) {
+      final newState = Map<String, String>.from(state);
+      newState.remove(event.conversationId);
+      state = newState;
+    });
+
+    // Clean up
+    ref.onDispose(() {
+      _typingSubscription?.cancel();
+      _stopTypingSubscription?.cancel();
+    });
+
     return {};
-  }
-
-  void setUserTyping(String conversationId, String userId) {
-    state = {...state, conversationId: userId};
-  }
-
-  void clearUserTyping(String conversationId) {
-    final newState = Map<String, String>.from(state);
-    newState.remove(conversationId);
-    state = newState;
   }
 
   bool isUserTyping(String conversationId) {

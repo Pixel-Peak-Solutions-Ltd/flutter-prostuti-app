@@ -6,6 +6,7 @@ void main() {
     flavor: Flavor.production,
     name: "Production",
     baseUrl: "https://prostuti-app-backend-production.up.railway.app/api/v1",
+    socketBaseUrl: 'https://prostuti-app-backend-production.up.railway.app',
   );
 
   runMain();

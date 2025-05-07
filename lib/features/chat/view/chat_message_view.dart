@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/localization_service.dart';
+import 'package:prostuti/features/chat/socket_service.dart';
 import 'package:prostuti/features/chat/viewmodel/chat_viewmodel.dart';
 import 'package:prostuti/features/chat/widgets/chat_input_field.dart';
 import 'package:prostuti/features/chat/widgets/chat_message_item.dart';
@@ -21,10 +22,11 @@ class ChatMessageView extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ChatMessageView> createState() => _ChatMessageViewState();
+  ConsumerState<ChatMessageView> createState() =>
+      _StreamBasedChatMessageViewState();
 }
 
-class _ChatMessageViewState extends ConsumerState<ChatMessageView>
+class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
     with CommonWidgets {
   final ScrollController _scrollController = ScrollController();
   late String userId;
@@ -33,10 +35,7 @@ class _ChatMessageViewState extends ConsumerState<ChatMessageView>
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-
-    // Get current user ID from profile or auth provider
-    // For now, we'll just assume it's retrieved already
-    userId = 'current_user_id';
+    userId = 'current_user_id'; // Would be fetched from auth service
   }
 
   @override
@@ -83,13 +82,15 @@ class _ChatMessageViewState extends ConsumerState<ChatMessageView>
 
   @override
   Widget build(BuildContext context) {
+    // Watch messages from the ChatMessagesNotifier provider
     final messagesAsync = ref.watch(
       chatMessagesNotifierProvider(widget.conversationId),
     );
 
-    // Watching for typing indicators
-    final isTyping =
-        ref.watch(typingUsersProvider).containsKey(widget.conversationId);
+    // Watch for typing indicator using our new stream-based provider
+    final isTyping = ref
+        .watch(typingIndicatorNotifierProvider)
+        .containsKey(widget.conversationId);
 
     return Scaffold(
       appBar: AppBar(
@@ -122,6 +123,62 @@ class _ChatMessageViewState extends ConsumerState<ChatMessageView>
       ),
       body: Column(
         children: [
+          // Connection status indicator
+          Consumer(
+            builder: (context, ref, child) {
+              final connectionStatus =
+                  ref.watch(socketConnectionStatusProvider);
+
+              return connectionStatus.when(
+                data: (status) {
+                  if (status != ConnectionStatus.connected) {
+                    return Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 16),
+                      color: status == ConnectionStatus.connecting
+                          ? Colors.orange.withOpacity(0.8)
+                          : Colors.red.withOpacity(0.8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (status == ConnectionStatus.connecting)
+                            const SizedBox(
+                              width: 16,
+                              height: 16,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
+                              ),
+                            )
+                          else
+                            const Icon(Icons.error_outline,
+                                size: 16, color: Colors.white),
+                          const SizedBox(width: 8),
+                          Text(
+                            status == ConnectionStatus.connecting
+                                ? context.l10n?.connecting ?? 'Connecting...'
+                                : context.l10n?.connectionError ??
+                                    'Connection error',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return const SizedBox
+                      .shrink(); // Don't show anything when connected
+                },
+                loading: () => const SizedBox.shrink(),
+                error: (_, __) => const SizedBox.shrink(),
+              );
+            },
+          ),
+
           // Messages list
           Expanded(
             child: messagesAsync.when(
@@ -143,95 +200,101 @@ class _ChatMessageViewState extends ConsumerState<ChatMessageView>
                   );
                 }
 
-                return ListView.builder(
-                  controller: _scrollController,
-                  reverse: true,
-                  // Display newest messages at the bottom
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  itemCount: messages.length + (isTyping ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    // Add typing indicator at the top
-                    if (isTyping && index == 0) {
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          left: 16,
-                          right: 16,
-                          top: 8,
-                          bottom: 16,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            const CircleAvatar(
-                              radius: 16,
-                              backgroundImage:
-                                  AssetImage('assets/images/test_dp.jpg'),
-                            ),
-                            const SizedBox(width: 8),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 12,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).brightness ==
-                                        Brightness.dark
-                                    ? Colors.grey[800]
-                                    : Colors.grey[200],
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 8,
-                                    height: 8,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[500],
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Container(
-                                    width: 8,
-                                    height: 8,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[500],
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Container(
-                                    width: 8,
-                                    height: 8,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey[500],
-                                      shape: BoxShape.circle,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
+                // StreamBuilder for real-time typing indicator
+                return Stack(
+                  children: [
+                    ListView.builder(
+                      controller: _scrollController,
+                      reverse: true, // Display newest messages at the bottom
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        final message = messages[index];
+                        final isMe = message.senderId == userId ||
+                            message.senderRole == 'student';
+                        final isLastMessage = index == 0;
 
-                    final adjustedIndex = isTyping ? index - 1 : index;
-                    final message = messages[adjustedIndex];
-                    final isMe = message.senderId == userId ||
-                        message.senderRole == 'student';
-                    final isLastMessage = adjustedIndex == 0;
+                        return ChatMessageItem(
+                          message: message,
+                          isMe: isMe,
+                          isLastMessage: isLastMessage,
+                        );
+                      },
+                    ),
 
-                    return ChatMessageItem(
-                      message: message,
-                      isMe: isMe,
-                      isLastMessage: isLastMessage,
-                    );
-                  },
+                    // Typing indicator overlay at the bottom
+                    if (isTyping)
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                            bottom: 8,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              const CircleAvatar(
+                                radius: 16,
+                                backgroundImage:
+                                    AssetImage('assets/images/test_dp.jpg'),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.grey[800]
+                                      : Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[500],
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[500],
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[500],
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
                 );
               },
               loading: () => const SkeletonizedChatScreen(),
@@ -241,7 +304,7 @@ class _ChatMessageViewState extends ConsumerState<ChatMessageView>
             ),
           ),
 
-          // Input field
+          // Input field (we can keep using the same ChatInputField component)
           ChatInputField(
             conversationId: widget.conversationId,
             recipientId: widget.recipientId,

@@ -6,7 +6,7 @@ part of 'broadcast_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$broadcastNotifierHash() => r'b0c6fe5592da551d44849b8f4f9c493c3aaafd3e';
+String _$broadcastNotifierHash() => r'18f443d35ce20b03264861e0e40f4ebbaa573077';
 
 /// See also [BroadcastNotifier].
 @ProviderFor(BroadcastNotifier)
