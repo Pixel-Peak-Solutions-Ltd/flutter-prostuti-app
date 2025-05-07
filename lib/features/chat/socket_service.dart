@@ -7,7 +7,9 @@ import 'package:prostuti/features/chat/model/broadcast_model.dart';
 import 'package:prostuti/features/chat/model/chat_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-const SOCKET_URL = 'https://resilient-heart-dev.up.railway.app';
+import '../../flutter_config.dart';
+
+final SOCKET_URL = FlavorConfig.instance.socketBaseUrl;
 
 // Event classes for better type safety
 class TypingEvent {
