@@ -24,12 +24,14 @@ class AssetsRes {
   static const String HELP_CIRCLE_DARK = 'assets/icons/help-circle_dark.svg';
   static const String LANGUAGE_SQUARE = 'assets/icons/language-square.svg';
   static const String LANGUAGE_SQUARE_DARK = 'assets/icons/language-square_dark.svg';
+  static const String MCQ_TEST = 'assets/icons/mcq_test.svg';
   static const String MOON_ECLIPSE = 'assets/icons/moon-eclipse.svg';
   static const String MOON_ECLIPSE_DARK = 'assets/icons/moon-eclipse_dark.svg';
   static const String SECURITY = 'assets/icons/security.svg';
   static const String SECURITY_DARK = 'assets/icons/security_dark.svg';
   static const String STAR = 'assets/icons/star.svg';
   static const String USER_DARK = 'assets/icons/user_dark.svg';
+  static const String WRITTEN_TEST = 'assets/icons/written_test.svg';
   static const String MOCK_TEST_BACKGROUND = 'assets/images/mock_test_background.svg';
   static const String QUIZER_BACKGROUND = 'assets/images/quizer_background.svg';
   static const String SEGMENT_TEST_BACKGROUND = 'assets/images/segment_test_background.svg';

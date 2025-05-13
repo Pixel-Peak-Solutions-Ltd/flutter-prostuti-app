@@ -92,12 +92,14 @@ flutter:
     - assets/icons/help-circle_dark.svg
     - assets/icons/language-square.svg
     - assets/icons/language-square_dark.svg
+    - assets/icons/mcq_test.svg
     - assets/icons/moon-eclipse.svg
     - assets/icons/moon-eclipse_dark.svg
     - assets/icons/security.svg
     - assets/icons/security_dark.svg
     - assets/icons/star.svg
     - assets/icons/user_dark.svg
+    - assets/icons/written_test.svg
     - assets/images/
     - assets/images/mock_test_background.svg
     - assets/images/quizer_background.svg

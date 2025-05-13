@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/features/test/view/segment_test_view.dart';
 import '../../../common/widgets/common_widgets/common_widgets.dart';
+import '../../../core/services/nav.dart';
 import '../widgets/test_nevigation_button.dart';
+import 'mock_test_view.dart';
 
 class TestLandingView extends StatelessWidget with CommonWidgets {
    TestLandingView({super.key});
@@ -41,7 +44,9 @@ class TestLandingView extends StatelessWidget with CommonWidgets {
                       label: 'সেগমেন্ট টেস্ট',
                       borderColor: borderColor,
                       svgAsset: 'assets/images/segment_test_background.svg',
-                      onTap: () {},
+                      onTap: () {
+                        Nav().push( SegmentTestLandingView());
+                      },
                     ),
                   ),
                   const Gap(12),
@@ -50,7 +55,9 @@ class TestLandingView extends StatelessWidget with CommonWidgets {
                       label: 'মক-টেস্ট',
                       borderColor: borderColor,
                       svgAsset: 'assets/images/mock_test_background.svg',
-                      onTap: () {},
+                      onTap: () {
+                        Nav().push( const MockTestLandingView());
+                      },
                     ),
                   ),
                 ],
