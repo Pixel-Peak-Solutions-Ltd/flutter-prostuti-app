@@ -12,6 +12,7 @@ class AssetsRes {
   static const String AWARD_01_DARK = 'assets/icons/award-01_dark.svg';
   static const String BOOKS_01 = 'assets/icons/books-01.svg';
   static const String BOTTOM_NAV_NOTIFICATION_SELECT = 'assets/icons/bottom_nav_notification_select.svg';
+  static const String BOTTOM_NAV_TEST_SELECT = 'assets/icons/bottom_nav_test_select.svg';
   static const String CATALOGUE = 'assets/icons/catalogue.svg';
   static const String CATALOGUE_DARK = 'assets/icons/catalogue_dark.svg';
   static const String CATEGORY_DARK = 'assets/icons/category_dark.svg';
@@ -29,4 +30,7 @@ class AssetsRes {
   static const String SECURITY_DARK = 'assets/icons/security_dark.svg';
   static const String STAR = 'assets/icons/star.svg';
   static const String USER_DARK = 'assets/icons/user_dark.svg';
+  static const String MOCK_TEST_BACKGROUND = 'assets/images/mock_test_background.svg';
+  static const String QUIZER_BACKGROUND = 'assets/images/quizer_background.svg';
+  static const String SEGMENT_TEST_BACKGROUND = 'assets/images/segment_test_background.svg';
 }

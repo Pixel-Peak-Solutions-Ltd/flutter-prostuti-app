@@ -80,6 +80,7 @@ flutter:
     - assets/icons/award-01_dark.svg
     - assets/icons/books-01.svg
     - assets/icons/bottom_nav_notification_select.svg
+    - assets/icons/bottom_nav_test_select.svg
     - assets/icons/catalogue.svg
     - assets/icons/catalogue_dark.svg
     - assets/icons/category_dark.svg
@@ -98,6 +99,9 @@ flutter:
     - assets/icons/star.svg
     - assets/icons/user_dark.svg
     - assets/images/
+    - assets/images/mock_test_background.svg
+    - assets/images/quizer_background.svg
+    - assets/images/segment_test_background.svg
     - lib/l10n/app_bn.arb
     - lib/l10n/app_en.arb
 
