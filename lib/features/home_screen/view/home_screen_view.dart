@@ -135,10 +135,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
                 _currentIndex == 2
+                    ? "assets/icons/bottom_nav_chat_select.svg"
+                    : "assets/icons/bottom_nav_chat_unselect.svg",
+                colorFilter: ColorFilter.mode(
+                    _currentIndex == 2
+                        ? Theme.of(context).colorScheme.secondary
+                        : AppColors.textTertiaryLight,
+                    BlendMode.srcIn),
+              ),
+              label: "ম্যাসেজ",
+            ),
+            BottomNavigationBarItem(
+              icon: SvgPicture.asset(
+                _currentIndex == 3
                     ? "assets/icons/bottom_nav_test_select.svg"
                     : "assets/icons/bottom_nav_test_unselect.svg",
                 colorFilter: ColorFilter.mode(
-                    _currentIndex == 2
+                    _currentIndex == 3
                         ? Theme.of(context).colorScheme.secondary
                         : AppColors.textTertiaryLight,
                     BlendMode.srcIn),
@@ -147,29 +160,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             BottomNavigationBarItem(
               icon: SvgPicture.asset(
-                _currentIndex == 3
+                _currentIndex == 4
                     ? "assets/icons/bottom_nav_notification_select.svg"
                     : "assets/icons/bottom_nav_notification_unselect.svg",
-                colorFilter: ColorFilter.mode(
-                    _currentIndex == 3
-                        ? Theme.of(context).colorScheme.secondary
-                        : AppColors.textTertiaryLight,
-                    BlendMode.srcIn),
-              ),
-              label: "নটিফিকেশন",
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                _currentIndex == 4
-                    ? "assets/icons/bottom_nav_chat_select.svg"
-                    : "assets/icons/bottom_nav_chat_unselect.svg",
                 colorFilter: ColorFilter.mode(
                     _currentIndex == 4
                         ? Theme.of(context).colorScheme.secondary
                         : AppColors.textTertiaryLight,
                     BlendMode.srcIn),
               ),
-              label: "ম্যাসেজ",
+              label: "নটিফিকেশন",
             ),
           ]),
     );
@@ -183,11 +183,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       case 1:
         return const FlashcardView();
       case 2:
-        return const Center(child: Text("Tests coming soon"));
-      case 3:
-        return const NotificationScreen();
-      case 4:
         return const ChatView();
+
+      case 3:
+        return const Center(child: Text("Tests coming soon"));
+
+      case 4:
+        return const NotificationScreen();
       default:
         return _buildHomeContent();
     }

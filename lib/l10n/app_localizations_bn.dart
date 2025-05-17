@@ -15,7 +15,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get createFlashcard => 'ফ্লাশকার্ড তৈরি করুন';
 
   @override
-  String get title => 'টাইটেল';
+  String get title => 'শিরোনাম';
 
   @override
   String get titleHint => 'সাবজেক্ট, চাপ্টার এবং ইউনিট';
@@ -33,7 +33,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get create => 'তৈরি করুন';
 
   @override
-  String get exploration => 'এক্সপ্লোর';
+  String get exploration => 'অনুসন্ধান করুন';
 
   @override
   String get yourFlashcards => 'আপনার ফ্লাশকার্ড';
@@ -156,7 +156,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get loginToYourAccount => 'আপনার অ্যাকাউন্টে লগ ইন করুন';
 
   @override
-  String get welcomeBack => 'ফিরে আসার জন্য স্বাগতম! আপনার বিস্তারিত লিখুন।';
+  String get welcomeBack => 'স্বাগতম! আপনার বিস্তারিত তথ্য লিখুন';
 
   @override
   String get phoneNumber => 'ফোন নম্বর';
@@ -432,7 +432,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get noCourseAvailable => 'কোন কোর্স পাওয়া যায়নি';
 
   @override
-  String get exploreCourses => 'কোর্স এক্সপ্লোর করুন';
+  String get exploreCourses => 'কোর্সে প্রবেশ করুন';
 
   @override
   String get courseProgress => 'কোর্স প্রোগ্রেস';

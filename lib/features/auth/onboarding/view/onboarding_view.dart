@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingView extends ConsumerStatefulWidget {
@@ -65,14 +66,14 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                 // Add your images to assets folder
                 const Gap(50),
                 Text(
-                  context.l10n!.mockTest,
+                  "প্রস্তুতির নতুন অধ্যায়ে স্বাগতম!",
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Gap(16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    context.l10n!.onboardingDesc,
+                    "প্রস্তুতি অ্যাপে স্বাগতম! অনুশীলন করুন, দক্ষতা গড়ুন, আত্মবিশ্বাস বাড়ান। আপনার সাফল্যের যাত্রা শুরু হোক আজ থেকেই! প্রস্তুতি অ্যাপে স্বাগতম! অনুশীলন করুন, দক্ষতা বাড়ান, সাফল্য অর্জন করুন",
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
@@ -97,14 +98,14 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                 // Add your images to assets folder
                 const Gap(50),
                 Text(
-                  context.l10n!.clearYourDoubts,
+                  "শেখার সুবিধা",
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Gap(16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    context.l10n!.onboardingDesc,
+                    " ইন্টারঅ্যাকটিভ ফ্ল্যাশকার্ড, কুইজ এবং ডাউট সলভের মাধ্যমে সহজে শেখার অভিজ্ঞতা লাভ করুন। ইন্টারঅ্যাকটিভ পাঠ, কুইজ, এবং অনুশীলনের মাধ্যমে সহজে শেখার অভিজ্ঞতা নিন।",
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme
@@ -140,10 +141,16 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: LongButton(
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const LoginView(),
-                  ));
+                onPressed: () async {
+                  final onboardingService = ref.read(onboardingServiceProvider);
+                  await onboardingService.setOnboardingComplete();
+
+                  // Navigate to login
+                  if (mounted) {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => const LoginView(),
+                    ));
+                  }
                 },
                 text: context.l10n!.getStarted),
           ),
@@ -152,3 +159,36 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
     );
   }
 }
+
+class OnboardingService {
+  static const String _hasSeenOnboardingKey = 'has_seen_onboarding';
+
+  // Check if the user has seen onboarding
+  Future<bool> hasSeenOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_hasSeenOnboardingKey) ?? false;
+  }
+
+  // Mark onboarding as completed
+  Future<void> setOnboardingComplete() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_hasSeenOnboardingKey, true);
+  }
+
+  // Reset onboarding status (for testing)
+  Future<void> resetOnboardingStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_hasSeenOnboardingKey, false);
+  }
+}
+
+// Provider for OnboardingService
+final onboardingServiceProvider = Provider<OnboardingService>((ref) {
+  return OnboardingService();
+});
+
+// Provider for checking onboarding status
+final hasSeenOnboardingProvider = FutureProvider<bool>((ref) async {
+  final onboardingService = ref.watch(onboardingServiceProvider);
+  return onboardingService.hasSeenOnboarding();
+});

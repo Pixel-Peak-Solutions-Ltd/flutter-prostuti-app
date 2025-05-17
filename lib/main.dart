@@ -11,6 +11,7 @@ import 'common/view_model/auth_notifier.dart';
 import 'core/configs/app_themes.dart';
 import 'core/services/localization_service.dart';
 import 'core/services/size_config.dart';
+import 'features/auth/onboarding/view/onboarding_view.dart';
 import 'features/splash_screen.dart';
 import 'flutter_config.dart';
 import 'l10n/app_localizations.dart';
@@ -72,23 +73,43 @@ class MainAppContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final authNotifier = ref.watch(authNotifierProvider);
+    final hasSeenOnboarding = ref.watch(hasSeenOnboardingProvider);
 
     SizeConfig.init(context);
 
-    return authNotifier.when(
-      data: (token) {
-        if (token != null) {
-          return const HomeScreen(); // User is logged in
-        } else {
-          return const LoginView(); // Redirect to login
+    // First check if we need to show onboarding
+    return hasSeenOnboarding.when(
+      data: (hasSeenOnboarding) {
+        // If user hasn't seen onboarding, show it regardless of auth status
+        if (!hasSeenOnboarding) {
+          return const OnboardingView();
         }
+
+        // Otherwise, check auth status and proceed accordingly
+        return authNotifier.when(
+          data: (token) {
+            if (token != null) {
+              return const HomeScreen(); // User is logged in
+            } else {
+              return const LoginView(); // Redirect to login
+            }
+          },
+          loading: () => const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+          error: (error, stack) =>
+              const LoginView(), // Redirect to login on error
+        );
       },
       loading: () => const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
       ),
-      error: (error, stack) => const LoginView(), // Redirect to login on error
+      error: (_, __) =>
+          const OnboardingView(), // Default to showing onboarding on error
     );
   }
 }
