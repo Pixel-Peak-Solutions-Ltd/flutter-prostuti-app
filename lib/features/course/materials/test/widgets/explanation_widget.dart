@@ -38,7 +38,7 @@ class _ExplanationWidgetState extends State<ExplanationWidget> {
                 Text(
                   "ব্যাখ্যা",
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.secondary),
+                  style: theme.textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.surface),
                 ),
                 const Gap(10),
                 Text(

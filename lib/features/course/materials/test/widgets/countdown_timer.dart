@@ -4,15 +4,42 @@ import 'package:gap/gap.dart';
 
 import '../../../../../core/services/timer.dart';
 
-class CountdownTimer extends ConsumerWidget {
+final _previousTimerStateProvider = StateProvider<bool>((ref) => false);
 
+class CountdownTimer extends ConsumerStatefulWidget {
   final VoidCallback onTimeUp;
 
   const CountdownTimer({super.key, required this.onTimeUp});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CountdownTimer> createState() => _CountdownTimerState();
+}
+
+class _CountdownTimerState extends ConsumerState<CountdownTimer> {
+  Duration? _maxTime;
+  bool _hasStarted = false;
+
+  @override
+  Widget build(BuildContext context) {
     final countdownState = ref.watch(countdownProvider);
+
+    if (countdownState.remainingTime.inSeconds > 0 && _maxTime == null) {
+      _maxTime = countdownState.remainingTime;
+    }
+
+    if (countdownState.isRunning && !_hasStarted) {
+      _hasStarted = true;
+    }
+
+    if (_hasStarted &&
+        !countdownState.isRunning &&
+        countdownState.remainingTime.inSeconds == 0) {
+      _hasStarted = false;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onTimeUp();
+      });
+    }
 
     String formatTime(Duration duration) {
       final hours = duration.inHours.toString().padLeft(2, '0');
@@ -21,12 +48,6 @@ class CountdownTimer extends ConsumerWidget {
       return "$hours:$minutes:$seconds";
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (countdownState.remainingTime.inSeconds == 0) {
-        onTimeUp();
-      }
-    });
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,7 +55,7 @@ class CountdownTimer extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "সময় বাকী ",
+              "সময় বাকী ",
               style: Theme.of(context).textTheme.titleSmall,
             ),
             Text(
@@ -45,13 +66,8 @@ class CountdownTimer extends ConsumerWidget {
         ),
         const Gap(8),
         LinearProgressIndicator(
-          value: countdownState.remainingTime.inSeconds > 0
-              ? countdownState.remainingTime.inSeconds /
-                  ref
-                      .read(countdownProvider.notifier)
-                      .state
-                      .remainingTime
-                      .inSeconds
+          value: countdownState.remainingTime.inSeconds > 0 && _maxTime != null
+              ? countdownState.remainingTime.inSeconds / _maxTime!.inSeconds
               : 0,
           backgroundColor: Colors.grey[300],
           color: Colors.blue,
