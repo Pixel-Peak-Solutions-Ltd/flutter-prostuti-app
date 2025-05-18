@@ -10,21 +10,21 @@ import 'package:prostuti/features/test/view/written_mock_quiz_history_screen.dar
 import '../../../core/services/debouncer.dart';
 import '../../../core/services/nav.dart';
 import '../../../core/services/timer.dart';
-import '../../course/materials/test/widgets/build_mcq_question_item.dart';
 import '../../course/materials/test/widgets/countdown_timer.dart';
 import '../model/mock_quiz_model.dart';
+import '../widgets/written_quiz_question_widget.dart';
 import 'mcq_quiz_result_screen.dart';
 
-class MCQMockQuizScreen extends ConsumerStatefulWidget {
+class WrittenMockQuizScreen extends ConsumerStatefulWidget {
   final MockQuizResponse mockQuiz;
 
-  const MCQMockQuizScreen({super.key, required this.mockQuiz});
+  const WrittenMockQuizScreen({super.key, required this.mockQuiz});
 
   @override
-  ConsumerState<MCQMockQuizScreen> createState() => _MCQMockQuizScreenState();
+  ConsumerState<WrittenMockQuizScreen> createState() => _WrittenMockQuizScreenState();
 }
 
-class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with CommonWidgets{
+class _WrittenMockQuizScreenState extends ConsumerState<WrittenMockQuizScreen> with CommonWidgets{
   final Map<int, int?> selectedAnswers = {};
   final List<Map<String, dynamic>> answerList = [];
   late int remainingTime;
@@ -54,6 +54,15 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with Comm
       ref.read(countdownProvider.notifier).initialize(duration);
       ref.read(countdownProvider.notifier).startTimer();
     });
+  }
+
+  void updateAnswer(String questionId, String answer) {
+    final index = answerList.indexWhere((item) => item["question_id"] == questionId);
+    if (index != -1) {
+      setState(() {
+        answerList[index]["selectedOption"] = answer;
+      });
+    }
   }
 
   void _startTimer() {
@@ -94,8 +103,8 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with Comm
         await ref.read(mockTestRepoProvider).submitMockQuiz(quizId: widget.mockQuiz.data!.id!,payload: payload, );
 
         response.fold(
-              (l) => Fluttertoast.showToast(msg: l.message),
-              (testResult) => Nav().pushReplacement(MCQMockQuizHistoryScreen(quizId: widget.mockQuiz.data!.id!,),)
+                (l) => Fluttertoast.showToast(msg: l.message),
+                (testResult) => Nav().pushReplacement( WrittenMockQuizHistoryScreen(quizId: widget.mockQuiz.data!.id!,),)
         );
       },
       loadingController: ref.read(_loadingProvider.notifier),
@@ -153,12 +162,11 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with Comm
               child: ListView.builder(
                 itemCount: widget.mockQuiz.data?.questions!.length,
                 itemBuilder: (context, index) {
-                  return MCQQuestionWidget(
+                  return WrittenQuizQuestionWidget(
                     questionNumber: index + 1,
                     theme: theme,
                     questionList: widget.mockQuiz.data!.questions![index],
-                    selectedAnswers: selectedAnswers,
-                    answerList: answerList,
+                    onAnswerChange: updateAnswer,
                   );
                 },
               ),

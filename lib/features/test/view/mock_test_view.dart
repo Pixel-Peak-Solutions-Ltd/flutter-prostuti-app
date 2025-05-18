@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/features/test/view/written_mock_quiz_screen.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import '../../../common/widgets/common_widgets/common_widgets.dart';
@@ -68,12 +69,12 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
           ),
         );
       } else if (quizData.questionType == "Written") {
-        /*Navigator.push(
+        Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => WrittenMockTestHistoryView(mockQuiz: quizData),
+            builder: (_) => WrittenMockQuizScreen(mockQuiz: response),
           ),
-        );*/
+        );
       } else {
         _showValidationError("অজানা টেস্ট টাইপ।");
       }

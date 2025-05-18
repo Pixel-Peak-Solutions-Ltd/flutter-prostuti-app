@@ -355,7 +355,7 @@ class Questions {
     categoryId = json['category_id'];
     title = json['title'];
     description = json['description'];
-    options = json['options'].cast<String>();
+    options = json['options'];
     correctOption = json['correctOption'];
     createdBy = json['createdBy'];
     updatedBy = json['updatedBy'];
