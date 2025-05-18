@@ -6,6 +6,7 @@ import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/chat/viewmodel/broadcast_viewmodel.dart';
+import 'package:prostuti/features/chat/viewmodel/user_category.dart';
 import 'package:prostuti/features/flashcard/viewmodel/flashcard_filter_viewmodel.dart';
 
 import '../widgets/broadcast_skeleton.dart';
@@ -104,6 +105,7 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
   Widget build(BuildContext context) {
     final isLoading = ref.watch(broadcastLoadingProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
+    final userCategoryAsync = ref.watch(userCategoryProvider);
 
     return Scaffold(
       bottomNavigationBar: Padding(
@@ -141,30 +143,33 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Course field
-              _buildFormField(
-                label: context.l10n?.course ?? 'কোর্স*',
-                child: categoriesAsync.when(
-                  data: (categories) {
-                    final types = ref
-                        .read(categoriesProvider.notifier)
-                        .getUniqueTypes(categories);
-                    return _buildDropdown(
-                      hint: context.l10n!.selectCourse,
-                      value: _selectedType,
-                      items: types,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedType = newValue;
-                          _selectedDivision = null;
-                          _selectedSubject = null;
-                        });
+              userCategoryAsync.when(
+                data: (data) {
+                  _selectedType = data;
+                  return _buildFormField(
+                    label: context.l10n?.course ?? 'কোর্স*',
+                    child: categoriesAsync.when(
+                      data: (categories) {
+                        final types = ref
+                            .read(categoriesProvider.notifier)
+                            .getUniqueTypes(categories);
+                        return _buildDropdown(
+
+                          hint: context.l10n!.selectCourse,
+                          value: _selectedType,
+                          items: types,
+                          onChanged: null,
+                        );
                       },
-                    );
-                  },
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
-                  error: (_, __) => const Text('Failed to load categories'),
-                ),
+                      loading: () =>
+                          const Center(child: Text("Loading...")),
+                      error: (_, __) => const Text('Failed to load categories'),
+                    ),
+                  );
+                },
+                loading: () =>
+                const Center(child: Text("Loading...")),
+                error: (_, __) => const Text('Failed to load categories'),
               ),
 
               // Class field
@@ -295,7 +300,6 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
                   },
                 ),
               ),
-
               const Gap(32),
             ],
           ),
@@ -326,7 +330,7 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
     required String hint,
     required String? value,
     required List<String> items,
-    required Function(String?) onChanged,
+    required Function(String?)? onChanged,
   }) {
     return Container(
       width: double.infinity,

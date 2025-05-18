@@ -183,7 +183,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
               AspectRatio(
                 aspectRatio: 16 / 9,
                 child: Image.network(
-                  courseDetails.data!.image!.path ??
+                  courseDetails.data!.imageDetails!.path ??
                       "https://www.pngkey.com/png/detail/233-2332677_image-500580-placeholder-transparent.png",
                   fit: BoxFit.cover,
                   width: double.infinity,
@@ -672,7 +672,7 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
     Nav().push(PaymentView(
       id: data.data!.sId!,
       name: data.data!.name!,
-      imgPath: data.data!.image!.path!,
+      imgPath: data.data!.imageDetails!.path!,
       price: data.data!.price.toString(),
     ));
   }

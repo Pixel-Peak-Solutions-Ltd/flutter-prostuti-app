@@ -8,25 +8,35 @@ class AssetsRes {
 
   static const String PLUGIN_NAME = 'prostuti';
   static const String PLUGIN_VERSION = '1.0.0+1';
+  static const String ACADEMIC = 'assets/icons/academic.svg';
   static const String ALERT_CIRCLE_DARK = 'assets/icons/alert-circle_dark.svg';
   static const String AWARD_01_DARK = 'assets/icons/award-01_dark.svg';
   static const String BOOKS_01 = 'assets/icons/books-01.svg';
   static const String BOTTOM_NAV_NOTIFICATION_SELECT = 'assets/icons/bottom_nav_notification_select.svg';
+  static const String BOTTOM_NAV_TEST_SELECT = 'assets/icons/bottom_nav_test_select.svg';
   static const String CATALOGUE = 'assets/icons/catalogue.svg';
   static const String CATALOGUE_DARK = 'assets/icons/catalogue_dark.svg';
   static const String CATEGORY_DARK = 'assets/icons/category_dark.svg';
   static const String CROWN = 'assets/icons/crown.svg';
   static const String CROWN_DARK = 'assets/icons/crown_dark.svg';
   static const String CUSTOMER_SUPPORT_DARK = 'assets/icons/customer-support_dark.svg';
+  static const String ENGINEERING = 'assets/icons/engineering.svg';
   static const String FAVOURITE_DARK = 'assets/icons/favourite_dark.svg';
   static const String HELP_CIRCLE = 'assets/icons/help-circle.svg';
   static const String HELP_CIRCLE_DARK = 'assets/icons/help-circle_dark.svg';
   static const String LANGUAGE_SQUARE = 'assets/icons/language-square.svg';
   static const String LANGUAGE_SQUARE_DARK = 'assets/icons/language-square_dark.svg';
+  static const String MCQ_TEST = 'assets/icons/mcq_test.svg';
+  static const String MEDICAL = 'assets/icons/medical.svg';
   static const String MOON_ECLIPSE = 'assets/icons/moon-eclipse.svg';
   static const String MOON_ECLIPSE_DARK = 'assets/icons/moon-eclipse_dark.svg';
   static const String SECURITY = 'assets/icons/security.svg';
   static const String SECURITY_DARK = 'assets/icons/security_dark.svg';
   static const String STAR = 'assets/icons/star.svg';
+  static const String UNIVERSITY = 'assets/icons/university.svg';
   static const String USER_DARK = 'assets/icons/user_dark.svg';
+  static const String WRITTEN_TEST = 'assets/icons/written_test.svg';
+  static const String MOCK_TEST_BACKGROUND = 'assets/images/mock_test_background.svg';
+  static const String QUIZER_BACKGROUND = 'assets/images/quizer_background.svg';
+  static const String SEGMENT_TEST_BACKGROUND = 'assets/images/segment_test_background.svg';
 }

@@ -50,8 +50,8 @@ class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: AppColors.textActionPrimaryLight,
-            border: Border.all(color: AppColors.shadeNeutralLight),
+            color: Theme.of(context).colorScheme.primary,
+            border: Border.all(color: Theme.of(context).colorScheme.onPrimary),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
