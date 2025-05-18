@@ -438,7 +438,7 @@ class SearchViewState extends ConsumerState<SearchView> {
               title: course.name,
               price: currencyFormatter.format(course.price),
               imgPath:
-                  course.image?.path ?? "assets/images/course_thumbnail.png",
+                  course.imageDetails?.path ?? "assets/images/course_thumbnail.png",
             ),
           );
         },

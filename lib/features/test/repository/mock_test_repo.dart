@@ -2,8 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:prostuti/core/services/dio_service.dart';
 import 'package:prostuti/core/services/error_handler.dart';
 import 'package:prostuti/core/services/error_response.dart';
+import 'package:prostuti/features/test/model/mcq_quiz_result_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../model/mock_quiz_model.dart';
+import '../model/quiz_submit_model.dart';
 
 part 'mock_test_repo.g.dart';
 
@@ -25,6 +27,35 @@ class MockTestRepo {
 
     if (response.statusCode == 200) {
       return Right(MockQuizResponse.fromJson(response.data));
+    } else {
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      ErrorHandler().setErrorMessage(errorResponse.message);
+      return Left(errorResponse);
+    }
+  }
+
+  Future<Either<ErrorResponse, QuizSubmitModel>> submitMockQuiz({
+    required String quizId,
+    required payload,
+  }) async {
+    final response = await _dioService.patchRequest("/quiz/submit-mock-quiz/$quizId",data: payload);
+
+    if (response.statusCode == 200) {
+      return Right(QuizSubmitModel.fromJson(response.data));
+    } else {
+      final errorResponse = ErrorResponse.fromJson(response.data);
+      ErrorHandler().setErrorMessage(errorResponse.message);
+      return Left(errorResponse);
+    }
+  }
+
+  Future<Either<ErrorResponse, MCQQuizResultModel>> getMockQuizResult({
+    required String quizId,
+  }) async {
+    final response = await _dioService.getRequest("/quiz/single-quiz/$quizId");
+
+    if (response.statusCode == 200) {
+      return Right(MCQQuizResultModel.fromJson(response.data));
     } else {
       final errorResponse = ErrorResponse.fromJson(response.data);
       ErrorHandler().setErrorMessage(errorResponse.message);

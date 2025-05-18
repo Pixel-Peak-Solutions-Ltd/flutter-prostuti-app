@@ -1,3 +1,5 @@
+import '../../course/materials/test/model/mcq_test_details_model.dart';
+
 class MockQuizResponse {
   bool? success;
   String? message;
@@ -31,7 +33,7 @@ class MockQuizData {
   int? questionCount;
   bool? isNegativeMarking;
   String? questionType;
-  List<Question>? questions;
+  List<QuestionList>? questions;
 
   MockQuizData({
     this.id,
@@ -55,7 +57,7 @@ class MockQuizData {
       questionCount: json['questionCount'],
       isNegativeMarking: json['isNegativeMarking'],
       questionType: json['questionType'],
-      questions: (json['questions'] as List?)?.map((e) => Question.fromJson(e)).toList(),
+      questions: (json['questions'] as List?)?.map((e) => QuestionList.fromJson(e)).toList(),
     );
   }
 
