@@ -38,8 +38,8 @@ class _WrittenQuizResultAnswerWidgetState extends State<WrittenQuizResultAnswerW
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: AppColors.textActionPrimaryLight,
-            border: Border.all(color: AppColors.shadeNeutralLight),
+            color: Theme.of(context).colorScheme.onPrimary,
+            border: Border.all(color: Theme.of(context).colorScheme.surface),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,18 +69,18 @@ class _WrittenQuizResultAnswerWidgetState extends State<WrittenQuizResultAnswerW
                 enabled: false,
                 maxLines: 8,
                 minLines: 3,
-                style: const TextStyle(
-                  color: AppColors.textPrimaryLight,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: AppColors.shadeNeutralLight, width: 4),
+                    borderSide:  BorderSide(color: Theme.of(context).colorScheme.surface, width: 4),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   disabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: AppColors.shadeNeutralLight, width: 4),
+                    borderSide: BorderSide(color:Theme.of(context).colorScheme.surface, width: 4),
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),

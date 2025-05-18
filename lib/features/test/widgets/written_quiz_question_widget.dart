@@ -50,8 +50,8 @@ class _WrittenQuizQuestionWidgetState extends State<WrittenQuizQuestionWidget> {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: AppColors.textActionPrimaryLight,
-            border: Border.all(color: AppColors.shadeNeutralLight),
+            color: Theme.of(context).colorScheme.onPrimary,
+            border: Border.all(color:Theme.of(context).colorScheme.onSurface),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,7 +79,7 @@ class _WrittenQuizQuestionWidgetState extends State<WrittenQuizQuestionWidget> {
                 controller: _answerController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: AppColors.shadeNeutralLight, width: 4),
+                    borderSide: BorderSide(color: Theme.of(context).colorScheme.onSurface, width: 4),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   hintText: "Write your answer here...",

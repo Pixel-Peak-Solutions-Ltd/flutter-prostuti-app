@@ -29,22 +29,22 @@ class _ExplanationWidgetState extends State<ExplanationWidget> {
             padding: const EdgeInsets.all(16),
             width: MediaQuery.sizeOf(context).width,
             decoration: BoxDecoration(
-              color: const Color(0xffE1EAFF),
+              color: Theme.of(context).colorScheme.onSecondary,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xff2970FF)),
+              border: Border.all(color: Theme.of(context).colorScheme.secondary),
             ),
             child: Column(
               children: [
                 Text(
                   "ব্যাখ্যা",
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyMedium!.copyWith(color: const Color(0xff2970FF)),
+                  style: theme.textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.secondary),
                 ),
                 const Gap(10),
                 Text(
                   widget.explanation ?? "No explanation available",
                   textAlign: TextAlign.center,
-                  style: theme.textTheme.bodyMedium,
+                  style: theme.textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.surface),
                 ),
               ],
             ),

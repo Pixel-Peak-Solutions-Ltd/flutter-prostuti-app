@@ -45,9 +45,9 @@ class MockQuizScreenState extends ConsumerState<MCQMockQuizHistoryScreen>
                     padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: AppColors.shadeSecondaryLight,
+                      color: Theme.of(context).colorScheme.onSecondary,
                       border:
-                          Border.all(color: AppColors.borderFocusPrimaryLight),
+                          Border.all(color: Theme.of(context).colorScheme.onPrimary),
                     ),
                     child: Column(
                       children: [
@@ -58,13 +58,13 @@ class MockQuizScreenState extends ConsumerState<MCQMockQuizHistoryScreen>
                               "টেস্ট টাইপ :",
                               style: theme.textTheme.bodyLarge!.copyWith(
                                   fontWeight: FontWeight.w600,
-                                  color: AppColors.borderFocusPrimaryLight),
+                                  color: Theme.of(context).colorScheme.onPrimary),
                             ),
                             Text(
                               "${test!.data!.type}",
                               style: theme.textTheme.bodyLarge!.copyWith(
                                   fontWeight: FontWeight.w600,
-                                  color: AppColors.borderFocusPrimaryLight),
+                                  color: Theme.of(context).colorScheme.onPrimary),
                             ),
                           ],
                         ),

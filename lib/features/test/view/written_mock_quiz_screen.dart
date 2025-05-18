@@ -126,8 +126,8 @@ class _WrittenMockQuizScreenState extends ConsumerState<WrittenMockQuizScreen> w
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: AppColors.shadeSecondaryLight,
-                border: Border.all(color: AppColors.borderFocusPrimaryLight),
+                color: Theme.of(context).colorScheme.onSecondary,
+                border: Border.all(color: Theme.of(context).colorScheme.primary),
               ),
               child: Column(
                 children: [

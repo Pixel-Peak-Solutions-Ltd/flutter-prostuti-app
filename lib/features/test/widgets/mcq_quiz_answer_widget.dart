@@ -39,8 +39,8 @@ class _MCQQuizResultAnswerWidgetState extends State<MCQQuizResultAnswerWidget> {
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: AppColors.textActionPrimaryLight,
-            border: Border.all(color: AppColors.shadeNeutralLight),
+            color: Theme.of(context).colorScheme.onPrimary,
+            border: Border.all(color: Theme.of(context).colorScheme.surface),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

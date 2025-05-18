@@ -123,7 +123,7 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with Comm
                   const Gap(8),
                   Text(
                     "প্রতিটি প্রশ্নে 1 পয়েন্ট থাকে এবং প্রতিটি ভুল উত্তরের জন্য \n0.5 পয়েন্ট কাটা হবে।",
-                    style: theme.textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.secondary),
+                    style: theme.textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.surface),
                     textAlign: TextAlign.center,
                   ),
                 ],

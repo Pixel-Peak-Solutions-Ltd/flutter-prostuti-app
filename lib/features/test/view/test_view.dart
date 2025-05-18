@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/test/view/quizer_test_view.dart';
 import 'package:prostuti/features/test/view/segment_test_view.dart';
 import '../../../common/widgets/common_widgets/common_widgets.dart';
@@ -16,7 +17,14 @@ class TestLandingView extends StatelessWidget with CommonWidgets {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: commonAppbar("টেস্ট"),
+      appBar: AppBar(
+        title: Text(
+          context.l10n!.test
+        ),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        backgroundColor: appTheme.appBarTheme.backgroundColor,
+      ),
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
         child: Container(
@@ -46,7 +54,13 @@ class TestLandingView extends StatelessWidget with CommonWidgets {
                       borderColor: borderColor,
                       svgAsset: 'assets/images/segment_test_background.svg',
                       onTap: () {
-                        Nav().push( SegmentTestLandingView());
+                        // Nav().push( SegmentTestLandingView());
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Coming Soon..."),
+                            backgroundColor: Colors.yellow,
+                          ),
+                        );
                       },
                     ),
                   ),

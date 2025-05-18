@@ -218,6 +218,12 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
             const Gap(10),
             Text('প্রশ্নের ধরণ সিলেক্ট করুন*', style: Theme.of(context).textTheme.bodyMedium),
             const Gap(10),
+            TextButton.icon(
+              onPressed: () => setState(() => selectedSubjects.add("সাবজেক্ট সিলেক্ট করুন")),
+              label: Text("আরেকটি বিষয় যোগ করুন", style: Theme.of(context).textTheme.bodyMedium),
+              icon: Icon(CupertinoIcons.plus_app, color: Theme.of(context).colorScheme.onSurface),
+            ),
+            const Gap(10),
             Wrap(
               spacing: 8,
               children: [
@@ -225,12 +231,6 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
                 _buildFilterChip("Unanswered Questions"),
                 _buildFilterChip("Wrong Questions"),
               ],
-            ),
-            const Gap(10),
-            TextButton.icon(
-              onPressed: () => setState(() => selectedSubjects.add("সাবজেক্ট সিলেক্ট করুন")),
-              label: Text("আরেকটি বিষয় যোগ করুন", style: Theme.of(context).textTheme.bodyMedium),
-              icon: Icon(CupertinoIcons.plus_app, color: Theme.of(context).colorScheme.onSurface),
             ),
 
             const Gap(10),
