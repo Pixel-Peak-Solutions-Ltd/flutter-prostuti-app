@@ -9,7 +9,7 @@ class MockQuizResultViewmodel extends _$MockQuizResultViewmodel {
   @override
   Future<MCQQuizResultModel?> build(String quizId) async {
     final repo = ref.read(mockTestRepoProvider);
-    final response = await repo.getMockQuizResult(quizId: quizId);
+    final response = await repo.getMockMCQQuizResult(quizId: quizId);
     return response.fold(
           (l) => throw Exception(l.message),
           (r) => r,

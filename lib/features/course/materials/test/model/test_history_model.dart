@@ -243,7 +243,7 @@ class QuestionId {
     title = json['title'];
     description = json['description'];
     hasImage = json['hasImage'];
-    options = json['options'];
+    options = json['options'].cast<String>();
     correctOption = json['correctOption'];
     createdBy = json['createdBy'];
     updatedBy = json['updatedBy'];

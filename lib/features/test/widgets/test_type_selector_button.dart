@@ -42,9 +42,9 @@ class TestTypeSelector extends StatelessWidget {
           children: [
             SvgPicture.asset(
               icon,
-              color: isSelected
-                  ? Theme.of(context).colorScheme.surface
-                  : Theme.of(context).colorScheme.onSurface,
+              color:isSelected
+                  ? Theme.of(context).colorScheme.onSurface
+                  : Theme.of(context).colorScheme.secondary,
               height: 20,
               width: 20,
             ),
@@ -53,8 +53,8 @@ class TestTypeSelector extends StatelessWidget {
               type,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: isSelected
-                      ? Theme.of(context).colorScheme.surface
-                      : Theme.of(context).colorScheme.onSurface),
+                      ? Theme.of(context).colorScheme.onSurface
+                      : Theme.of(context).colorScheme.secondary),
             ),
           ],
         ),

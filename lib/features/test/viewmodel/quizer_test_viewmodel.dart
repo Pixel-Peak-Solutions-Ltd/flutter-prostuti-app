@@ -2,19 +2,20 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../model/mock_quiz_model.dart';
 import '../repository/mock_test_repo.dart';
 
-part 'mock_test_viewmodel.g.dart';
+part 'quizer_test_viewmodel.g.dart';
 
 @Riverpod(keepAlive: false)
-class MockTestViewmodel extends _$MockTestViewmodel {
+class QuizerTestViewmodel extends _$QuizerTestViewmodel {
   @override
   Future<MockQuizResponse?> build() async {
     // Initial State (You can trigger a default API call if needed)
     return null;
   }
 
-  Future<MockQuizResponse?> createMockQuiz({
+  Future<MockQuizResponse?> createMCQQuizer({
     required String questionType,
     required List<String> subjects,
+    required List<String> questionFilters,
     required int questionCount,
     required bool isNegativeMarking,
     required int time,
@@ -24,6 +25,7 @@ class MockTestViewmodel extends _$MockTestViewmodel {
     final payload = {
       "questionType": questionType,
       "subjects": subjects,
+      "questionFilters":questionFilters,
       "questionCount": questionCount,
       "isNegativeMarking": isNegativeMarking,
       "time": time,
@@ -36,7 +38,7 @@ class MockTestViewmodel extends _$MockTestViewmodel {
           (data) {
         state = AsyncData(data);
         return data;
-        },
+      },
     );
   }
 }

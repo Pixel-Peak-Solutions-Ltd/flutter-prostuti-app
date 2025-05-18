@@ -5,18 +5,17 @@ import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/configs/app_colors.dart';
+import 'package:prostuti/features/test/model/mock_written_quiz_model.dart';
 import 'package:prostuti/features/test/repository/mock_test_repo.dart';
 import 'package:prostuti/features/test/view/written_mock_quiz_history_screen.dart';
 import '../../../core/services/debouncer.dart';
 import '../../../core/services/nav.dart';
 import '../../../core/services/timer.dart';
 import '../../course/materials/test/widgets/countdown_timer.dart';
-import '../model/mock_quiz_model.dart';
 import '../widgets/written_quiz_question_widget.dart';
-import 'mcq_quiz_result_screen.dart';
 
 class WrittenMockQuizScreen extends ConsumerStatefulWidget {
-  final MockQuizResponse mockQuiz;
+  final MockWrittenQuizResponse mockQuiz;
 
   const WrittenMockQuizScreen({super.key, required this.mockQuiz});
 

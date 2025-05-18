@@ -46,8 +46,8 @@ class QuestionStandardSelector extends StatelessWidget {
             SvgPicture.asset(
               icon,
               color: isSelected
-                  ? Theme.of(context).colorScheme.surface
-                  : Theme.of(context).colorScheme.onSurface,
+                  ? Theme.of(context).colorScheme.onSurface
+                  : Theme.of(context).colorScheme.secondary,
               height: 20,
               width: 20,
             ),
@@ -56,8 +56,8 @@ class QuestionStandardSelector extends StatelessWidget {
               type,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: isSelected
-                    ? Theme.of(context).colorScheme.surface
-                    : Theme.of(context).colorScheme.onSurface,
+                    ? Theme.of(context).colorScheme.onSurface
+                    : Theme.of(context).colorScheme.secondary,
               ),
             ),
           ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/features/test/viewmodel/mock_written_quiz_result_viewmodel.dart';
 import 'package:prostuti/features/test/widgets/written_quiz_answer_widget.dart';
 import '../../../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../../../../core/configs/app_colors.dart';
@@ -30,7 +31,7 @@ class MockQuizScreenState extends ConsumerState<WrittenMockQuizHistoryScreen>
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    final mCQTestHistoryAsync =ref.watch(mockQuizResultViewmodelProvider(widget.quizId));
+    final mCQTestHistoryAsync =ref.watch(mockWrittenQuizResultViewmodelProvider(widget.quizId));
 
     return Scaffold(
       appBar: commonAppbar("মক টেস্ট"),

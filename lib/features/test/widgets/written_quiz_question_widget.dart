@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:prostuti/features/course/materials/test/model/mcq_test_details_model.dart';
+import 'package:prostuti/features/course/materials/test/model/written_test_details_model.dart';
 
 import '../../../../../core/configs/app_colors.dart';
 

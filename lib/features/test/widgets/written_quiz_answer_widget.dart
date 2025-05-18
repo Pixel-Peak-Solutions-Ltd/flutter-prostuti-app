@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
-import 'package:prostuti/features/test/model/mcq_quiz_result_model.dart';
+import 'package:prostuti/features/test/model/written_quiz_result_model.dart';
 import '../../../../../core/configs/app_colors.dart';
 import '../../course/materials/test/widgets/explanation_widget.dart';
 

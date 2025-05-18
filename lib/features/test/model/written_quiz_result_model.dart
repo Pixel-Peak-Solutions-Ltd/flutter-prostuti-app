@@ -1,13 +1,11 @@
-import 'package:prostuti/features/course/materials/test/model/test_history_model.dart';
-
-class MCQQuizResultModel {
+class WrittenQuizResultModel {
   bool? success;
   String? message;
   Data? data;
 
-  MCQQuizResultModel({this.success, this.message, this.data});
+  WrittenQuizResultModel({this.success, this.message, this.data});
 
-  MCQQuizResultModel.fromJson(Map<String, dynamic> json) {
+  WrittenQuizResultModel.fromJson(Map<String, dynamic> json) {
     success = json['success'];
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
@@ -355,7 +353,7 @@ class Questions {
     categoryId = json['category_id'];
     title = json['title'];
     description = json['description'];
-    options = json['options'].cast<String>();
+    options = json['options'];
     correctOption = json['correctOption'];
     createdBy = json['createdBy'];
     updatedBy = json['updatedBy'];
@@ -411,3 +409,77 @@ class Answers {
     return data;
   }
 }
+
+
+class QuestionId {
+  String? sId;
+  String? type;
+  String? categoryId;
+  String? title;
+  String? description;
+  bool? hasImage;
+  List<String>? options;
+  String? correctOption;
+  String? createdBy;
+  String? updatedBy;
+  String? createdAt;
+  String? updatedAt;
+  int? iV;
+  ImageDetails? image;
+
+  QuestionId(
+      {this.sId,
+        this.type,
+        this.categoryId,
+        this.title,
+        this.description,
+        this.hasImage,
+        this.options,
+        this.correctOption,
+        this.createdBy,
+        this.updatedBy,
+        this.createdAt,
+        this.updatedAt,
+        this.iV,
+        this.image});
+
+  QuestionId.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    type = json['type'];
+    categoryId = json['category_id'];
+    title = json['title'];
+    description = json['description'];
+    hasImage = json['hasImage'];
+    options = json['options'];
+    correctOption = json['correctOption'];
+    createdBy = json['createdBy'];
+    updatedBy = json['updatedBy'];
+    createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
+    iV = json['__v'];
+    image = json['image'] != null ? new ImageDetails.fromJson(json['image']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['_id'] = this.sId;
+    data['type'] = this.type;
+    data['category_id'] = this.categoryId;
+    data['title'] = this.title;
+    data['description'] = this.description;
+    data['hasImage'] = this.hasImage;
+    data['options'] = this.options;
+    data['correctOption'] = this.correctOption;
+    data['createdBy'] = this.createdBy;
+    data['updatedBy'] = this.updatedBy;
+    data['createdAt'] = this.createdAt;
+    data['updatedAt'] = this.updatedAt;
+    data['__v'] = this.iV;
+    if (this.image != null) {
+      data['image'] = this.image!.toJson();
+    }
+    return data;
+  }
+}
+
+

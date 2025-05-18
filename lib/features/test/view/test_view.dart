@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/features/test/view/quizer_test_view.dart';
 import 'package:prostuti/features/test/view/segment_test_view.dart';
 import '../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../../core/services/nav.dart';
@@ -69,7 +70,9 @@ class TestLandingView extends StatelessWidget with CommonWidgets {
                 borderColor: borderColor,
                 svgAsset: 'assets/images/quizer_background.svg',
                 fullWidth: true,
-                onTap: () {},
+                onTap: () {
+                  Nav().push( const QuizerTestLandingView());
+                },
               ),
             ],
           ),

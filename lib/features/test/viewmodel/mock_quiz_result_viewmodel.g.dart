@@ -7,7 +7,7 @@ part of 'mock_quiz_result_viewmodel.dart';
 // **************************************************************************
 
 String _$mockQuizResultViewmodelHash() =>
-    r'7e4017886141afb199f15f83699f1ecaa000d07f';
+    r'05744bbaa7900e474cd593253a976706dc3d648f';
 
 /// Copied from Dart SDK
 class _SystemHash {

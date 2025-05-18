@@ -1,18 +1,19 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../model/mock_quiz_model.dart';
+
+import '../model/mock_written_quiz_model.dart';
 import '../repository/mock_test_repo.dart';
 
-part 'mock_test_viewmodel.g.dart';
+part 'written_quiz_viewmodel.g.dart';
 
 @Riverpod(keepAlive: false)
-class MockTestViewmodel extends _$MockTestViewmodel {
+class WrittenQuizViewmodel extends _$WrittenQuizViewmodel {
   @override
-  Future<MockQuizResponse?> build() async {
+  Future<MockWrittenQuizResponse?> build() async {
     // Initial State (You can trigger a default API call if needed)
     return null;
   }
 
-  Future<MockQuizResponse?> createMockQuiz({
+  Future<MockWrittenQuizResponse?> createMockQuiz({
     required String questionType,
     required List<String> subjects,
     required int questionCount,
@@ -29,7 +30,7 @@ class MockTestViewmodel extends _$MockTestViewmodel {
       "time": time,
     };
 
-    final response = await ref.read(mockTestRepoProvider).createMCQMockQuiz(payload: payload);
+    final response = await ref.read(mockTestRepoProvider).createWrittenMockQuiz(payload: payload);
 
     return response.fold(
           (l) => throw Exception(l.message),
