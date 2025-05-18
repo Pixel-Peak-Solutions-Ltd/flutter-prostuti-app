@@ -76,28 +76,38 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/icons/
+    - assets/icons/academic.svg
     - assets/icons/alert-circle_dark.svg
     - assets/icons/award-01_dark.svg
     - assets/icons/books-01.svg
     - assets/icons/bottom_nav_notification_select.svg
+    - assets/icons/bottom_nav_test_select.svg
     - assets/icons/catalogue.svg
     - assets/icons/catalogue_dark.svg
     - assets/icons/category_dark.svg
     - assets/icons/crown.svg
     - assets/icons/crown_dark.svg
     - assets/icons/customer-support_dark.svg
+    - assets/icons/engineering.svg
     - assets/icons/favourite_dark.svg
     - assets/icons/help-circle.svg
     - assets/icons/help-circle_dark.svg
     - assets/icons/language-square.svg
     - assets/icons/language-square_dark.svg
+    - assets/icons/mcq_test.svg
+    - assets/icons/medical.svg
     - assets/icons/moon-eclipse.svg
     - assets/icons/moon-eclipse_dark.svg
     - assets/icons/security.svg
     - assets/icons/security_dark.svg
     - assets/icons/star.svg
+    - assets/icons/university.svg
     - assets/icons/user_dark.svg
+    - assets/icons/written_test.svg
     - assets/images/
+    - assets/images/mock_test_background.svg
+    - assets/images/quizer_background.svg
+    - assets/images/segment_test_background.svg
     - lib/l10n/app_bn.arb
     - lib/l10n/app_en.arb
 

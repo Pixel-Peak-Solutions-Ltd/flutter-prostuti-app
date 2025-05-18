@@ -23,8 +23,8 @@ class MockQuestionSkeleton extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: AppColors.shadeSecondaryLight,
-              border: Border.all(color: AppColors.borderFocusPrimaryLight),
+              color: Theme.of(context).colorScheme.onSecondary,
+              border: Border.all(color: Theme.of(context).colorScheme.onPrimary),
             ),
             child: Column(
               children: [
@@ -35,13 +35,13 @@ class MockQuestionSkeleton extends StatelessWidget {
                       "বিষয় :",
                       style: theme.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppColors.borderFocusPrimaryLight),
+                          color: Theme.of(context).colorScheme.onPrimary),
                     ),
                     Text(
                       "",
                       style: theme.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppColors.borderFocusPrimaryLight),
+                          color: Theme.of(context).colorScheme.onPrimary),
                     ),
                   ],
                 ),
@@ -53,13 +53,13 @@ class MockQuestionSkeleton extends StatelessWidget {
                       "টেস্ট টাইপ :",
                       style: theme.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppColors.borderFocusPrimaryLight),
+                          color: Theme.of(context).colorScheme.onPrimary),
                     ),
                     Text(
                       "",
                       style: theme.textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppColors.borderFocusPrimaryLight),
+                          color: Theme.of(context).colorScheme.onPrimary),
                     ),
                   ],
                 ),
@@ -73,18 +73,18 @@ class MockQuestionSkeleton extends StatelessWidget {
             ),
           ),
           const Gap(16),
-          CountdownTimer(),
+          CountdownTimer(onTimeUp: () {  },),
           const Gap(24),
           Expanded(
             child: ListView.builder(
               itemCount: 10,
               itemBuilder: (context, index) {
                 return Container(
-                  padding: const EdgeInsets.all(16),
+                  margin: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: AppColors.textActionPrimaryLight,
-                    border: Border.all(color: AppColors.shadeNeutralLight),
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    border: Border.all(color: Theme.of(context).colorScheme.onPrimary),
                   ),
                   child: const Text(
                       "                                                                                                                                           "),

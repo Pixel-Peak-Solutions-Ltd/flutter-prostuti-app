@@ -13,6 +13,7 @@ import 'package:prostuti/features/course/course_list/view/course_list_view.dart'
 import 'package:prostuti/features/course/my_course/view/my_course_view.dart';
 import 'package:prostuti/features/home_screen/view/search_view.dart';
 import 'package:prostuti/features/leaderboard/widgets/leaderboard_section.dart';
+import 'package:prostuti/features/test/view/test_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -186,7 +187,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         return const ChatView();
 
       case 3:
-        return const Center(child: Text("Tests coming soon"));
+        return TestLandingView();
 
       case 4:
         return const NotificationScreen();
