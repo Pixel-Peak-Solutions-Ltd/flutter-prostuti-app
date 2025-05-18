@@ -66,11 +66,13 @@ Dio dio(DioRef ref) {
   ))
     ..interceptors.add(
       PrettyDioLogger(
-        responseBody: true,
+        responseBody: false,
+        requestHeader: true,
+        requestBody: true,
+        responseHeader: false,
         error: true,
         compact: true,
         maxWidth: 90,
-
       ),
     )
     ..interceptors.add(
