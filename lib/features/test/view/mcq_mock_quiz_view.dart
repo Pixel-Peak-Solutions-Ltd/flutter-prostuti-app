@@ -56,22 +56,6 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with Comm
     });
   }
 
-  void _startTimer() {
-    if (remainingTime <= 0) return;
-    Future.delayed(const Duration(seconds: 1), () {
-      if (mounted) {
-        setState(() {
-          remainingTime--;
-        });
-        if (remainingTime == 0) {
-          _submitAnswers();
-        } else {
-          _startTimer();
-        }
-      }
-    });
-  }
-
   Future<void> _submitAnswers() async {
     _debouncer.run(
       action: () async {
@@ -118,8 +102,8 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with Comm
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: AppColors.shadeSecondaryLight,
-                border: Border.all(color: AppColors.borderFocusPrimaryLight),
+                color: Theme.of(context).colorScheme.onSecondary,
+                border: Border.all(color: Theme.of(context).colorScheme.primary),
               ),
               child: Column(
                 children: [
@@ -128,25 +112,25 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with Comm
                     children: [
                       Text("টেস্ট টাইপ :", style: theme.textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.borderFocusPrimaryLight,
+                        color: Theme.of(context).colorScheme.primary,
                       )),
                       Text(" ${widget.mockQuiz.data?.questionType}", style: theme.textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppColors.borderFocusPrimaryLight,
+                        color: Theme.of(context).colorScheme.primary,
                       )),
                     ],
                   ),
                   const Gap(8),
                   Text(
                     "প্রতিটি প্রশ্নে 1 পয়েন্ট থাকে এবং প্রতিটি ভুল উত্তরের জন্য \n0.5 পয়েন্ট কাটা হবে।",
-                    style: theme.textTheme.bodyMedium,
+                    style: theme.textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.secondary),
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
             const Gap(16),
-            CountdownTimer(),
+            CountdownTimer(onTimeUp: _submitAnswers,),
             const Gap(16),
             // Questions List
             Expanded(

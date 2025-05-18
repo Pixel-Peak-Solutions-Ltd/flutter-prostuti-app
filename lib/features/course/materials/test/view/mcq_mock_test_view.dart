@@ -127,7 +127,9 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                   ),
                 ),
                 const Gap(16),
-                CountdownTimer(),
+                CountdownTimer(onTimeUp: () {
+                  _submitTest(test);
+                },),
                 const Gap(24),
                 // Questions Section
                 Expanded(

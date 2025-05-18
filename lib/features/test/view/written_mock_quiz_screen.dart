@@ -154,7 +154,7 @@ class _WrittenMockQuizScreenState extends ConsumerState<WrittenMockQuizScreen> w
               ),
             ),
             const Gap(16),
-            CountdownTimer(),
+            CountdownTimer(onTimeUp: _submitAnswers,),
             const Gap(16),
             // Questions List
             Expanded(

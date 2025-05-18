@@ -132,7 +132,9 @@ class MockTestScreenState extends ConsumerState<WrittenMockTestScreen>
                     ),
                   ),
                   const Gap(16),
-                  CountdownTimer(),
+                  CountdownTimer(onTimeUp: () {
+                    _submitTest(test);
+                  },),
                   const Gap(24),
                   Expanded(
                     child: ListView.builder(

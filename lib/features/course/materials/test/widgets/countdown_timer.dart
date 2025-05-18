@@ -5,6 +5,11 @@ import 'package:gap/gap.dart';
 import '../../../../../core/services/timer.dart';
 
 class CountdownTimer extends ConsumerWidget {
+
+  final VoidCallback onTimeUp;
+
+  const CountdownTimer({super.key, required this.onTimeUp});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final countdownState = ref.watch(countdownProvider);
@@ -15,6 +20,12 @@ class CountdownTimer extends ConsumerWidget {
       final seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
       return "$hours:$minutes:$seconds";
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (countdownState.remainingTime.inSeconds == 0) {
+        onTimeUp();
+      }
+    });
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

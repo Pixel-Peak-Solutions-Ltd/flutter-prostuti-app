@@ -73,7 +73,7 @@ class MockQuestionSkeleton extends StatelessWidget {
             ),
           ),
           const Gap(16),
-          CountdownTimer(),
+          CountdownTimer(onTimeUp: () {  },),
           const Gap(24),
           Expanded(
             child: ListView.builder(
