@@ -47,7 +47,6 @@ mixin CommonWidgets {
               .copyWith(color: AppColors.textActionSecondaryLight),
         ),
         Container(
-          height: 48,
           width: 157,
           decoration: BoxDecoration(
             color: const Color(0xff2970FF), // Set the background color

@@ -824,7 +824,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutTest.
   ///
   /// In en, this message translates to:
-  /// **'About Test'**
+  /// **'About Course'**
   String get aboutTest;
 
   /// No description provided for @courseCurriculum.
@@ -836,7 +836,7 @@ abstract class AppLocalizations {
   /// No description provided for @testReviews.
   ///
   /// In en, this message translates to:
-  /// **'Test Reviews'**
+  /// **'Course Reviews'**
   String get testReviews;
 
   /// No description provided for @showLess.

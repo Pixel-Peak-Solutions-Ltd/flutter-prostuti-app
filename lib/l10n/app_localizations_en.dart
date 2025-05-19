@@ -372,13 +372,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get coursePreview => 'Course Preview';
 
   @override
-  String get aboutTest => 'About Test';
+  String get aboutTest => 'About Course';
 
   @override
   String get courseCurriculum => 'Course Curriculum';
 
   @override
-  String get testReviews => 'Test Reviews';
+  String get testReviews => 'Course Reviews';
 
   @override
   String get showLess => 'Show Less';

@@ -372,13 +372,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get coursePreview => 'কোর্স প্রিভিউ';
 
   @override
-  String get aboutTest => 'টেস্ট সম্পর্কে';
+  String get aboutTest => 'কোর্স সম্পর্কে';
 
   @override
   String get courseCurriculum => 'কোর্স কারিকুলাম';
 
   @override
-  String get testReviews => 'টেস্ট রিভিউ';
+  String get testReviews => 'কোর্স রিভিউ';
 
   @override
   String get showLess => 'কম দেখুন';
