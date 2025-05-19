@@ -41,6 +41,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     final themeMode = ref.watch(themeNotifierProvider);
     final currentLocale = ref.watch(localeProvider);
+    SizeConfig.init(context);
 
     return MaterialApp(
       debugShowCheckedModeBanner: kDebugMode ? true : false,
@@ -72,8 +73,6 @@ class MainAppContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final authNotifier = ref.watch(authNotifierProvider);
-
-    SizeConfig.init(context);
 
     return authNotifier.when(
       data: (token) {

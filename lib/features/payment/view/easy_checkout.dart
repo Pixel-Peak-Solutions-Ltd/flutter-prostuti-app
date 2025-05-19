@@ -61,15 +61,15 @@ class _EasyCheckoutState extends State<EasyCheckout> {
             onUrlChange: (change) {
               print("URL changed to: ${change.url}");
               if (change.url != null) {
-                if (change.url!
-                    .contains("https://www.google.com/payment/success")) {
+                if (change.url!.contains(
+                    "https://prostuti-app-teacher-admin-dashb-staging.up.railway.app/payment/success")) {
                   Nav().pushReplacement(const PaymetSuccessful());
-                } else if (change.url!
-                    .contains("https://www.google.com/payment/failed")) {
+                } else if (change.url!.contains(
+                    "https://prostuti-app-teacher-admin-dashb-staging.up.railway.app/payment/failed")) {
                   Nav().pop();
                   Fluttertoast.showToast(msg: "Failed to purchase the course.");
-                } else if (change.url!
-                    .contains("https://www.google.com/payment/cancelled")) {
+                } else if (change.url!.contains(
+                    "https://prostuti-app-teacher-admin-dashb-staging.up.railway.app/payment/cancelled")) {
                   Nav().pop();
                 }
               }

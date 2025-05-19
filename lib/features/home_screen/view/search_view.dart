@@ -6,6 +6,7 @@ import 'package:prostuti/core/services/currency_converter.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/course/course_details/view/course_details_view.dart';
+import 'package:prostuti/features/course/course_list/model/course_list_model.dart';
 import 'package:prostuti/features/course/course_list/viewmodel/course_list_viewmodel.dart';
 import 'package:prostuti/features/course/course_list/viewmodel/get_course_by_id.dart';
 import 'package:prostuti/features/course/course_list/widgets/course_card.dart';
@@ -419,7 +420,7 @@ class SearchViewState extends ConsumerState<SearchView> {
     );
   }
 
-  Widget _buildCourseList(List courses) {
+  Widget _buildCourseList(List<PublishedCourseData> courses) {
     return AnimatedOpacity(
       opacity: 1.0,
       duration: const Duration(milliseconds: 300),
@@ -438,7 +439,7 @@ class SearchViewState extends ConsumerState<SearchView> {
               title: course.name,
               price: currencyFormatter.format(course.price),
               imgPath:
-                  course.imageDetails?.path ?? "assets/images/course_thumbnail.png",
+                  course.image?.path ?? "assets/images/course_thumbnail.png",
             ),
           );
         },
