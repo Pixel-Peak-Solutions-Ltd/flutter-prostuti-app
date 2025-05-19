@@ -43,12 +43,6 @@ class HomeRoutineWidget extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
               ),
-              Text(
-                context.l10n?.seeMore ?? 'আরো দেখুন',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.blue,
-                    ),
-              ),
             ],
           ),
           const Gap(12),
