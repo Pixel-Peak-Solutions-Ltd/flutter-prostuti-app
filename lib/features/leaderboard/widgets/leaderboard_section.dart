@@ -32,9 +32,7 @@ class LeaderboardSection extends ConsumerWidget {
               },
               child: Text(
                 "আরো দেখুন",
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
           ],

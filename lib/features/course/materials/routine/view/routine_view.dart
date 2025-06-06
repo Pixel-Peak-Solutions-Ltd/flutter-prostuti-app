@@ -80,11 +80,9 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Calendar section
             _buildCalendar().animate().fadeIn(duration: 400.ms),
             const Gap(28),
 
-            // Selected day section with activity buttons
             _buildSelectedDaySection().animate().slideX(
                   begin: -0.1,
                   end: 0,
@@ -93,7 +91,6 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
                 ),
             const Gap(24),
 
-            // Daily activities timeline
             _buildDailyActivitiesTimeline().animate().slideX(
                   begin: -0.1,
                   end: 0,
@@ -102,7 +99,6 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
                 ),
             const Gap(32),
 
-            // Upcoming activity section
             _buildUpcomingActivitySection().animate().slideX(
                   begin: -0.1,
                   end: 0,
@@ -141,6 +137,7 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
             lastDay: DateTime.utc(2030, 12, 31),
             focusedDay: _focusedDay,
             calendarFormat: _calendarFormat,
+            weekendDays: const [DateTime.saturday, DateTime.friday],
             selectedDayPredicate: (day) {
               return isSameDay(_selectedDay, day);
             },
@@ -310,17 +307,11 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
         const Gap(16),
         Row(
           children: [
-            Expanded(
-              child: _buildCategoryButton('Class'),
-            ),
+            _buildCategoryButton('Class'),
             const Gap(12),
-            Expanded(
-              child: _buildCategoryButton('Assignment'),
-            ),
+            _buildCategoryButton('Assignment'),
             const Gap(12),
-            Expanded(
-              child: _buildCategoryButton('Exam'),
-            ),
+            _buildCategoryButton('Exam'),
           ],
         ),
       ],
@@ -352,6 +343,7 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       height: 50,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
         color: isDarkMode ? color.withOpacity(0.2) : color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
@@ -360,28 +352,31 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
           width: 1.5,
         ),
       ),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              _getIconForActivityType(title),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            _getIconForActivityType(title),
+            color: color,
+            height: 18,
+            width: 18,
+          ),
+          const Gap(8),
+          Text(
+            translatedTitle,
+            maxLines: 1,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.outfit(
               color: color,
-              height: 18,
-              width: 18,
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
             ),
-            const Gap(8),
-            Text(
-              translatedTitle,
-              style: GoogleFonts.outfit(
-                color: color,
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        ],
+      )
+
     );
   }
 
@@ -518,7 +513,6 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
     final color = _activityColors[activity.type] ?? Colors.grey;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    // Translate the activity type
     String translatedType;
     switch (activity.type) {
       case 'Class':
@@ -544,7 +538,6 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Timeline dot and line
         SizedBox(
           width: 24,
           child: Column(
@@ -584,7 +577,6 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
           ),
         ),
         const Gap(16),
-        // Activity content
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -754,7 +746,6 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
     final color = _activityColors[activity.type] ?? Colors.grey;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    // Translate the activity type
     String translatedType;
     switch (activity.type) {
       case 'Class':
@@ -792,7 +783,6 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Activity type badge
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
@@ -828,7 +818,6 @@ class _RoutineViewState extends ConsumerState<RoutineView> with CommonWidgets {
                 ],
               ),
             ),
-            // Activity details
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(

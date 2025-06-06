@@ -4,6 +4,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
+        android:enableOnBackInvokedCallback="true"
         android:label="prostuti">
         <activity
             android:name="com.linusu.flutter_web_auth_2.CallbackActivity"

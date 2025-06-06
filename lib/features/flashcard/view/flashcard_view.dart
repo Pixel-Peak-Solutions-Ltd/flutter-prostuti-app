@@ -180,7 +180,7 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
                                     .textTheme
                                     .titleSmall!
                                     .copyWith(
-                                      fontWeight: FontWeight.w700,
+                                      fontWeight: FontWeight.w600,
                                       color: _currentTabIndex == 0
                                           ? Colors.white
                                           : Theme.of(context)
@@ -218,7 +218,7 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
                                     .textTheme
                                     .titleSmall!
                                     .copyWith(
-                                      fontWeight: FontWeight.w700,
+                                      fontWeight: FontWeight.w600,
                                       color: _currentTabIndex == 1
                                           ? Colors.white
                                           : Theme.of(context)
@@ -246,9 +246,8 @@ class FlashcardViewState extends ConsumerState<FlashcardView>
                     onPressed: _createNewFlashcard,
                     child: Text(
                       context.l10n!.createNewFlashcard,
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,
                           ),
                     ),
                   ),

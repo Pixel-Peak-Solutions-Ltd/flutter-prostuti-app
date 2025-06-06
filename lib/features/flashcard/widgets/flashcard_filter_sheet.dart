@@ -45,7 +45,7 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
             children: [
               Text(
                 context.l10n!.filter,
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
@@ -220,9 +220,8 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                   },
                   child: Text(
                     context.l10n!.applyFilter,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
                           color: Colors.white,
-                          fontWeight: FontWeight.bold,
                         ),
                   ),
                 ),
@@ -254,7 +253,6 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                       context.l10n!.resetFilter,
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
                             color: const Color(0xff2970FF),
-                            fontWeight: FontWeight.bold,
                           ),
                     ),
                   ),
@@ -290,7 +288,7 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                 children: [
                   Text(
                     title,
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                   Icon(
                     isExpanded

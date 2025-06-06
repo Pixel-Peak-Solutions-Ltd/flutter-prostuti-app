@@ -49,19 +49,18 @@ class TestLandingView extends StatelessWidget with CommonWidgets {
               Row(
                 children: [
                   Expanded(
-                    child: TestButton(
-                      label: 'সেগমেন্ট টেস্ট',
-                      borderColor: borderColor,
-                      svgAsset: 'assets/images/segment_test_background.svg',
-                      onTap: () {
-                        // Nav().push( SegmentTestLandingView());
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Coming Soon..."),
-                            backgroundColor: Colors.yellow,
-                          ),
-                        );
-                      },
+                    child: Material(
+                      borderRadius: BorderRadius.circular(8),
+                      clipBehavior: Clip.antiAlias,
+
+                      child: TestButton(
+                        label: 'সেগমেন্ট টেস্ট',
+                        borderColor: borderColor,
+                        svgAsset: 'assets/images/segment_test_background.svg',
+                        onTap: () {
+                          Nav().push( const SegmentTestLandingView());
+                        },
+                      ),
                     ),
                   ),
                   const Gap(12),
