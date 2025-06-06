@@ -54,13 +54,7 @@ class TestLandingView extends StatelessWidget with CommonWidgets {
                       borderColor: borderColor,
                       svgAsset: 'assets/images/segment_test_background.svg',
                       onTap: () {
-                        // Nav().push( SegmentTestLandingView());
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Coming Soon..."),
-                            backgroundColor: Colors.yellow,
-                          ),
-                        );
+                        Nav().push( const SegmentTestLandingView());
                       },
                     ),
                   ),

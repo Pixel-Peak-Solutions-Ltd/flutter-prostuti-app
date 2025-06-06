@@ -33,6 +33,7 @@ class AssetsRes {
   static const String SECURITY = 'assets/icons/security.svg';
   static const String SECURITY_DARK = 'assets/icons/security_dark.svg';
   static const String STAR = 'assets/icons/star.svg';
+  static const String SUPPORT = 'assets/icons/support.png';
   static const String UNIVERSITY = 'assets/icons/university.svg';
   static const String USER_DARK = 'assets/icons/user_dark.svg';
   static const String WRITTEN_TEST = 'assets/icons/written_test.svg';
