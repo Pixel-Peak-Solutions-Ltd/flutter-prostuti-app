@@ -33,7 +33,7 @@ class CustomListTile extends StatelessWidget {
         leading: SvgPicture.asset(
           icon,
           fit: BoxFit.cover,
-          colorFilter: const ColorFilter.linearToSrgbGamma(),
+          color: Theme.of(context).colorScheme.onSurface,
         ),
         title: Text(title),
         trailing: trailing ?? const Icon(Icons.chevron_right),

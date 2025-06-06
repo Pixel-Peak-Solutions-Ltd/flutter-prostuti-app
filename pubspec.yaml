@@ -106,6 +106,7 @@ flutter:
     - assets/icons/user_dark.svg
     - assets/icons/written_test.svg
     - assets/images/
+    - assets/images/ad_banner.png
     - assets/images/mock_test_background.svg
     - assets/images/quizer_background.svg
     - assets/images/segment_test_background.svg
