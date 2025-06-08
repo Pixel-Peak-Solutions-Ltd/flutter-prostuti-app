@@ -210,11 +210,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               _buildTopSection(maxWidth).animate().fadeIn(duration: 575.ms),
 
               const Gap(16),
+              _buildAdSection(maxWidth)
+                  .animate()
+                  .moveX(begin: 20, end: 0, duration: 500.ms),
 
-              // Ad section slides in
-              // _buildAdSection(maxWidth)
-              //     .animate()
-              //     .moveX(begin: 20, end: 0, duration: 500.ms),
 
               const Gap(16),
 
@@ -422,7 +421,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const Gap(16),
 
                   // Title text
-                  Padding(
+                  /*Padding(
                     padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.05),
                     child: RichText(
                       textAlign: TextAlign.center,
@@ -443,7 +442,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ],
                       ),
                     ),
-                  ),
+                  ),*/
 
                   const Gap(16),
 
@@ -562,10 +561,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
+            Material(
+              borderRadius: BorderRadius.circular(8),
+              clipBehavior: Clip.hardEdge,
               child: Image.asset(
-                'assets/images/home_screen_ad.png',
+                'assets/images/ad_banner.png',
                 height: 120,
                 width: maxWidth,
                 fit: BoxFit.cover,
@@ -574,7 +574,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const Gap(8),
             SmoothPageIndicator(
               controller: _adController,
-              count: 2, // Number of pages
+              count: 1, // Number of pages
               effect: const ExpandingDotsEffect(
                 dotHeight: 8,
                 dotWidth: 8,

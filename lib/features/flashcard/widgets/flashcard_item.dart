@@ -134,10 +134,7 @@ class FlashcardItem extends ConsumerWidget {
                         Text(
                           flashcard.title ?? 'Untitled Flashcard',
                           style:
-                              Theme.of(context).textTheme.titleLarge!.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.2,
-                                  ),
+                              Theme.of(context).textTheme.titleMedium,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -207,6 +204,7 @@ class FlashcardItem extends ConsumerWidget {
                               ],
                             ),
 
+                            const Gap(10),
                             // Study indicator for unstudied cards
                             if (studySessions == 0)
                               Row(
@@ -215,7 +213,7 @@ class FlashcardItem extends ConsumerWidget {
                                     Icons.play_circle_outline,
                                     size: 18,
                                     color:
-                                        Theme.of(context).colorScheme.primary,
+                                        Theme.of(context).colorScheme.onSurface,
                                   ),
                                   const Gap(4),
                                   Text(
@@ -227,7 +225,7 @@ class FlashcardItem extends ConsumerWidget {
                                           fontWeight: FontWeight.w600,
                                           color: Theme.of(context)
                                               .colorScheme
-                                              .primary,
+                                              .onSurface,
                                         ),
                                   ),
                                 ],

@@ -16,14 +16,21 @@ import '../widgets/written_quiz_question_widget.dart';
 
 class WrittenMockQuizScreen extends ConsumerStatefulWidget {
   final MockWrittenQuizResponse mockQuiz;
+  final bool isSegmentTest;
 
-  const WrittenMockQuizScreen({super.key, required this.mockQuiz});
+  const WrittenMockQuizScreen({
+    super.key,
+    required this.mockQuiz,
+    this.isSegmentTest = false,
+  });
 
   @override
-  ConsumerState<WrittenMockQuizScreen> createState() => _WrittenMockQuizScreenState();
+  ConsumerState<WrittenMockQuizScreen> createState() =>
+      _WrittenMockQuizScreenState();
 }
 
-class _WrittenMockQuizScreenState extends ConsumerState<WrittenMockQuizScreen> with CommonWidgets{
+class _WrittenMockQuizScreenState extends ConsumerState<WrittenMockQuizScreen>
+    with CommonWidgets {
   final Map<int, int?> selectedAnswers = {};
   final List<Map<String, dynamic>> answerList = [];
   late int remainingTime;
@@ -47,7 +54,6 @@ class _WrittenMockQuizScreenState extends ConsumerState<WrittenMockQuizScreen> w
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
       // Initialize and start the countdown timer
       final duration = Duration(minutes: remainingTime);
       ref.read(countdownProvider.notifier).initialize(duration);
@@ -56,7 +62,8 @@ class _WrittenMockQuizScreenState extends ConsumerState<WrittenMockQuizScreen> w
   }
 
   void updateAnswer(String questionId, String answer) {
-    final index = answerList.indexWhere((item) => item["question_id"] == questionId);
+    final index =
+        answerList.indexWhere((item) => item["question_id"] == questionId);
     if (index != -1) {
       setState(() {
         answerList[index]["selectedOption"] = answer;
@@ -86,11 +93,7 @@ class _WrittenMockQuizScreenState extends ConsumerState<WrittenMockQuizScreen> w
         print(answerList);
         ref.read(countdownProvider.notifier).stopTimer();
 
-        final remainingTime =
-            ref
-                .read(countdownProvider)
-                .remainingTime
-                .inSeconds;
+        final remainingTime = ref.read(countdownProvider).remainingTime.inSeconds;
         final totalTime = widget.mockQuiz.data!.time!.toInt() * 60;
         final timeTaken = totalTime - remainingTime;
 
@@ -98,12 +101,17 @@ class _WrittenMockQuizScreenState extends ConsumerState<WrittenMockQuizScreen> w
           "answers": answerList,
         };
 
-        final response =
-        await ref.read(mockTestRepoProvider).submitMockQuiz(quizId: widget.mockQuiz.data!.id!,payload: payload, );
+        final response = await ref.read(mockTestRepoProvider).submitMockQuiz(
+          quizId: widget.mockQuiz.data!.id!,
+          payload: payload,
+          isSegmentTest: widget.isSegmentTest,
+        );
 
         response.fold(
-                (l) => Fluttertoast.showToast(msg: l.message),
-                (testResult) => Nav().pushReplacement( WrittenMockQuizHistoryScreen(quizId: widget.mockQuiz.data!.id!,),)
+              (l) => Fluttertoast.showToast(msg: l.message),
+              (testResult) => Nav().pushReplacement(
+            WrittenMockQuizHistoryScreen(quizId: widget.mockQuiz.data!.id!),
+          ),
         );
       },
       loadingController: ref.read(_loadingProvider.notifier),
@@ -115,7 +123,7 @@ class _WrittenMockQuizScreenState extends ConsumerState<WrittenMockQuizScreen> w
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: commonAppbar("MCQ Mock Test"),
+      appBar: commonAppbar("Written Mock Test"),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Column(
@@ -127,21 +135,24 @@ class _WrittenMockQuizScreenState extends ConsumerState<WrittenMockQuizScreen> w
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: Theme.of(context).colorScheme.onSecondary,
-                border: Border.all(color: Theme.of(context).colorScheme.primary),
+                border:
+                    Border.all(color: Theme.of(context).colorScheme.primary),
               ),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("টেস্ট টাইপ :", style: theme.textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.borderFocusPrimaryLight,
-                      )),
-                      Text(" ${widget.mockQuiz.data?.questionType}", style: theme.textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.borderFocusPrimaryLight,
-                      )),
+                      Text("টেস্ট টাইপ :",
+                          style: theme.textTheme.bodyLarge!.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.borderFocusPrimaryLight,
+                          )),
+                      Text(" ${widget.mockQuiz.data?.questionType}",
+                          style: theme.textTheme.bodyLarge!.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.borderFocusPrimaryLight,
+                          )),
                     ],
                   ),
                   const Gap(8),
@@ -154,7 +165,9 @@ class _WrittenMockQuizScreenState extends ConsumerState<WrittenMockQuizScreen> w
               ),
             ),
             const Gap(16),
-            CountdownTimer(onTimeUp: _submitAnswers,),
+            CountdownTimer(
+              onTimeUp: _submitAnswers,
+            ),
             const Gap(16),
             // Questions List
             Expanded(

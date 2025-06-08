@@ -46,7 +46,7 @@ class TopLeaderboardItem extends StatelessWidget {
                 studentName,
                 style: Theme.of(context)
                     .textTheme
-                    .titleMedium!
+                    .titleSmall!
                     .copyWith(fontWeight: FontWeight.w600, color: Colors.black),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -58,7 +58,7 @@ class TopLeaderboardItem extends StatelessWidget {
               "${student.totalScore ?? 0} মার্কস",
               style: Theme.of(context)
                   .textTheme
-                  .titleMedium!
+                  .titleSmall!
                   .copyWith(fontWeight: FontWeight.w600, color: Colors.black),
             ),
           ],
@@ -201,7 +201,7 @@ class RegularLeaderboardItem extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 rank.toString().padLeft(2, '0'),
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
               ),
@@ -216,7 +216,7 @@ class RegularLeaderboardItem extends StatelessWidget {
             Expanded(
               child: Text(
                 studentName,
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                style: Theme.of(context).textTheme.titleSmall!.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                 maxLines: 1,
@@ -227,7 +227,7 @@ class RegularLeaderboardItem extends StatelessWidget {
             // Score
             Text(
               "${student.totalScore ?? 0} মার্কস",
-              style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
             ),

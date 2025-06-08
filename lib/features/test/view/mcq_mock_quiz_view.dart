@@ -17,14 +17,20 @@ import 'mcq_quiz_result_screen.dart';
 
 class MCQMockQuizScreen extends ConsumerStatefulWidget {
   final MockQuizResponse mockQuiz;
+  final bool isSegmentTest;
 
-  const MCQMockQuizScreen({super.key, required this.mockQuiz});
+  const MCQMockQuizScreen({
+    super.key,
+    required this.mockQuiz,
+    this.isSegmentTest = false,
+  });
 
   @override
   ConsumerState<MCQMockQuizScreen> createState() => _MCQMockQuizScreenState();
 }
 
-class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with CommonWidgets{
+class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen>
+    with CommonWidgets {
   final Map<int, int?> selectedAnswers = {};
   final List<Map<String, dynamic>> answerList = [];
   late int remainingTime;
@@ -48,7 +54,6 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with Comm
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
       // Initialize and start the countdown timer
       final duration = Duration(minutes: remainingTime);
       ref.read(countdownProvider.notifier).initialize(duration);
@@ -63,10 +68,7 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with Comm
         ref.read(countdownProvider.notifier).stopTimer();
 
         final remainingTime =
-            ref
-                .read(countdownProvider)
-                .remainingTime
-                .inSeconds;
+            ref.read(countdownProvider).remainingTime.inSeconds;
         final totalTime = widget.mockQuiz.data!.time!.toInt() * 60;
         final timeTaken = totalTime - remainingTime;
 
@@ -74,13 +76,19 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with Comm
           "answers": answerList,
         };
 
-        final response =
-        await ref.read(mockTestRepoProvider).submitMockQuiz(quizId: widget.mockQuiz.data!.id!,payload: payload, );
+        final response = await ref.read(mockTestRepoProvider).submitMockQuiz(
+              quizId: widget.mockQuiz.data!.id!,
+              payload: payload,
+              isSegmentTest: widget.isSegmentTest,
+            );
 
         response.fold(
-              (l) => Fluttertoast.showToast(msg: l.message),
-              (testResult) => Nav().pushReplacement(MCQMockQuizHistoryScreen(quizId: widget.mockQuiz.data!.id!,),)
-        );
+            (l) => Fluttertoast.showToast(msg: l.message),
+            (testResult) => Nav().pushReplacement(
+                  MCQMockQuizHistoryScreen(
+                    quizId: widget.mockQuiz.data!.id!,
+                  ),
+                ));
       },
       loadingController: ref.read(_loadingProvider.notifier),
     );
@@ -103,34 +111,40 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen> with Comm
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: Theme.of(context).colorScheme.onSecondary,
-                border: Border.all(color: Theme.of(context).colorScheme.primary),
+                border:
+                    Border.all(color: Theme.of(context).colorScheme.primary),
               ),
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("টেস্ট টাইপ :", style: theme.textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.primary,
-                      )),
-                      Text(" ${widget.mockQuiz.data?.questionType}", style: theme.textTheme.bodyLarge!.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).colorScheme.primary,
-                      )),
+                      Text("টেস্ট টাইপ :",
+                          style: theme.textTheme.bodyLarge!.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).colorScheme.primary,
+                          )),
+                      Text(" ${widget.mockQuiz.data?.questionType}",
+                          style: theme.textTheme.bodyLarge!.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).colorScheme.primary,
+                          )),
                     ],
                   ),
                   const Gap(8),
                   Text(
                     "প্রতিটি প্রশ্নে 1 পয়েন্ট থাকে এবং প্রতিটি ভুল উত্তরের জন্য \n0.5 পয়েন্ট কাটা হবে।",
-                    style: theme.textTheme.bodyMedium!.copyWith(color: Theme.of(context).colorScheme.surface),
+                    style: theme.textTheme.bodyMedium!
+                        .copyWith(color: Theme.of(context).colorScheme.surface),
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
             ),
             const Gap(16),
-            CountdownTimer(onTimeUp: _submitAnswers,),
+            CountdownTimer(
+              onTimeUp: _submitAnswers,
+            ),
             const Gap(16),
             // Questions List
             Expanded(

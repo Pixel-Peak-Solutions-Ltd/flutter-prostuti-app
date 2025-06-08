@@ -31,9 +31,13 @@ class TestButton extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             Positioned.fill(
-              child: SvgPicture.asset(
-                svgAsset,
-                fit: BoxFit.cover,
+              child: Material(
+                borderRadius: BorderRadius.circular(8),
+                clipBehavior: Clip.antiAlias,
+                child: SvgPicture.asset(
+                  svgAsset,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             // Button label

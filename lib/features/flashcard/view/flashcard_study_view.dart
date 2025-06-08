@@ -57,7 +57,7 @@ class FlashcardStudyViewState extends ConsumerState<FlashcardStudyView>
   }
 
   Future<void> _initTts() async {
-    await flutterTts.setLanguage("bn-BD"); // Bengali language
+    await flutterTts.setLanguage("bn-BD");
     await flutterTts.setSpeechRate(0.5);
     await flutterTts.setVolume(1.0);
     await flutterTts.setPitch(1.0);

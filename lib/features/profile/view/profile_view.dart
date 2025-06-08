@@ -284,7 +284,7 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                         ? "assets/icons/moon-eclipse_dark.svg"
                         : "assets/icons/dark_theme.svg",
                     fit: BoxFit.cover,
-                    colorFilter: const ColorFilter.linearToSrgbGamma(),
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                   title: Text(context.l10n!.darkTheme),
                   trailing: Switch(

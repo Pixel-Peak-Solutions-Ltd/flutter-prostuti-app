@@ -52,9 +52,14 @@ class MockTestRepo {
 
   Future<Either<ErrorResponse, QuizSubmitModel>> submitMockQuiz({
     required String quizId,
-    required payload,
+    required Map<String, dynamic> payload,
+    bool isSegmentTest = false,
   }) async {
-    final response = await _dioService.patchRequest("/quiz/submit-mock-quiz/$quizId",data: payload);
+    final String endpoint = isSegmentTest
+        ? "/quiz/submit-segment-quiz/$quizId"
+        : "/quiz/submit-mock-quiz/$quizId";
+
+    final response = await _dioService.patchRequest(endpoint, data: payload);
 
     if (response.statusCode == 200) {
       return Right(QuizSubmitModel.fromJson(response.data));
@@ -78,6 +83,7 @@ class MockTestRepo {
       return Left(errorResponse);
     }
   }
+
   Future<Either<ErrorResponse, WrittenQuizResultModel>> getMockWrittenQuizResult({
     required String quizId,
   }) async {

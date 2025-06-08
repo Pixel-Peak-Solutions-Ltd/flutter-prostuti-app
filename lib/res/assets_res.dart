@@ -33,9 +33,11 @@ class AssetsRes {
   static const String SECURITY = 'assets/icons/security.svg';
   static const String SECURITY_DARK = 'assets/icons/security_dark.svg';
   static const String STAR = 'assets/icons/star.svg';
+  static const String SUPPORT = 'assets/icons/support.png';
   static const String UNIVERSITY = 'assets/icons/university.svg';
   static const String USER_DARK = 'assets/icons/user_dark.svg';
   static const String WRITTEN_TEST = 'assets/icons/written_test.svg';
+  static const String AD_BANNER = 'assets/images/ad_banner.png';
   static const String MOCK_TEST_BACKGROUND = 'assets/images/mock_test_background.svg';
   static const String QUIZER_BACKGROUND = 'assets/images/quizer_background.svg';
   static const String SEGMENT_TEST_BACKGROUND = 'assets/images/segment_test_background.svg';

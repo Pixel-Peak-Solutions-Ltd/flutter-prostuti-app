@@ -475,22 +475,29 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        border: Border.all(color: Theme.of(context).colorScheme.onSecondary),
-        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Theme.of(context).colorScheme.onSurface),
+        borderRadius: BorderRadius.circular(4),
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
       child: DropdownButtonHideUnderline(
         child: ButtonTheme(
           alignedDropdown: true,
           child: DropdownButton<String>(
             isExpanded: true,
-            hint: Text(hint),
+            hint: Text(
+              hint,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             value: value,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             borderRadius: BorderRadius.circular(8),
             items: items.map<DropdownMenuItem<String>>((String item) {
               return DropdownMenuItem<String>(
                 value: item,
-                child: Text(item),
+                child: Text(
+                  item,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               );
             }).toList(),
             onChanged: onChanged,
