@@ -7,13 +7,11 @@ import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/core/services/debouncer.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/auth/category/view/category_view.dart';
-import 'package:prostuti/features/auth/signup/viewmodel/name_viewmodel.dart';
-import 'package:prostuti/features/auth/signup/viewmodel/password_viewmodel.dart';
 import 'package:prostuti/features/auth/signup/widgets/label.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../viewmodel/email_viewmodel.dart';
 import '../viewmodel/phone_number_viewmodel.dart';
+import '../viewmodel/register_viewmodel.dart';
 
 class RegisterView extends ConsumerStatefulWidget {
   const RegisterView({super.key});
@@ -47,30 +45,6 @@ class RegisterViewState extends ConsumerState<RegisterView> {
     super.dispose();
   }
 
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return context.l10n!.emailRequired;
-    }
-    // Basic email regex pattern
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    if (!emailRegex.hasMatch(value)) {
-      return context.l10n!.validEmailRequired;
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return context.l10n!.passwordRequired;
-    }
-    // Password must contain at least one uppercase, one special character, and be at least 8 characters long
-    final passwordRegex = RegExp(r'^(?=.*?[A-Z])(?=.*?[!@#\$&*~]).{8,}$');
-    if (!passwordRegex.hasMatch(value)) {
-      return context.l10n!.passwordValidationMessage;
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(_loadingProvider);
@@ -78,6 +52,7 @@ class RegisterViewState extends ConsumerState<RegisterView> {
     final isDarkMode = themeMode == ThemeMode.dark ||
         (themeMode == ThemeMode.system &&
             MediaQuery.platformBrightnessOf(context) == Brightness.dark);
+    final registerState = ref.watch(registerViewModelProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -126,32 +101,34 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                       keyboardType: TextInputType.name,
                       controller: _nameController,
                       onChanged: (value) => ref
-                          .read(nameViewmodelProvider.notifier)
+                          .read(registerViewModelProvider.notifier)
                           .setName(value),
                       decoration: InputDecoration(
-                          hintText: context.l10n!.enterYourName),
+                        hintText: context.l10n!.enterYourName,
+                        errorText: registerState.emailError,
+                      ),
                     ),
                     const Gap(20),
                     Label(text: context.l10n!.email),
                     const Gap(6),
                     TextFormField(
-                      validator: _validateEmail,
                       keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
                       onChanged: (value) => ref
-                          .read(emailViewmodelProvider.notifier)
+                          .read(registerViewModelProvider.notifier)
                           .setEmail(value),
                       decoration: InputDecoration(
-                          hintText: context.l10n!.enterYourEmail),
+                        hintText: context.l10n!.enterYourEmail,
+                        errorText: registerState.passwordError,
+                      ),
                     ),
                     const Gap(20),
                     Label(text: context.l10n!.password),
                     const Gap(6),
                     TextFormField(
-                      validator: _validatePassword,
                       keyboardType: TextInputType.text,
                       onChanged: (value) => ref
-                          .read(passwordViewmodelProvider.notifier)
+                          .read(registerViewModelProvider.notifier)
                           .setPassword(value),
                       obscureText: true,
                       controller: _passwordController,
@@ -170,8 +147,13 @@ class RegisterViewState extends ConsumerState<RegisterView> {
                       if (_formKey.currentState!.validate()) {
                         _debouncer.run(
                             action: () async {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => CategoryView()));
+                              if (ref
+                                  .read(registerViewModelProvider.notifier)
+                                  .validate()) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CategoryView()));
+                              }
                             },
                             loadingController:
                                 ref.read(_loadingProvider.notifier));

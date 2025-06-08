@@ -6,6 +6,7 @@ import 'package:pinput/pinput.dart';
 import 'package:prostuti/common/helpers/theme_provider.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/auth/signup/view/register_view.dart';
+import 'package:prostuti/features/auth/signup/viewmodel/register_viewmodel.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../common/widgets/long_button.dart';
@@ -14,7 +15,6 @@ import '../../../../core/services/debouncer.dart';
 import '../../../../core/services/error_handler.dart';
 import '../../forget_password/view/new_password_view.dart';
 import '../repository/signup_repo.dart';
-import '../viewmodel/otp_viewmodel.dart';
 import '../viewmodel/phone_number_viewmodel.dart';
 
 class OtpView extends ConsumerStatefulWidget {
@@ -77,7 +77,7 @@ class OtpViewState extends ConsumerState<OtpView> {
                   controller: _otpController,
                   showCursor: true,
                   onCompleted: (pin) =>
-                      ref.read(otpProvider.notifier).setOtp(pin),
+                      ref.read(registerViewModelProvider.notifier).setOtp(pin),
                 ),
                 const Gap(32),
                 TextButton(

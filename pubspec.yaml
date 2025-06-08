@@ -21,7 +21,7 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_riverpod: ^2.5.3
   riverpod_annotation: ^2.5.3
-  skeletonizer: ^1.4.2
+  skeletonizer: ^2.0.1
   flutter_animate: ^4.5.0
   cached_network_image: ^3.4.1
   connectivity_plus: ^4.0.2
@@ -60,7 +60,7 @@ dev_dependencies:
     sdk: flutter
 
 
-  flutter_lints: ^3.0.0
+  flutter_lints: ^6.0.0
   riverpod_generator:
   build_runner: ^2.1.11
   riverpod_lint:

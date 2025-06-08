@@ -11,11 +11,8 @@ import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/auth/category/model/category_constant.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
 import 'package:prostuti/features/auth/signup/repository/signup_repo.dart';
-import 'package:prostuti/features/auth/signup/viewmodel/email_viewmodel.dart';
-import 'package:prostuti/features/auth/signup/viewmodel/name_viewmodel.dart';
-import 'package:prostuti/features/auth/signup/viewmodel/otp_viewmodel.dart';
-import 'package:prostuti/features/auth/signup/viewmodel/password_viewmodel.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/phone_number_viewmodel.dart';
+import 'package:prostuti/features/auth/signup/viewmodel/register_viewmodel.dart';
 import 'package:prostuti/features/profile/viewmodel/profile_viewmodel.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -162,7 +159,7 @@ class CategoryViewState extends ConsumerState<CategoryView> with CommonWidgets {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select Subcategory'),
+        title: const Text('Select Subcategory'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -290,12 +287,12 @@ class CategoryViewState extends ConsumerState<CategoryView> with CommonWidgets {
           try {
             // Create registration payload
             final payload = {
-              "otpCode": ref.read(otpProvider),
-              "name": ref.read(nameViewmodelProvider),
-              "email": ref.read(emailViewmodelProvider),
+              "otpCode": ref.read(registerViewModelProvider).otp,
+              "name": ref.read(registerViewModelProvider).name,
+              "email": ref.read(registerViewModelProvider).email,
               "phone": "+88${ref.read(phoneNumberProvider)}",
-              "password": ref.read(passwordViewmodelProvider),
-              "confirmPassword": ref.read(passwordViewmodelProvider),
+              "password": ref.read(registerViewModelProvider).password,
+              "confirmPassword": ref.read(registerViewModelProvider).password,
               "categoryType": _selectedMainCategory,
               if (_selectedSubCategory != null)
                 "subCategory": _selectedSubCategory

@@ -9,8 +9,8 @@ import 'package:prostuti/core/services/error_handler.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/features/auth/forget_password/repository/forget_password_repo.dart';
 import 'package:prostuti/features/auth/login/view/login_view.dart';
-import 'package:prostuti/features/auth/signup/viewmodel/otp_viewmodel.dart';
 import 'package:prostuti/features/auth/signup/viewmodel/phone_number_viewmodel.dart';
+import 'package:prostuti/features/auth/signup/viewmodel/register_viewmodel.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class NewPasswordView extends ConsumerStatefulWidget {
@@ -132,7 +132,7 @@ class NewPasswordViewState extends ConsumerState<NewPasswordView> {
                           }
 
                           final payload = {
-                            "otpCode": ref.read(otpProvider),
+                            "otpCode": ref.read(registerViewModelProvider).otp,
                             "phone": ref.read(phoneNumberProvider),
                             "newPassword": _passwordController.text,
                             "confirmNewPassword":
