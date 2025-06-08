@@ -30,7 +30,20 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
   final _problemController = TextEditingController();
 
   String? _selectedType;
+
+  // Academic specific
   String? _selectedDivision;
+
+  // Job specific
+  String? _selectedJobType;
+  String? _selectedJobName;
+
+  // Admission specific
+  String? _selectedUniversityType;
+  String? _selectedUniversityName;
+  String? _selectedUnit;
+
+  // Common
   String? _selectedSubject;
 
   @override
@@ -101,6 +114,194 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
     }
   }
 
+  Widget _buildSecondLevelDropdown() {
+    final categoriesAsync = ref.watch(categoriesProvider);
+
+    if (_selectedType == null) return const SizedBox.shrink();
+
+    switch (_selectedType) {
+      case 'Academic':
+        return _buildFormField(
+          label: context.l10n?.division ?? 'ক্লাস*',
+          child: categoriesAsync.when(
+            data: (categories) {
+              final divisions = ref
+                  .read(categoriesProvider.notifier)
+                  .getUniqueDivisions(categories);
+              return _buildDropdown(
+                hint: context.l10n?.selectDivision ?? 'নবম শ্রেণী',
+                value: _selectedDivision,
+                items: divisions,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedDivision = newValue;
+                    _selectedSubject = null;
+                  });
+                },
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (_, __) => const Text('Failed to load divisions'),
+          ),
+        );
+
+      case 'Job':
+        return _buildFormField(
+          label: 'Job Type*',
+          child: categoriesAsync.when(
+            data: (categories) {
+              final jobTypes = ref
+                  .read(categoriesProvider.notifier)
+                  .getUniqueJobTypes(categories);
+              return _buildDropdown(
+                hint: 'Select Job Type',
+                value: _selectedJobType,
+                items: jobTypes,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedJobType = newValue;
+                    _selectedJobName = null;
+                    _selectedSubject = null;
+                  });
+                },
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (_, __) => const Text('Failed to load job types'),
+          ),
+        );
+
+      case 'Admission':
+        return _buildFormField(
+          label: 'University Type*',
+          child: categoriesAsync.when(
+            data: (categories) {
+              final universityTypes = ref
+                  .read(categoriesProvider.notifier)
+                  .getUniqueUniversityTypes(categories);
+              return _buildDropdown(
+                hint: 'Select University Type',
+                value: _selectedUniversityType,
+                items: universityTypes,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedUniversityType = newValue;
+                    _selectedUniversityName = null;
+                    _selectedUnit = null;
+                    _selectedSubject = null;
+                  });
+                },
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (_, __) => const Text('Failed to load university types'),
+          ),
+        );
+
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  Widget _buildThirdLevelDropdown() {
+    final categoriesAsync = ref.watch(categoriesProvider);
+
+    if (_selectedType == null) return const SizedBox.shrink();
+
+    switch (_selectedType) {
+      case 'Job':
+        if (_selectedJobType == null) return const SizedBox.shrink();
+        return _buildFormField(
+          label: 'Job Name*',
+          child: categoriesAsync.when(
+            data: (categories) {
+              final jobNames = ref
+                  .read(categoriesProvider.notifier)
+                  .getUniqueJobNames(categories, _selectedJobType);
+              return _buildDropdown(
+                hint: 'Select Job Name',
+                value: _selectedJobName,
+                items: jobNames,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedJobName = newValue;
+                    _selectedSubject = null;
+                  });
+                },
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (_, __) => const Text('Failed to load job names'),
+          ),
+        );
+
+      case 'Admission':
+        if (_selectedUniversityType != 'University')
+          return const SizedBox.shrink();
+        return _buildFormField(
+          label: 'University Name*',
+          child: categoriesAsync.when(
+            data: (categories) {
+              final universityNames = ref
+                  .read(categoriesProvider.notifier)
+                  .getUniqueUniversityNames(
+                      categories, _selectedUniversityType);
+              return _buildDropdown(
+                hint: 'Select University Name',
+                value: _selectedUniversityName,
+                items: universityNames,
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedUniversityName = newValue;
+                    _selectedUnit = null;
+                    _selectedSubject = null;
+                  });
+                },
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (_, __) => const Text('Failed to load university names'),
+          ),
+        );
+
+      default:
+        return const SizedBox.shrink();
+    }
+  }
+
+  Widget _buildFourthLevelDropdown() {
+    final categoriesAsync = ref.watch(categoriesProvider);
+
+    if (_selectedType != 'Admission' ||
+        _selectedUniversityType != 'University' ||
+        _selectedUniversityName == null) {
+      return const SizedBox.shrink();
+    }
+
+    return _buildFormField(
+      label: 'Unit*',
+      child: categoriesAsync.when(
+        data: (categories) {
+          final units = ref.read(categoriesProvider.notifier).getUniqueUnits(
+              categories, _selectedUniversityType, _selectedUniversityName);
+          return _buildDropdown(
+            hint: 'Select Unit',
+            value: _selectedUnit,
+            items: units,
+            onChanged: (newValue) {
+              setState(() {
+                _selectedUnit = newValue;
+                _selectedSubject = null;
+              });
+            },
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (_, __) => const Text('Failed to load units'),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(broadcastLoadingProvider);
@@ -154,51 +355,29 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
                             .read(categoriesProvider.notifier)
                             .getUniqueTypes(categories);
                         return _buildDropdown(
-
                           hint: context.l10n!.selectCourse,
                           value: _selectedType,
                           items: types,
                           onChanged: null,
                         );
                       },
-                      loading: () =>
-                          const Center(child: Text("Loading...")),
+                      loading: () => const Center(child: Text("Loading...")),
                       error: (_, __) => const Text('Failed to load categories'),
                     ),
                   );
                 },
-                loading: () =>
-                const Center(child: Text("Loading...")),
+                loading: () => const Center(child: Text("Loading...")),
                 error: (_, __) => const Text('Failed to load categories'),
               ),
 
-              // Class field
-              _buildFormField(
-                label: context.l10n?.division ?? 'ক্লাস*',
-                child: categoriesAsync.when(
-                  data: (categories) {
-                    final divisions = _selectedType != null
-                        ? ref
-                            .read(categoriesProvider.notifier)
-                            .getUniqueDivisions(categories, _selectedType)
-                        : <String>[];
-                    return _buildDropdown(
-                      hint: context.l10n?.selectDivision ?? 'নবম শ্রেণী',
-                      value: _selectedDivision,
-                      items: divisions,
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedDivision = newValue;
-                          _selectedSubject = null;
-                        });
-                      },
-                    );
-                  },
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
-                  error: (_, __) => const Text('Failed to load divisions'),
-                ),
-              ),
+              // Second level dropdown (Division/JobType/UniversityType)
+              _buildSecondLevelDropdown(),
+
+              // Third level dropdown (JobName/UniversityName for University type)
+              _buildThirdLevelDropdown(),
+
+              // Fourth level dropdown (Unit for University)
+              _buildFourthLevelDropdown(),
 
               // Subject field
               _buildFormField(
@@ -210,8 +389,15 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
                             .read(categoriesProvider.notifier)
                             .getUniqueSubjects(
                               categories,
-                              _selectedType,
-                              _selectedDivision,
+                              FilterState(
+                                selectedType: _selectedType,
+                                selectedDivision: _selectedDivision,
+                                selectedJobType: _selectedJobType,
+                                selectedJobName: _selectedJobName,
+                                selectedUniversityType: _selectedUniversityType,
+                                selectedUniversityName: _selectedUniversityName,
+                                selectedUnit: _selectedUnit,
+                              ),
                             )
                         : <String>[];
                     return _buildDropdown(
@@ -229,52 +415,6 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
                   error: (_, __) => const Text('Failed to load subjects'),
                 ),
               ),
-
-              // Name field
-              // _buildFormField(
-              //   label: context.l10n?.name ?? 'নাম*',
-              //   child: TextFormField(
-              //     controller: _nameController,
-              //     decoration: InputDecoration(
-              //       hintText: context.l10n?.yourName ?? 'নাজমুল ইসলাম সিফাত',
-              //       border: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(8),
-              //       ),
-              //       contentPadding: const EdgeInsets.symmetric(
-              //           horizontal: 16, vertical: 16),
-              //     ),
-              //     validator: (value) {
-              //       if (value == null || value.trim().isEmpty) {
-              //         return context.l10n?.mustNotBeEmpty ??
-              //             'Name must not be empty';
-              //       }
-              //       return null;
-              //     },
-              //   ),
-              // ),
-
-              // Problem field
-              // _buildFormField(
-              //   label: context.l10n?.problem ?? 'সমস্যা*',
-              //   child: TextFormField(
-              //     controller: _problemController,
-              //     decoration: InputDecoration(
-              //       hintText: context.l10n?.problemHint ?? 'সমস্যা ২৪.২',
-              //       border: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(8),
-              //       ),
-              //       contentPadding: const EdgeInsets.symmetric(
-              //           horizontal: 16, vertical: 16),
-              //     ),
-              //     validator: (value) {
-              //       if (value == null || value.trim().isEmpty) {
-              //         return context.l10n?.mustNotBeEmpty ??
-              //             'Problem must not be empty';
-              //       }
-              //       return null;
-              //     },
-              //   ),
-              // ),
 
               // Question field
               _buildFormField(

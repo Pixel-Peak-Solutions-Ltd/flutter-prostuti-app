@@ -117,8 +117,7 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
 
                         final divisions = ref
                             .read(categoriesProvider.notifier)
-                            .getUniqueDivisions(
-                                categories, filterState.selectedType);
+                            .getUniqueDivisions(categories);
 
                         return divisions.isEmpty
                             ? Center(
@@ -165,8 +164,7 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                             .read(categoriesProvider.notifier)
                             .getUniqueSubjects(
                               categories,
-                              filterState.selectedType,
-                              filterState.selectedDivision,
+                              filterState,
                             );
 
                         return subjects.isEmpty
