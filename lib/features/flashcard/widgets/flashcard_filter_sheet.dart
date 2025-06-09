@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 
+import '../model/category_model.dart';
 import '../viewmodel/flashcard_filter_viewmodel.dart';
 import '../viewmodel/flashcard_viewmodel.dart';
 
@@ -14,8 +15,10 @@ class FlashcardFilterSheet extends ConsumerStatefulWidget {
 }
 
 class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
-  bool _isTypeExpanded = true; // Start with type expanded
-  bool _isDivisionExpanded = false;
+  bool _isTypeExpanded = true;
+  bool _isSecondLevelExpanded = false;
+  bool _isThirdLevelExpanded = false;
+  bool _isFourthLevelExpanded = false;
   bool _isSubjectExpanded = false;
 
   @override
@@ -39,7 +42,6 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with title and close button
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -56,8 +58,6 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
             ],
           ),
           const Gap(16),
-
-          // Content with scrolling capability for long lists
           Flexible(
             child: SingleChildScrollView(
               child: Column(
@@ -84,11 +84,12 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                                   ref
                                       .read(flashcardFilterProvider.notifier)
                                       .setType(value);
-
-                                  // Auto expand the division section
                                   setState(() {
-                                    _isDivisionExpanded = true;
+                                    _isSecondLevelExpanded = true;
                                     _isTypeExpanded = false;
+                                    _isThirdLevelExpanded = false;
+                                    _isFourthLevelExpanded = false;
+                                    _isSubjectExpanded = false;
                                   });
                                 },
                               );
@@ -102,101 +103,171 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
 
                   const Gap(16),
 
-                  // Division Filter Section
-                  _buildFilterSection(
-                    title: context.l10n!.division,
-                    isExpanded: _isDivisionExpanded,
-                    onToggle: () => setState(
-                        () => _isDivisionExpanded = !_isDivisionExpanded),
-                    content: categoriesAsync.when(
-                      data: (categories) {
-                        if (filterState.selectedType == null) {
-                          return Center(
-                              child: Text(context.l10n!.selectTypeFirst));
-                        }
+                  // Second Level Filter Section (Division/JobType/UniversityType)
+                  if (filterState.selectedType != null)
+                    _buildFilterSection(
+                      title: _getSecondLevelTitle(filterState.selectedType!),
+                      isExpanded: _isSecondLevelExpanded,
+                      onToggle: () => setState(() =>
+                          _isSecondLevelExpanded = !_isSecondLevelExpanded),
+                      content: categoriesAsync.when(
+                        data: (categories) {
+                          final items = _getSecondLevelItems(
+                              categories, filterState.selectedType!);
 
-                        final divisions = ref
-                            .read(categoriesProvider.notifier)
-                            .getUniqueDivisions(categories);
-
-                        return divisions.isEmpty
-                            ? Center(
-                                child: Text(context.l10n!.noDivisionsAvailable))
-                            : _buildOptionsList(
-                                items: divisions,
-                                selectedValue: filterState.selectedDivision,
-                                onSelected: (value) {
-                                  ref
-                                      .read(flashcardFilterProvider.notifier)
-                                      .setDivision(value);
-
-                                  // Auto expand the subject section
-                                  setState(() {
-                                    _isSubjectExpanded = true;
-                                    _isDivisionExpanded = false;
-                                  });
-                                },
-                              );
-                      },
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                      error: (error, _) =>
-                          Center(child: Text('${context.l10n!.error}: $error')),
+                          return items.isEmpty
+                              ? Center(
+                                  child: Text(_getNoItemsMessage(
+                                      filterState.selectedType!)))
+                              : _buildOptionsList(
+                                  items: items,
+                                  selectedValue:
+                                      _getSecondLevelValue(filterState),
+                                  onSelected: (value) {
+                                    _setSecondLevelValue(
+                                        value, filterState.selectedType!);
+                                    setState(() {
+                                      _isThirdLevelExpanded =
+                                          _shouldShowThirdLevel(
+                                              filterState.selectedType!, value);
+                                      _isSecondLevelExpanded = false;
+                                      _isFourthLevelExpanded = false;
+                                      _isSubjectExpanded = false;
+                                    });
+                                  },
+                                );
+                        },
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                        error: (error, _) => Center(
+                            child: Text('${context.l10n!.error}: $error')),
+                      ),
                     ),
-                  ),
+
+                  const Gap(16),
+
+                  // Third Level Filter Section (JobName/UniversityName)
+                  if (_shouldShowThirdLevelSection(filterState))
+                    _buildFilterSection(
+                      title: _getThirdLevelTitle(filterState.selectedType!),
+                      isExpanded: _isThirdLevelExpanded,
+                      onToggle: () => setState(
+                          () => _isThirdLevelExpanded = !_isThirdLevelExpanded),
+                      content: categoriesAsync.when(
+                        data: (categories) {
+                          final items =
+                              _getThirdLevelItems(categories, filterState);
+
+                          return items.isEmpty
+                              ? Center(child: Text('No items available'))
+                              : _buildOptionsList(
+                                  items: items,
+                                  selectedValue:
+                                      _getThirdLevelValue(filterState),
+                                  onSelected: (value) {
+                                    _setThirdLevelValue(
+                                        value, filterState.selectedType!);
+                                    setState(() {
+                                      _isFourthLevelExpanded =
+                                          _shouldShowFourthLevel(
+                                              filterState, value);
+                                      _isThirdLevelExpanded = false;
+                                      _isSubjectExpanded = false;
+                                    });
+                                  },
+                                );
+                        },
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                        error: (error, _) => Center(
+                            child: Text('${context.l10n!.error}: $error')),
+                      ),
+                    ),
+
+                  const Gap(16),
+
+                  // Fourth Level Filter Section (Unit)
+                  if (_shouldShowFourthLevelSection(filterState))
+                    _buildFilterSection(
+                      title: 'Unit',
+                      isExpanded: _isFourthLevelExpanded,
+                      onToggle: () => setState(() =>
+                          _isFourthLevelExpanded = !_isFourthLevelExpanded),
+                      content: categoriesAsync.when(
+                        data: (categories) {
+                          final units = ref
+                              .read(categoriesProvider.notifier)
+                              .getUniqueUnits(
+                                categories,
+                                filterState.selectedUniversityType,
+                                filterState.selectedUniversityName,
+                              );
+
+                          return units.isEmpty
+                              ? Center(child: Text('No units available'))
+                              : _buildOptionsList(
+                                  items: units,
+                                  selectedValue: filterState.selectedUnit,
+                                  onSelected: (value) {
+                                    ref
+                                        .read(flashcardFilterProvider.notifier)
+                                        .setUnit(value);
+                                    setState(() {
+                                      _isSubjectExpanded = true;
+                                      _isFourthLevelExpanded = false;
+                                    });
+                                  },
+                                );
+                        },
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                        error: (error, _) => Center(
+                            child: Text('${context.l10n!.error}: $error')),
+                      ),
+                    ),
 
                   const Gap(16),
 
                   // Subject Filter Section
-                  _buildFilterSection(
-                    title: context.l10n!.subject,
-                    isExpanded: _isSubjectExpanded,
-                    onToggle: () => setState(
-                        () => _isSubjectExpanded = !_isSubjectExpanded),
-                    content: categoriesAsync.when(
-                      data: (categories) {
-                        if (filterState.selectedType == null) {
-                          return Center(
-                              child: Text(context.l10n!.selectTypeFirst));
-                        }
+                  if (filterState.selectedType != null)
+                    _buildFilterSection(
+                      title: context.l10n!.subject,
+                      isExpanded: _isSubjectExpanded,
+                      onToggle: () => setState(
+                          () => _isSubjectExpanded = !_isSubjectExpanded),
+                      content: categoriesAsync.when(
+                        data: (categories) {
+                          final subjects = ref
+                              .read(categoriesProvider.notifier)
+                              .getUniqueSubjects(categories, filterState);
 
-                        final subjects = ref
-                            .read(categoriesProvider.notifier)
-                            .getUniqueSubjects(
-                              categories,
-                              filterState,
-                            );
-
-                        return subjects.isEmpty
-                            ? Center(
-                                child: Text(context.l10n!.noSubjectsAvailable))
-                            : _buildOptionsList(
-                                items: subjects,
-                                selectedValue: filterState.selectedSubject,
-                                onSelected: (value) {
-                                  ref
-                                      .read(flashcardFilterProvider.notifier)
-                                      .setSubject(value);
-                                },
-                              );
-                      },
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                      error: (error, _) =>
-                          Center(child: Text('${context.l10n!.error}: $error')),
+                          return subjects.isEmpty
+                              ? Center(
+                                  child:
+                                      Text(context.l10n!.noSubjectsAvailable))
+                              : _buildOptionsList(
+                                  items: subjects,
+                                  selectedValue: filterState.selectedSubject,
+                                  onSelected: (value) {
+                                    ref
+                                        .read(flashcardFilterProvider.notifier)
+                                        .setSubject(value);
+                                  },
+                                );
+                        },
+                        loading: () =>
+                            const Center(child: CircularProgressIndicator()),
+                        error: (error, _) => Center(
+                            child: Text('${context.l10n!.error}: $error')),
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
           ),
-
           const Gap(24),
-
-          // Action Buttons
           Column(
             children: [
-              // Apply Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -209,11 +280,8 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                   ),
                   onPressed: () {
                     ref.read(flashcardFilterProvider.notifier).applyFilters();
-
-                    // Refresh flashcard lists
                     ref.invalidate(exploreFlashcardsProvider);
                     ref.invalidate(userFlashcardsProvider);
-
                     Navigator.pop(context);
                   },
                   child: Text(
@@ -224,10 +292,8 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                   ),
                 ),
               ),
-
               if (filterState.isFilterActive) ...[
                 const Gap(16),
-                // Reset Button
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton(
@@ -240,11 +306,8 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                     ),
                     onPressed: () {
                       ref.read(flashcardFilterProvider.notifier).resetFilters();
-
-                      // Refresh flashcard lists
                       ref.invalidate(exploreFlashcardsProvider);
                       ref.invalidate(userFlashcardsProvider);
-
                       Navigator.pop(context);
                     },
                     child: Text(
@@ -263,6 +326,156 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
     );
   }
 
+  String _getSecondLevelTitle(String type) {
+    switch (type) {
+      case 'Academic':
+        return context.l10n!.division;
+      case 'Job':
+        return 'Job Type';
+      case 'Admission':
+        return 'University Type';
+      default:
+        return '';
+    }
+  }
+
+  String _getThirdLevelTitle(String type) {
+    switch (type) {
+      case 'Job':
+        return 'Job Name';
+      case 'Admission':
+        return 'University Name';
+      default:
+        return '';
+    }
+  }
+
+  String _getNoItemsMessage(String type) {
+    switch (type) {
+      case 'Academic':
+        return context.l10n!.noDivisionsAvailable;
+      case 'Job':
+        return 'No job types available';
+      case 'Admission':
+        return 'No university types available';
+      default:
+        return 'No items available';
+    }
+  }
+
+  List<String> _getSecondLevelItems(List<Category> categories, String type) {
+    final notifier = ref.read(categoriesProvider.notifier);
+    switch (type) {
+      case 'Academic':
+        return notifier.getUniqueDivisions(categories);
+      case 'Job':
+        return notifier.getUniqueJobTypes(categories);
+      case 'Admission':
+        return notifier.getUniqueUniversityTypes(categories);
+      default:
+        return [];
+    }
+  }
+
+  List<String> _getThirdLevelItems(
+      List<Category> categories, FilterState filterState) {
+    final notifier = ref.read(categoriesProvider.notifier);
+    switch (filterState.selectedType) {
+      case 'Job':
+        return notifier.getUniqueJobNames(
+            categories, filterState.selectedJobType);
+      case 'Admission':
+        return notifier.getUniqueUniversityNames(
+            categories, filterState.selectedUniversityType);
+      default:
+        return [];
+    }
+  }
+
+  String? _getSecondLevelValue(FilterState filterState) {
+    switch (filterState.selectedType) {
+      case 'Academic':
+        return filterState.selectedDivision;
+      case 'Job':
+        return filterState.selectedJobType;
+      case 'Admission':
+        return filterState.selectedUniversityType;
+      default:
+        return null;
+    }
+  }
+
+  String? _getThirdLevelValue(FilterState filterState) {
+    switch (filterState.selectedType) {
+      case 'Job':
+        return filterState.selectedJobName;
+      case 'Admission':
+        return filterState.selectedUniversityName;
+      default:
+        return null;
+    }
+  }
+
+  void _setSecondLevelValue(String value, String type) {
+    switch (type) {
+      case 'Academic':
+        ref.read(flashcardFilterProvider.notifier).setDivision(value);
+        break;
+      case 'Job':
+        ref.read(flashcardFilterProvider.notifier).setJobType(value);
+        break;
+      case 'Admission':
+        ref.read(flashcardFilterProvider.notifier).setUniversityType(value);
+        break;
+    }
+  }
+
+  void _setThirdLevelValue(String value, String type) {
+    switch (type) {
+      case 'Job':
+        ref.read(flashcardFilterProvider.notifier).setJobName(value);
+        break;
+      case 'Admission':
+        ref.read(flashcardFilterProvider.notifier).setUniversityName(value);
+        break;
+    }
+  }
+
+  bool _shouldShowThirdLevel(String type, String? secondLevelValue) {
+    switch (type) {
+      case 'Job':
+        return secondLevelValue != null;
+      case 'Admission':
+        return secondLevelValue == 'University';
+      default:
+        return false;
+    }
+  }
+
+  bool _shouldShowThirdLevelSection(FilterState filterState) {
+    switch (filterState.selectedType) {
+      case 'Job':
+        return filterState.selectedJobType != null;
+      case 'Admission':
+        return filterState.selectedUniversityType == 'University';
+      default:
+        return false;
+    }
+  }
+
+  bool _shouldShowFourthLevel(
+      FilterState filterState, String? thirdLevelValue) {
+    return filterState.selectedType == 'Admission' &&
+        filterState.selectedUniversityType == 'University' &&
+        thirdLevelValue != null;
+  }
+
+  bool _shouldShowFourthLevelSection(FilterState filterState) {
+    return filterState.selectedType == 'Admission' &&
+        filterState.selectedUniversityType == 'University' &&
+        filterState.selectedUniversityName != null;
+  }
+
   Widget _buildFilterSection({
     required String title,
     required bool isExpanded,
@@ -276,7 +489,6 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
       ),
       child: Column(
         children: [
-          // Header
           InkWell(
             onTap: onToggle,
             child: Padding(
@@ -298,8 +510,6 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
               ),
             ),
           ),
-
-          // Content
           if (isExpanded)
             Container(
               width: double.infinity,
@@ -336,7 +546,6 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Row(
               children: [
-                // Radio button
                 Container(
                   width: 20,
                   height: 20,
@@ -363,7 +572,6 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
                       : null,
                 ),
                 const Gap(12),
-                // Option text
                 Expanded(
                   child: Text(
                     item,
