@@ -1075,4 +1075,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get messageToSupport => 'Message Support';
+
+  @override
+  String get seeProfile => 'View Profile';
 }

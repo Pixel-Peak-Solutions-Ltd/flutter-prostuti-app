@@ -8,9 +8,7 @@ import 'package:prostuti/features/course/materials/test/viewmodel/mcq_test_detai
 import '../../../../../common/helpers/func.dart';
 import '../../../../../core/configs/app_colors.dart';
 import '../../../../../core/services/nav.dart';
-import '../../assignment/widgets/assignment_skeleton.dart';
 import '../widgets/build_test_time_row.dart';
-import '../widgets/countdown_timer.dart';
 import '../widgets/test_skeleton.dart';
 import 'mcq_mock_test_view.dart';
 
@@ -36,7 +34,8 @@ class TestDetailsViewState extends ConsumerState<MCQTestDetailsView>
         child: SingleChildScrollView(
           child: mCQTestDetailsAsync.when(
             data: (test) {
-              final time = Func.timeConverterMinToHour(test.data!.time!.toInt());
+              final time =
+                  Func.timeConverterMinToHour(test.data!.time!.toInt());
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -52,7 +51,6 @@ class TestDetailsViewState extends ConsumerState<MCQTestDetailsView>
                     width: size.width * .9,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: AppColors.textActionPrimaryLight,
                       border: Border.all(color: AppColors.shadeNeutralLight),
                     ),
                     child: Padding(
@@ -60,8 +58,9 @@ class TestDetailsViewState extends ConsumerState<MCQTestDetailsView>
                           horizontal: 10, vertical: 14),
                       child: Text(
                         test.data!.name.toString(),
-                        style: theme.textTheme.bodyLarge!
-                            .copyWith(fontWeight: FontWeight.w400),
+                        style: theme.textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),
@@ -77,7 +76,6 @@ class TestDetailsViewState extends ConsumerState<MCQTestDetailsView>
                     width: size.width * .9,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: AppColors.textActionPrimaryLight,
                       border: Border.all(color: AppColors.shadeNeutralLight),
                     ),
                     child: Padding(
@@ -85,8 +83,9 @@ class TestDetailsViewState extends ConsumerState<MCQTestDetailsView>
                           horizontal: 10, vertical: 14),
                       child: Text(
                         test.data!.type.toString(),
-                        style: theme.textTheme.bodyLarge!
-                            .copyWith(fontWeight: FontWeight.w400),
+                        style: theme.textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),
@@ -102,7 +101,6 @@ class TestDetailsViewState extends ConsumerState<MCQTestDetailsView>
                     width: size.width * .9,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: AppColors.textActionPrimaryLight,
                       border: Border.all(color: AppColors.shadeNeutralLight),
                     ),
                     child: Padding(
@@ -110,18 +108,22 @@ class TestDetailsViewState extends ConsumerState<MCQTestDetailsView>
                           horizontal: 10, vertical: 14),
                       child: Text(
                         test.data!.questionList!.length.toString(),
-                        style: theme.textTheme.bodyLarge!
-                            .copyWith(fontWeight: FontWeight.w400),
+                        style: theme.textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                   ),
                   const Gap(24),
-                  buildTestTimeRow(theme, time['hour'].toString(), time['minute'].toString()),
+                  buildTestTimeRow(theme, time['hour'].toString(),
+                      time['minute'].toString()),
                   const Gap(24),
                   // Start Test Button
-                  LongButton(onPressed: () {
-                    Nav().pushReplacement(const MCQMockTestScreen());
-                  }, text: "টেস্ট শুরু করুন")
+                  LongButton(
+                      onPressed: () {
+                        Nav().pushReplacement(const MCQMockTestScreen());
+                      },
+                      text: "টেস্ট শুরু করুন")
                 ],
               );
             },

@@ -2209,6 +2209,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Message Support'**
   String get messageToSupport;
+
+  /// No description provided for @seeProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'View Profile'**
+  String get seeProfile;
 }
 
 class _AppLocalizationsDelegate

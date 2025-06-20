@@ -1078,4 +1078,7 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get messageToSupport => 'ম্যাসেজে সাপোর্ট কথা বলুন';
+
+  @override
+  String get seeProfile => 'প্রফাইল দেখুন';
 }

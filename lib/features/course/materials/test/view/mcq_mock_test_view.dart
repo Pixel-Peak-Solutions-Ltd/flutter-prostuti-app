@@ -19,6 +19,7 @@ import '../viewmodel/mcq_test_details_viewmodel.dart';
 import '../widgets/build_mcq_question_item.dart';
 import '../widgets/countdown_timer.dart';
 import '../widgets/mcq_mock_test_skeleton.dart';
+import '../widgets/omr_sheet_widget.dart';
 
 class MCQMockTestScreen extends ConsumerStatefulWidget {
   const MCQMockTestScreen({Key? key}) : super(key: key);
@@ -33,6 +34,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
   final List<Map<String, dynamic>> answerList = [];
   final _debouncer = Debouncer(milliseconds: 120);
   final _loadingProvider = StateProvider<bool>((ref) => false);
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -56,6 +58,52 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
     });
   }
 
+  void _showOMRSheet(dynamic test) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      enableDrag: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
+        ),
+      ),
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.7,
+          minChildSize: 0.3,
+          maxChildSize: 0.9,
+          builder: (_, scrollController) {
+            return OMRSheetWidget(
+              totalQuestions: test.data!.questionList!.length,
+              selectedAnswers: selectedAnswers,
+              onAnswerSelected: (questionNumber, optionIndex) {
+                setState(() {
+                  selectedAnswers[questionNumber] = optionIndex;
+                  final answerIndex = answerList.indexWhere(
+                    (answer) =>
+                        answer['question_id'] ==
+                        test.data!.questionList![questionNumber - 1].sId,
+                  );
+
+                  if (answerIndex != -1) {
+                    answerList[answerIndex]['selectedOption'] = test
+                        .data!
+                        .questionList![questionNumber - 1]
+                        .options![optionIndex];
+                  }
+                });
+              },
+              scrollController: scrollController,
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -63,7 +111,16 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
     final isLoading = ref.watch(_loadingProvider);
 
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndTop,
       appBar: commonAppbar("মক টেস্ট"),
+      floatingActionButton: mCQTestDetailsAsync.when(
+        data: (test) => FloatingActionButton(
+          onPressed: () => _showOMRSheet(test),
+          child: const Icon(Icons.grid_on),
+        ),
+        loading: () => const SizedBox.shrink(),
+        error: (_, __) => const SizedBox.shrink(),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: mCQTestDetailsAsync.when(
@@ -78,7 +135,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                     borderRadius: BorderRadius.circular(8),
                     color: AppColors.shadeSecondaryLight,
                     border:
-                    Border.all(color: AppColors.borderFocusPrimaryLight),
+                        Border.all(color: AppColors.borderFocusPrimaryLight),
                   ),
                   child: Column(
                     children: [
@@ -120,20 +177,24 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                       const Gap(8),
                       Text(
                         "প্রতিটি প্রশ্নে 1 পয়েন্ট থাকে এবং প্রতিটি ভুল উত্তরের জন্য \n0.5 পয়েন্ট কাটা হবে।",
-                        style: theme.textTheme.bodyMedium,
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                            color: AppColors.backgroundActionPrimaryLight),
                         textAlign: TextAlign.center,
                       ),
                     ],
                   ),
                 ),
                 const Gap(16),
-                CountdownTimer(onTimeUp: () {
-                  _submitTest(test);
-                },),
+                CountdownTimer(
+                  onTimeUp: () {
+                    _submitTest(test);
+                  },
+                ),
                 const Gap(24),
                 // Questions Section
                 Expanded(
                   child: ListView.builder(
+                    controller: _scrollController,
                     itemCount: test.data!.questionList!.length,
                     itemBuilder: (context, index) {
                       return MCQQuestionWidget(
@@ -150,24 +211,25 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                 isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : LongButton(
-                  onPressed: () {
-                    if (answerList.any(
-                            (answer) => answer['selectedOption'] != "null")) {
-                      _submitTest(test);
-                    } else {
-                      Fluttertoast.showToast(
-                        msg: "You need to submit at least 1 answer.",
-                      );
-                    }
-                  },
-                  text: "সাবমিট করুন",
-                ),
+                        onPressed: () {
+                          if (answerList.any(
+                              (answer) => answer['selectedOption'] != "null")) {
+                            _submitTest(test);
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "You need to submit at least 1 answer.",
+                            );
+                          }
+                        },
+                        text: "সাবমিট করুন",
+                      ),
               ],
             );
           },
           error: (error, stackTrace) {
             print(error);
             print(stackTrace);
+            return Center(child: Text('Error: $error'));
           },
           loading: () => const MockQuestionSkeleton(),
         ),
@@ -182,10 +244,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
         ref.read(countdownProvider.notifier).stopTimer();
 
         final remainingTime =
-            ref
-                .read(countdownProvider)
-                .remainingTime
-                .inSeconds;
+            ref.read(countdownProvider).remainingTime.inSeconds;
         final totalTime = test.data!.time!.toInt() * 60;
         final timeTaken = totalTime - remainingTime;
 
@@ -198,19 +257,19 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
         };
 
         final response =
-        await ref.read(testRepoProvider).submitMCQTest(payload: payload);
+            await ref.read(testRepoProvider).submitMCQTest(payload: payload);
 
         response.fold(
-              (l) => Fluttertoast.showToast(msg: l.message),
-              (testResult) => _navigateToResults(test, testResult, timeTaken),
+          (l) => Fluttertoast.showToast(msg: l.message),
+          (testResult) => _navigateToResults(test, testResult, timeTaken),
         );
       },
       loadingController: ref.read(_loadingProvider.notifier),
     );
   }
 
-  void _navigateToResults(dynamic test, dynamic testResult,
-      int timeTaken) async {
+  void _navigateToResults(
+      dynamic test, dynamic testResult, int timeTaken) async {
     _debouncer.run(
       action: () async {
         final markAsComplete = await ref
@@ -221,7 +280,6 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
         });
 
         if (markAsComplete) {
-
           final courseId = ref.read(getCourseByIdProvider);
           ref.invalidate(completedIdProvider(courseId));
 
@@ -230,8 +288,8 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
               resultData: {
                 "testTitle": test.data!.name,
                 "scorePercentage": ((testResult.data!.rightScore!.toInt() /
-                    testResult.data!.totalScore!.toInt()) *
-                    100)
+                            testResult.data!.totalScore!.toInt()) *
+                        100)
                     .toInt(),
                 "feedback": "চমৎকার",
                 "pointsEarned": testResult.data!.score,
@@ -248,7 +306,9 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
           Fluttertoast.showToast(
             msg: "Something went wrong, Please try again.",
           );
-        };
-      }, loadingController: ref.read(_loadingProvider.notifier),);
+        }
+      },
+      loadingController: ref.read(_loadingProvider.notifier),
+    );
   }
 }
