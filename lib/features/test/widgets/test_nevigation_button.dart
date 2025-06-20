@@ -5,15 +5,18 @@ class TestButton extends StatelessWidget {
   final String label;
   final Color borderColor;
   final String svgAsset;
+  final String icon;
   final VoidCallback onTap;
   final bool fullWidth;
 
-  const TestButton({super.key,
+  const TestButton({
+    super.key,
     required this.label,
     required this.borderColor,
     required this.svgAsset,
     required this.onTap,
     this.fullWidth = false,
+    required this.icon,
   });
 
   @override
@@ -25,8 +28,7 @@ class TestButton extends StatelessWidget {
         height: 170,
         decoration: BoxDecoration(
             border: Border.all(color: borderColor),
-            borderRadius: BorderRadius.circular(10)
-        ),
+            borderRadius: BorderRadius.circular(10)),
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -41,14 +43,25 @@ class TestButton extends StatelessWidget {
               ),
             ),
             // Button label
-            Center(
-              child: Text(
-                label,
-                style: TextStyle(
-                  color: borderColor,
-                  fontWeight: FontWeight.w600,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize:MainAxisSize.max ,
+              children: [
+                Image.asset(
+                  icon,
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.contain,
                 ),
-              ),
+                const SizedBox(height: 16,),
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: borderColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

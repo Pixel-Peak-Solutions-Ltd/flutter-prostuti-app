@@ -52,11 +52,11 @@ class TestLandingView extends StatelessWidget with CommonWidgets {
                     child: Material(
                       borderRadius: BorderRadius.circular(8),
                       clipBehavior: Clip.antiAlias,
-
                       child: TestButton(
                         label: 'সেগমেন্ট টেস্ট',
                         borderColor: borderColor,
                         svgAsset: 'assets/images/segment_test_background.svg',
+                        icon: 'assets/icons/segment_icon.png',
                         onTap: () {
                           Nav().push( const SegmentTestLandingView());
                         },
@@ -69,6 +69,7 @@ class TestLandingView extends StatelessWidget with CommonWidgets {
                       label: 'মক-টেস্ট',
                       borderColor: borderColor,
                       svgAsset: 'assets/images/mock_test_background.svg',
+                      icon: 'assets/icons/mock_icon.png',
                       onTap: () {
                         Nav().push( const MockTestLandingView());
                       },
@@ -76,12 +77,12 @@ class TestLandingView extends StatelessWidget with CommonWidgets {
                   ),
                 ],
               ),
-
               const Gap(12),
               TestButton(
                 label: 'কুইজার',
                 borderColor: borderColor,
                 svgAsset: 'assets/images/quizer_background.svg',
+                icon: 'assets/icons/quizer_icon.png',
                 fullWidth: true,
                 onTap: () {
                   Nav().push( const QuizerTestLandingView());
