@@ -49,7 +49,7 @@ class _SegmentTestLandingViewState extends ConsumerState<SegmentTestLandingView>
   }
 
   void _startSegmentTest() async {
-    if (_selectedSubject == null || _selectedSubject!.isEmpty) {
+    if (_selectedType != 'Admission' && (_selectedSubject == null || _selectedSubject!.isEmpty)) {
       Fluttertoast.showToast(
         msg: 'Please select a subject',
         toastLength: Toast.LENGTH_SHORT,
@@ -334,7 +334,7 @@ class _SegmentTestLandingViewState extends ConsumerState<SegmentTestLandingView>
               _buildFourthLevelDropdown(),
 
               // Subject field
-              _buildFormField(
+              if (_selectedType != 'Admission') _buildFormField(
                 label: context.l10n?.subject ?? 'সাবজেক্ট*',
                 child: categoriesAsync.when(
                   data: (categories) {
