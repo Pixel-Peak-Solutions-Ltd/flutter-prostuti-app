@@ -12,12 +12,13 @@ import 'package:prostuti/features/chat/view/chat_view.dart';
 import 'package:prostuti/features/course/course_list/view/course_list_view.dart';
 import 'package:prostuti/features/course/my_course/view/my_course_view.dart';
 import 'package:prostuti/features/home_screen/view/search_view.dart';
+import 'package:prostuti/features/home_screen/widget/horizontal_flashcard_list_loading.dart';
 import 'package:prostuti/features/leaderboard/widgets/leaderboard_section.dart';
 import 'package:prostuti/features/test/view/test_view.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../core/configs/app_colors.dart';
+import '../../auth/signup/widgets/flashcard_painter.dart';
 import '../../flashcard/model/flashcard_model.dart';
 import '../../flashcard/view/flashcard_study_view.dart';
 import '../../flashcard/view/flashcard_view.dart';
@@ -28,13 +29,10 @@ import '../../profile/viewmodel/profile_viewmodel.dart';
 import '../widget/category_card.dart';
 import '../widget/home_routine.dart';
 
-// Updated provider to avoid unnecessary API calls
 final cachedUserProfileProvider = Provider.autoDispose((ref) {
-  // Just return the existing provider but only refresh it when necessary
   return ref.watch(userProfileProvider);
 });
 
-// Flag to track if we've already initialized the profile
 final hasLoadedProfileProvider = StateProvider<bool>((ref) => false);
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -69,7 +67,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  // Proper tab change handler method
   void _handleTabChange(int index) {
     setState(() {
       _currentIndex = index;
@@ -78,11 +75,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Only initialize profile data once when needed
     if (_currentIndex == 0) {
       final hasLoaded = ref.read(hasLoadedProfileProvider);
       if (!hasLoaded) {
-        // This will ensure we only trigger the API call once
         WidgetsBinding.instance.addPostFrameCallback((_) {
           ref.read(hasLoadedProfileProvider.notifier).state = true;
         });
@@ -176,7 +171,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  // Build only the active tab to prevent unnecessary API calls and widget builds
   Widget _buildCurrentTab() {
     switch (_currentIndex) {
       case 0:
@@ -196,7 +190,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  // Rebuilt home content with LayoutBuilder for better adaptivity
   Widget _buildHomeContent() {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -206,18 +199,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top section fades in
               _buildTopSection(maxWidth).animate().fadeIn(duration: 575.ms),
-
               const Gap(16),
               _buildAdSection(maxWidth)
                   .animate()
                   .moveX(begin: 20, end: 0, duration: 500.ms),
-
-
               const Gap(16),
-
-              // Calendar title bounces in
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -229,35 +216,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
               ).animate().moveX(duration: 674.ms, curve: Curves.easeIn),
-
-              // Routine widget fades in
               const HomeRoutineWidget()
                   .animate()
                   .moveX(begin: 20, end: 0, duration: 500.ms),
-
               const Gap(16),
-
-              // Flashcard header slides in
               _buildSectionHeader(context, "আমার ফ্ল্যাশকার্ড")
                   .animate()
                   .moveX(begin: -20, end: 0, duration: 400.ms),
-
               const Gap(8),
-
-              // Flashcard section shimmers in
               _buildFlashcardSection(maxWidth)
                   .animate()
                   .fadeIn()
                   .shimmer(duration: 1000.ms),
-
               const Gap(16),
-
-              // Leaderboard section zooms in
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: LeaderboardSection(),
               ).animate().scale(duration: 500.ms),
-
               const Gap(16),
             ],
           ),
@@ -269,7 +244,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget _buildProfileShimmer(BuildContext context) {
     return Row(
       children: [
-        // Avatar placeholder
         Container(
           width: 40,
           height: 40,
@@ -282,7 +256,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Name placeholder
             Container(
               width: 120,
               height: 16,
@@ -292,7 +265,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             const SizedBox(height: 4),
-            // "View profile" text placeholder
             Container(
               width: 80,
               height: 14,
@@ -314,9 +286,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         );
   }
 
-  // Top section with profile and category cards - Optimized to reduce API calls
   Widget _buildTopSection(double maxWidth) {
-    // Use cached provider to prevent unnecessary API calls
     final userProfileAsyncValue = ref.watch(cachedUserProfileProvider);
     final themeMode = ref.watch(themeNotifierProvider);
     final isDarkTheme = themeMode == ThemeMode.dark ||
@@ -343,14 +313,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       child: Column(
         children: [
-          // Safe area for top padding
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Profile section
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -361,8 +329,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   UserProfileView(),
                           transitionsBuilder:
                               (context, animation, secondaryAnimation, child) {
-                            const begin = Offset(0.0, 1.0); // Start from bottom
-                            const end = Offset.zero; // End at original position
+                            const begin = Offset(0.0, 1.0);
+                            const end = Offset.zero;
                             const curve = Curves.easeInOut;
 
                             final tween = Tween(begin: begin, end: end)
@@ -417,10 +385,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       },
                     ),
                   ),
-
                   const Gap(16),
 
-                  // Title text
                   /*Padding(
                     padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.05),
                     child: RichText(
@@ -445,9 +411,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),*/
 
                   const Gap(16),
-
-                  // Search box
-
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -515,8 +478,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
           ),
-
-          // Category cards - now part of the column flow instead of absolutely positioned
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
             child: Row(
@@ -552,7 +513,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  // Advertisement section
   Widget _buildAdSection(double maxWidth) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -574,7 +534,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             const Gap(8),
             SmoothPageIndicator(
               controller: _adController,
-              count: 1, // Number of pages
+              count: 1,
               effect: const ExpandingDotsEffect(
                 dotHeight: 8,
                 dotWidth: 8,
@@ -588,15 +548,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  // Flashcard section
-// Redesigned Flashcard Section - directly based on existing implementation
-
-// Flashcard section
   Widget _buildFlashcardSection(double maxWidth) {
-    final flashcardsAsync = ref.watch(exploreFlashcardsProvider);
+    final flashcardsAsync = ref.watch(userFlashcardsProvider);
 
     return SizedBox(
-      height: 220, // Same height as original
+      height: 220,
       child: flashcardsAsync.when(
         data: (flashcards) {
           if (flashcards.isEmpty) {
@@ -610,7 +566,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
           return _buildHorizontalFlashcardList(flashcards, maxWidth);
         },
-        loading: () => _buildHorizontalFlashcardListLoading(maxWidth),
+        loading: () => HorizontalFlashcardListLoading(maxWidth: maxWidth),
         error: (error, stack) => Center(
           child: Text('${context.l10n!.error}: ${error.toString()}'),
         ),
@@ -618,121 +574,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _buildHorizontalFlashcardListLoading(double maxWidth) {
-    // Generate fake flashcard data for skeleton loading
-    final fakeFlashcards = List<Flashcard>.generate(
-      3, // Number of skeleton items to show
-      (index) => Flashcard(
-        title: 'Loading flashcard title',
-        studentId: Student(name: 'Loading author'),
-      ),
-    );
-
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: fakeFlashcards.length,
-      itemBuilder: (context, index) {
-        return Container(
-          width: maxWidth * 0.8, // 80% of screen width
-          padding: EdgeInsets.only(
-            left: index == 0 ? 16 : 8,
-            right: index == fakeFlashcards.length - 1 ? 16 : 8,
-          ),
-          child: Skeletonizer(
-            enabled: true,
-            child: Card(
-              elevation: 8,
-              shadowColor: Colors.grey.withOpacity(0.2),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Title skeleton
-                    Container(
-                      width: double.infinity,
-                      height: 24,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      width: maxWidth * 0.5,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    const Spacer(),
-                    // Author skeleton
-                    Row(
-                      children: [
-                        Container(
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Container(
-                          width: 100,
-                          height: 16,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    // Button skeleton
-                    Container(
-                      height: 40,
-                      width: 120,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   Widget _buildHorizontalFlashcardList(
       List<Flashcard> flashcards, double maxWidth) {
-    final flashcardNotifier = ref.read(exploreFlashcardsProvider.notifier);
-    final isLoadingMore = flashcardNotifier.isLoadingMore;
+    final flashcardNotifier = ref.read(userFlashcardsProvider.notifier);
 
     return NotificationListener<ScrollNotification>(
       onNotification: (scrollNotification) {
         if (scrollNotification.metrics.pixels >=
             scrollNotification.metrics.maxScrollExtent * 0.8) {
-          // Load more when 80% scrolled
           flashcardNotifier.loadMoreData();
         }
         return false;
       },
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: 5,
+        itemCount: flashcards.length,
         itemBuilder: (context, index) {
           if (index == flashcards.length) {
-            // Loading indicator at the end
             return const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 80),
               child: Center(child: CircularProgressIndicator()),
@@ -749,7 +607,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   flashcardTitle: flashcards[index].title!));
             },
             child: Container(
-              width: maxWidth * 0.8, // 80% of screen width
+              width: maxWidth * 0.8,
               padding: EdgeInsets.only(
                 left: index == 0 ? 16 : 8,
                 right: index == flashcards.length - 1 ? 16 : 8,
@@ -766,12 +624,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   borderRadius: BorderRadius.circular(16),
                   child: Stack(
                     children: [
-                      // Background pattern
                       Positioned.fill(
                         child: _buildModernBackground(cardColor),
                       ),
-
-                      // Content
                       Padding(
                         padding: const EdgeInsets.all(20),
                         child: Column(
@@ -806,10 +661,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ],
                                 ),
                               ),
-
                             const Spacer(),
-
-                            // Title with decoration element
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -836,10 +688,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 ),
                               ],
                             ),
-
                             const Spacer(),
-
-                            // Action button
                             Align(
                               alignment: Alignment.bottomLeft,
                               child: Container(
@@ -893,7 +742,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-// Modern background pattern
   Widget _buildModernBackground(Color baseColor) {
     return CustomPaint(
       painter: ModernFlashcardBackgroundPainter(
@@ -902,7 +750,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  // Section header
   Widget _buildSectionHeader(BuildContext context, String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -919,7 +766,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           TextButton(
             onPressed: () {
               if (title == "আমার ফ্ল্যাশকার্ড") {
-                _handleTabChange(1); // Switch to flashcard tab
+                _handleTabChange(1);
               }
             },
             child: Text(
@@ -932,101 +779,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
     );
-  }
-}
-
-// ---------
-
-class ModernFlashcardBackgroundPainter extends CustomPainter {
-  final Color baseColor;
-
-  ModernFlashcardBackgroundPainter({
-    required this.baseColor,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    // Create gradient colors based on the baseColor
-    final Rect rect = Offset.zero & size;
-
-    // Create lighter variations of the base color
-    final Color lighterColor1 = HSLColor.fromColor(baseColor)
-        .withLightness(
-            (HSLColor.fromColor(baseColor).lightness + 0.45).clamp(0.0, 1.0))
-        .toColor();
-
-    final Color lighterColor2 = HSLColor.fromColor(baseColor)
-        .withLightness(
-            (HSLColor.fromColor(baseColor).lightness + 0.3).clamp(0.0, 1.0))
-        .toColor();
-
-    // Background gradient
-    final gradient = LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [
-        lighterColor1,
-        lighterColor1,
-        lighterColor2,
-      ],
-      stops: const [0.0, 0.5, 1.0],
-    );
-
-    final paint = Paint()
-      ..shader = gradient.createShader(rect)
-      ..style = PaintingStyle.fill;
-
-    // Fill background
-    canvas.drawRect(rect, paint);
-
-    // Add decorative elements
-    _paintDecorativeElements(canvas, size, baseColor);
-  }
-
-  void _paintDecorativeElements(Canvas canvas, Size size, Color color) {
-    // Large circle in top right
-    final circlePaint = Paint()
-      ..color = color.withOpacity(0.1)
-      ..style = PaintingStyle.fill;
-
-    canvas.drawCircle(
-      Offset(size.width - 40, 30),
-      80,
-      circlePaint,
-    );
-
-    // Small circle in bottom left
-    final smallCirclePaint = Paint()
-      ..color = color.withOpacity(0.15)
-      ..style = PaintingStyle.fill;
-
-    canvas.drawCircle(
-      Offset(40, size.height - 30),
-      25,
-      smallCirclePaint,
-    );
-
-    // Abstract curved path
-    final pathPaint = Paint()
-      ..color = color.withOpacity(0.15)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 15;
-
-    final path = Path();
-    path.moveTo(0, size.height * 0.6);
-    path.quadraticBezierTo(
-      size.width * 0.3,
-      size.height * 0.2,
-      size.width * 0.9,
-      size.height * 0.5,
-    );
-
-    canvas.drawPath(path, pathPaint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return true;
   }
 }
 
