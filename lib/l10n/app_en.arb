@@ -351,5 +351,6 @@
   "contactUsForAnyQuestions": "Contact us for any questions",
   "supportDescription": "Our support team is available to help you with any questions or issues you might have with the app.",
   "helplineCall": "Call Helpline",
-  "messageToSupport": "Message Support"
+  "messageToSupport": "Message Support",
+  "seeProfile": "View Profile"
 }

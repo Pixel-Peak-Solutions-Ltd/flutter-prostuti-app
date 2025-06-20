@@ -367,7 +367,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       Theme.of(context).textTheme.titleSmall!,
                                 ),
                                 Text(
-                                  'প্রফাইল দেখুন',
+                                  context.l10n!.seeProfile,
                                   style:
                                       Theme.of(context).textTheme.bodyMedium!,
                                 ),
