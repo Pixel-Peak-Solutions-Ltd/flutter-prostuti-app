@@ -132,7 +132,7 @@ enum GridItem {
 
       case GridItem.reportCard:
         Nav().push(TestReportCardView(
-          studentId: "682a2c96c99e0afa014976b6",
+          studentId: studentId,
           courseId: courseId,
         ));
       default:
@@ -179,7 +179,7 @@ class EnrolledCourseLandingViewState
     return InkWell(
       onTap: () {
         // 🎯 EASY WAY: Read the provider directly here!
-        final studentId = ref.read(userProfileProvider).value?.data?.studentId;
+        final studentId = ref.read(userProfileProvider).value?.data?.sId;
 
         // Always add a null check before navigating
         if (studentId != null) {

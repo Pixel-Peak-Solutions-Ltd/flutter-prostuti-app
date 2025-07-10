@@ -416,7 +416,7 @@ class _TestReportCardViewState extends ConsumerState<TestReportCardView> {
                   'Average Score',
                   '${stats['averageScore'].toStringAsFixed(1)}%',
                   Icons.trending_up_rounded,
-                  accentColor,
+                  Colors.deepOrange,
                   textColor,
                   secondaryColor,
                 ),
