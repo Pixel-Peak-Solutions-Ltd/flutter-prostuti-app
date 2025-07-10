@@ -97,7 +97,7 @@ class _ChatViewState extends ConsumerState<ChatView>
                       child: Container(
                         decoration: BoxDecoration(
                           color: _selectedTabIndex == 1
-                              ? Colors.blue
+                              ? Colors.green
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(30),
                         ),
