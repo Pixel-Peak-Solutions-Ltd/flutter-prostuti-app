@@ -179,7 +179,7 @@ class _TestReportCardViewState extends ConsumerState<TestReportCardView> {
         children: [
           Icon(
             Icons.calendar_month_rounded,
-            color: accentColor,
+            color: Theme.of(context).colorScheme.error,
             size: 20,
           ),
           const SizedBox(width: 12),
