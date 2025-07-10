@@ -45,7 +45,7 @@ dependencies:
   pull_to_refresh_flutter3: ^2.0.2
   riverpod_annotation: ^2.5.3
   shared_preferences:
-  skeletonizer: any
+  skeletonizer: ^2.1.0+1
   smooth_page_indicator: ^1.2.0+3
   socket_io_client: ^3.1.1
   swipable_stack: ^2.0.0

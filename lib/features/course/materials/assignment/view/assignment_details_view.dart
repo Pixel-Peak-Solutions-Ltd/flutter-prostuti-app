@@ -113,7 +113,31 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
                     filePath != "" ||
                             ref.watch(changeBtnStateProvider) ||
                             widget.isCompleted
-                        ? fileBox(theme, fileName)
+                        ? Row(
+                            children: [
+                              // Expanded to make the fileBox take available space
+                              Expanded(child: fileBox(theme, fileName)),
+                              const Gap(8),
+                              // Add some space between the box and the button
+                              // This is the cross/delete button
+                              IconButton(
+                                onPressed: () {
+                                  // Clear the file path and name from the providers
+                                  ref
+                                      .read(getFilePathProvider.notifier)
+                                      .setFilePath("");
+                                  ref
+                                      .read(assignmentFileNameProvider.notifier)
+                                      .setFileName("");
+                                },
+                                icon: const Icon(
+                                  Icons.close,
+                                  color: Colors
+                                      .red, // Making the icon red for better UX
+                                ),
+                              )
+                            ],
+                          )
                         : InkWell(
                             onTap: () async {
                               final result =
@@ -148,8 +172,7 @@ class AssignmentDetailsViewState extends ConsumerState<AssignmentDetailsView>
                                         action: () async {
                                           final filePath =
                                               ref.read(getFilePathProvider);
-                                          if (filePath == null ||
-                                              filePath == "") {
+                                          if (filePath == "") {
                                             Fluttertoast.showToast(
                                                 msg:
                                                     "You must submit the file");
