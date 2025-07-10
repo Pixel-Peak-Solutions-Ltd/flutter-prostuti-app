@@ -43,13 +43,6 @@ class NoticeCard extends StatelessWidget {
                 ),
                 const Gap(8),
                 Text(
-                  'Exam Reminder',
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                const Spacer(),
-                Text(
                   timeAgo,
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
                         color: Colors.grey,

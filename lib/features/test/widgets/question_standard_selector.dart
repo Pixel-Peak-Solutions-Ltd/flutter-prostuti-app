@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+
 import '../../../core/configs/app_colors.dart';
 
 class QuestionStandardSelector extends StatelessWidget {
@@ -19,8 +20,10 @@ class QuestionStandardSelector extends StatelessWidget {
       spacing: 12,
       runSpacing: 12,
       children: [
-        _buildStandardButton(context, "ইঞ্জিনিয়ারিং", "assets/icons/engineering.svg"),
-        _buildStandardButton(context, "ভার্সিটি", "assets/icons/university.svg"),
+        _buildStandardButton(
+            context, "ইঞ্জিনিয়ারিং", "assets/icons/engineering.svg"),
+        _buildStandardButton(
+            context, "ভার্সিটি", "assets/icons/university.svg"),
         _buildStandardButton(context, "মেডিকেল", "assets/icons/medical.svg"),
         _buildStandardButton(context, "একাডেমিক", "assets/icons/academic.svg"),
       ],
@@ -46,7 +49,7 @@ class QuestionStandardSelector extends StatelessWidget {
             SvgPicture.asset(
               icon,
               color: isSelected
-                  ? Theme.of(context).colorScheme.onSurface
+                  ? Colors.white
                   : Theme.of(context).colorScheme.secondary,
               height: 20,
               width: 20,
@@ -55,10 +58,10 @@ class QuestionStandardSelector extends StatelessWidget {
             Text(
               type,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.onSurface
-                    : Theme.of(context).colorScheme.secondary,
-              ),
+                    color: isSelected
+                        ? Colors.white
+                        : Theme.of(context).colorScheme.secondary,
+                  ),
             ),
           ],
         ),
