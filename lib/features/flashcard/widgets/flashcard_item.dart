@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/core/services/size_config.dart';
 
 import '../model/flashcard_model.dart';
 import '../viewmodel/flashcard_item_count_provider.dart';
@@ -131,12 +132,14 @@ class FlashcardItem extends ConsumerWidget {
                           ),
                         const Gap(8),
                         // Flashcard title
-                        Text(
-                          flashcard.title ?? 'Untitled Flashcard',
-                          style:
-                              Theme.of(context).textTheme.titleMedium,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                        SizedBox(
+                          width: SizeConfig.screenWidth * 0.65,
+                          child: Text(
+                            flashcard.title ?? 'Untitled Flashcard',
+                            style: Theme.of(context).textTheme.titleMedium,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
 
                         const Gap(16),
