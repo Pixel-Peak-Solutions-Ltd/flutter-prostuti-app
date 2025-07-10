@@ -3,13 +3,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../model/all_test_history_model.dart';
 import '../repository/test_history_repo.dart';
 
-part 'test_history_view_model.g.dart';
+part 'get_test_history_of_course.g.dart';
 
 @riverpod
-class TestHistoryViewModel extends _$TestHistoryViewModel {
+class TestHistoryViewModelOfCourse extends _$TestHistoryViewModelOfCourse {
   @override
-  FutureOr<List<Data>> build({required String studentId}) {
+  FutureOr<List<Data>> build(
+      {required String studentId, required String courseId}) {
     _studentId = studentId;
+    _courseId = courseId;
     _currentPage = 1;
     _hasMore = true;
     _isLoadingMore = false;
@@ -17,6 +19,7 @@ class TestHistoryViewModel extends _$TestHistoryViewModel {
   }
 
   late String _studentId;
+  late String _courseId;
   int _currentPage = 1;
   int _limit = 10;
   bool _hasMore = true;
@@ -33,10 +36,11 @@ class TestHistoryViewModel extends _$TestHistoryViewModel {
     if (!_hasMore && !refresh) return _allTests;
 
     final repo = ref.read(testHistoryRepoProvider);
-    final result = await repo.getAllTestHistory(
+    final result = await repo.getAllTestHistoryOfACourse(
       studentId: _studentId,
       page: _currentPage,
       limit: _limit,
+      coureseId: _courseId,
     );
 
     return result.fold(

@@ -12,10 +12,12 @@ import 'package:prostuti/features/course/enrolled_course_landing/viewmodel/enrol
 import 'package:prostuti/features/course/materials/assignment/view/assignment_view.dart';
 import 'package:prostuti/features/course/materials/notice/view/notice_view.dart';
 import 'package:prostuti/features/course/materials/record_class/view/record_class_view.dart';
+import 'package:prostuti/features/course/materials/report_card/report_card_view.dart';
 import 'package:prostuti/features/course/materials/resources/view/resources_view.dart';
 import 'package:prostuti/features/course/materials/shared/widgets/trailing_icon.dart';
 import 'package:prostuti/features/course/materials/test/view/test_view.dart';
 import 'package:prostuti/features/leaderboard/view/course_leaderboard_view.dart';
+import 'package:prostuti/features/profile/viewmodel/profile_viewmodel.dart';
 
 import '../../course_details/widgets/expandable_text.dart';
 import '../../materials/get_material_completion.dart';
@@ -104,7 +106,7 @@ enum GridItem {
     }
   }
 
-  void navigate(BuildContext context, String courseId) {
+  void navigate(BuildContext context, String courseId, String studentId) {
     switch (this) {
       case GridItem.recordedClass:
         Nav().push(const RecordClassView());
@@ -125,6 +127,12 @@ enum GridItem {
         Nav().push(CourseRoutineView());
       case GridItem.leaderboard:
         Nav().push(CourseLeaderboardView(
+          courseId: courseId,
+        ));
+
+      case GridItem.reportCard:
+        Nav().push(TestReportCardView(
+          studentId: "682a2c96c99e0afa014976b6",
           courseId: courseId,
         ));
       default:
@@ -169,7 +177,22 @@ class EnrolledCourseLandingViewState
   // Reusable method to create a grid item
   Widget _buildGridItem(GridItem item, String courseId, ThemeData theme) {
     return InkWell(
-      onTap: () => item.navigate(context, courseId),
+      onTap: () {
+        // 🎯 EASY WAY: Read the provider directly here!
+        final studentId = ref.read(userProfileProvider).value?.data?.studentId;
+
+        // Always add a null check before navigating
+        if (studentId != null) {
+          item.navigate(context, courseId, studentId);
+        } else {
+          // Handle the case where the profile might not be loaded yet
+          print("Student ID not available.");
+          // Optionally show a snackbar to the user
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("User profile not loaded yet.")),
+          );
+        }
+      },
       child: Container(
         decoration: BoxDecoration(
           color: theme.scaffoldBackgroundColor,

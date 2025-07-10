@@ -243,8 +243,8 @@ class TestHistoryCard extends StatelessWidget {
   }
 
   Widget _buildScoreCircle(
-    int score,
-    int totalScore,
+    num score,
+    num totalScore,
     double percentage,
     Color statusColor,
     Color textColor,

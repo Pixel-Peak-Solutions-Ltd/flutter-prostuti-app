@@ -26,10 +26,47 @@ class TestHistoryRepo {
   }) async {
     try {
       final response = await _dioService.getRequest(
-        "/test-history/all-test-history?$studentId",
+        "/test-history/all-test-history",
         queryParameters: {
           "page": page,
           "limit": limit,
+          "student_id": studentId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final testHistory = AllTestHistoryModel.fromJson(response.data);
+        return Right(testHistory);
+      } else {
+        final errorResponse = ErrorResponse.fromJson(response.data);
+        ErrorHandler().setErrorMessage(errorResponse.message);
+        return Left(errorResponse);
+      }
+    } catch (e) {
+      final errorResponse = ErrorResponse(
+        message: e.toString(),
+        success: false,
+      );
+      ErrorHandler().setErrorMessage(errorResponse.message);
+      return Left(errorResponse);
+    }
+  }
+
+  Future<Either<ErrorResponse, AllTestHistoryModel>>
+      getAllTestHistoryOfACourse({
+    required String studentId,
+    required String coureseId,
+    int page = 1,
+    int limit = 10,
+  }) async {
+    try {
+      final response = await _dioService.getRequest(
+        "/test-history/all-test-history",
+        queryParameters: {
+          "page": page,
+          "limit": limit,
+          "student_id": studentId,
+          "course_id": coureseId
         },
       );
 

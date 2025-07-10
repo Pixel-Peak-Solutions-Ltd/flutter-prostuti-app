@@ -7,7 +7,7 @@ part of 'test_history_view_model.dart';
 // **************************************************************************
 
 String _$testHistoryViewModelHash() =>
-    r'ce499ced24eaf5c4050d765b7b1dc070541ed42e';
+    r'3a9d9f2460ff085ea69f3360321e090cde9fc836';
 
 /// Copied from Dart SDK
 class _SystemHash {

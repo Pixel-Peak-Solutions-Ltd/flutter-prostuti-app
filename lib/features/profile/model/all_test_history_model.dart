@@ -79,10 +79,10 @@ class Data {
   LessonId? lessonId;
   TestId? testId;
   StudentId? studentId;
-  int? score;
-  int? totalScore;
-  int? wrongScore;
-  int? rightScore;
+  num? score;
+  num? totalScore;
+  num? wrongScore;
+  num? rightScore;
   List<Answers>? answers;
   bool? isPassed;
   bool? isChecked;
