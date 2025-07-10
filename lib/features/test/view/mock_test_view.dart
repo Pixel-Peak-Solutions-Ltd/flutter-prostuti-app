@@ -2,10 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:prostuti/common/widgets/long_button.dart';
 import 'package:prostuti/features/test/view/written_mock_quiz_screen.dart';
 import 'package:prostuti/features/test/viewmodel/written_quiz_viewmodel.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:prostuti/common/widgets/long_button.dart';
+
 import '../../../common/widgets/common_widgets/common_widgets.dart';
 import '../viewmodel/mock_test_viewmodel.dart';
 import '../viewmodel/subject_selector_viewmodel.dart';
@@ -190,15 +191,30 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
-                child: SubjectDropdown(
-                  selectedStandard: selectedStandard,
-                  selectedSubject: subject,
-                  onSubjectChanged: (value) {
-                    if (!selectedExcludingCurrent.contains(value)) {
-                      setState(() => selectedSubjects[index] = value);
-                    }
-                  },
-                  excludedSubjects: selectedExcludingCurrent,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SubjectDropdown(
+                        selectedStandard: selectedStandard,
+                        selectedSubject: subject,
+                        onSubjectChanged: (value) {
+                          if (!selectedExcludingCurrent.contains(value)) {
+                            setState(() => selectedSubjects[index] = value);
+                          }
+                        },
+                        excludedSubjects: selectedExcludingCurrent,
+                      ),
+                    ),
+                    if (selectedSubjects.length > 1)
+                      IconButton(
+                        onPressed: () =>
+                            setState(() => selectedSubjects.removeAt(index)),
+                        icon: Icon(
+                          CupertinoIcons.xmark_circle_fill,
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                  ],
                 ),
               );
             }),
