@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/core/services/currency_converter.dart';
 import 'package:prostuti/core/services/localization_service.dart';
@@ -195,9 +194,6 @@ class SearchViewState extends ConsumerState<SearchView> {
             child: Container(
               height: 56,
               decoration: BoxDecoration(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.grey[800]
-                    : Colors.grey[200],
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: Theme.of(context).brightness == Brightness.dark
@@ -216,26 +212,17 @@ class SearchViewState extends ConsumerState<SearchView> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
-                  SvgPicture.asset(
-                    "assets/icons/search_icon.svg",
-                    height: 20,
-                    width: 20,
-                    colorFilter: ColorFilter.mode(
-                      Theme.of(context).brightness == Brightness.dark
-                          ? Colors.grey[400]!
-                          : Colors.grey[600]!,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  const Gap(12),
                   Expanded(
                     child: TextField(
                       controller: _searchController,
                       focusNode: _focusNode,
                       decoration: InputDecoration(
+                        focusedBorder: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        prefixIcon: const Icon(Icons.search),
                         hintText: context.l10n!.searchCourses,
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.zero,
+                        contentPadding: EdgeInsets.symmetric(vertical: 16),
                         hintStyle: TextStyle(
                           color: Theme.of(context).brightness == Brightness.dark
                               ? Colors.grey[400]
@@ -431,7 +418,7 @@ class SearchViewState extends ConsumerState<SearchView> {
           final course = courses[index];
           return InkWell(
             onTap: () {
-              ref.read(getCourseByIdProvider.notifier).setId(course.sId!);
+              ref.watch(getCourseByIdProvider.notifier).setId(course.sId!);
               Nav().push(const CourseDetailsView());
             },
             child: CourseCard(
@@ -484,7 +471,7 @@ class SearchViewState extends ConsumerState<SearchView> {
               _focusNode.requestFocus();
             },
             icon: const Icon(Icons.refresh),
-            label: Text('New Search'),
+            label: const Text('New Search'),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.secondary,
               foregroundColor: Colors.white,
