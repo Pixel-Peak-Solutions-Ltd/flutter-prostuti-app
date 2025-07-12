@@ -151,7 +151,7 @@ class FlashcardRepo {
 
   Future<Either<ErrorResponse, CategoryResponse>> getCategories() async {
     try {
-      final response = await _dioService.getRequest("/category");
+      final response = await _dioService.getRequest("/category?limit=0");
 
       if (response.statusCode == 200) {
         return Right(CategoryResponse.fromJson(response.data));
