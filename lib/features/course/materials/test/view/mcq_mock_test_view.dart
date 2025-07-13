@@ -142,6 +142,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                         questionList: test.data!.questionList![index],
                         selectedAnswers: selectedAnswers,
                         answerList: answerList,
+                        isTestify: false,
                       );
                     },
                   ),
