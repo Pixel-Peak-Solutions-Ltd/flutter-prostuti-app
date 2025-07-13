@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:prostuti/core/configs/app_colors.dart';
 import '../viewmodel/subject_selector_viewmodel.dart';
 
 class SubjectDropdown extends ConsumerWidget {
@@ -35,8 +36,8 @@ class SubjectDropdown extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.onPrimary,
-            borderRadius: BorderRadius.circular(4),
-            border: Border.all(color: Theme.of(context).colorScheme.onSurface),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: AppColors.shadeNeutralLight),
           ),
           child: DropdownButton<String>(
             value: selectedSubject ?? "সাবজেক্ট সিলেক্ট করুন",
