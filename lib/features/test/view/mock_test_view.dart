@@ -26,15 +26,61 @@ class MockTestLandingView extends ConsumerStatefulWidget {
 class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
     with CommonWidgets {
   final TextEditingController questionCountController = TextEditingController();
-  final TextEditingController timeController = TextEditingController();
+  final TextEditingController hourController = TextEditingController();
+  final TextEditingController minuteController = TextEditingController();
+  final TextEditingController secondController = TextEditingController();
   bool isNegativeMarking = false;
   String selectedQuestionType = "MCQ";
   String selectedStandard = "ইঞ্জিনিয়ারিং";
   List<String> selectedSubjects = ["সাবজেক্ট সিলেক্ট করুন"];
 
+  // Helper method to convert hours, minutes, seconds to total minutes
+  int _convertToTotalMinutes() {
+    final hours = int.tryParse(hourController.text.trim()) ?? 0;
+    final minutes = int.tryParse(minuteController.text.trim()) ?? 0;
+    final seconds = int.tryParse(secondController.text.trim()) ?? 0;
+
+    // Convert everything to minutes
+    return (hours * 60) + minutes + (seconds > 0 ? 1 : 0); // Round up if seconds > 0
+  }
+
+  Widget _buildTimeInputField(TextEditingController controller, String label) {
+    return Expanded(
+      child: Column(
+        children: [
+          Center(
+            child: TextField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: "০০",
+                hintStyle: TextStyle(
+                  fontSize: 24,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          ),
+          const Gap(8),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
+      ),
+    );
+  }
+
   void _startWrittenMockTest() async {
     final int questionCount = int.tryParse(questionCountController.text) ?? 0;
-    final int time = int.tryParse(timeController.text) ?? 0;
+    final int time = _convertToTotalMinutes();
 
     final validSubjects = selectedSubjects
         .where((subject) => subject != "সাবজেক্ট সিলেক্ট করুন")
@@ -78,7 +124,7 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
 
   void _startMCQMockTest() async {
     final int questionCount = int.tryParse(questionCountController.text) ?? 0;
-    final int time = int.tryParse(timeController.text) ?? 0;
+    final int time = _convertToTotalMinutes();
 
     final validSubjects = selectedSubjects
         .where((subject) => subject != "সাবজেক্ট সিলেক্ট করুন")
@@ -252,14 +298,18 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
               onChanged: (value) => setState(() => isNegativeMarking = value),
             ),
             const Gap(10),
-            Text("সময় (মিনিটে)", style: Theme.of(context).textTheme.bodyMedium),
-            const Gap(10),
-            TextField(
-              controller: timeController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(hintText: "30"),
+            Text("সময়", style: Theme.of(context).textTheme.bodyMedium),
+            const Gap(16),
+            Row(
+              children: [
+                _buildTimeInputField(hourController, "ঘন্টা"),
+                const Gap(16),
+                _buildTimeInputField(minuteController, "মিনিট"),
+                const Gap(16),
+                _buildTimeInputField(secondController, "সেকেন্ড"),
+              ],
             ),
-            const Gap(10),
+            const Gap(20),
             LongButton(
               onPressed: selectedQuestionType == "MCQ"
                   ? _startMCQMockTest

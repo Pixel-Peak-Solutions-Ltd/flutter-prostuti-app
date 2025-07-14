@@ -79,23 +79,22 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen>
         };
 
         final response = await ref.read(mockTestRepoProvider).submitMockQuiz(
-          quizId: widget.mockQuiz.data!.id!,
-          payload: payload,
-          isSegmentTest: widget.isSegmentTest,
-        );
+              quizId: widget.mockQuiz.data!.id!,
+              payload: payload,
+              isSegmentTest: widget.isSegmentTest,
+            );
 
         response.fold(
-                (l) => Fluttertoast.showToast(msg: l.message),
-                (testResult) => Nav().pushReplacement(
-              MCQMockQuizHistoryScreen(
-                quizId: widget.mockQuiz.data!.id!,
-              ),
-            ));
+            (l) => Fluttertoast.showToast(msg: l.message),
+            (testResult) => Nav().pushReplacement(
+                  MCQMockQuizHistoryScreen(
+                    quizId: widget.mockQuiz.data!.id!,
+                  ),
+                ));
       },
       loadingController: ref.read(_loadingProvider.notifier),
     );
   }
-
 
   void _showOMRSheet() {
     showModalBottomSheet(
@@ -122,13 +121,16 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen>
                 setState(() {
                   selectedAnswers[questionNumber] = optionIndex;
                   final answerIndex = answerList.indexWhere(
-                        (answer) =>
-                    answer['question_id'] ==
-                        widget.mockQuiz.data!.questions![questionNumber - 1].sId,
+                    (answer) =>
+                        answer['question_id'] ==
+                        widget
+                            .mockQuiz.data!.questions![questionNumber - 1].sId,
                   );
 
                   if (answerIndex != -1) {
-                    answerList[answerIndex]['selectedOption'] = widget.mockQuiz.data!
+                    answerList[answerIndex]['selectedOption'] = widget
+                        .mockQuiz
+                        .data!
                         .questions![questionNumber - 1]
                         .options![optionIndex];
                   }
@@ -161,7 +163,7 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen>
                 borderRadius: BorderRadius.circular(8),
                 color: Theme.of(context).colorScheme.onSecondary,
                 border:
-                Border.all(color: Theme.of(context).colorScheme.primary),
+                    Border.all(color: Theme.of(context).colorScheme.primary),
               ),
               child: Column(
                 children: [
@@ -218,24 +220,45 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen>
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.backgroundActionPrimaryLight,
-                      minimumSize: Size(width* .45, 54),
-                      maximumSize: Size(width* .45, 54),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                      padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 23)),
-                  child: Text("OMR দেখুন"),
+                      backgroundColor: AppColors.shadePrimaryLight,
+                      minimumSize: Size(width * .45, 54),
+                      maximumSize: Size(width * .45, 54),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        side: const BorderSide(
+                          color: AppColors.backgroundActionPrimaryLight,
+                          width: 1.5,
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 13, horizontal: 23)),
                   onPressed: _showOMRSheet,
+                  child: Text(
+                    "OMR দেখুন",
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.backgroundActionPrimaryLight,
+                        ),
+                  ),
                 ),
                 const Gap(12),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.backgroundActionPrimaryLight,
-                      minimumSize: Size(width* .45, 54),
-                      maximumSize: Size(width* .45, 54),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                      padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 23)),
-                  child: Text("সাবমিট করুন"),
+                      minimumSize: Size(width * .45, 54),
+                      maximumSize: Size(width * .45, 54),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6)),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 13, horizontal: 23)),
                   onPressed: _submitAnswers,
+                  child: Text(
+                    "সাবমিট করুন",
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                  ),
                 ),
               ],
             ),
@@ -246,4 +269,3 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen>
     );
   }
 }
-
