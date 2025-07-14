@@ -101,7 +101,7 @@ class OMRQuestionRow extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4),
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: Colors.grey[200]!,
@@ -150,7 +150,7 @@ class OMRQuestionRow extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                           color: isSelected
                               ? Colors.white
-                              : Theme.of(context).colorScheme.onSurface,
+                              : Colors.black,
                         ),
                       ),
                     ),
