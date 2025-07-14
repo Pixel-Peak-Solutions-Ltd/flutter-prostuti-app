@@ -33,7 +33,7 @@ class MockQuizScreenState extends ConsumerState<MCQMockQuizHistoryScreen>
     final mCQTestHistoryAsync =ref.watch(mockQuizResultViewmodelProvider(widget.quizId));
 
     return Scaffold(
-      appBar: commonAppbar("মক টেস্ট"),
+      appBar: commonAppbar("টেস্ট"),
       body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: mCQTestHistoryAsync.when(
@@ -72,7 +72,7 @@ class MockQuizScreenState extends ConsumerState<MCQMockQuizHistoryScreen>
                         // Points Earned
                         Text(
                           "আপনি ${test.data!.score ?? 0} পয়েন্ট পেয়েছেন",
-                          style: theme.textTheme.titleSmall,
+                          style: theme.textTheme.titleSmall!.copyWith(color: Colors.black),
                         ),
                         const Gap(24),
                         /*// Time Taken

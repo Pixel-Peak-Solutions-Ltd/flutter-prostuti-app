@@ -87,7 +87,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestHistoryScreen>
                         // Points Earned
                         Text(
                           "আপনি ${test.data!.score ?? 0} পয়েন্ট পেয়েছেন",
-                          style: theme.textTheme.titleSmall,
+                          style: theme.textTheme.titleSmall!.copyWith(color: Colors.black),
                         ),
                         const Gap(24),
                         // Time Taken
@@ -103,7 +103,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestHistoryScreen>
                             const Gap(8),
                             Text(
                               "সময় নিয়েছেন ${Func.timeConverterSecToMin(test.data!.timeTaken?? 00)} মিনিট",
-                              style: theme.textTheme.titleSmall,
+                              style: theme.textTheme.titleSmall!.copyWith(color: Colors.black),
                             ),
                           ],
                         ),
