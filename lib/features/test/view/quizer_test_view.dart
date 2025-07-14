@@ -54,10 +54,10 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
               controller: controller,
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w500,
-                color: Colors.black87,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
               decoration: const InputDecoration(
                 border: InputBorder.none,
@@ -110,24 +110,33 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
       return;
     }
 
-    final response =
-    await ref.read(quizerTestViewmodelProvider.notifier).createMCQQuizer(
-      questionType: selectedQuestionType,
-      subjects: validSubjects,
-      questionFilters: validQuestionFilters,
-      questionCount: questionCount,
-      isNegativeMarking: isNegativeMarking,
-      time: time,
-    );
-
-    if (response != null && response.data != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => MCQMockQuizScreen(mockQuiz: response),
-        ),
+    try{
+      final response =
+      await ref.read(quizerTestViewmodelProvider.notifier).createMCQQuizer(
+        questionType: selectedQuestionType,
+        subjects: validSubjects,
+        questionFilters: validQuestionFilters,
+        questionCount: questionCount,
+        isNegativeMarking: isNegativeMarking,
+        time: time,
       );
+
+      if (response != null && response.data != null) {
+        if(response.success!){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => MCQMockQuizScreen(mockQuiz: response),
+            ),
+          );
+        }else{
+          _showValidationError(response.message!);
+        }
+      }
+    }catch (e) {
+      _showValidationError(e.toString());
     }
+
   }
 
   void _startWrittenQuizerTest() async {
@@ -161,6 +170,7 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
       return;
     }
 
+    try{
     final response = await ref
         .read(quizerWrittenTestViewmodelProvider.notifier)
         .createWrittenQuizer(
@@ -171,25 +181,42 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
       isNegativeMarking: isNegativeMarking,
       time: time,
     );
-
     if (response != null && response.data != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => WrittenMockQuizScreen(mockQuiz: response),
-        ),
-      );
+      if(response.success!){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => WrittenMockQuizScreen(mockQuiz: response),
+          ),
+        );
+      }else{
+        _showValidationError(response.message!);
+      }
+    }
+    }catch (e) {
+      _showValidationError(e.toString());
     }
   }
 
   void _showValidationError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          "ত্রুটি!",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+        ),
         content: Text(message),
-        backgroundColor: Colors.red,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(), // Close the dialog
+            child: Text("ঠিক আছে",style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+          ),
+        ],
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

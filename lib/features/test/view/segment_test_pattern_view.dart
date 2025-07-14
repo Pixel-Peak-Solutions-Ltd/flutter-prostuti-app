@@ -40,7 +40,7 @@ class _SegmentTestPatternViewState extends ConsumerState<SegmentTestPatternView>
   }
 
   Future<void> _startTest() async {
-    final int time = int.tryParse(timeController.text.trim()) ?? 0;
+    final int time = widget.pattern.time!;
     if (time <= 0) {
       _showValidationError("দয়া করে সময় দিন");
       return;
@@ -104,11 +104,10 @@ class _SegmentTestPatternViewState extends ConsumerState<SegmentTestPatternView>
             child: Center(
               child: Text(
                 value,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                ),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontWeight: FontWeight.w500),
               ),
             ),
           ),
