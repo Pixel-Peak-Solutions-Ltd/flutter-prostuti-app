@@ -22,7 +22,7 @@ class OMRSheetWidget extends StatelessWidget {
     return StatefulBuilder(
       builder: (BuildContext context, StateSetter setState) {
         return Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
             borderRadius: const BorderRadius.only(
@@ -35,22 +35,31 @@ class OMRSheetWidget extends StatelessWidget {
               // Draggable handle
               Container(
                 width: 40,
-                height: 5,
+                height: 4,
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              const SizedBox(height: 16),
-              Text(
-                'ওএমআর',
-                style: Theme.of(context).textTheme.titleLarge,
+              const Gap(12),
+              // Header with better spacing
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  'ওএমআর',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
-              const SizedBox(height: 30),
+              const Gap(16),
+
+              // Questions list
               Expanded(
                 child: ListView.builder(
                   controller: scrollController,
                   itemCount: totalQuestions,
+                  padding: const EdgeInsets.only(top: 4),
                   itemBuilder: (context, index) {
                     return OMRQuestionRow(
                       questionNumber: index + 1,
@@ -87,48 +96,71 @@ class OMRQuestionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ansOption = ["ক", "খ", "গ", "ঘ"];
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Colors.grey[200]!,
+          width: 1,
+        ),
+      ),
       child: Row(
         children: [
-          Text('${questionNumber}'),
-          Gap(40),
-          Row(
-            children: List.generate(4, (index) {
-              return GestureDetector(
-                onTap: () => onOptionSelected(index),
-                child: Container(
-                  width: 30,
-                  height: 30,
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: selectedOption == index
-                        ? Colors.blue
-                        : AppColors.textActionTertiaryDark,
-                    border: Border.all(
-                      color: selectedOption == index
+          Container(
+            width: 40,
+            alignment: Alignment.center,
+            child: Text(
+              questionNumber.toString().padLeft(2, '0'),
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const Gap(16),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(4, (index) {
+                final isSelected = selectedOption == index;
+                return GestureDetector(
+                  onTap: () => onOptionSelected(index),
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: isSelected
                           ? Colors.blue
                           : AppColors.textActionTertiaryDark,
+                      border: Border.all(
+                        color: isSelected
+                            ? Colors.blue
+                            : AppColors.textActionTertiaryDark,
+                        width: 2,
+                      ),
                     ),
-                  ),
-                  child: Center(
-                    child: Text(
-                      ansOption[index],
-                      style: TextStyle(
-                        color: selectedOption == index
-                            ? Colors.white
-                            : Colors.black,
+                    child: Center(
+                      child: Text(
+                        ansOption[index],
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: isSelected
+                              ? Colors.white
+                              : Theme.of(context).colorScheme.onSurface,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+            ),
           ),
         ],
       ),
     );
   }
 }
-

@@ -108,12 +108,16 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
               );
 
       if (response != null && response.data != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => MCQMockQuizScreen(mockQuiz: response),
-          ),
-        );
+        if(response.success!){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => MCQMockQuizScreen(mockQuiz: response),
+            ),
+          );
+        }else{
+          _showValidationError(response.message!);
+        }
       }
     } catch (e) {
       _showValidationError(e.toString());
@@ -143,7 +147,7 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
         child: state.when(
           data: (data) => _buildContent(context),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, _) => Center(child: Text("Error: \${err.toString()}")),
+          error: (err, _) => Center(child: Text("Error: ${err.toString()}")),
         ),
       ),
     );
