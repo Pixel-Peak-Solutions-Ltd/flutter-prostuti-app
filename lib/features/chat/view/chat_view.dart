@@ -272,6 +272,7 @@ class ConversationsTab extends ConsumerWidget {
                       recipientId: conversation.acceptedBy ?? '',
                       recipientName:
                           conversation.participant?.name ?? 'Teacher',
+                      message: conversation.message ?? "",
                     ),
                   );
                 },
@@ -394,6 +395,7 @@ class BroadcastsTab extends ConsumerWidget {
                             conversationId: broadcast.conversationId ?? '',
                             recipientId: broadcast.acceptedBy ?? '',
                             recipientName: 'Teacher',
+                            message: broadcast.message ?? '',
                           ),
                         );
                       }

@@ -15,12 +15,14 @@ class ChatMessageView extends ConsumerStatefulWidget {
   final String conversationId;
   final String recipientId;
   final String recipientName;
+  final String message;
 
   const ChatMessageView({
     super.key,
     required this.conversationId,
     required this.recipientId,
     required this.recipientName,
+    required this.message,
   });
 
   @override
@@ -114,36 +116,52 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
     );
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        toolbarHeight: 40,
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        title: Row(
-          children: [
-            const CircleAvatar(
-              radius: 16,
-              backgroundImage: AssetImage('assets/images/test_dp.jpg'),
-            ),
-            const SizedBox(width: 12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.recipientName,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                if (isTyping)
-                  Text(
-                    context.l10n?.typing ?? 'typing...',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-              ],
-            ),
-          ],
-        ),
-      ),
       body: Column(
         children: [
+          SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+              child: Row(
+                children: [
+                  // Back button
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () => Navigator.of(context).pop(),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                  const SizedBox(width: 12),
+                  const CircleAvatar(
+                    radius: 20,
+                    backgroundImage: AssetImage('assets/images/test_dp.jpg'),
+                  ),
+                  const SizedBox(width: 12),
+                  // ✨ **KEY CHANGE**: Expanded allows the column to take available
+                  // space and lets the text wrap without causing a layout overflow.
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.recipientName,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          widget.message,
+                          style: Theme.of(context).textTheme.bodySmall,
+                          maxLines: 2, // Optional: limit the number of lines
+                          overflow: TextOverflow
+                              .ellipsis, // Optional: handle overflow
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
           // Connection status indicator
           Consumer(
             builder: (context, ref, child) {
@@ -301,13 +319,49 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
           // ✨ **KEY CHANGE**: Conditionally show the input field or the resolved text
           if (isConversationResolved)
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-              alignment: Alignment.center,
-              child: Text(
-                "This conversation is resolved.",
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.grey[600],
+              key: const ValueKey('resolved'),
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(
+                vertical: 24,
+                horizontal: 20,
+              ),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    const Color(0xFF34C759).withOpacity(0.1),
+                    const Color(0xFF34C759).withOpacity(0.05),
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: const Color(0xFF34C759).withOpacity(0.3),
+                  width: 1.5,
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF34C759),
+                      shape: BoxShape.circle,
                     ),
+                    child: const Icon(
+                      Icons.check_rounded,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    "This conversation has been resolved",
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: const Color(0xFF34C759),
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                ],
               ),
             )
           else
