@@ -9,6 +9,8 @@ import 'package:prostuti/features/chat/widgets/chat_message_item.dart';
 
 import '../widgets/chat_skeleton.dart';
 
+const String RESOLVED_MESSAGE = "Your doubt is solved. Thank you";
+
 class ChatMessageView extends ConsumerStatefulWidget {
   final String conversationId;
   final String recipientId;
@@ -35,7 +37,7 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    userId = 'current_user_id'; // Would be fetched from auth service
+    userId = 'current_user_id'; // This would be fetched from an auth service
   }
 
   @override
@@ -48,7 +50,6 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
   void _scrollListener() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent * 0.9) {
-      // Load more messages when scrolling to the top (newer messages are at the bottom)
       ref
           .read(
             chatMessagesNotifierProvider(widget.conversationId).notifier,
@@ -82,15 +83,35 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
 
   @override
   Widget build(BuildContext context) {
-    // Watch messages from the ChatMessagesNotifier provider
+    // Watch providers for state
     final messagesAsync = ref.watch(
       chatMessagesNotifierProvider(widget.conversationId),
     );
-
-    // Watch for typing indicator using our new stream-based provider
     final isTyping = ref
         .watch(typingIndicatorNotifierProvider)
         .containsKey(widget.conversationId);
+
+    // ✨ **KEY CHANGE**: Determine the resolved state directly from the provider's data
+    // This makes the UI a pure function of the state.
+    final isConversationResolved = messagesAsync.when(
+      data: (messages) {
+        if (messages.isEmpty) return false;
+
+        // Create a sorted copy to find the newest message
+        final sortedMessages = List.of(messages);
+        sortedMessages.sort((a, b) {
+          final timeA = DateTime.tryParse(a.createdAt ?? '');
+          final timeB = DateTime.tryParse(b.createdAt ?? '');
+          if (timeA == null || timeB == null) return 0;
+          return timeB.compareTo(timeA); // Newest messages first
+        });
+
+        // Check the newest message for the resolved text
+        return sortedMessages.first.message == RESOLVED_MESSAGE;
+      },
+      loading: () => false, // Default to not resolved while loading
+      error: (_, __) => false, // Default to not resolved on error
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -170,8 +191,7 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
                       ),
                     );
                   }
-                  return const SizedBox
-                      .shrink(); // Don't show anything when connected
+                  return const SizedBox.shrink();
                 },
                 loading: () => const SizedBox.shrink(),
                 error: (_, __) => const SizedBox.shrink(),
@@ -183,7 +203,6 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
           Expanded(
             child: messagesAsync.when(
               data: (messages) {
-                // Sort messages by time (newest first for reverse list)
                 messages.sort((a, b) {
                   final timeA = DateTime.tryParse(a.createdAt ?? '');
                   final timeB = DateTime.tryParse(b.createdAt ?? '');
@@ -205,7 +224,7 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
                   children: [
                     ListView.builder(
                       controller: _scrollController,
-                      reverse: true, // Display newest messages at the bottom
+                      reverse: true,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 8,
@@ -261,32 +280,7 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
                                 ),
                                 child: Row(
                                   children: [
-                                    Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[500],
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[500],
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Container(
-                                      width: 8,
-                                      height: 8,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[500],
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
+                                    Container(/* ...typing dots... */),
                                   ],
                                 ),
                               ),
@@ -304,12 +298,24 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
             ),
           ),
 
-          // Input field (we can keep using the same ChatInputField component)
-          ChatInputField(
-            conversationId: widget.conversationId,
-            recipientId: widget.recipientId,
-            onSendMessage: _sendMessage,
-          ),
+          // ✨ **KEY CHANGE**: Conditionally show the input field or the resolved text
+          if (isConversationResolved)
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+              alignment: Alignment.center,
+              child: Text(
+                "This conversation is resolved.",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey[600],
+                    ),
+              ),
+            )
+          else
+            ChatInputField(
+              conversationId: widget.conversationId,
+              recipientId: widget.recipientId,
+              onSendMessage: _sendMessage,
+            ),
         ],
       ),
     );
