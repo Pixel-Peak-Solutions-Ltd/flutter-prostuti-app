@@ -36,7 +36,8 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
   void initState() {
     super.initState();
     // Add one subject selector by default
-    selectedSubjects.add(SelectedSubjectAndChapter(subject: "সাবজেক্ট সিলেক্ট করুন"));
+    selectedSubjects
+        .add(SelectedSubjectAndChapter(subject: "সাবজেক্ট সিলেক্ট করুন"));
   }
 
   void _startWrittenMockTest() async {
@@ -45,7 +46,8 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
 
     // Filter out placeholder subjects. The list is now of the correct type.
     final validSubjects = selectedSubjects
-        .where((s) => s.subject != "সাবজেক্ট সিলেক্ট করুন" && s.subject.isNotEmpty)
+        .where(
+            (s) => s.subject != "সাবজেক্ট সিলেক্ট করুন" && s.subject.isNotEmpty)
         .map((s) => s.toJson()) // Convert to JSON
         .toList();
 
@@ -64,13 +66,13 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
 
     try {
       final response =
-      await ref.read(writtenQuizViewmodelProvider.notifier).createMockQuiz(
-        questionType: selectedQuestionType,
-        subjects: validSubjects,
-        questionCount: questionCount,
-        isNegativeMarking: isNegativeMarking,
-        time: time,
-      );
+          await ref.read(writtenQuizViewmodelProvider.notifier).createMockQuiz(
+                questionType: selectedQuestionType,
+                subjects: validSubjects,
+                questionCount: questionCount,
+                isNegativeMarking: isNegativeMarking,
+                time: time,
+              );
 
       if (response != null && response.data != null && mounted) {
         Navigator.push(
@@ -91,7 +93,8 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
 
     // Filter out placeholder subjects. The list is now of the correct type.
     final validSubjects = selectedSubjects
-        .where((s) => s.subject != "সাবজেক্ট সিলেক্ট করুন" && s.subject.isNotEmpty)
+        .where(
+            (s) => s.subject != "সাবজেক্ট সিলেক্ট করুন" && s.subject.isNotEmpty)
         .map((s) => s.toJson()) // Convert to JSON
         .toList();
 
@@ -110,13 +113,13 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
 
     try {
       final response =
-      await ref.read(mockTestViewmodelProvider.notifier).createMockQuiz(
-        questionType: selectedQuestionType,
-        subjects: validSubjects,
-        questionCount: questionCount,
-        isNegativeMarking: isNegativeMarking,
-        time: time,
-      );
+          await ref.read(mockTestViewmodelProvider.notifier).createMockQuiz(
+                questionType: selectedQuestionType,
+                subjects: validSubjects,
+                questionCount: questionCount,
+                isNegativeMarking: isNegativeMarking,
+                time: time,
+              );
 
       if (response != null && response.data != null && mounted) {
         Navigator.push(
@@ -189,7 +192,9 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
               selectedStandard: selectedStandard,
               onStandardChanged: (value) => setState(() {
                 selectedStandard = value;
-                selectedSubjects = [SelectedSubjectAndChapter(subject: "সাবজেক্ট সিলেক্ট করুন")];
+                selectedSubjects = [
+                  SelectedSubjectAndChapter(subject: "সাবজেক্ট সিলেক্ট করুন")
+                ];
               }),
             ),
             const Gap(10),
@@ -212,32 +217,44 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
                     Expanded(
                       child: Consumer(
                         builder: (context, ref, _) {
-                          final subjectListAsync = ref.watch(subjectViewmodelProvider(selectedStandard));
+                          final subjectListAsync = ref.watch(
+                              subjectViewmodelProvider(selectedStandard));
 
                           return subjectListAsync.when(
                             data: (subjects) {
-                              final availableSubjects = subjects.where((s) => !selectedExcludingCurrent.contains(s)).toList();
-                              final dropdownSubjects = ["সাবজেক্ট সিলেক্ট করুন", ...availableSubjects];
+                              final availableSubjects = subjects;
+                              final dropdownSubjects = [
+                                "সাবজেক্ট সিলেক্ট করুন",
+                                ...availableSubjects
+                              ];
 
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   // Subject Dropdown
                                   DropdownButtonFormField<String>(
-                                    value: selectedSubjects[index].subject.isEmpty || !dropdownSubjects.contains(selectedSubjects[index].subject)
+                                    value: selectedSubjects[index]
+                                                .subject
+                                                .isEmpty ||
+                                            !dropdownSubjects.contains(
+                                                selectedSubjects[index].subject)
                                         ? "সাবজেক্ট সিলেক্ট করুন"
                                         : selectedSubjects[index].subject,
                                     items: dropdownSubjects
-                                        .map((subject) => DropdownMenuItem<String>(
-                                      value: subject,
-                                      child: Text(subject),
-                                    ))
+                                        .map((subject) =>
+                                            DropdownMenuItem<String>(
+                                              value: subject,
+                                              child: Text(subject),
+                                            ))
                                         .toList(),
                                     onChanged: (value) {
-                                      if (value != null && value != "সাবজেক্ট সিলেক্ট করুন") {
+                                      if (value != null &&
+                                          value != "সাবজেক্ট সিলেক্ট করুন") {
                                         setState(() {
-                                          selectedSubjects[index].subject = value;
-                                          selectedSubjects[index].chapter = "All"; // reset chapter on subject change
+                                          selectedSubjects[index].subject =
+                                              value;
+                                          selectedSubjects[index].chapter =
+                                              "All"; // reset chapter on subject change
                                         });
                                       }
                                     },
@@ -250,47 +267,96 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
                                   const SizedBox(height: 10),
 
                                   // Chapter Dropdown (shown only if subject selected)
-                                  if (selectedSubjects[index].subject != "সাবজেক্ট সিলেক্ট করুন" &&
-                                      selectedSubjects[index].subject.isNotEmpty)
-                                    ref.watch(chapterViewmodelProvider(selectedSubjects[index].subject)).when(
-                                      data: (chapters) {
-                                        final chapterOptions = chapters;
-
-                                        return DropdownButtonFormField<String>(
-                                          value: chapterOptions.contains(selectedSubjects[index].chapter)
-                                              ? selectedSubjects[index].chapter
-                                              : 'All',
-                                          items: chapterOptions
-                                              .map((chapter) => DropdownMenuItem<String>(
-                                            value: chapter,
-                                            child: Text(chapter),
-                                          ))
-                                              .toList(),
-                                          onChanged: (value) {
-                                            if (value != null) {
-                                              setState(() => selectedSubjects[index].chapter = value);
-                                            }
+                                  if (selectedSubjects[index].subject !=
+                                          "সাবজেক্ট সিলেক্ট করুন" &&
+                                      selectedSubjects[index]
+                                          .subject
+                                          .isNotEmpty)
+                                    ref
+                                        .watch(chapterViewmodelProvider(
+                                            selectedSubjects[index].subject))
+                                        .when(
+                                          data: (chapters) {
+                                            final List<String> chapterOptions = ["All", ...chapters].toSet().toList();
+                                            final otherSelectedChapters =
+                                                selectedSubjects
+                                                    .asMap()
+                                                    .entries
+                                                    .where((entry) =>
+                                                        entry.key != index &&
+                                                        entry.value.subject ==
+                                                            selectedSubjects[
+                                                                    index]
+                                                                .subject)
+                                                    .map((entry) =>
+                                                        entry.value.chapter)
+                                                    .toList();
+                                            return DropdownButtonFormField<
+                                                String>(
+                                              value: chapterOptions.contains(
+                                                      selectedSubjects[index]
+                                                          .chapter)
+                                                  ? selectedSubjects[index]
+                                                      .chapter
+                                                  : chapterOptions.first,
+                                              items: chapterOptions
+                                                  .map((chapter) {
+                                                final isSelectedElsewhere =
+                                                    otherSelectedChapters
+                                                            .contains(
+                                                                chapter) &&
+                                                        chapter != 'All';
+                                                return DropdownMenuItem<
+                                                    String>(
+                                                  value: chapter,
+                                                  enabled:
+                                                      !isSelectedElsewhere,
+                                                  child: Text(
+                                                    chapter,
+                                                    style: TextStyle(
+                                                      color:
+                                                          isSelectedElsewhere
+                                                              ? Colors.grey
+                                                              : null,
+                                                    ),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                              onChanged: (value) {
+                                                if (value != null) {
+                                                  if (otherSelectedChapters.contains(value) && value != 'All') {
+                                                    _showValidationError(
+                                                        "This chapter has already been selected for this subject.");
+                                                  } else {
+                                                    setState(() =>
+                                                        selectedSubjects[index]
+                                                            .chapter = value);
+                                                  }
+                                                }
+                                              },
+                                              decoration: const InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText:
+                                                    "অধ্যায় নির্বাচন করুন",
+                                              ),
+                                            );
                                           },
-                                          decoration: const InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: "অধ্যায় নির্বাচন করুন",
-                                          ),
-                                        );
-
-                                      },
-                                      loading: () => const Center(child: CircularProgressIndicator()),
-                                      error: (err, _) => Text("Error loading chapters"),
-                                    ),
+                                          loading: () => const Center(
+                                              child:
+                                                  CircularProgressIndicator()),
+                                          error: (err, _) =>
+                                              Text("Error loading chapters"),
+                                        ),
                                 ],
                               );
                             },
-                            loading: () => const Center(child: CircularProgressIndicator()),
+                            loading: () => const Center(
+                                child: CircularProgressIndicator()),
                             error: (err, _) => Text("Error loading subjects"),
                           );
                         },
                       ),
                     ),
-
                     if (selectedSubjects.length > 1)
                       IconButton(
                         onPressed: () =>
@@ -307,7 +373,8 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
             const Gap(10),
             TextButton.icon(
               onPressed: () => setState(() {
-                selectedSubjects.add(SelectedSubjectAndChapter(subject: "সাবজেক্ট সিলেক্ট করুন"));
+                selectedSubjects.add(SelectedSubjectAndChapter(
+                    subject: "সাবজেক্ট সিলেক্ট করুন"));
               }),
               label: Text("আরেকটি বিষয় যোগ করুন",
                   style: Theme.of(context).textTheme.bodyMedium),
@@ -322,7 +389,7 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
               controller: questionCountController,
               keyboardType: TextInputType.number,
               decoration:
-              const InputDecoration(hintText: "প্রশ্ন সংখ্যা সিলেক্ট করুন"),
+                  const InputDecoration(hintText: "প্রশ্ন সংখ্যা সিলেক্ট করুন"),
             ),
             const Gap(10),
             SwitchListTile(
