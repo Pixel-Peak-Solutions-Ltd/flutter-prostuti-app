@@ -59,7 +59,7 @@ class TestDetailsViewState extends ConsumerState<WrittenTestDetailsView>
                       child: Text(
                         test.data!.name.toString(),
                         style: theme.textTheme.bodyLarge!
-                            .copyWith(fontWeight: FontWeight.w400),
+                            .copyWith(fontWeight: FontWeight.w400,color: Colors.black),
                       ),
                     ),
                   ),
@@ -84,7 +84,7 @@ class TestDetailsViewState extends ConsumerState<WrittenTestDetailsView>
                       child: Text(
                         test.data!.type.toString(),
                         style: theme.textTheme.bodyLarge!
-                            .copyWith(fontWeight: FontWeight.w400),
+                            .copyWith(fontWeight: FontWeight.w400,color: Colors.black),
                       ),
                     ),
                   ),
@@ -109,7 +109,7 @@ class TestDetailsViewState extends ConsumerState<WrittenTestDetailsView>
                       child: Text(
                         test.data!.questionList!.length.toString(),
                         style: theme.textTheme.bodyLarge!
-                            .copyWith(fontWeight: FontWeight.w400),
+                            .copyWith(fontWeight: FontWeight.w400,color: Colors.black),
                       ),
                     ),
                   ),

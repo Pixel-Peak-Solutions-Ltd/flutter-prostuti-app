@@ -14,7 +14,7 @@ class QuizerTestViewmodel extends _$QuizerTestViewmodel {
 
   Future<MockQuizResponse?> createMCQQuizer({
     required String questionType,
-    required List<String> subjects,
+    required List<Map<String, dynamic>> subjects,
     required List<String> questionFilters,
     required int questionCount,
     required bool isNegativeMarking,
@@ -34,7 +34,10 @@ class QuizerTestViewmodel extends _$QuizerTestViewmodel {
     final response = await ref.read(mockTestRepoProvider).createMCQMockQuiz(payload: payload);
 
     return response.fold(
-          (l) => throw Exception(l.message),
+          (l) {
+        state = const AsyncData(null);
+        throw Exception(l.message);
+      },
           (data) {
         state = AsyncData(data);
         return data;

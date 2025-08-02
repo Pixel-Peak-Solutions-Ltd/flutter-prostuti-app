@@ -333,7 +333,7 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
       case 'Job':
         return 'Job Type';
       case 'Admission':
-        return 'University Type';
+        return 'Institute Type';
       default:
         return '';
     }
@@ -344,7 +344,7 @@ class FlashcardFilterSheetState extends ConsumerState<FlashcardFilterSheet> {
       case 'Job':
         return 'Job Name';
       case 'Admission':
-        return 'University Name';
+        return 'Institute Name';
       default:
         return '';
     }

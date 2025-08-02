@@ -14,7 +14,7 @@ class QuizerWrittenTestViewmodel extends _$QuizerWrittenTestViewmodel {
 
   Future<MockWrittenQuizResponse?> createWrittenQuizer({
     required String questionType,
-    required List<String> subjects,
+    required List<Map<String, dynamic>> subjects,
     required List<String> questionFilters,
     required int questionCount,
     required bool isNegativeMarking,

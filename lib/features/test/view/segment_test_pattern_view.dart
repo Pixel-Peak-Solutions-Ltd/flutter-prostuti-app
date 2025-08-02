@@ -40,7 +40,7 @@ class _SegmentTestPatternViewState extends ConsumerState<SegmentTestPatternView>
   }
 
   Future<void> _startTest() async {
-    final int time = int.tryParse(timeController.text.trim()) ?? 0;
+    final int time = widget.pattern.time!;
     if (time <= 0) {
       _showValidationError("দয়া করে সময় দিন");
       return;
@@ -90,6 +90,48 @@ class _SegmentTestPatternViewState extends ConsumerState<SegmentTestPatternView>
     );
   }
 
+
+  Widget _buildTimeDisplayField(String value, String label) {
+    return Expanded(
+      child: Column(
+        children: [
+          Container(
+            height: 80,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Center(
+              child: Text(
+                value,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontWeight: FontWeight.w500),
+              ),
+            ),
+          ),
+          const Gap(8),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Map<String, String> _getTimeComponents(int totalMinutes) {
+    final hours = totalMinutes ~/ 60;
+    final minutes = totalMinutes % 60;
+
+    return {
+      'hours': hours.toString().padLeft(2, '0'),
+      'minutes': minutes.toString().padLeft(2, '0'),
+      'seconds': '00',
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final vmState = ref.watch(segmentQuizViewmodelProvider);
@@ -126,13 +168,27 @@ class _SegmentTestPatternViewState extends ConsumerState<SegmentTestPatternView>
                 onSelectionChanged: _toggleOptionalSubject,
               ),
               const Gap(10),
-              Text("সময় (মিনিটে)",
-                  style: Theme.of(context).textTheme.bodyMedium),
-              const Gap(10),
-              TextField(
-                controller: timeController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(hintText: "30"),
+              Text(
+                "সময়",
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontWeight: FontWeight.w500),
+              ),
+              const Gap(16),
+              Builder(
+                builder: (context) {
+                  final timeComponents = _getTimeComponents(widget.pattern.time ?? 0);
+                  return Row(
+                    children: [
+                      _buildTimeDisplayField(timeComponents['hours']!, "ঘন্টা"),
+                      const Gap(16),
+                      _buildTimeDisplayField(timeComponents['minutes']!, "মিনিট"),
+                      const Gap(16),
+                      _buildTimeDisplayField(timeComponents['seconds']!, "সেকেন্ড"),
+                    ],
+                  );
+                },
               ),
               const Gap(20),
               LongButton(

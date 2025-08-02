@@ -121,11 +121,7 @@ class SubjectWithChapterSelector extends ConsumerWidget {
                         onChapterChanged(index, value);
                       }
                     },
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "অধ্যায় নির্বাচন করুন",
-                    ),
-                  );
+                    );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (err, _) => Text("Error loading chapters"),

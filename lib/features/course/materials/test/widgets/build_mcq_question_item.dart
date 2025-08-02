@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import '../../../../../core/configs/app_colors.dart';
 import '../model/mcq_test_details_model.dart';
 
 class MCQQuestionWidget extends StatefulWidget {
@@ -10,6 +8,7 @@ class MCQQuestionWidget extends StatefulWidget {
   final QuestionList questionList;
   final Map<int, int?> selectedAnswers;
   final List<Map<String, dynamic>> answerList;
+  final bool isTestify;
 
   const MCQQuestionWidget({
     super.key,
@@ -18,6 +17,7 @@ class MCQQuestionWidget extends StatefulWidget {
     required this.questionList,
     required this.selectedAnswers,
     required this.answerList,
+    required this.isTestify,
   });
 
   @override
@@ -27,17 +27,15 @@ class MCQQuestionWidget extends StatefulWidget {
 class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
   void updateAnswerList(int? selectedIndex) {
     final answerIndex = widget.answerList.indexWhere(
-          (answer) => answer['question_id'] == widget.questionList.sId,
+      (answer) => answer['question_id'] == widget.questionList.sId,
     );
 
     if (answerIndex != -1) {
-      widget.answerList[answerIndex]['selectedOption'] =
-      selectedIndex != null
+      widget.answerList[answerIndex]['selectedOption'] = selectedIndex != null
           ? widget.questionList.options![selectedIndex]
           : "null";
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -57,16 +55,16 @@ class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (widget.questionList.hasImage == true &&
-                widget.questionList.image != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Image.network(
-                  widget.questionList.image!.path!,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Text('Image not available');
-                  },
+                  widget.questionList.image != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Image.network(
+                    widget.questionList.image!.path!,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Text('Image not available');
+                    },
+                  ),
                 ),
-              ),
               // Question Title
               Text(
                 "${widget.questionNumber}. ${widget.questionList.title}",
@@ -81,12 +79,15 @@ class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
                 children: List.generate(4, (index) {
                   bool isSelected = selectedOption == index;
                   return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        widget.selectedAnswers[widget.questionNumber] = index;
-                        updateAnswerList(index);
-                      });
-                    },
+                    onTap: widget.isTestify
+                        ? () {}
+                        : () {
+                            setState(() {
+                              widget.selectedAnswers[widget.questionNumber] =
+                                  index;
+                              updateAnswerList(index);
+                            });
+                          },
                     child: Container(
                       margin: const EdgeInsets.symmetric(vertical: 6),
                       padding: const EdgeInsets.symmetric(
@@ -96,7 +97,8 @@ class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
                             ? Colors.blue.withOpacity(0.1)
                             : Colors.white,
                         border: Border.all(
-                          color: isSelected ? Colors.blue : Colors.grey.shade300,
+                          color:
+                              isSelected ? Colors.blue : Colors.grey.shade300,
                         ),
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -115,7 +117,8 @@ class _MCQQuestionWidgetState extends State<MCQQuestionWidget> {
                               child: Text(
                                 ansOption[index],
                                 style: TextStyle(
-                                  color: isSelected ? Colors.white : Colors.black,
+                                  color:
+                                      isSelected ? Colors.white : Colors.black,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),

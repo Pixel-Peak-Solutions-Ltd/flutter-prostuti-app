@@ -9,8 +9,7 @@ part 'mock_test_viewmodel.g.dart';
 class MockTestViewmodel extends _$MockTestViewmodel {
   @override
   Future<MockQuizResponse?> build() async {
-    // Initial State (You can trigger a default API call if needed)
-    return null;
+    return null; // Initial state, no quiz loaded
   }
 
   Future<MockQuizResponse?> createMockQuiz({
@@ -30,14 +29,18 @@ class MockTestViewmodel extends _$MockTestViewmodel {
       "time": time,
     };
 
-    final response = await ref.read(mockTestRepoProvider).createMCQMockQuiz(payload: payload);
+    final response =
+    await ref.read(mockTestRepoProvider).createMCQMockQuiz(payload: payload);
 
     return response.fold(
-          (l) => throw Exception(l.message),
+          (l) {
+        state = const AsyncData(null);
+        throw Exception(l.message);
+      },
           (data) {
         state = AsyncData(data);
         return data;
-        },
+      },
     );
   }
 }
