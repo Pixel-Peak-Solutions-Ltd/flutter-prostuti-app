@@ -34,7 +34,10 @@ class QuizerTestViewmodel extends _$QuizerTestViewmodel {
     final response = await ref.read(mockTestRepoProvider).createMCQMockQuiz(payload: payload);
 
     return response.fold(
-          (l) => throw Exception(l.message),
+          (l) {
+        state = const AsyncData(null);
+        throw Exception(l.message);
+      },
           (data) {
         state = AsyncData(data);
         return data;

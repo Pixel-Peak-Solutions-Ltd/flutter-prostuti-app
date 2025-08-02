@@ -26,23 +26,69 @@ class QuizerTestLandingView extends ConsumerStatefulWidget {
 class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
     with CommonWidgets {
   final TextEditingController questionCountController = TextEditingController();
-  final TextEditingController timeController = TextEditingController();
+  final TextEditingController hourController = TextEditingController();
+  final TextEditingController minuteController = TextEditingController();
+  final TextEditingController secondController = TextEditingController();
   bool isNegativeMarking = false;
   String selectedQuestionType = "MCQ";
-  String selectedStandard = "ইঞ্জিনিয়ারিং";
+  String selectedStandard = "ইঞ্জিনিয়ারিং";
   List<String> selectedSubjects = ["সাবজেক্ট সিলেক্ট করুন"];
   List<String> questionFilters = [];
 
+  // Helper method to convert hours, minutes, seconds to total minutes
+  int _convertToTotalMinutes() {
+    final hours = int.tryParse(hourController.text.trim()) ?? 0;
+    final minutes = int.tryParse(minuteController.text.trim()) ?? 0;
+    final seconds = int.tryParse(secondController.text.trim()) ?? 0;
+
+    // Convert everything to minutes
+    return (hours * 60) + minutes + (seconds > 0 ? 1 : 0); // Round up if seconds > 0
+  }
+
+  Widget _buildTimeInputField(TextEditingController controller, String label) {
+    return Expanded(
+      child: Column(
+        children: [
+          Center(
+            child: TextField(
+              controller: controller,
+              keyboardType: TextInputType.number,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: "০০",
+                hintStyle: TextStyle(
+                  fontSize: 24,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+          ),
+          const Gap(8),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ],
+      ),
+    );
+  }
+
   void _startMCQQuizerTest() async {
     final int questionCount = int.tryParse(questionCountController.text) ?? 0;
-    final int time = int.tryParse(timeController.text) ?? 0;
+    final int time = _convertToTotalMinutes();
 
     final validSubjects = selectedSubjects
         .where((subject) => subject != "সাবজেক্ট সিলেক্ট করুন")
         .toList();
 
     if (validSubjects.isEmpty) {
-      _showValidationError("কমপক্ষে একটি বিষয় সিলেক্ট করুন।");
+      _showValidationError("কমপক্ষে একটি বিষয় সিলেক্ট করুন।");
       return;
     }
 
@@ -60,40 +106,49 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
       return;
     }
     if (time <= 0) {
-      _showValidationError("সময়টি সঠিকভাবে লিখুন।");
+      _showValidationError("সময়টি সঠিকভাবে লিখুন।");
       return;
     }
 
-    final response =
-        await ref.read(quizerTestViewmodelProvider.notifier).createMCQQuizer(
-              questionType: selectedQuestionType,
-              subjects: validSubjects,
-              questionFilters: validQuestionFilters,
-              questionCount: questionCount,
-              isNegativeMarking: isNegativeMarking,
-              time: time,
-            );
-
-    if (response != null && response.data != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => MCQMockQuizScreen(mockQuiz: response),
-        ),
+    try{
+      final response =
+      await ref.read(quizerTestViewmodelProvider.notifier).createMCQQuizer(
+        questionType: selectedQuestionType,
+        subjects: validSubjects,
+        questionFilters: validQuestionFilters,
+        questionCount: questionCount,
+        isNegativeMarking: isNegativeMarking,
+        time: time,
       );
+
+      if (response != null && response.data != null) {
+        if(response.success!){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => MCQMockQuizScreen(mockQuiz: response),
+            ),
+          );
+        }else{
+          _showValidationError(response.message!);
+        }
+      }
+    }catch (e) {
+      _showValidationError(e.toString());
     }
+
   }
 
   void _startWrittenQuizerTest() async {
     final int questionCount = int.tryParse(questionCountController.text) ?? 0;
-    final int time = int.tryParse(timeController.text) ?? 0;
+    final int time = _convertToTotalMinutes();
 
     final validSubjects = selectedSubjects
         .where((subject) => subject != "সাবজেক্ট সিলেক্ট করুন")
         .toList();
 
     if (validSubjects.isEmpty) {
-      _showValidationError("কমপক্ষে একটি বিষয় সিলেক্ট করুন।");
+      _showValidationError("কমপক্ষে একটি বিষয় সিলেক্ট করুন।");
       return;
     }
 
@@ -111,39 +166,57 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
       return;
     }
     if (time <= 0) {
-      _showValidationError("সময়টি সঠিকভাবে লিখুন।");
+      _showValidationError("সময়টি সঠিকভাবে লিখুন।");
       return;
     }
 
+    try{
     final response = await ref
         .read(quizerWrittenTestViewmodelProvider.notifier)
         .createWrittenQuizer(
-          questionType: selectedQuestionType,
-          subjects: validSubjects,
-          questionFilters: validQuestionFilters,
-          questionCount: questionCount,
-          isNegativeMarking: isNegativeMarking,
-          time: time,
-        );
-
+      questionType: selectedQuestionType,
+      subjects: validSubjects,
+      questionFilters: validQuestionFilters,
+      questionCount: questionCount,
+      isNegativeMarking: isNegativeMarking,
+      time: time,
+    );
     if (response != null && response.data != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => WrittenMockQuizScreen(mockQuiz: response),
-        ),
-      );
+      if(response.success!){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => WrittenMockQuizScreen(mockQuiz: response),
+          ),
+        );
+      }else{
+        _showValidationError(response.message!);
+      }
+    }
+    }catch (e) {
+      _showValidationError(e.toString());
     }
   }
 
   void _showValidationError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          "ত্রুটি!",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface),
+        ),
         content: Text(message),
-        backgroundColor: Colors.red,
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(), // Close the dialog
+            child: Text("ঠিক আছে",style: TextStyle(color: Theme.of(context).colorScheme.onSurface)),
+          ),
+        ],
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -159,7 +232,7 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
         child: state.when(
           data: (data) => _buildContent(context),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, _) => Center(child: Text("Error: \${err.toString()}")),
+          error: (err, _) => Center(child: Text("Error: ${err.toString()}")),
         ),
       ),
     );
@@ -203,7 +276,7 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
               final index = entry.key;
               final subject = entry.value;
               final selectedExcludingCurrent =
-                  List<String>.from(selectedSubjects)..removeAt(index);
+              List<String>.from(selectedSubjects)..removeAt(index);
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
@@ -235,17 +308,17 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
               );
             }),
             const Gap(10),
-            Text('প্রশ্নের ধরণ সিলেক্ট করুন*',
-                style: Theme.of(context).textTheme.bodyMedium),
-            const Gap(10),
             TextButton.icon(
               onPressed: () =>
                   setState(() => selectedSubjects.add("সাবজেক্ট সিলেক্ট করুন")),
-              label: Text("আরেকটি বিষয় যোগ করুন",
+              label: Text("আরেকটি বিষয় যোগ করুন",
                   style: Theme.of(context).textTheme.bodyMedium),
               icon: Icon(CupertinoIcons.plus_app,
                   color: Theme.of(context).colorScheme.onSurface),
             ),
+            const Gap(10),
+            Text('প্রশ্নের ধরণ সিলেক্ট করুন*',
+                style: Theme.of(context).textTheme.bodyMedium),
             const Gap(10),
             Wrap(
               spacing: 8,
@@ -263,7 +336,7 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
               controller: questionCountController,
               keyboardType: TextInputType.number,
               decoration:
-                  const InputDecoration(hintText: "প্রশ্ন সংখ্যা সিলেক্ট করুন"),
+              const InputDecoration(hintText: "প্রশ্ন সংখ্যা সিলেক্ট করুন"),
             ),
             const Gap(10),
             SwitchListTile(
@@ -276,14 +349,18 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
               onChanged: (value) => setState(() => isNegativeMarking = value),
             ),
             const Gap(10),
-            Text("সময় (মিনিটে)", style: Theme.of(context).textTheme.bodyMedium),
-            const Gap(10),
-            TextField(
-              controller: timeController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(hintText: "30"),
+            Text("সময়", style: Theme.of(context).textTheme.bodyMedium),
+            const Gap(16),
+            Row(
+              children: [
+                _buildTimeInputField(hourController, "ঘন্টা"),
+                const Gap(16),
+                _buildTimeInputField(minuteController, "মিনিট"),
+                const Gap(16),
+                _buildTimeInputField(secondController, "সেকেন্ড"),
+              ],
             ),
-            const Gap(10),
+            const Gap(20),
             LongButton(
               onPressed: selectedQuestionType == "MCQ"
                   ? _startMCQQuizerTest

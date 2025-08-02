@@ -59,6 +59,7 @@ class _WrittenQuizResultAnswerWidgetState extends State<WrittenQuizResultAnswerW
               Text(
                 "${widget.questionNumber}. ${widget.answerData.questionId!.title} (1 Point)",
                 style: const TextStyle(
+                  color: Colors.black,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),

@@ -7,7 +7,7 @@ class LibRes {
   LibRes._();
 
   static const String PLUGIN_NAME = 'prostuti';
-  static const String PLUGIN_VERSION = '1.0.0+1';
+  static const String PLUGIN_VERSION = '1.0.4+1';
   static const String APP_BN = 'lib/l10n/app_bn.arb';
   static const String APP_EN = 'lib/l10n/app_en.arb';
 }

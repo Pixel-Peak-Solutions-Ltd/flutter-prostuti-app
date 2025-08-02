@@ -120,7 +120,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                       const Gap(8),
                       Text(
                         "প্রতিটি প্রশ্নে 1 পয়েন্ট থাকে এবং প্রতিটি ভুল উত্তরের জন্য \n0.5 পয়েন্ট কাটা হবে।",
-                        style: theme.textTheme.bodyMedium,
+                        style: theme.textTheme.bodyMedium!.copyWith(color: Colors.black),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -142,6 +142,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                         questionList: test.data!.questionList![index],
                         selectedAnswers: selectedAnswers,
                         answerList: answerList,
+                        isTestify: false,
                       );
                     },
                   ),

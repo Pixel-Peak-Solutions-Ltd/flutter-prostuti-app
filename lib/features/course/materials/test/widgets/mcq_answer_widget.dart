@@ -61,15 +61,16 @@ class _MCQResultAnswerWidgetState extends State<MCQResultAnswerWidget> {
               Text(
                 "${widget.questionNumber}. ${widget.answerData.questionId!.title} (1 Point)",
                 style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
               ),
               const SizedBox(height: 8),
               // Options
               Column(
                 children: List.generate(4, (index) {
-                  final optionText = widget.answerData.questionId!.options![index];
+                  final optionText =
+                      widget.answerData.questionId!.options![index];
                   bool isSelected = optionText == widget.selectedOption;
                   bool isCorrect = optionText == widget.correctOption;
 
@@ -136,7 +137,8 @@ class _MCQResultAnswerWidgetState extends State<MCQResultAnswerWidget> {
               ),
               const SizedBox(height: 8),
               // Explanation Button
-              ExplanationWidget(explanation: widget.answerData.questionId!.description),
+              ExplanationWidget(
+                  explanation: widget.answerData.questionId!.description),
             ],
           ),
         ),

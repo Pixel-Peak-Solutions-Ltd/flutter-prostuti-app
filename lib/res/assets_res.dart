@@ -7,8 +7,5 @@ class AssetsRes {
   AssetsRes._();
 
   static const String PLUGIN_NAME = 'prostuti';
-  static const String PLUGIN_VERSION = '1.0.0+1';
-  static const String MOCK_ICON = 'assets/icons/mock_icon.png';
-  static const String QUIZER_ICON = 'assets/icons/quizer_icon.png';
-  static const String SEGMENT_ICON = 'assets/icons/segment_icon.png';
+  static const String PLUGIN_VERSION = '1.0.4+1';
 }

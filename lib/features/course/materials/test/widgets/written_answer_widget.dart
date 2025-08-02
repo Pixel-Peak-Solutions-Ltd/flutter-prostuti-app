@@ -62,6 +62,7 @@ class _WrittenResultAnswerWidgetState extends State<WrittenResultAnswerWidget> {
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
               ),
               const SizedBox(height: 8),
@@ -70,8 +71,8 @@ class _WrittenResultAnswerWidgetState extends State<WrittenResultAnswerWidget> {
                 enabled: false,
                 maxLines: 8,
                 minLines: 3,
-                style: const TextStyle(
-                  color: AppColors.textPrimaryLight,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),

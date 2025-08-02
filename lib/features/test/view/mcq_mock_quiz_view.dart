@@ -10,9 +10,11 @@ import 'package:prostuti/features/test/view/written_mock_quiz_history_screen.dar
 import '../../../core/services/debouncer.dart';
 import '../../../core/services/nav.dart';
 import '../../../core/services/timer.dart';
+import '../../course/materials/test/viewmodel/mcq_test_details_viewmodel.dart';
 import '../../course/materials/test/widgets/build_mcq_question_item.dart';
 import '../../course/materials/test/widgets/countdown_timer.dart';
 import '../model/mock_quiz_model.dart';
+import '../widgets/omr_sheet_widget.dart';
 import 'mcq_quiz_result_screen.dart';
 
 class MCQMockQuizScreen extends ConsumerStatefulWidget {
@@ -94,9 +96,58 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen>
     );
   }
 
+  void _showOMRSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      enableDrag: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25),
+          topRight: Radius.circular(25),
+        ),
+      ),
+      builder: (context) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.7,
+          minChildSize: 0.3,
+          maxChildSize: 0.9,
+          builder: (_, scrollController) {
+            return OMRSheetWidget(
+              totalQuestions: widget.mockQuiz.data!.questions!.length,
+              selectedAnswers: selectedAnswers,
+              onAnswerSelected: (questionNumber, optionIndex) {
+                setState(() {
+                  selectedAnswers[questionNumber] = optionIndex;
+                  final answerIndex = answerList.indexWhere(
+                    (answer) =>
+                        answer['question_id'] ==
+                        widget
+                            .mockQuiz.data!.questions![questionNumber - 1].sId,
+                  );
+
+                  if (answerIndex != -1) {
+                    answerList[answerIndex]['selectedOption'] = widget
+                        .mockQuiz
+                        .data!
+                        .questions![questionNumber - 1]
+                        .options![optionIndex];
+                  }
+                });
+              },
+              scrollController: scrollController,
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    double width = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
       appBar: commonAppbar("MCQ Mock Test"),
@@ -157,14 +208,59 @@ class _MCQMockQuizScreenState extends ConsumerState<MCQMockQuizScreen>
                     questionList: widget.mockQuiz.data!.questions![index],
                     selectedAnswers: selectedAnswers,
                     answerList: answerList,
+                    isTestify: true,
                   );
                 },
               ),
             ),
             const Gap(12),
-            LongButton(
-              onPressed: _submitAnswers,
-              text: "Submit Test",
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.shadePrimaryLight,
+                      minimumSize: Size(width * .45, 54),
+                      maximumSize: Size(width * .45, 54),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        side: const BorderSide(
+                          color: AppColors.backgroundActionPrimaryLight,
+                          width: 1.5,
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 13, horizontal: 23)),
+                  onPressed: _showOMRSheet,
+                  child: Text(
+                    "OMR দেখুন",
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.backgroundActionPrimaryLight,
+                        ),
+                  ),
+                ),
+                const Gap(12),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.backgroundActionPrimaryLight,
+                      minimumSize: Size(width * .45, 54),
+                      maximumSize: Size(width * .45, 54),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6)),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 13, horizontal: 23)),
+                  onPressed: _submitAnswers,
+                  child: Text(
+                    "সাবমিট করুন",
+                    style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                  ),
+                ),
+              ],
             ),
             const Gap(12),
           ],
