@@ -30,14 +30,23 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
   bool isNegativeMarking = false;
   String selectedQuestionType = "MCQ";
   String selectedStandard = "ইঞ্জিনিয়ারিং";
-  List<String> selectedSubjects = ["সাবজেক্ট সিলেক্ট করুন"];
+  List<SelectedSubjectAndChapter> selectedSubjects = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Add one subject selector by default
+    selectedSubjects.add(SelectedSubjectAndChapter(subject: "সাবজেক্ট সিলেক্ট করুন"));
+  }
 
   void _startWrittenMockTest() async {
     final int questionCount = int.tryParse(questionCountController.text) ?? 0;
     final int time = int.tryParse(timeController.text) ?? 0;
 
+    // Filter out placeholder subjects. The list is now of the correct type.
     final validSubjects = selectedSubjects
-        .where((subject) => subject != "সাবজেক্ট সিলেক্ট করুন")
+        .where((s) => s.subject != "সাবজেক্ট সিলেক্ট করুন" && s.subject.isNotEmpty)
+        .map((s) => s.toJson()) // Convert to JSON
         .toList();
 
     if (validSubjects.isEmpty) {
@@ -55,15 +64,15 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
 
     try {
       final response =
-          await ref.read(writtenQuizViewmodelProvider.notifier).createMockQuiz(
-                questionType: selectedQuestionType,
-                subjects: validSubjects,
-                questionCount: questionCount,
-                isNegativeMarking: isNegativeMarking,
-                time: time,
-              );
+      await ref.read(writtenQuizViewmodelProvider.notifier).createMockQuiz(
+        questionType: selectedQuestionType,
+        subjects: validSubjects,
+        questionCount: questionCount,
+        isNegativeMarking: isNegativeMarking,
+        time: time,
+      );
 
-      if (response != null && response.data != null) {
+      if (response != null && response.data != null && mounted) {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -80,8 +89,10 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
     final int questionCount = int.tryParse(questionCountController.text) ?? 0;
     final int time = int.tryParse(timeController.text) ?? 0;
 
+    // Filter out placeholder subjects. The list is now of the correct type.
     final validSubjects = selectedSubjects
-        .where((subject) => subject != "সাবজেক্ট সিলেক্ট করুন")
+        .where((s) => s.subject != "সাবজেক্ট সিলেক্ট করুন" && s.subject.isNotEmpty)
+        .map((s) => s.toJson()) // Convert to JSON
         .toList();
 
     if (validSubjects.isEmpty) {
@@ -99,15 +110,15 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
 
     try {
       final response =
-          await ref.read(mockTestViewmodelProvider.notifier).createMockQuiz(
-                questionType: selectedQuestionType,
-                subjects: validSubjects,
-                questionCount: questionCount,
-                isNegativeMarking: isNegativeMarking,
-                time: time,
-              );
+      await ref.read(mockTestViewmodelProvider.notifier).createMockQuiz(
+        questionType: selectedQuestionType,
+        subjects: validSubjects,
+        questionCount: questionCount,
+        isNegativeMarking: isNegativeMarking,
+        time: time,
+      );
 
-      if (response != null && response.data != null) {
+      if (response != null && response.data != null && mounted) {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -121,6 +132,7 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
   }
 
   void _showValidationError(String message) {
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -143,7 +155,7 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
         child: state.when(
           data: (data) => _buildContent(context),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (err, _) => Center(child: Text("Error: \${err.toString()}")),
+          error: (err, _) => Center(child: Text("Error: ${err.toString()}")),
         ),
       ),
     );
@@ -177,7 +189,7 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
               selectedStandard: selectedStandard,
               onStandardChanged: (value) => setState(() {
                 selectedStandard = value;
-                selectedSubjects = ["সাবজেক্ট সিলেক্ট করুন"];
+                selectedSubjects = [SelectedSubjectAndChapter(subject: "সাবজেক্ট সিলেক্ট করুন")];
               }),
             ),
             const Gap(10),
@@ -186,25 +198,99 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
             ...selectedSubjects.asMap().entries.map((entry) {
               final index = entry.key;
               final subject = entry.value;
-              final selectedExcludingCurrent =
-                  List<String>.from(selectedSubjects)..removeAt(index);
+              final selectedExcludingCurrent = selectedSubjects
+                  .asMap()
+                  .entries
+                  .where((e) => e.key != index)
+                  .map((e) => e.value.subject)
+                  .toList();
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: Row(
                   children: [
                     Expanded(
-                      child: SubjectDropdown(
-                        selectedStandard: selectedStandard,
-                        selectedSubject: subject,
-                        onSubjectChanged: (value) {
-                          if (!selectedExcludingCurrent.contains(value)) {
-                            setState(() => selectedSubjects[index] = value);
-                          }
+                      child: Consumer(
+                        builder: (context, ref, _) {
+                          final subjectListAsync = ref.watch(subjectViewmodelProvider(selectedStandard));
+
+                          return subjectListAsync.when(
+                            data: (subjects) {
+                              final availableSubjects = subjects.where((s) => !selectedExcludingCurrent.contains(s)).toList();
+                              final dropdownSubjects = ["সাবজেক্ট সিলেক্ট করুন", ...availableSubjects];
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Subject Dropdown
+                                  DropdownButtonFormField<String>(
+                                    value: selectedSubjects[index].subject.isEmpty || !dropdownSubjects.contains(selectedSubjects[index].subject)
+                                        ? "সাবজেক্ট সিলেক্ট করুন"
+                                        : selectedSubjects[index].subject,
+                                    items: dropdownSubjects
+                                        .map((subject) => DropdownMenuItem<String>(
+                                      value: subject,
+                                      child: Text(subject),
+                                    ))
+                                        .toList(),
+                                    onChanged: (value) {
+                                      if (value != null && value != "সাবজেক্ট সিলেক্ট করুন") {
+                                        setState(() {
+                                          selectedSubjects[index].subject = value;
+                                          selectedSubjects[index].chapter = "All"; // reset chapter on subject change
+                                        });
+                                      }
+                                    },
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText: "বিষয় নির্বাচন করুন",
+                                    ),
+                                  ),
+
+                                  const SizedBox(height: 10),
+
+                                  // Chapter Dropdown (shown only if subject selected)
+                                  if (selectedSubjects[index].subject != "সাবজেক্ট সিলেক্ট করুন" &&
+                                      selectedSubjects[index].subject.isNotEmpty)
+                                    ref.watch(chapterViewmodelProvider(selectedSubjects[index].subject)).when(
+                                      data: (chapters) {
+                                        final chapterOptions = chapters;
+
+                                        return DropdownButtonFormField<String>(
+                                          value: chapterOptions.contains(selectedSubjects[index].chapter)
+                                              ? selectedSubjects[index].chapter
+                                              : 'All',
+                                          items: chapterOptions
+                                              .map((chapter) => DropdownMenuItem<String>(
+                                            value: chapter,
+                                            child: Text(chapter),
+                                          ))
+                                              .toList(),
+                                          onChanged: (value) {
+                                            if (value != null) {
+                                              setState(() => selectedSubjects[index].chapter = value);
+                                            }
+                                          },
+                                          decoration: const InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: "অধ্যায় নির্বাচন করুন",
+                                          ),
+                                        );
+
+                                      },
+                                      loading: () => const Center(child: CircularProgressIndicator()),
+                                      error: (err, _) => Text("Error loading chapters"),
+                                    ),
+                                ],
+                              );
+                            },
+                            loading: () => const Center(child: CircularProgressIndicator()),
+                            error: (err, _) => Text("Error loading subjects"),
+                          );
                         },
-                        excludedSubjects: selectedExcludingCurrent,
                       ),
                     ),
+
                     if (selectedSubjects.length > 1)
                       IconButton(
                         onPressed: () =>
@@ -220,8 +306,9 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
             }),
             const Gap(10),
             TextButton.icon(
-              onPressed: () =>
-                  setState(() => selectedSubjects.add("সাবজেক্ট সিলেক্ট করুন")),
+              onPressed: () => setState(() {
+                selectedSubjects.add(SelectedSubjectAndChapter(subject: "সাবজেক্ট সিলেক্ট করুন"));
+              }),
               label: Text("আরেকটি বিষয় যোগ করুন",
                   style: Theme.of(context).textTheme.bodyMedium),
               icon: Icon(CupertinoIcons.plus_app,
@@ -235,7 +322,7 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
               controller: questionCountController,
               keyboardType: TextInputType.number,
               decoration:
-                  const InputDecoration(hintText: "প্রশ্ন সংখ্যা সিলেক্ট করুন"),
+              const InputDecoration(hintText: "প্রশ্ন সংখ্যা সিলেক্ট করুন"),
             ),
             const Gap(10),
             SwitchListTile(

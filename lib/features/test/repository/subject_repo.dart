@@ -36,4 +36,18 @@ class SubjectRepo {
       throw Exception(response.data['message'] ?? 'Failed to load subjects');
     }
   }
+
+  Future<List<String>> fetchChapters(String subjectName) async {
+    const String endpoint = '/category/chapter';
+    final response = await _dioService.getRequest(
+      endpoint,
+      queryParameters: {"subject": subjectName},
+    );
+
+    if (response.statusCode == 200 && response.data['success'] == true) {
+      return List<String>.from(response.data['data'] ?? []);
+    } else {
+      throw Exception(response.data['message'] ?? 'Failed to load chapters');
+    }
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../model/mock_quiz_model.dart';
 import '../repository/mock_test_repo.dart';
+import '../widgets/subject_dropdown.dart';
 
 part 'mock_test_viewmodel.g.dart';
 
@@ -14,7 +15,7 @@ class MockTestViewmodel extends _$MockTestViewmodel {
 
   Future<MockQuizResponse?> createMockQuiz({
     required String questionType,
-    required List<String> subjects,
+    required List<Map<String, dynamic>> subjects,
     required int questionCount,
     required bool isNegativeMarking,
     required int time,

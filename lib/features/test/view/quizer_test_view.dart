@@ -154,18 +154,18 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: commonAppbar("কুইজার"),
-      body: Skeletonizer(
+      body: Container()/*Skeletonizer(
         enabled: isSubjectLoading,
         child: state.when(
           data: (data) => _buildContent(context),
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (err, _) => Center(child: Text("Error: \${err.toString()}")),
         ),
-      ),
+      ),*/
     );
   }
 
-  Widget _buildContent(BuildContext context) {
+  /*Widget _buildContent(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -294,7 +294,7 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
         ),
       ),
     );
-  }
+  }*/
 
   Widget _buildFilterChip(String label) {
     final selected = questionFilters.contains(label);
