@@ -1,4 +1,4 @@
-package PixelPeakSolutionsLtd.prostuti
+package com.pixelpeak.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -5,8 +5,8 @@ void main() {
   FlavorConfig(
     flavor: Flavor.production,
     name: "Production",
-    baseUrl: "https://prostuti-app-backend-production.up.railway.app/api/v1",
-    socketBaseUrl: 'https://prostuti-app-backend-production.up.railway.app',
+    baseUrl: "https://resilient-heart-staging.up.railway.app/api/v1",
+    socketBaseUrl: 'https://resilient-heart-staging.up.railway.app',
   );
 
   runMain();
