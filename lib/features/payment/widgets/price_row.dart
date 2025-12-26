@@ -31,7 +31,7 @@ class PriceRow extends ConsumerWidget {
         children: [
           Text(name, style: Theme.of(context).textTheme.bodyMedium),
           Text(
-            "৳ $price",
+            "$price",
             style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
@@ -59,7 +59,7 @@ class PriceRow extends ConsumerWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                "৳ $price",
+                "$price",
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
@@ -125,7 +125,7 @@ class PriceRow extends ConsumerWidget {
         ),
         const SizedBox(width: 8),
         Text(
-          "৳ $price",
+          "$price",
           style: Theme.of(context).textTheme.bodyMedium,
         ),
       ],

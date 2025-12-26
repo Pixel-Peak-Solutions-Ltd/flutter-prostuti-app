@@ -72,7 +72,7 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                 const Divider(),
                 const Gap(24),
                 CourseNamePrice(
-                    name: name, imgPath: imgPath, price: "৳ $price"),
+                    name: name, imgPath: imgPath, price: "$price"),
                 const Gap(24),
 
                 // Voucher selector with bottom sheet

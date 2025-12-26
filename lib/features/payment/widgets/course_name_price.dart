@@ -49,7 +49,7 @@ class CourseNamePrice extends StatelessWidget {
         // Make the price non-flexible
         Text(
           price,
-          style: Theme.of(context).textTheme.bodyLarge,
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w600),
         ),
       ],
     );
