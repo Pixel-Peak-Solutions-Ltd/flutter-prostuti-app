@@ -38,7 +38,7 @@ class HomeRoutineWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                context.l10n?.todaysRoutine ?? 'আজকের ক্লাসকলাপ',
+                context.l10n?.todaysRoutine ?? 'আজকের কার্যকলাপ',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
