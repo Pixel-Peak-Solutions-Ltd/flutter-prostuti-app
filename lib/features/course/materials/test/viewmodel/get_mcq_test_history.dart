@@ -11,12 +11,11 @@ part 'get_mcq_test_history.g.dart';
 @riverpod
 class GetMCQTestHistory extends _$GetMCQTestHistory {
   @override
-  FutureOr<TestHistory> build() async {
-    return await getMCQTestHistoryById();
+  FutureOr<TestHistory> build(String id) async {
+    return await getMCQTestHistoryById(id);
   }
 
-  Future<TestHistory> getMCQTestHistoryById() async {
-    final String id = ref.watch(getTestByIdProvider);
+  Future<TestHistory> getMCQTestHistoryById(String id) async {
     final response =
     await ref.read(testRepoProvider).getMCQTestHistoryById(id);
 

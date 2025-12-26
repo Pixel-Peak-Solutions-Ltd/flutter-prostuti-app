@@ -8,6 +8,7 @@ import 'package:prostuti/common/widgets/long_button.dart';
 import '../../../../../core/configs/app_colors.dart';
 import '../../../../../core/services/nav.dart';
 import 'mcq_test_history_view.dart';
+import '../viewmodel/get_test_by_id.dart';
 
 class TestResultScreen extends ConsumerWidget with CommonWidgets {
   final Map<String, dynamic> resultData;
@@ -159,7 +160,14 @@ class TestResultScreen extends ConsumerWidget with CommonWidgets {
                 children: [
                   LongButton(
                     onPressed: () {
-                      Nav().pushReplacement(const MCQMockTestHistoryScreen());
+                      if (resultData['testId'] != null) {
+                        Nav().pushReplacement(MCQMockTestHistoryScreen(
+                            testId: resultData['testId']));
+                      } else {
+                        // Fallback or error handling
+                        print("Error: testId is null in resultData");
+                        Nav().pop();
+                      }
                     },
                     text: "সম্পূর্ণ ফলাফল দেখুন",
                   ),

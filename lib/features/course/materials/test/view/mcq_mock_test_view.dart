@@ -242,6 +242,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestScreen>
                 "skippedAns": testResult.data!.totalScore! -
                     (testResult.data!.rightScore!.toInt() +
                         testResult.data!.wrongScore!.toInt()),
+                "testId": test.data!.sId,
               },
             ),
           );

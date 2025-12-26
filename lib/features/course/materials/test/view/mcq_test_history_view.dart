@@ -11,7 +11,8 @@ import '../widgets/mcq_answer_widget.dart';
 import '../widgets/mcq_mock_test_skeleton.dart';
 
 class MCQMockTestHistoryScreen extends ConsumerStatefulWidget {
-  const MCQMockTestHistoryScreen({super.key});
+  final String testId;
+  const MCQMockTestHistoryScreen({super.key, required this.testId});
 
   @override
   MockTestScreenState createState() => MockTestScreenState();
@@ -27,7 +28,7 @@ class MockTestScreenState extends ConsumerState<MCQMockTestHistoryScreen>
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    final mCQTestHistoryAsync = ref.watch(getMCQTestHistoryProvider);
+    final mCQTestHistoryAsync = ref.watch(getMCQTestHistoryProvider(widget.testId));
 
     return Scaffold(
       appBar: commonAppbar("মক টেস্ট"),

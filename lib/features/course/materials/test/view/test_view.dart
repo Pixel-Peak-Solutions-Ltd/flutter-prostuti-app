@@ -112,7 +112,8 @@ class TestListViewState extends ConsumerState<TestListView>
                                     isToday(test[index].publishDate!);
 
                                 if (isCompleted) {
-                                  Nav().push(const MCQMockTestHistoryScreen());
+                                  Nav().push(MCQMockTestHistoryScreen(
+                                      testId: test[index].sId!));
                                 } else {
                                   // if (canAccessTest) {
                                     Nav().push(const MCQTestDetailsView());
