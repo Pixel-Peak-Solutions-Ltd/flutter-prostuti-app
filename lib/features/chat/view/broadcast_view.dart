@@ -422,6 +422,7 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
                 child: TextFormField(
                   controller: _messageController,
                   maxLines: 5,
+                  autofocus: false,
                   decoration: InputDecoration(
                     hintText: context.l10n?.questionHint ??
                         'জীবনে সবচেয়ে সম্পূর্ণ মানুষরা। কিন্তু সবচেয়ে অসম্পূর্ণ হয় যে জনপ্রিয় করে। যার তাকে তার জীবনযাত্রার অনেক-আনা প্রশ্নের নিয়ে আসে তৃতিয়র মার্খানা থেকে?',

@@ -340,6 +340,7 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                     padding: const EdgeInsets.all(8),
@@ -354,12 +355,15 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Text(
-                    "This conversation has been resolved",
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: const Color(0xFF34C759),
-                          fontWeight: FontWeight.w600,
-                        ),
+                  Flexible(
+                    child: Text(
+                      "This conversation has been resolved",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: const Color(0xFF34C759),
+                            fontWeight: FontWeight.w600,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ],
               ),

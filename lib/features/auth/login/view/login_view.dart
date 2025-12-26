@@ -79,11 +79,13 @@ class LoginViewState extends ConsumerState<LoginView> {
               Text(
                 context.l10n!.loginToYourAccount,
                 style: Theme.of(context).textTheme.titleLarge,
+                textAlign: TextAlign.center,
               ),
               const Gap(8),
               Text(
                 context.l10n!.welcomeBack,
                 style: Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.center,
               ),
               const Gap(32),
               Form(

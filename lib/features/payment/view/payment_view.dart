@@ -264,12 +264,14 @@ class PaymentView extends ConsumerWidget with CommonWidgets {
                                         "Payment error: ${paymentState.error}");
                                     Fluttertoast.showToast(
                                       msg: paymentState.error.toString(),
+                                      toastLength: Toast.LENGTH_LONG,
                                     );
                                   } else {
                                     // Could be already enrolled
                                     Fluttertoast.showToast(
                                       msg:
                                           "You are already enrolled in this course",
+                                      toastLength: Toast.LENGTH_LONG,
                                     );
                                   }
                                 }

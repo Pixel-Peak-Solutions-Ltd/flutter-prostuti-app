@@ -147,7 +147,7 @@ class SubscriptionView extends ConsumerWidget with CommonWidgets {
                                             "Subscription URL received: $paymentUrl");
                                         // Valid URL received, navigate to checkout
                                         Nav().pushReplacement(
-                                            EasyCheckout(url: paymentUrl));
+                                            EasyCheckout(url: paymentUrl, isSubscription: true));
                                       } else {
                                         // No URL received, check for error or already subscribed
                                         final paymentState =
@@ -157,12 +157,14 @@ class SubscriptionView extends ConsumerWidget with CommonWidgets {
                                               "Subscription error: ${paymentState.error}");
                                           Fluttertoast.showToast(
                                             msg: paymentState.error.toString(),
+                                            toastLength: Toast.LENGTH_LONG,
                                           );
                                         } else {
-                                          // Could be already subscribed
+                                          // Show message about subscription status
                                           Fluttertoast.showToast(
                                             msg:
-                                                "You already have an active subscription",
+                                                "আপনার সাবস্ক্রিপশন প্রসেস করা হচ্ছে",
+                                            toastLength: Toast.LENGTH_LONG,
                                           );
                                         }
                                       }

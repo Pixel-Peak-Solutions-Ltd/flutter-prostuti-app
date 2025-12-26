@@ -74,10 +74,15 @@ class SubjectWithChapterSelector extends ConsumerWidget {
                             pair.subject == "সাবজেক্ট সিলেক্ট করুন"
                             ? "সাবজেক্ট সিলেক্ট করুন"
                             : pair.subject,
+                        isExpanded: true,
                         items: dropdownSubjects
                             .map((subject) => DropdownMenuItem<String>(
                           value: subject,
-                          child: Text(subject),
+                          child: Text(
+                            subject,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
                         ))
                             .toList(),
                         onChanged: (value) {
@@ -110,10 +115,15 @@ class SubjectWithChapterSelector extends ConsumerWidget {
                   final chapterOptions = ["All", ...chapters];
                   return DropdownButtonFormField<String>(
                     value: pair.chapter,
+                    isExpanded: true,
                     items: chapterOptions
                         .map((chapter) => DropdownMenuItem<String>(
                       value: chapter,
-                      child: Text(chapter),
+                      child: Text(
+                        chapter,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                     ))
                         .toList(),
                     onChanged: (value) {
@@ -121,7 +131,10 @@ class SubjectWithChapterSelector extends ConsumerWidget {
                         onChapterChanged(index, value);
                       }
                     },
-                    );
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                  );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (err, _) => Text("Error loading chapters"),

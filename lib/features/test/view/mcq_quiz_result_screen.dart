@@ -74,6 +74,16 @@ class MockQuizScreenState extends ConsumerState<MCQMockQuizHistoryScreen>
                           "আপনি ${test.data!.score ?? 0} পয়েন্ট পেয়েছেন",
                           style: theme.textTheme.titleSmall!.copyWith(color: Colors.black),
                         ),
+                        if (test.data!.isNegativeMarking == true) ...[
+                          const Gap(4),
+                          Text(
+                            "(নেগেটিভ মার্কিং প্রযোজ্য)",
+                            style: theme.textTheme.bodySmall!.copyWith(
+                              color: Colors.red,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
                         const Gap(24),
                         /*// Time Taken
                         Row(
@@ -190,6 +200,42 @@ class MockQuizScreenState extends ConsumerState<MCQMockQuizHistoryScreen>
             error: (error, stackTrace) {
               print(error);
               print(stackTrace);
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 64,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'ফলাফল লোড করতে সমস্যা হয়েছে',
+                        style: theme.textTheme.titleMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'দয়া করে আবার চেষ্টা করুন',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: Colors.grey,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        onPressed: () {
+                          ref.invalidate(mockQuizResultViewmodelProvider(widget.quizId));
+                        },
+                        child: const Text('আবার চেষ্টা করুন'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
             },
             loading: () => const MockQuestionSkeleton(),
           )),

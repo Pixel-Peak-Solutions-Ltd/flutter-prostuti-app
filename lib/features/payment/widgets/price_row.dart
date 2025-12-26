@@ -50,7 +50,14 @@ class PriceRow extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(name, style: Theme.of(context).textTheme.bodyMedium),
+              Expanded(
+                child: Text(
+                  name,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: 8),
               Text(
                 "৳ $price",
                 style: Theme.of(context).textTheme.bodyMedium,
@@ -63,12 +70,16 @@ class PriceRow extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "${context.l10n?.discount ?? 'Discount'} (${voucherState.value!.title})",
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Colors.green,
-                    ),
+              Expanded(
+                child: Text(
+                  "${context.l10n?.discount ?? 'Discount'} (${voucherState.value!.title})",
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: Colors.green,
+                      ),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
+              const SizedBox(width: 8),
               Text(
                 "- ৳ ${discountAmount.toStringAsFixed(2)}",
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -105,7 +116,14 @@ class PriceRow extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(name, style: Theme.of(context).textTheme.bodyMedium),
+        Expanded(
+          child: Text(
+            name,
+            style: Theme.of(context).textTheme.bodyMedium,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        const SizedBox(width: 8),
         Text(
           "৳ $price",
           style: Theme.of(context).textTheme.bodyMedium,

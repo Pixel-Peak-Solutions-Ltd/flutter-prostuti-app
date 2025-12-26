@@ -28,7 +28,6 @@ class Data {
   String? studentId;
   String? name;
   String? categoryType;
-
   String? phone;
   String? email;
   List<String>? enrolledCourses;
@@ -61,12 +60,12 @@ class Data {
     categoryType = json['categoryType'];
     phone = json['phone'];
     email = json['email'];
-    enrolledCourses = json['enrolledCourses'].cast<String>();
+    enrolledCourses = json['enrolledCourses']?.cast<String>();
     subscriptionStartDate = json['subscriptionStartDate'];
     subscriptionEndDate = json['subscriptionEndDate'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    image = json['image'] != null ? new Image.fromJson(json['image']) : null;
+    image = json['image'] != null ? Image.fromJson(json['image']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -83,8 +82,8 @@ class Data {
     data['subscriptionEndDate'] = subscriptionEndDate;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
-    if (this.image != null) {
-      data['image'] = this.image!.toJson();
+    if (image != null) {
+      data['image'] = image!.toJson();
     }
     return data;
   }

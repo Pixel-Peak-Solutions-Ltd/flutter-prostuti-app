@@ -571,10 +571,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get upcomingActivity => 'আসন্ন কার্যক্রম';
 
   @override
-  String get noActivitiesForDay => 'এই দিনের জন্য কোন কার্যক্রম নেই';
+  String get noActivitiesForDay => 'এই দিনের জন্য কোন এক্টিভিটিস নেই';
 
   @override
-  String get noUpcomingActivities => 'কোন আসন্ন কার্যক্রম নেই';
+  String get noUpcomingActivities => 'কোন আসন্ন এক্টিভিটিস নেই';
 
   @override
   String get classs => 'ক্লাস';
@@ -691,7 +691,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get noMessagesYetDesc => 'শিক্ষক আপনার প্রশ্নের উত্তর দেওয়ার পরে আপনার কথোপকথন এখানে দেখা যাবে।';
 
   @override
-  String get todaysRoutine => 'আজকের ক্লাসকলাপ';
+  String get todaysRoutine => 'আজকের এক্টিভিটিস';
 
   @override
   String get seeMore => 'আরো দেখুন';
@@ -709,7 +709,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get tryAgain => 'আবার চেষ্টা করুন';
 
   @override
-  String get noActivitiesToday => 'আজ কোন কার্যক্রম নেই';
+  String get noActivitiesToday => 'আজ কোন এক্টিভিটিস নেই';
 
   @override
   String get enjoyyourFreeTime => 'আপনার ফ্রি সময় উপভোগ করুন!';

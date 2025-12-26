@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
+import 'package:prostuti/features/chat/viewmodel/user_category.dart';
 import 'package:prostuti/features/test/view/written_mock_quiz_screen.dart';
 import 'package:prostuti/features/test/viewmodel/quizer_test_viewmodel.dart';
 import 'package:prostuti/features/test/viewmodel/quizer_written_test_viewmodel.dart';
@@ -41,6 +42,20 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
     // Add one subject selector by default
     selectedSubjects
         .add(SelectedSubjectAndChapter(subject: "সাবজেক্ট সিলেক্ট করুন"));
+  }
+
+  /// Maps user's profile categoryType to the appropriate test standard
+  String _mapCategoryToStandard(String categoryType) {
+    switch (categoryType.toLowerCase()) {
+      case 'academic':
+        return 'একাডেমিক';
+      case 'admission':
+        return 'ইঞ্জিনিয়ারিং';
+      case 'job':
+        return 'একাডেমিক';
+      default:
+        return 'ইঞ্জিনিয়ারিং';
+    }
   }
 
   // Helper method to convert hours, minutes, seconds to total minutes
@@ -242,6 +257,22 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
     final state = ref.watch(quizerTestViewmodelProvider);
     final subjectState = ref.watch(subjectViewmodelProvider(selectedStandard));
     final isSubjectLoading = subjectState.isLoading;
+
+    // Watch user category and initialize standard based on profile
+    final userCategoryAsync = ref.watch(userCategoryProvider);
+    userCategoryAsync.whenData((categoryType) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          final newStandard = _mapCategoryToStandard(categoryType);
+          if (selectedStandard != newStandard && selectedSubjects.length == 1 &&
+              selectedSubjects.first.subject == "সাবজেক্ট সিলেক্ট করুন") {
+            setState(() {
+              selectedStandard = newStandard;
+            });
+          }
+        }
+      });
+    });
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

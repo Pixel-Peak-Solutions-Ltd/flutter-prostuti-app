@@ -7,7 +7,9 @@ import '../model/notification_model.dart';
 import '../viewmodel/notification_viewmodel.dart';
 
 class NotificationScreen extends ConsumerStatefulWidget {
-  const NotificationScreen({super.key});
+  final bool showBackButton;
+
+  const NotificationScreen({super.key, this.showBackButton = false});
 
   @override
   ConsumerState<NotificationScreen> createState() => _NotificationScreenState();
@@ -23,7 +25,13 @@ class _NotificationScreenState extends ConsumerState<NotificationScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: commonAppbar(context.l10n!.notification),
+      appBar: widget.showBackButton
+          ? commonAppbar(context.l10n!.notification)
+          : AppBar(
+              title: Text(context.l10n!.notification),
+              centerTitle: true,
+              automaticallyImplyLeading: false,
+            ),
       body: RefreshIndicator(
         onRefresh: () async {
           await ref

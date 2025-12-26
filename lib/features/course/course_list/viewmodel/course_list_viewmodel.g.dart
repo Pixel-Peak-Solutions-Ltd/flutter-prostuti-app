@@ -6,7 +6,7 @@ part of 'course_list_viewmodel.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$publishedCourseHash() => r'05610ff4f737e947cd5bd50ebc9a1fb8da48b141';
+String _$publishedCourseHash() => r'aebce76490ea49ab28f3ef2ff22ab5639ad1ef71';
 
 /// See also [PublishedCourse].
 @ProviderFor(PublishedCourse)

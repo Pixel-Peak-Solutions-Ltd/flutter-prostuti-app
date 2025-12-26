@@ -10,9 +10,21 @@ class Func {
   }
 
   static int timeConverterSecToMin(int sec) {
-    int minutes = sec % 60;
+    int minutes = sec ~/ 60;
     print("minute:$minutes");
     return minutes;
+  }
+
+  static String formatTimeTaken(int sec) {
+    int minutes = sec ~/ 60;
+    int seconds = sec % 60;
+    if (minutes > 0 && seconds > 0) {
+      return "$minutes মিনিট $seconds সেকেন্ড";
+    } else if (minutes > 0) {
+      return "$minutes মিনিট";
+    } else {
+      return "$seconds সেকেন্ড";
+    }
   }
 
   static bool canAccessContent(

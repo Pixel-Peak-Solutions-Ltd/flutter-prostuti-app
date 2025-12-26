@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/common/widgets/long_button.dart';
+import 'package:prostuti/features/chat/viewmodel/user_category.dart';
 import 'package:prostuti/features/test/view/written_mock_quiz_screen.dart';
 import 'package:prostuti/features/test/viewmodel/written_quiz_viewmodel.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -40,6 +41,22 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
     // Add one subject selector by default
     selectedSubjects
         .add(SelectedSubjectAndChapter(subject: "সাবজেক্ট সিলেক্ট করুন"));
+  }
+
+  /// Maps user's profile categoryType to the appropriate mock test standard
+  String _mapCategoryToStandard(String categoryType) {
+    switch (categoryType.toLowerCase()) {
+      case 'academic':
+        return 'একাডেমিক';
+      case 'admission':
+        // Default to Engineering for Admission category
+        return 'ইঞ্জিনিয়ারিং';
+      case 'job':
+        // Job category doesn't have a direct mapping, default to Academic
+        return 'একাডেমিক';
+      default:
+        return 'ইঞ্জিনিয়ারিং';
+    }
   }
 
   // Helper method to convert hours, minutes, seconds to total minutes
@@ -214,6 +231,23 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
     final subjectState = ref.watch(subjectViewmodelProvider(selectedStandard));
     final isSubjectLoading = subjectState.isLoading;
 
+    // Watch user category and initialize standard based on profile
+    final userCategoryAsync = ref.watch(userCategoryProvider);
+    userCategoryAsync.whenData((categoryType) {
+      // Use addPostFrameCallback to avoid calling setState during build
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          final newStandard = _mapCategoryToStandard(categoryType);
+          if (selectedStandard != newStandard && selectedSubjects.length == 1 &&
+              selectedSubjects.first.subject == "সাবজেক্ট সিলেক্ট করুন") {
+            setState(() {
+              selectedStandard = newStandard;
+            });
+          }
+        }
+      });
+    });
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: commonAppbar("মক-টেস্ট"),
@@ -304,11 +338,16 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
                                                 selectedSubjects[index].subject)
                                         ? "সাবজেক্ট সিলেক্ট করুন"
                                         : selectedSubjects[index].subject,
+                                    isExpanded: true,
                                     items: dropdownSubjects
                                         .map((subject) =>
                                             DropdownMenuItem<String>(
                                               value: subject,
-                                              child: Text(subject),
+                                              child: Text(
+                                                subject,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
                                             ))
                                         .toList(),
                                     onChanged: (value) {
@@ -359,6 +398,7 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
                                                   ? selectedSubjects[index]
                                                       .chapter
                                                   : chapterOptions.first,
+                                              isExpanded: true,
                                               items: chapterOptions
                                                   .map((chapter) {
                                                 final isSelectedElsewhere =
@@ -373,6 +413,8 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
                                                       !isSelectedElsewhere,
                                                   child: Text(
                                                     chapter,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
                                                     style: TextStyle(
                                                       color:
                                                           isSelectedElsewhere

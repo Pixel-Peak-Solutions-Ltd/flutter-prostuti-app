@@ -98,6 +98,7 @@ class _ChatInputFieldState extends ConsumerState<ChatInputField> {
             Expanded(
               child: TextField(
                 controller: _messageController,
+                autofocus: false,
                 decoration: InputDecoration(
                   hintText: context.l10n!.typeMessage,
                   contentPadding: const EdgeInsets.all(16),

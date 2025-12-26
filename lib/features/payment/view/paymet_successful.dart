@@ -8,7 +8,10 @@ import '../../course/course_list/view/course_list_view.dart';
 import '../../home_screen/view/home_screen_view.dart';
 
 class PaymetSuccessful extends StatelessWidget {
-  const PaymetSuccessful({Key? key}) : super(key: key);
+  final bool isSubscription;
+
+  const PaymetSuccessful({Key? key, this.isSubscription = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +82,9 @@ class PaymetSuccessful extends StatelessWidget {
                 const Gap(16),
                 Text(
                   textAlign: TextAlign.center,
-                  'আপনার পেমেন্ট সফল হয়েছে',
+                  isSubscription
+                      ? 'পেমেন্ট সফল ও সাবস্ক্রিপশন নিশ্চিত হয়েছে'
+                      : 'আপনার পেমেন্ট সফল হয়েছে',
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium!
@@ -88,7 +93,9 @@ class PaymetSuccessful extends StatelessWidget {
                 const Gap(16),
                 Text(
                   textAlign: TextAlign.center,
-                  'সাবস্ক্রাইব্ড ইউজার পছন্দের কোর্স গুলো এনরোল করতে পারবেন',
+                  isSubscription
+                      ? 'আপনার সাবস্ক্রিপশন সক্রিয় হয়েছে। এখন থেকে সব প্রিমিয়াম কোর্স এনরোল করতে পারবেন।'
+                      : 'সাবস্ক্রাইব্ড ইউজার পছন্দের কোর্স গুলো এনরোল করতে পারবেন',
                   style: Theme.of(context)
                       .textTheme
                       .bodyLarge!
