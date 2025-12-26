@@ -351,7 +351,7 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
                     child: const Icon(
                       Icons.check_rounded,
                       color: Colors.white,
-                      size: 20,
+                      size: 16,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -362,7 +362,6 @@ class _StreamBasedChatMessageViewState extends ConsumerState<ChatMessageView>
                             color: const Color(0xFF34C759),
                             fontWeight: FontWeight.w600,
                           ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
