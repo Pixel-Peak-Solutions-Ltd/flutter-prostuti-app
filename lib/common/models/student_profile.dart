@@ -28,6 +28,7 @@ class Data {
   String? studentId;
   String? name;
   String? categoryType;
+  CategoryInfo? category;
   String? phone;
   String? email;
   List<String>? enrolledCourses;
@@ -43,6 +44,7 @@ class Data {
       this.studentId,
       this.name,
       this.categoryType,
+      this.category,
       this.phone,
       this.email,
       this.enrolledCourses,
@@ -58,6 +60,9 @@ class Data {
     studentId = json['studentId'];
     name = json['name'];
     categoryType = json['categoryType'];
+    category = json['category'] != null
+        ? CategoryInfo.fromJson(json['category'])
+        : null;
     phone = json['phone'];
     email = json['email'];
     enrolledCourses = json['enrolledCourses']?.cast<String>();
@@ -75,6 +80,9 @@ class Data {
     data['studentId'] = studentId;
     data['name'] = name;
     data['categoryType'] = categoryType;
+    if (category != null) {
+      data['category'] = category!.toJson();
+    }
     data['phone'] = phone;
     data['email'] = email;
     data['enrolledCourses'] = enrolledCourses;
@@ -85,6 +93,25 @@ class Data {
     if (image != null) {
       data['image'] = image!.toJson();
     }
+    return data;
+  }
+}
+
+class CategoryInfo {
+  String? mainCategory;
+  String? subCategory;
+
+  CategoryInfo({this.mainCategory, this.subCategory});
+
+  CategoryInfo.fromJson(Map<String, dynamic> json) {
+    mainCategory = json['mainCategory'];
+    subCategory = json['subCategory'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['mainCategory'] = mainCategory;
+    data['subCategory'] = subCategory;
     return data;
   }
 }

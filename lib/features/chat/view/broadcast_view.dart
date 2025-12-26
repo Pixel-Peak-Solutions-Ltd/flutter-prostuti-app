@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:prostuti/common/widgets/common_widgets/common_widgets.dart';
 import 'package:prostuti/core/services/localization_service.dart';
 import 'package:prostuti/core/services/nav.dart';
 import 'package:prostuti/features/chat/viewmodel/broadcast_viewmodel.dart';
 import 'package:prostuti/features/chat/viewmodel/user_category.dart';
 import 'package:prostuti/features/flashcard/viewmodel/flashcard_filter_viewmodel.dart';
+import 'package:prostuti/features/profile/viewmodel/profile_viewmodel.dart';
 
 import '../widgets/broadcast_skeleton.dart';
 
@@ -306,7 +308,7 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
   Widget build(BuildContext context) {
     final isLoading = ref.watch(broadcastLoadingProvider);
     final categoriesAsync = ref.watch(categoriesProvider);
-    final userCategoryAsync = ref.watch(userCategoryProvider);
+    final userProfileAsync = ref.watch(userProfileProvider);
 
     return Scaffold(
       bottomNavigationBar: Padding(
@@ -344,9 +346,16 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Course field
-              userCategoryAsync.when(
-                data: (data) {
-                  _selectedType = data;
+              // Course field
+              userProfileAsync.when(
+                data: (profile) {
+                  _selectedType = profile.data?.categoryType;
+
+                  // Pre-fill division for Academic students if not already set
+                  if (_selectedType == 'Academic' && _selectedDivision == null) {
+                    _selectedDivision = profile.data?.category?.subCategory;
+                  }
+
                   return _buildFormField(
                     label: context.l10n?.course ?? 'কোর্স*',
                     child: categoriesAsync.when(
@@ -411,7 +420,7 @@ class _CreateBroadcastViewState extends ConsumerState<CreateBroadcastView>
                       },
                     );
                   },
-                  loading: () => const BroadcastSkeletonLoader(),
+                  loading: () => Container(child: const BroadcastSkeletonLoader()),
                   error: (_, __) => const Text('Failed to load subjects'),
                 ),
               ),
