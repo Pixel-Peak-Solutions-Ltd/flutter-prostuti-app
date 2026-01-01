@@ -47,7 +47,7 @@ class TopLeaderboardItem extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .titleSmall!
-                    .copyWith(fontWeight: FontWeight.w600, color: Colors.black),
+                    .copyWith(fontWeight: FontWeight.w600),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -59,7 +59,7 @@ class TopLeaderboardItem extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .titleSmall!
-                  .copyWith(fontWeight: FontWeight.w600, color: Colors.black),
+                  .copyWith(fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -184,10 +184,12 @@ class RegularLeaderboardItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: isCurrentUser ? const Color(0xFFE6EFFD) : Colors.white,
+        color: isCurrentUser
+            ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+            : Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: Colors.grey.withOpacity(0.2),
+          color: Theme.of(context).dividerColor.withOpacity(0.2),
           width: 1,
         ),
       ),

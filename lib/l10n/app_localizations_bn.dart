@@ -304,7 +304,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get support => 'সাপোর্ট';
 
   @override
-  String get faq => 'এফ এন্ড কিউ';
+  String get faq => 'প্রায়শই জিজ্ঞাসিত প্রশ্নাবলী';
 
   @override
   String get termsAndConditions => 'টার্মস এন্ড কন্ডিশন';
@@ -328,7 +328,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get test => 'টেস্ট';
 
   @override
-  String get notification => 'নটিফিকেশন';
+  String get notification => 'বিজ্ঞপ্তি';
 
   @override
   String get message => 'ম্যাসেজ';
