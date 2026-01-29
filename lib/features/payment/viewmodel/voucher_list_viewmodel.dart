@@ -14,7 +14,7 @@ class VoucherListNotifier extends _$VoucherListNotifier {
   }
 
   Future<List<VoucherModel>> _fetchAndFilterVouchers(String? courseId) async {
-    final result = await ref.read(paymentRepoProvider).getAllVouchers();
+    final result = await ref.read(paymentRepoProvider).getAllVouchers(courseId: courseId);
 
     return result.fold(
       (error) => throw Exception(error.message),

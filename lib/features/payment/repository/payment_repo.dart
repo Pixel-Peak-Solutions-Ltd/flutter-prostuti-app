@@ -150,12 +150,17 @@ class PaymentRepo {
   Future<Either<ErrorResponse, List<VoucherModel>>> getAllVouchers(
       {String? courseId}) async {
     try {
-      // Simplified params - only include isActive
-      Map<String, dynamic> params = {'isActive': 'true'};
+      // Use the new authenticated endpoint that filters vouchers properly for the student
+      Map<String, dynamic> params = {};
+      
+      // Pass courseId to filter course-specific vouchers
+      if (courseId != null && courseId.isNotEmpty) {
+        params['course_id'] = courseId;
+      }
 
       final response = await _dioService.getRequest(
-        "/voucher/all-voucher",
-        queryParameters: params,
+        "/voucher/my-vouchers",  // Changed from /voucher/all-voucher
+        queryParameters: params.isNotEmpty ? params : null,
       );
 
       print("Voucher API response: ${response.data}");
