@@ -162,8 +162,6 @@ class MockWrittenQuizResultViewmodelProvider
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 mixin MockWrittenQuizResultViewmodelRef
     on AutoDisposeAsyncNotifierProviderRef<WrittenQuizResultModel?> {
   /// The parameter `quizId` of this provider.
@@ -181,4 +179,4 @@ class _MockWrittenQuizResultViewmodelProviderElement
       (origin as MockWrittenQuizResultViewmodelProvider).quizId;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

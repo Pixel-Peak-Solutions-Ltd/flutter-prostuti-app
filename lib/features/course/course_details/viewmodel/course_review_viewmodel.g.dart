@@ -160,8 +160,6 @@ class CourseReviewViewModelProvider
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 mixin CourseReviewViewModelRef
     on AutoDisposeAsyncNotifierProviderRef<List<CourseReview>> {
   /// The parameter `courseId` of this provider.
@@ -307,8 +305,6 @@ class ReviewStatsProvider
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 mixin ReviewStatsRef on AutoDisposeNotifierProviderRef<Map<String, dynamic>> {
   /// The parameter `reviews` of this provider.
   List<CourseReview> get reviews;
@@ -322,4 +318,4 @@ class _ReviewStatsProviderElement extends AutoDisposeNotifierProviderElement<
   List<CourseReview> get reviews => (origin as ReviewStatsProvider).reviews;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

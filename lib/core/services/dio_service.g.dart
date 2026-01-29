@@ -19,8 +19,6 @@ final connectivityProvider = AutoDisposeProvider<Connectivity>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef ConnectivityRef = AutoDisposeProviderRef<Connectivity>;
 String _$networkInfoHash() => r'beab523a04badc03212a1fa1eaa7814b1207b8ab';
 
@@ -35,8 +33,6 @@ final networkInfoProvider = AutoDisposeProvider<NetworkInfo>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef NetworkInfoRef = AutoDisposeProviderRef<NetworkInfo>;
 String _$dioHash() => r'8de8215587fd9b1ce69ccd14b51ba3aa6ad5f762';
 
@@ -51,8 +47,6 @@ final dioProvider = AutoDisposeProvider<Dio>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef DioRef = AutoDisposeProviderRef<Dio>;
 String _$dioServiceHash() => r'd90ea8402de78343b4fc905ff4bf9ec290ab1ae7';
 
@@ -67,8 +61,6 @@ final dioServiceProvider = AutoDisposeProvider<DioService>.internal(
   allTransitiveDependencies: null,
 );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 typedef DioServiceRef = AutoDisposeProviderRef<DioService>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

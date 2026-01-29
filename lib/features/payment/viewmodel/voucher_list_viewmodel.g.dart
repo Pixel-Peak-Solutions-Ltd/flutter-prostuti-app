@@ -7,7 +7,7 @@ part of 'voucher_list_viewmodel.dart';
 // **************************************************************************
 
 String _$voucherListNotifierHash() =>
-    r'b0342c1e96231e98db4c59a03d2129d7b71d3d34';
+    r'3ebb0588c0b9155380fbc5a1b3cb4e9d989fd6d9';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -158,8 +158,6 @@ class VoucherListNotifierProvider extends AutoDisposeAsyncNotifierProviderImpl<
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
 mixin VoucherListNotifierRef
     on AutoDisposeAsyncNotifierProviderRef<List<VoucherModel>> {
   /// The parameter `courseId` of this provider.
@@ -175,4 +173,4 @@ class _VoucherListNotifierProviderElement
   String? get courseId => (origin as VoucherListNotifierProvider).courseId;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
