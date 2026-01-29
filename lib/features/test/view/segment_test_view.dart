@@ -418,6 +418,7 @@ class _SegmentTestLandingViewState extends ConsumerState<SegmentTestLandingView>
           alignedDropdown: true,
           child: DropdownButton<String>(
             isExpanded: true,
+            menuMaxHeight: 300,
             hint: Text(
               hint,
               style: Theme.of(context).textTheme.bodyMedium,

@@ -205,11 +205,12 @@ class CourseDetailsViewState extends ConsumerState<CourseDetailsView>
                                           ),
                                         ],
                                       ),
-                                      Icon(
-                                        Icons.lock_outline_rounded,
-                                        size: 18,
-                                        color: Colors.grey.shade600,
-                                      )
+                                      if (isEnrolled.value != true)
+                                        Icon(
+                                          Icons.lock_outline_rounded,
+                                          size: 18,
+                                          color: Colors.grey.shade600,
+                                        )
                                     ],
                                   ),
                                 ),
