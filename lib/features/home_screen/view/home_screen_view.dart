@@ -101,16 +101,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         final shouldExit = await showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('অ্যাপ বন্ধ করতে চান?'),
-            content: const Text('আপনি কি নিশ্চিত যে অ্যাপ থেকে বের হতে চান?'),
+            backgroundColor: Theme.of(context).cardColor,
+            title: Text(
+              'অ্যাপ বন্ধ করতে চান?',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            content: Text(
+              'আপনি কি নিশ্চিত যে অ্যাপ থেকে বের হতে চান?',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(false),
-                child: const Text('না'),
+                child: Text(
+                  'না',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
               ),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(true),
-                child: const Text('হ্যাঁ'),
+                child: Text(
+                  'হ্যাঁ',
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+                ),
               ),
             ],
           ),

@@ -54,7 +54,7 @@ class _FullLeaderboardViewState extends ConsumerState<FullLeaderboardView>
     }
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F7FC),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: commonAppbar("লিডারবোর্ড"),
       body: RefreshIndicator(
         onRefresh: () async {
