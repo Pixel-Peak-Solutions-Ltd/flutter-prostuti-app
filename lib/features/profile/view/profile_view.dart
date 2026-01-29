@@ -18,6 +18,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../common/view_model/auth_notifier.dart';
 import '../../../core/configs/app_colors.dart';
 import '../../../core/services/localization_service.dart';
+import '../../../common/models/student_profile.dart';
 import '../../auth/category/view/category_view.dart';
 import '../../course/my_course/view/my_course_view.dart';
 import '../../payment/view/subscription_view.dart';
@@ -174,19 +175,8 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
                     studentId: studentId,
                   ));
                 },
-                // Show current category if available
-                trailing: userData.data?.categoryType != null
-                    ? Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            userData.data!.categoryType!,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                          const Icon(Icons.chevron_right, size: 20),
-                        ],
-                      )
-                    : null,
+                // P010 Fix: Show current category from either new or old field
+                trailing: _getCategoryText(userData.data, context),
               ).animate().moveX(duration: const Duration(milliseconds: 600)),
               const Gap(24),
               Text(
@@ -463,6 +453,27 @@ class UserProfileView extends ConsumerWidget with CommonWidgets {
           ],
         ),
       ),
+    );
+  }
+
+  /// P010 Fix: Helper method to get category text from either old or new field
+  Widget? _getCategoryText(Data? data, BuildContext context) {
+    if (data == null) return null;
+    
+    // Check new field first (category.mainCategory), then fall back to old field (categoryType)
+    final categoryText = data.category?.mainCategory ?? data.categoryType;
+    
+    if (categoryText == null || categoryText.isEmpty) return null;
+    
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          categoryText,
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+        const Icon(Icons.chevron_right, size: 20),
+      ],
     );
   }
 }
