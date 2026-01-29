@@ -93,11 +93,11 @@ class AppColors {
   static const homeScreenBottomDark = Color(0xFFDEEFF9);
 
   static const leaderboardFirstLight = Color(0xFFFEE8DC);
-  static const leaderboardFirstDark = Color(0xFFFEE8DC);
+  static const leaderboardFirstDark = Color(0xFF5C4434); // P028 Fix: Darker peach for dark mode
 
   static const leaderboardSecondLight = Color(0xFFD2FADF);
-  static const leaderboardSecondDark = Color(0xFFD2FADF);
+  static const leaderboardSecondDark = Color(0xFF2A4D34); // P028 Fix: Darker green for dark mode
 
   static const leaderboardThirdLight = Color(0xFFFEF2CE);
-  static const leaderboardThirdDark = Color(0xFFFEF2CE);
+  static const leaderboardThirdDark = Color(0xFF4D4530); // P028 Fix: Darker yellow for dark mode
 }
