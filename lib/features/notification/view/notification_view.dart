@@ -129,14 +129,14 @@ class NotificationCard extends StatelessWidget {
       final difference = now.difference(dateTime);
 
       if (difference.inMinutes < 60) {
-        return '${difference.inMinutes} mins ago';
+        return '${difference.inMinutes} মিনিট আগে';
       } else if (difference.inHours < 24) {
-        return '${difference.inHours} hours ago';
+        return '${difference.inHours} ঘন্টা আগে';
       } else {
-        return '${difference.inDays} days ago';
+        return '${difference.inDays} দিন আগে';
       }
     } catch (e) {
-      return '2 mins ago'; // Default fallback for the design
+      return '২ মিনিট আগে'; // Default fallback
     }
   }
 

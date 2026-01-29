@@ -84,7 +84,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }
     }
 
-    return Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        
+        // P002: If not on home tab (index 0), go back to first tab
+        if (_currentIndex != 0) {
+          setState(() {
+            _currentIndex = 0;
+          });
+          return;
+        }
+        
+        // P035: Show exit confirmation dialog when on home tab
+        final shouldExit = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('অ্যাপ বন্ধ করতে চান?'),
+            content: const Text('আপনি কি নিশ্চিত যে অ্যাপ থেকে বের হতে চান?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('না'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('হ্যাঁ'),
+              ),
+            ],
+          ),
+        );
+        
+        if (shouldExit == true && context.mounted) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
       body: _buildCurrentTab(),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
@@ -168,6 +204,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               label: "নটিফিকেশন",
             ),
           ]),
+    ),
     );
   }
 
