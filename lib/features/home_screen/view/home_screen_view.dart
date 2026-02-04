@@ -216,7 +216,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         : AppColors.textTertiaryLight,
                     BlendMode.srcIn),
               ),
-              label: "নটিফিকেশন",
+              label: "নোটিফিকেশন",
             ),
           ]),
     ),
