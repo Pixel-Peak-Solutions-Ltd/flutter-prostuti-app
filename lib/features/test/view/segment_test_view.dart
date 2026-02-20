@@ -421,7 +421,7 @@ class _SegmentTestLandingViewState extends ConsumerState<SegmentTestLandingView>
             menuMaxHeight: 300,
             hint: Text(
               hint,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
             value: value,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -431,7 +431,7 @@ class _SegmentTestLandingViewState extends ConsumerState<SegmentTestLandingView>
                 value: item,
                 child: Text(
                   item,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               );
             }).toList(),

@@ -407,6 +407,7 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
                                                 subject,
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 1,
+                                                style: Theme.of(context).textTheme.bodySmall,
                                               ),
                                             ))
                                         .toList(),
@@ -475,7 +476,7 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
                                                     chapter,
                                                     overflow: TextOverflow.ellipsis,
                                                     maxLines: 1,
-                                                    style: TextStyle(
+                                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                                       color:
                                                           isSelectedElsewhere
                                                               ? Colors.grey

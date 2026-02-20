@@ -370,7 +370,7 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
                                               value: subject,
                                               child: Text(subject,style: Theme.of(context)
                                                   .textTheme
-                                                  .bodyMedium,),
+                                                  .bodySmall,),
                                             ))
                                         .toList(),
                                     onChanged: (value) {
@@ -438,7 +438,7 @@ class _QuizerTestLandingViewState extends ConsumerState<QuizerTestLandingView>
                                                     chapter,
                                                     style: Theme.of(context)
                                                         .textTheme
-                                                        .bodyMedium!
+                                                        .bodySmall!
                                                         .copyWith(
                                                           color:
                                                               isSelectedElsewhere
