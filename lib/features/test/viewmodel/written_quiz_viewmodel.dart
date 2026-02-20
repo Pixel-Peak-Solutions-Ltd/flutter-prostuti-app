@@ -18,6 +18,8 @@ class WrittenQuizViewmodel extends _$WrittenQuizViewmodel {
     required String questionType,
     required List<Map<String, dynamic>> subjects,
     required int questionCount,
+    int? mcqCount,
+    int? writtenCount,
     required bool isNegativeMarking,
     required int time,
   }) async {
@@ -27,6 +29,8 @@ class WrittenQuizViewmodel extends _$WrittenQuizViewmodel {
       "questionType": questionType,
       "subjects": subjects,
       "questionCount": questionCount,
+      if (mcqCount != null) "mcqCount": mcqCount,
+      if (writtenCount != null) "writtenCount": writtenCount,
       "isNegativeMarking": isNegativeMarking,
       "time": time,
     };

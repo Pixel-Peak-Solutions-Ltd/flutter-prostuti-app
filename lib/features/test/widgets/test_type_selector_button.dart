@@ -16,12 +16,13 @@ class TestTypeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+    return Wrap(
+      spacing: 12,
+      runSpacing: 8,
       children: [
         _buildTypeButton(context, "MCQ", "assets/icons/mcq_test.svg"),
-        const SizedBox(width: 12),
         _buildTypeButton(context, "Written", "assets/icons/written_test.svg"),
+        _buildTypeButton(context, "Hybrid", "assets/icons/mcq_test.svg"),
       ],
     );
   }

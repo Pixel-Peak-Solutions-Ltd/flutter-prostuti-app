@@ -15,6 +15,7 @@ import '../widgets/question_standard_selector.dart';
 import '../widgets/subject_dropdown.dart';
 import '../widgets/test_type_selector_button.dart';
 import 'mcq_mock_quiz_view.dart';
+import 'hybrid_mock_quiz_view.dart'; // Add this import
 
 class MockTestLandingView extends ConsumerStatefulWidget {
   const MockTestLandingView({super.key});
@@ -27,6 +28,8 @@ class MockTestLandingView extends ConsumerStatefulWidget {
 class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
     with CommonWidgets {
   final TextEditingController questionCountController = TextEditingController();
+  final TextEditingController mcqCountController = TextEditingController();
+  final TextEditingController writtenCountController = TextEditingController();
   final TextEditingController hourController = TextEditingController();
   final TextEditingController minuteController = TextEditingController();
   final TextEditingController secondController = TextEditingController();
@@ -194,6 +197,63 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
             context,
             MaterialPageRoute(
               builder: (_) => MCQMockQuizScreen(mockQuiz: response),
+            ),
+          );
+        }else{
+          _showValidationError(response.message!);
+        }
+      }
+    } catch (e) {
+      _showValidationError(e.toString());
+    }
+  }
+
+  void _startHybridMockTest() async {
+    final int mcqCount = int.tryParse(mcqCountController.text) ?? 0;
+    final int writtenCount = int.tryParse(writtenCountController.text) ?? 0;
+    final int questionCount = mcqCount + writtenCount;
+    final int time = _convertToTotalMinutes();
+
+    // Filter out placeholder subjects. The list is now of the correct type.
+    final validSubjects = selectedSubjects
+        .where(
+            (s) => s.subject != "সাবজেক্ট সিলেক্ট করুন" && s.subject.isNotEmpty)
+        .map((s) => s.toJson()) // Convert to JSON
+        .toList();
+
+    if (validSubjects.isEmpty) {
+      _showValidationError("কমপক্ষে একটি বিষয় সিলেক্ট করুন।");
+      return;
+    }
+    if (mcqCount <= 0 || writtenCount <= 0) {
+      _showValidationError("MCQ এবং Written প্রশ্ন সংখ্যা সঠিকভাবে লিখুন।");
+      return;
+    }
+    if (time <= 0) {
+      _showValidationError("সময়টি সঠিকভাবে লিখুন।");
+      return;
+    }
+
+    try {
+      final response =
+          await ref.read(mockTestViewmodelProvider.notifier).createMockQuiz(
+                questionType: selectedQuestionType,
+                subjects: validSubjects,
+                questionCount: questionCount,
+                mcqCount: mcqCount,
+                writtenCount: writtenCount,
+                isNegativeMarking: isNegativeMarking,
+                time: time,
+              );
+
+      if (response != null && response.data != null) {
+        if(response.success!){
+          // For now, redirecting to a placeholder Hybrid screen.
+          // You will need to create HybridMockQuizScreen
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => HybridMockQuizScreen(mockQuiz: response),
             ),
           );
         }else{
@@ -478,16 +538,57 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
               icon: Icon(CupertinoIcons.plus_app,
                   color: Theme.of(context).colorScheme.onSurface),
             ),
-            const Gap(10),
-            Text("প্রশ্ন সংখ্যা",
-                style: Theme.of(context).textTheme.bodyMedium),
-            const Gap(10),
-            TextField(
-              controller: questionCountController,
-              keyboardType: TextInputType.number,
-              decoration:
-                  const InputDecoration(hintText: "প্রশ্ন সংখ্যা সিলেক্ট করুন"),
-            ),
+            if (selectedQuestionType == "Hybrid") ...[
+              const Gap(10),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("MCQ সংখ্যা",
+                            style: Theme.of(context).textTheme.bodyMedium),
+                        const Gap(10),
+                        TextField(
+                          controller: mcqCountController,
+                          keyboardType: TextInputType.number,
+                          decoration:
+                              const InputDecoration(hintText: "MCQ সংখ্যা"),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Gap(16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Written সংখ্যা",
+                            style: Theme.of(context).textTheme.bodyMedium),
+                        const Gap(10),
+                        TextField(
+                          controller: writtenCountController,
+                          keyboardType: TextInputType.number,
+                          decoration:
+                              const InputDecoration(hintText: "Written সংখ্যা"),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ] else ...[
+              const Gap(10),
+              Text("প্রশ্ন সংখ্যা",
+                  style: Theme.of(context).textTheme.bodyMedium),
+              const Gap(10),
+              TextField(
+                controller: questionCountController,
+                keyboardType: TextInputType.number,
+                decoration:
+                    const InputDecoration(hintText: "প্রশ্ন সংখ্যা সিলেক্ট করুন"),
+              ),
+            ],
             const Gap(10),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
@@ -514,7 +615,9 @@ class _MockTestLandingViewState extends ConsumerState<MockTestLandingView>
             LongButton(
               onPressed: selectedQuestionType == "MCQ"
                   ? _startMCQMockTest
-                  : _startWrittenMockTest,
+                  : selectedQuestionType == "Written"
+                      ? _startWrittenMockTest
+                      : _startHybridMockTest,
               text: "টেস্ট শুরু করুন",
             ),
           ],

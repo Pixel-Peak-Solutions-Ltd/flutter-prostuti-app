@@ -16,6 +16,8 @@ class MockTestViewmodel extends _$MockTestViewmodel {
     required String questionType,
     required List<Map<String, dynamic>> subjects,
     required int questionCount,
+    int? mcqCount,
+    int? writtenCount,
     required bool isNegativeMarking,
     required int time,
   }) async {
@@ -25,6 +27,8 @@ class MockTestViewmodel extends _$MockTestViewmodel {
       "questionType": questionType,
       "subjects": subjects,
       "questionCount": questionCount,
+      if (mcqCount != null) "mcqCount": mcqCount,
+      if (writtenCount != null) "writtenCount": writtenCount,
       "isNegativeMarking": isNegativeMarking,
       "time": time,
     };
