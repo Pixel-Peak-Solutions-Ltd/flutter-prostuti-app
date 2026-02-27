@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:prostuti/features/test/widgets/mcq_quiz_answer_widget.dart';
 import 'package:prostuti/features/test/widgets/written_quiz_answer_widget.dart';
+import 'package:prostuti/features/test/model/written_quiz_result_model.dart' as written;
 import '../../../../../common/widgets/common_widgets/common_widgets.dart';
 import '../../../../../core/configs/app_colors.dart';
 import '../../course/materials/test/widgets/mcq_mock_test_skeleton.dart';
@@ -152,7 +153,7 @@ class MockQuizScreenState extends ConsumerState<HybridMockQuizHistoryScreen>
                           return WrittenQuizResultAnswerWidget(
                             questionNumber: index + 1,
                             theme: theme,
-                            answerData: answer,
+                            answerData: written.Answers.fromJson(answer.toJson()),
                             selectedOption: answer.selectedOption!,
                             correctOption: answer.questionId?.description ?? '',
                           );
